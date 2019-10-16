@@ -849,5 +849,3 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
 
   return(list(graph=graph, Gamma=Ghat[[1]]))
 }
-
-
