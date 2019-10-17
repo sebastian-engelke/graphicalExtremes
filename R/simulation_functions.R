@@ -8,16 +8,28 @@
 #' \item \code{neglogistic}
 #' \item \code{dirichlet}.
 #' }
-#' @param d Positive integer. Dimension of the multivariate Pareto distribution.
-#' @param no.simu Positive integer. Number of simulations.
-#' @param
-#' no.simu: number of simulations
-#' par: the respective parameter for the model; a dxd variogram matrix for HR
-
-### This function simulates exact samples of multivariate Pareto distributions
-#model = the parametric model type; one of "HR", "logistic", "neglogistic", "dirichlet"
-#d: dimension of the multivariate Pareto distribution
-#no.simu: number of simulations
+#' @param d Positive integer. Dimension of the multivariate Pareto
+#' distribution.
+#' @param no.simu Positive integer. Number of simulations
+#' (by default equal to 1).
+#' @param par Is the respective parameter for the given \code{model}.
+#' Is one of:
+#' \itemize{
+#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}
+#' \item \eqn{\theta > 0}, if \code{model = neglogistic}
+#' \item \eqn{\alpha}, numeric vector of size \code{d},
+#' if \code{model = dirichlet}
+#' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
+#' variogram, if \code{model = HR}.
+#' }
+#' @return List. The list is made of:
+#' \itemize{
+#' \item \code{res} Numeric matrix of size \eqn{no.simu \times d}{no.simu x d}.
+#' The simulated multivariate Pareto data.
+#' \item \code{counter} Positive integer. The number of times needed to sweep
+#' over the \code{d} variables to simulate \code{no.simul} multivariate
+#' observations.
+#' }
 rmpareto <- function(model, d, no.simu=1, par) {
 
   stopifnot((d==round(d)) & (d>=1))

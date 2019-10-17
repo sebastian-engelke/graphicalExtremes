@@ -1,4 +1,4 @@
-## Graphical Models
+## Graphical Models functions ####
 
 tr <- function(m) sum(diag(m))
 
@@ -849,3 +849,22 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
 
   return(list(graph=graph, Gamma=Ghat[[1]]))
 }
+
+
+### drafts ####
+Sigma <- rbind(c(1, .8), c(.8, 1))
+R <- chol(Sigma)
+
+it <- 1e3
+n <- 1e3
+d <- NCOL(Sigma)
+
+M <- matrix(nrow = it, ncol = d)
+
+for (i in 1:it){
+  X <- t(t(R) %*% matrix(rnorm(d * n),  ncol = n))
+  M[i, ] <- apply(X = X, MARGIN = 2, max)
+}
+
+pairs(M)
+pairs(X)
