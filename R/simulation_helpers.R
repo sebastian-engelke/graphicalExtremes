@@ -2,90 +2,153 @@
 #'
 #' Simulate the Huessler-Reiss extremal functions
 #'
-#' @param no.simu Integer. Number of simulations, by default equal to 1
-#' @param idx Integer. Related index corresponding to the variable  over which variable we use  extremal function is simulated.
-#' @param trend
-simu_px_HR <- function(no.simu=1, idx, trend, chol.mat, d) {
-  stopifnot(length(idx)==1)
-  d <- nrow(chol.mat)
-  proc <- t(chol.mat)%*%matrix(rnorm(d*no.simu), ncol=no.simu) - trend
+#' @inheritParams rmpareto
+#' @param idx Integer. Index corresponding to the variable over which
+#' the extremal function is simulated.
+#' @param trend Numeric. Trend corresponding to the variable \code{idx}.
+#' @param chol_mat Numeric matrix \eqn{d\times d}{d x d}.
+#' Cholesky decomposition of the desired covariance matrix.
+#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+simu_px_HR <- function(n, idx, d, trend, chol_mat) {
+  # check arguments
+  if (length(idx)!=1) stop("Argument idx must be a scalar.")
+
+  # function body
+  d <- nrow(chol_mat)
+  proc <- t(chol_mat)%*%matrix(rnorm(d*n), ncol=n) - trend
   proc <- exp(t(proc) - proc[idx,])
   return(proc)
 }
 
 
 
-### Internal: simulates logistic extremal functions
-simu_px_logistic <- function(no.simu=1, idx, N, theta) {
-  stopifnot(length(idx)==1 || length(idx)==no.simu)
-  res       <- matrix(1/gamma(1-theta)*(-log(runif(no.simu*N)))^(-theta), nrow=no.simu, ncol=N)
-  res[cbind(1:no.simu,idx)] <- 1/gamma(1-theta)*rgamma(no.simu,shape=1-theta)^(-theta)
-  return(res/res[cbind(1:no.simu,idx)])
+#' Simulates logistic extremal functions
+#'
+#' Simulate logistic extremal functions
+#'
+#' @inheritParams simu_px_HR
+#' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
+#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+simu_px_logistic <- function(n, idx, d, theta) {
+  # check arguments
+  if (length(idx) != 1 & length(idx) != n){
+    stop("Argument idx must be a scalar or a vector with n entries")
+  }
+
+  # function body
+  res <- matrix(1/gamma(1-theta)*(-log(runif(n*d)))^(-theta),
+                      nrow=n, ncol=d)
+  res[cbind(1:n,idx)] <- 1/gamma(1-theta)*rgamma(n,shape=1-theta)^(-theta)
+  return(res/res[cbind(1:n,idx)])
 }
 
 
-### Internal: simulates negative logistic extremal functions
-simu_px_neglogistic <- function(no.simu=1, idx, N, theta) {
-  stopifnot(length(idx)==1 || length(idx)==no.simu)
-  res       <- matrix(rweibull(no.simu*N, shape=theta, scale=1/gamma(1+1/theta)), nrow=no.simu, ncol=N)
-  res[cbind(1:no.simu,idx)] <- 1/gamma(1+1/theta)*rgamma(no.simu,shape=1+1/theta)^(1/theta)
-  return(res/res[cbind(1:no.simu,idx)])
+
+#' Simulates negative logistic extremal functions
+#'
+#' Simulate negative logistic extremal functions
+#'
+#' @inheritParams simu_px_HR
+#' @param theta Numeric --- assume \eqn{\theta > 0}.
+#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+simu_px_neglogistic <- function(n, idx, d, theta) {
+  # check arguments
+  if (length(idx) != 1 & length(idx) != n){
+    stop("Argument idx must be a scalar or a vector with n entries")
+  }
+
+  # function body
+  res <- matrix(rweibull(n*d, shape=theta, scale=1/gamma(1+1/theta)),
+                nrow=n, ncol=d)
+  res[cbind(1:n,idx)] <- 1/gamma(1+1/theta)*rgamma(n,shape=1+1/theta)^(1/theta)
+  return(res/res[cbind(1:n,idx)])
 }
 
 
-### Internal: simulates Dirichlet extremal functions
-simu_px_dirichlet <- function(no.simu, idx, N, alpha) {
-  stopifnot(length(idx)==1 || length(idx)==no.simu)
+
+#' Simulates Dirichlet extremal functions
+#'
+#' Simulate Dirichlet extremal functions
+#'
+#' @inheritParams simu_px_HR
+#' @param theta Numeric vector  of size \code{d}.
+#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+simu_px_dirichlet <- function(n, idx, d, alpha) {
+  # check arguments
+  if (length(idx) != 1 & length(idx) != n){
+    stop("Argument idx must be a scalar or a vector with n entries")
+  }
+
+  # function body
   shape <- alpha
   shape[idx] <- alpha[idx] + 1
-  shape.mat <- matrix(shape, nrow=N, ncol=no.simu)
-  rate.mat <- matrix(alpha, nrow=N, ncol=no.simu)
-  res <- t(matrix(rgamma(N*no.simu, shape=shape.mat, rate=rate.mat), nrow=N, ncol=no.simu))
-  return(res/res[cbind(1:no.simu,idx)])
+  shape.mat <- matrix(shape, nrow=d, ncol=n)
+  rate.mat <- matrix(alpha, nrow=d, ncol=n)
+  res <- t(matrix(rgamma(d*n, shape=shape.mat, rate=rate.mat), nrow=d, ncol=n))
+  return(res/res[cbind(1:n,idx)])
 }
 
 
-### Internal: simulates Dirichlet mixture extremal functions
-simu_px_dirichlet_mix <- function(no.simu, idx, N, weights, alpha, norm.alpha) {
-  stopifnot(length(idx)==1 || length(idx)==no.simu)
-  if (length(idx)==1) {
-    k <- sample(1:length(weights), no.simu, replace=TRUE, prob=N*weights*norm.alpha[idx,])
-  } else {
-    k <- sapply(1:no.simu, function(i) sample(1:length(weights), 1, prob=N*weights*norm.alpha[idx[i],]))
+
+#' Simulates Dirichlet mixture extremal functions
+#'
+#' Simulate Dirichlet mixture extremal functions
+#'
+#' @inheritParams simu_px_HR
+#' @param weights Numeric vector of size ???. ???
+#' @param alpha Numeric matrix of size ???. ???
+#' @param norm_alpha Numeric matrix of size ???. ???
+#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+simu_px_dirichlet_mix <- function(n, idx, d, weights, alpha, norm_alpha) {
+  # check arguments
+  if (length(idx) != 1 & length(idx) != n){
+    stop("Argument idx must be a scalar or a vector with n entries")
   }
+
+  # function body
+  if (length(idx)==1) {
+    k <- sample(1:length(weights), n, replace=TRUE,
+                prob=d*weights*norm_alpha[idx,])
+  } else {
+    k <- sapply(1:n, function(i) sample(1:length(weights), 1,
+                                        prob=d*weights*norm_alpha[idx[i],]))
+  }
+
   shape.mat <- alpha[,k,drop=FALSE]
-  shape.mat[cbind(idx,1:no.simu)] <- shape.mat[cbind(idx,1:no.simu)]+1
-  res <- t(matrix(rgamma(N*no.simu, shape=shape.mat), nrow=N, ncol=no.simu))
-  return(res/res[cbind(1:no.simu,idx)])
+  shape.mat[cbind(idx,1:n)] <- shape.mat[cbind(idx,1:n)]+1
+  res <- t(matrix(rgamma(d*n, shape=shape.mat), nrow=d, ncol=n))
+  return(res/res[cbind(1:n,idx)])
 }
 
 
-### Internal: simulates HR extremal functions on a tree
-simu_px_tree_HR <- function(no.simu=1, G.vec, A) {
-  res <- exp(A %*% matrix(rnorm(length(G.vec)*no.simu, mean= -G.vec/2, sd=sqrt(G.vec)), ncol=no.simu))
+
+### !!! Internal: simulates HR extremal functions on a tree
+simu_px_tree_HR <- function(n, G.vec, A) {
+  res <- exp(A %*% matrix(rnorm(length(G.vec)*n, mean= -G.vec/2, sd=sqrt(G.vec)), ncol=n))
   return(t(res))
 }
 
-### Internal: simulates logistic extremal functions on a tree
-simu_px_tree_logistic <- function(no.simu=1, idx, nb.edges, theta, A) {
-  stopifnot(length(idx)==1 || length(idx)==no.simu)
-  res       <- exp(A[[idx]] %*% log(matrix(1/gamma(1-theta)*(-log(runif(no.simu*nb.edges)))^(-theta) /
-                                             (1/gamma(1-theta)*rgamma(no.simu*nb.edges,shape=1-theta)^(-theta)), ncol=no.simu)))
+
+
+### !!! Internal: simulates logistic extremal functions on a tree
+simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
+  stopifnot(length(idx)==1 || length(idx)==n)
+  res       <- exp(A[[idx]] %*% log(matrix(1/gamma(1-theta)*(-log(runif(n*nb.edges)))^(-theta) /
+                                             (1/gamma(1-theta)*rgamma(n*nb.edges,shape=1-theta)^(-theta)), ncol=n)))
   return(t(res))
 }
 
-### Internal: simulates Dirichlet extremal functions on a tree
-simu_px_tree_dirichlet <- function(no.simu=1, alpha.start, alpha.end, A) {
+
+
+### !!! Internal: simulates Dirichlet extremal functions on a tree
+simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {
   e = length(alpha.start)
-  shape.start = matrix(alpha.start + 1, nrow=e, ncol=no.simu)
-  rate.start = matrix(alpha.start, nrow=e, ncol=no.simu)
-  shape.end = matrix(alpha.end, nrow=e, ncol=no.simu)
-  rate.end = matrix(alpha.end, nrow=e, ncol=no.simu)
-  sim.start = matrix(rgamma(e*no.simu, shape=shape.start, rate=rate.start), nrow=e, ncol=no.simu)
-  sim.end = matrix(rgamma(e*no.simu, shape=shape.end, rate=rate.end), nrow=e, ncol=no.simu)
+  shape.start = matrix(alpha.start + 1, nrow=e, ncol=n)
+  rate.start = matrix(alpha.start, nrow=e, ncol=n)
+  shape.end = matrix(alpha.end, nrow=e, ncol=n)
+  rate.end = matrix(alpha.end, nrow=e, ncol=n)
+  sim.start = matrix(rgamma(e*n, shape=shape.start, rate=rate.start), nrow=e, ncol=n)
+  sim.end = matrix(rgamma(e*n, shape=shape.end, rate=rate.end), nrow=e, ncol=n)
   res       <- exp(A %*% log(sim.end / sim.start))
   return(t(res))
 }
-
-
-

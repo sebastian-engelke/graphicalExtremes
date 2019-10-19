@@ -1,12 +1,12 @@
 #' Simulate samples of multivariate Pareto distribution
 #'
 #' Simulates exact samples of multivariate Pareto distributions
-#' @param no.simu Positive integer. Number of simulations.
+#' @param n Positive integer. Number of simulations.
 #' @param model String. The parametric model type. Is one of:
 #' \itemize{
-#' \item \code{HR}
-#' \item \code{logistic}
-#' \item \code{neglogistic}
+#' \item \code{HR} (default),
+#' \item \code{logistic},
+#' \item \code{neglogistic},
 #' \item \code{dirichlet}.
 #' }
 #' @param d Positive integer. Dimension of the multivariate Pareto
@@ -20,90 +20,168 @@
 #' if \code{model = dirichlet}
 #' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
 #' variogram, if \code{model = HR}.
+#' \item list, made of ???, if \code{model = dirichlet_mix}
 #' }
 #' @return List. The list is made of:
 #' \itemize{
-#' \item \code{res} Numeric matrix of size \eqn{no.simu \times d}{no.simu x d}.
+#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
 #' The simulated multivariate Pareto data.
 #' \item \code{counter} Positive integer. The number of times needed to sweep
-#' over the \code{d} variables to simulate \code{no.simul} multivariate
+#' over the \code{d} variables to simulate \code{n} multivariate
 #' observations.
 #'
 #' ## !!! add examples (define params and call function)
 #' }
-rmpareto <- function(no.simu, model, d, par) {
+rmpareto <- function(n,
+                     model = c("HR", "logistic", "neglogistic", "dirichlet",
+                               "dirichlet_mix")[1], d, par) {
 
-  stopifnot((d==round(d)) & (d>=1))
-  stopifnot((no.simu==round(no.simu)) & (no.simu>=1))
-  stopifnot(model %in% c("HR", "logistic", "neglogistic", "dirichlet"))
-
-  if (model=="HR") {
-    stopifnot(is.matrix(par))
-    Gamma = par
-    stopifnot(nrow(Gamma) == d & ncol(Gamma) == d)
-    cov.mat <- Gamma2Sigma(Gamma, k=1, full=FALSE)
-    chol.mat <- matrix(0,d,d)
-    chol.mat[-1,-1] <- chol(cov.mat)
-    # !!! add error if cannot chol()
-    # !!! put here the trend and save it as a matrix (each row is one variable)
-  } else if (model=="logistic") {
-    stopifnot(length(par) == 1 & 1e-12 < par & par < 1 - 1e-12)
-    theta = par
-  } else if (model=="neglogistic") {
-    stopifnot(par > 1e-12)
-    theta = par
-  } else if (model=="dirichlet") {
-    alpha = par
-    stopifnot(length(alpha) == d)
-    stopifnot(all(alpha>1e-12))
-  } else if (model == "dirichlet_mix"){ # !!!
-    # !!!
+  # check arguments ####
+  if (d != round(d) | d < 1){
+    stop("The argument d must be a positive integer.")
   }
 
+  if (n != round(n) & n < 1){
+    stop("The argument n must be a positive integer.")
+  }
+
+  if (!(model %in% c("HR", "logistic", "neglogistic", "dirichlet",
+                     "dirichlet_mix"))){
+    stop(paste("The model must be one of",
+               c("HR", "logistic", "neglogistic", "dirichlet",
+                 "dirichlet_mix")))
+  }
+
+  if (model == "HR") {
+    if (!is.matrix(par)){
+      stop("The argument par must be a matrix, when model = HR.")
+    }
+
+    if (nrow(par) != d | ncol(par) != d){
+      stop("The argument par must be a d x d matrix, when model = HR.")
+    }
+
+  } else if (model == "logistic") {
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
+      stop("The argument par must be scalar between 1e-12 and 1 - 1e-12,
+           when model = logistic.")
+    }
+
+  } else if (model == "neglogistic") {
+    if (par <= 1e-12){
+      stop("The argument par must be scalar greater than 1e-12,
+           when model = neglogistic.")
+    }
+
+  } else if (model == "dirichlet") {
+    if (length(par) != d){
+      stop("par must be a vector with d elements,
+           when model = dirichlet.")
+    }
+
+    if (any(par <= 1e-12)){
+      stop("The elements of par must be greater than 1e-12,
+           when model = dirichlet.")
+    }
+
+  } else if (model == "dirichlet_mix") { # !!!
+    # ???
+  }
+
+  # prepare arguments ####
+  if (model == "HR") {
+    Gamma <- par
+
+    # compute cholesky decomposition
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    chol_mat <- matrix(0, d, d)
+
+    result <- tryCatch({
+      chol_mat[-1, -1] <- chol(cov.mat)
+    },
+    error = function(e) {
+      stop("The covariance matrix associated to Gamma cannot be factorized
+           with Cholesky.")
+    })
+
+    # compute trend (matrix where each row is one variable)
+    trend <- t(sapply(1:d, function(k){
+      sapply(1:d, function(j){
+        Gamma[j, k] / 2
+        }
+      )}))
+
+  } else if (model == "logistic") {
+    theta <- par
+
+  } else if (model == "neglogistic") {
+    theta <- par
+
+  } else if (model == "dirichlet") {
+    alpha <- par
+
+  } else if (model == "dirichlet_mix"){
+    # ???
+  }
+
+  # function body ####
   counter <- 0
   res <- numeric(0)
   n.total <- 0
-  while (n.total < no.simu){
+  while (n.total < n){
     counter <- counter + 1
-    shift <- sample(1:d, no.simu, replace=TRUE)
-    for(k in 1:d){
-      if (model == "HR") {
-        trend <- sapply(1:d, function(j) Gamma[j,k]/2)
-      }
-      n.k <- sum(shift==k)
+    shift <- sample(1:d, n, replace = TRUE)
+    for (k in 1:d){
 
-      if(n.k>0){
-        proc <- switch(model,
-                       "HR"           = simu_px_HR(no.simu=n.k, idx=k, trend=trend, chol.mat=chol.mat),
-                       "logistic"     = simu_px_logistic(no.simu=n.k, idx=k, d=d, theta=theta),
-                       "neglogistic"  = simu_px_neglogistic(no.simu=n.k, idx=k, d=d, theta=theta),
-                       "dirichlet"    = simu_px_dirichlet(no.simu=n.k, idx=k, d=d, alpha=alpha),
-                       "dirichlet_mix" = simu_px_dirichlet_mix(no.simu = n.k,
-                                                               idx = k, d = d,
-                                                               weights=..., alpha=..., norm.alpha=...)
+      n.k <- sum(shift == k)
+
+      if (n.k > 0){
+        proc <-
+          switch(model,
+                 "HR" =
+                   simu_px_HR(n = n.k, idx = k, d = d, trend = trend[k, ],
+                              chol_mat = chol_mat),
+                 "logistic" =
+                   simu_px_logistic(n = n.k, idx = k, d = d, theta = theta),
+                 "neglogistic" =
+                   simu_px_neglogistic(n = n.k, idx = k, d = d, theta = theta),
+                 "dirichlet" =
+                   simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha),
+                 "dirichlet_mix" =
+                   simu_px_dirichlet_mix(n = n.k, idx = k, d = d, weights = ...,
+                                         alpha = ..., norm.alpha = ...) # ???
         )
-        stopifnot(dim(proc)==c(n.k, d))
-        proc <- proc/rowSums(proc) / (1-runif(nrow(proc)))
-        idx.sim <- which(apply(proc,1,max) > 1)
-        res <- rbind(res, proc[idx.sim,])
+
+        if (dim(proc) != c(n.k, d)) {
+          stop("The generated sample has wrong size.")
+        }
+
+        proc <- proc / rowSums(proc) / (1 - runif(nrow(proc)))
+        idx.sim <- which(apply(proc, 1, max) > 1)
+        res <- rbind(res, proc[idx.sim, ])
         n.total <- nrow(res)
+
       }
     }
   }
-  return(list(res=res[sample(1:nrow(res), no.simu, replace=FALSE),],
-              counter=counter))
+
+  return(list(res = res[sample(1:nrow(res), n, replace=FALSE), ],
+              counter = counter))
 }
 
 
-### This function simulates tree graphical models, either multivariate Pareto or max-stable distributions
+### !!! This function simulates tree graphical models, either multivariate
+#Pareto or max-stable distributions
 #tree: a graph object that must be a tree
 #model: either "HR" or "logistic" for HR or logistics tree model, respectively
 #method: either "mpareto" or "maxstable"
-#loc, scale, shape: if method="maxstable", output is transformed to general GEV margins
-#no.simu: number of simulations
+#loc, scale, shape: if method="maxstable", output is transformed to
+#general GEV margins
+#n: number of simulations
 #Gamma: parameter matrix if model="HR"
 #theta: parameter if model="logsitic"
-simu_tree <- function(tree, model, method, no.simu=1, Gamma=NULL, theta=NULL, alpha.mat=NULL, loc=1, scale=1, shape=1) {
+simu_tree <- function(tree, model, method, n=1, Gamma=NULL, theta=NULL,
+                      alpha.mat=NULL, loc=1, scale=1, shape=1) {
   require("igraph")
   adj =  as.matrix(as_adj(tree))
   d <- nrow(adj)
@@ -112,7 +190,7 @@ simu_tree <- function(tree, model, method, no.simu=1, Gamma=NULL, theta=NULL, al
 
   stopifnot(model %in% c("logistic", "HR", "dirichlet"))
   stopifnot((d==round(d)) & (d>=1))
-  stopifnot((no.simu==round(no.simu)) & (no.simu>=1))
+  stopifnot((n==round(n)) & (n>=1))
 
   if (length(loc)  ==1) loc   <- rep(loc  , times=d)
   if (length(scale)==1) scale <- rep(scale, times=d)
@@ -152,16 +230,16 @@ simu_tree <- function(tree, model, method, no.simu=1, Gamma=NULL, theta=NULL, al
     counter <- 0
     res <- numeric(0)
     n.total <- 0
-    while (n.total < no.simu) {
+    while (n.total < n) {
       counter <- counter + 1
-      shift <- sample(1:d, no.simu, replace=TRUE)
+      shift <- sample(1:d, n, replace=TRUE)
       for(k in 1:d){
         n.k <- sum(shift==k)
         if(n.k>0){
           proc <- switch(model,
-                         "HR" = simu_px_tree_HR(no.simu=n.k, G.vec=par.vec, A = A[[k]]),
-                         "logistic"     = simu_px_tree_logistic(no.simu=n.k, idx=k, nb.edges=e, theta=theta, A=A),
-                         "dirichlet"     = simu_px_tree_dirichlet(no.simu=n.k, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
+                         "HR" = simu_px_tree_HR(n=n.k, G.vec=par.vec, A = A[[k]]),
+                         "logistic"     = simu_px_tree_logistic(n=n.k, idx=k, nb.edges=e, theta=theta, A=A),
+                         "dirichlet"     = simu_px_tree_dirichlet(n=n.k, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
                                                                   alpha.end = alpha.mat[cbind(1:e, e.end[[k]])], A=A[[k]])
           )
           stopifnot(dim(proc)==c(n.k, d))
@@ -173,20 +251,20 @@ simu_tree <- function(tree, model, method, no.simu=1, Gamma=NULL, theta=NULL, al
       }
     }
   }else if(method=="maxstable"){
-    counter <- rep(0, times=no.simu)
-    res <- matrix(0, nrow=no.simu, ncol=d)
+    counter <- rep(0, times=n)
+    res <- matrix(0, nrow=n, ncol=d)
     for (k in 1:d) {
-      poisson <- rexp(no.simu)
+      poisson <- rexp(n)
 
       while (any(1/poisson > res[,k])) {
         ind <- (1/poisson > res[,k])
         n.ind <- sum(ind)
-        idx <- (1:no.simu)[ind]
+        idx <- (1:n)[ind]
         counter[ind] <- counter[ind] + 1
         proc <- switch(model,
-                       "HR" = simu_px_tree_HR(no.simu=n.ind, G.vec=par.vec, A = A[[k]]),
-                       "logistic"     = simu_px_tree_logistic(no.simu=n.ind, idx=k, nb.edges=e, theta=theta, A=A),
-                       "dirichlet"     = simu_px_tree_dirichlet(no.simu=n.ind, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
+                       "HR" = simu_px_tree_HR(n=n.ind, G.vec=par.vec, A = A[[k]]),
+                       "logistic"     = simu_px_tree_logistic(n=n.ind, idx=k, nb.edges=e, theta=theta, A=A),
+                       "dirichlet"     = simu_px_tree_dirichlet(n=n.ind, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
                                                                 alpha.end = alpha.mat[cbind(1:e, e.end[[k]])], A=A[[k]])
         )
         stopifnot(dim(proc)==c(n.ind, d))
@@ -212,7 +290,7 @@ simu_tree <- function(tree, model, method, no.simu=1, Gamma=NULL, theta=NULL, al
     })
 
   }
-  return(list(res=res[sample(1:nrow(res), no.simu, replace=FALSE),], counter=counter))
+  return(list(res=res[sample(1:nrow(res), n, replace=FALSE),], counter=counter))
 }
 
 
