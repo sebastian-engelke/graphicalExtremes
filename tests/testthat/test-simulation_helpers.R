@@ -25,7 +25,8 @@ test_that("simu_px_HR works", {
 
 test_that("simu_px_logistic works", {
   expect_error(simu_px_logistic(n, idx = c(1, 3), d, theta = 0.2))
-  expect_error(simu_px_logistic(n, idx = c(sample(1:n, n), 1), d, theta = 0.2))
+  expect_error(simu_px_logistic(n, idx = c(sample(1:d, n, replace = F), 1),
+                                d, theta = 0.2))
 
   res <- simu_px_logistic(n, idx, d, theta = 0.2)
   expect_type(res, "double")
@@ -33,6 +34,42 @@ test_that("simu_px_logistic works", {
 
   res <- simu_px_logistic(7, sample(x = 1:4, size = 7, replace = T), d,
                           theta = 0.2)
+
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+})
+
+test_that("simu_px_neglogistic works", {
+  expect_error(simu_px_neglogistic(n, idx = c(1, 3), d, theta = 0.2))
+  expect_error(simu_px_neglogistic(n, idx = c(sample(1:d, n, replace = T), 1),
+                                d, theta = 0.2))
+
+
+  res <- simu_px_neglogistic(n, idx, d, theta = 0.2)
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+
+  res <- simu_px_neglogistic(7, sample(x = 1:4, size = 7, replace = T), d,
+                          theta = 0.2)
+
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+
+})
+
+test_that("simu_px_dirchlet works", {
+  expect_error(simu_px_dirichlet(n, idx = c(1, 3), d,
+                                 alpha = c(0.2, 1, 1.2, 0.8)))
+  expect_error(simu_px_dirichlet(n, idx = c(sample(1:d, n, replace = T), 1),
+                                   d, alpha = c(0.2, 1, 1.2, 0.8)))
+
+
+  res <- simu_px_dirichlet(n, idx, d, alpha = c(0.2, 1, 1.2, 0.8))
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+
+  res <- simu_px_dirichlet(7, sample(x = 1:4, size = 7, replace = T), d,
+                           alpha = c(0.2, 1, 1.2, 0.1))
 
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))

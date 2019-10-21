@@ -1,6 +1,6 @@
-#' Simulates HR extremal functions
+#' Simulate HR extremal functions
 #'
-#' Simulate the Huessler-Reiss extremal functions
+#' Simulates the Huessler-Reiss extremal functions
 #'
 #' @inheritParams rmpareto
 #' @param idx Integer. Index corresponding to the variable over which
@@ -22,11 +22,13 @@ simu_px_HR <- function(n, idx, d, trend, chol_mat) {
 
 
 
-#' Simulates logistic extremal functions
-#'
 #' Simulate logistic extremal functions
 #'
+#' Simulates logistic extremal functions
+#'
 #' @inheritParams simu_px_HR
+#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+#' 1 to \code{d}, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 simu_px_logistic <- function(n, idx, d, theta) {
@@ -34,6 +36,8 @@ simu_px_logistic <- function(n, idx, d, theta) {
   if (length(idx) != 1 & length(idx) != n){
     stop("Argument idx must be a scalar or a vector with n entries")
   }
+
+
 
   # function body
   res <- matrix(1/gamma(1-theta)*(-log(runif(n*d)))^(-theta),
@@ -44,11 +48,13 @@ simu_px_logistic <- function(n, idx, d, theta) {
 
 
 
-#' Simulates negative logistic extremal functions
-#'
 #' Simulate negative logistic extremal functions
 #'
+#' Simulates negative logistic extremal functions
+#'
 #' @inheritParams simu_px_HR
+#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+#' 1 to \code{d}, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 simu_px_neglogistic <- function(n, idx, d, theta) {
@@ -66,12 +72,14 @@ simu_px_neglogistic <- function(n, idx, d, theta) {
 
 
 
-#' Simulates Dirichlet extremal functions
-#'
 #' Simulate Dirichlet extremal functions
 #'
+#' Simulates Dirichlet extremal functions
+#'
 #' @inheritParams simu_px_HR
-#' @param theta Numeric vector  of size \code{d}.
+#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+#' 1 to \code{d}, that determine which extremal function to simulate.
+#' @param theta Numeric vector of size \code{d}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 simu_px_dirichlet <- function(n, idx, d, alpha) {
   # check arguments
@@ -90,39 +98,9 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
 
 
 
-#' Simulates Dirichlet mixture extremal functions
+#' Simulate HR extremal functions on a tree
 #'
-#' Simulate Dirichlet mixture extremal functions
-#'
-#' @inheritParams simu_px_HR
-#' @param weights Numeric vector of size ???. ???
-#' @param alpha Numeric matrix of size ???. ???
-#' @param norm_alpha Numeric matrix of size ???. ???
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
-simu_px_dirichlet_mix <- function(n, idx, d, weights, alpha, norm_alpha) {
-  # check arguments
-  if (length(idx) != 1 & length(idx) != n){
-    stop("Argument idx must be a scalar or a vector with n entries")
-  }
-
-  # function body
-  if (length(idx)==1) {
-    k <- sample(1:length(weights), n, replace=TRUE,
-                prob=d*weights*norm_alpha[idx,])
-  } else {
-    k <- sapply(1:n, function(i) sample(1:length(weights), 1,
-                                        prob=d*weights*norm_alpha[idx[i],]))
-  }
-
-  shape.mat <- alpha[,k,drop=FALSE]
-  shape.mat[cbind(idx,1:n)] <- shape.mat[cbind(idx,1:n)]+1
-  res <- t(matrix(rgamma(d*n, shape=shape.mat), nrow=d, ncol=n))
-  return(res/res[cbind(1:n,idx)])
-}
-
-
-
-### !!! Internal: simulates HR extremal functions on a tree
+#' Simulates HR extremal functions on a tree
 simu_px_tree_HR <- function(n, G.vec, A) {
   res <- exp(A %*% matrix(rnorm(length(G.vec)*n, mean= -G.vec/2, sd=sqrt(G.vec)), ncol=n))
   return(t(res))

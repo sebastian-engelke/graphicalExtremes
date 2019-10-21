@@ -123,6 +123,7 @@ simu_px_dirichlet_mix <- function(no.simu, idx, N, weights, alpha, norm.alpha) {
 }
 
 
+# !!! this is used for fitting
 ### This function selects all possible edges that can be added to graph
 ### while still remaining in the class of graphs described in the paper
 #graph: the initial graph object
@@ -137,9 +138,9 @@ selectEdges = function(graph){
 ### Transforms data empirically to multivariate Pareto scale
 #data: nxd data matrix
 #p: probability that is used for quantile to threshold the data
-data2mpd <- function(data, p){
+data2mpareto <- function(data, p){
   xx <- 1/(1-apply(data, 2, unif))
-  q <- quantile(xx, p)
+  q <- 1 / (1 - p) # !!! use theoretical quantile from Pareto
   idx <- which(apply(xx, 1, max) > q)
   return(xx[idx,] / q)
 }
@@ -147,6 +148,8 @@ data2mpd <- function(data, p){
 ### Transforms Gamma matrix to graph and plots it
 #Gamma: the parameter matrix
 Gamma2Graph <- function(Gamma){
+  # !!! put a flag plot = T
+  # !!! add properties to the graph object
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
   for(i in 1:nrow(Gamma))
     null.mat[-i,-i] <- null.mat[-i,-i] + (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
@@ -159,12 +162,16 @@ Gamma2Graph <- function(Gamma){
 #S: Sigma^1 matrix
 #full: if TRUE then the dxd Sigma^1 matrix must be supplied
 Sigma2Gamma <- function(S, full=FALSE){
+  # !!! add argument k = index that is missing, with default = 1
+  # !!! full = F -> give S d-1 x d-1, we specify which element is missing.
+  # !!! First "complete" Sigma -> create GG
+  # !!! G is always d x d
   One <- rep(1, times=ncol(S))
   D <- diag(S)
   if(!full)
     Gamma <- cbind(c(0, D), rbind(t(diag(S)),  One%*%t(D) + D%*%t(One) - 2*S))
   if(full)
-    Gamma <- One%*%t(D) + D%*%t(One) - 2*S
+    Gamma <- One%*%t(D) + D%*%t(One) - 2*S # !!! use this once Sigma is "completed"
   return(Gamma)
 }
 
@@ -703,12 +710,15 @@ fpareto_HR <- function(data,
 
 
 
+# !!! the graph should be decomposable. It is only made for block graphs
+# Block graph
 ### This function takes a graph and Gamma matrix specified only on the edges/cliques
 ### of this graph and returns the full Gamma matrix implied by the conditional indepdencies
 #graph: graph object from igraph package
 #Gamma: the Gamma with entries only inside the cliques; or vector with weights for each
 #       edge in the same order as in graph object
-fullGamma = function(graph, Gamma){
+fullGamma = function(graph, Gamma){ # !!! block_gamma_completion
+
   if(is.vector(Gamma)){
     G = matrix(0,d,d)
     G[ends(graph,E(graph))] = Gamma
@@ -851,20 +861,5 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
 }
 
 
-### drafts ####
-Sigma <- rbind(c(1, .8), c(.8, 1))
-R <- chol(Sigma)
 
-it <- 1e3
-n <- 1e3
-d <- NCOL(Sigma)
 
-M <- matrix(nrow = it, ncol = d)
-
-for (i in 1:it){
-  X <- t(t(R) %*% matrix(rnorm(d * n),  ncol = n))
-  M[i, ] <- apply(X = X, MARGIN = 2, max)
-}
-
-pairs(M)
-pairs(X)
