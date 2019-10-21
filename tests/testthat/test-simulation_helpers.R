@@ -31,7 +31,8 @@ test_that("simu_px_logistic works", {
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 
-  res <- simu_px_logistic(7, 1:7, d, theta = 0.2)
+  res <- simu_px_logistic(7, sample(x = 1:4, size = 7, replace = T), d,
+                          theta = 0.2)
 
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))

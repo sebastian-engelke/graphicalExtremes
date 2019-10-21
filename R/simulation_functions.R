@@ -33,8 +33,11 @@
 #' ## !!! add examples (define params and call function)
 #' }
 rmpareto <- function(n,
-                     model = c("HR", "logistic", "neglogistic", "dirichlet",
-                               "dirichlet_mix")[1], d, par) {
+                     model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
+                     d, par) {
+
+  # methods
+  methods_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 
   # check arguments ####
   if (d != round(d) | d < 1){
@@ -45,11 +48,8 @@ rmpareto <- function(n,
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% c("HR", "logistic", "neglogistic", "dirichlet",
-                     "dirichlet_mix"))){
-    stop(paste("The model must be one of",
-               c("HR", "logistic", "neglogistic", "dirichlet",
-                 "dirichlet_mix")))
+  if (!(model %in% methods_nms)){
+    stop(paste("The model must be one of", methods_nms))
   }
 
   if (model == "HR") {
@@ -84,8 +84,6 @@ rmpareto <- function(n,
            when model = dirichlet.")
     }
 
-  } else if (model == "dirichlet_mix") { # !!!
-    # ???
   }
 
   # prepare arguments ####
@@ -146,10 +144,7 @@ rmpareto <- function(n,
                  "neglogistic" =
                    simu_px_neglogistic(n = n.k, idx = k, d = d, theta = theta),
                  "dirichlet" =
-                   simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha),
-                 "dirichlet_mix" =
-                   simu_px_dirichlet_mix(n = n.k, idx = k, d = d, weights = ...,
-                                         alpha = ..., norm.alpha = ...) # ???
+                   simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha)
         )
 
         if (dim(proc) != c(n.k, d)) {
