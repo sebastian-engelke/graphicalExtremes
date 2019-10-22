@@ -57,7 +57,7 @@ rmpareto <- function(n,
       stop("The argument par must be a matrix, when model = HR.")
     }
 
-    if (nrow(par) != d | ncol(par) != d){
+    if (NROW(par) != d | NCOL(par) != d){
       stop("The argument par must be a d x d matrix, when model = HR.")
     }
 
@@ -149,16 +149,16 @@ rmpareto <- function(n,
           stop("The generated sample has wrong size.")
         }
 
-        proc <- proc / rowSums(proc) / (1 - runif(nrow(proc)))
+        proc <- proc / rowSums(proc) / (1 - runif(NROW(proc)))
         idx.sim <- which(apply(proc, 1, max) > 1)
         res <- rbind(res, proc[idx.sim, ])
-        n.total <- nrow(res)
+        n.total <- NROW(res)
 
       }
     }
   }
 
-  return(list(res = res[sample(1:nrow(res), n, replace=FALSE), ],
+  return(list(res = res[sample(1:NROW(res), n, replace=FALSE), ],
               counter = counter))
 }
 
@@ -250,7 +250,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                    "or a vector with d elements, when model = HR."))
       }
     } else {
-      if (nrow(par) != d | ncol(par) != d){
+      if (NROW(par) != d | NCOL(par) != d){
         stop(paste("The argument par must be a d x d matrix,",
                    "or a vector with d elements, when model = HR."))
       }
@@ -262,7 +262,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
 
   } else if (model == "dirichlet") {
-    if (nrow(alpha.mat) != d-1 | ncol(alpha.mat) != 2){
+    if (NROW(alpha.mat) != d-1 | NCOL(alpha.mat) != 2){
       stop(paste("The argument par must be a (d-1) x 2 ,",
                  "when model = dirichlet."))
     }
@@ -325,15 +325,15 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                                                                 alpha.end = alpha.mat[cbind(1:e, e.end[[k]])], A=A[[k]])
         )
         stopifnot(dim(proc)==c(n.k, d))
-        proc <- proc/rowSums(proc) / (1-runif(nrow(proc)))
+        proc <- proc/rowSums(proc) / (1-runif(NROW(proc)))
         idx.sim <- which(apply(proc,1,max) > 1)
         res <- rbind(res, proc[idx.sim,])
-        n.total <- nrow(res)
+        n.total <- NROW(res)
       }
     }
   }
 
-  return(list(res=res[sample(1:nrow(res), n, replace=FALSE),], counter=counter))
+  return(list(res=res[sample(1:NROW(res), n, replace=FALSE),], counter=counter))
 }
 
 
@@ -359,7 +359,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   # !!! code this
   require("igraph")
   adj =  as.matrix(as_adj(tree))
-  d <- nrow(adj)
+  d <- NROW(adj)
   e <- ecount(tree)
   ends.mat = ends(tree, E(tree))
 
@@ -385,7 +385,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   } else if (model=="HR") {
     par.vec = Gamma[ends.mat]
   } else if (model=="dirichlet") {
-    stopifnot(nrow(alpha.mat) == d-1 & ncol(alpha.mat) == 2)
+    stopifnot(NROW(alpha.mat) == d-1 & NCOL(alpha.mat) == 2)
   }
 
   ## Define a matrix A[[k]] choosing the paths from k to other vertices
@@ -441,5 +441,5 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
   }
 
-  return(list(res=res[sample(1:nrow(res), n, replace=FALSE),], counter=counter))
+  return(list(res=res[sample(1:NROW(res), n, replace=FALSE),], counter=counter))
 }
