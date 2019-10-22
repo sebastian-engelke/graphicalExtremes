@@ -38,17 +38,27 @@ if (model=="HR") {
 treee <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
                                                    c(1, 0, 1, 0),
                                                    c(0, 1, 0, 1),
-                                                   c(0, 0, 1, 0)))
-d <- 3
+                                                   c(0, 0, 1, 0)),
+                                             mode = "undirected")
 
-alpha <- matrix(runif(d * 2), ncol = 2)
+d <- 4
+
+alpha <- matrix(runif((d - 1) * 2), ncol = 2)
 
 igraph::plot.igraph(treee)
 
+S <- (get.adjacency(treee) - diag(0.5, nrow = d)) %>%  as.matrix() %>% solve()
 
+G <- matrix(nrow = d, ncol = d)
+for (i in 1:d){
+  for (j in 1:d){
+    G[i, j] = 2 * abs(i - j)
+  }
+}
+Gamma2Graph(G)
+simu_tree_old(treee, "HR", "mpareto", n = 3, Gamma = G)
+simu_tree_old(treee, "logistic", "mpareto", n = 3, theta = .3)
 simu_tree_old(treee, "dirichlet", "mpareto", n = 3, alpha.mat = alpha)
-
-
 
 
 ### Internal: simulates HR extremal functions on a tree

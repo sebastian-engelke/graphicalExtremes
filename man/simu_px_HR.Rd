@@ -2,15 +2,27 @@
 % Please edit documentation in R/simulation_helpers.R
 \name{simu_px_HR}
 \alias{simu_px_HR}
-\title{Simulates HR extremal functions}
+\title{Simulate HR extremal functions}
 \usage{
-simu_px_HR(no.simu = 1, idx, trend, chol.mat)
+simu_px_HR(n, idx, d, trend, chol_mat)
 }
 \arguments{
-\item{no.simu}{Integer. Number of simulations, by default equal to 1}
+\item{n}{Positive integer. Number of simulations.}
 
-\item{idx}{Integer.}
+\item{idx}{Integer. Index corresponding to the variable over which
+the extremal function is simulated.}
+
+\item{d}{Positive integer. Dimension of the multivariate Pareto
+distribution.}
+
+\item{trend}{Numeric. Trend corresponding to the variable \code{idx}.}
+
+\item{chol_mat}{Numeric matrix \eqn{d\times d}{d x d}.
+Cholesky decomposition of the desired covariance matrix.}
+}
+\value{
+Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 }
 \description{
-Simulate the Huessler-Reiss extremal functions
+Simulates the Huessler-Reiss extremal functions
 }
