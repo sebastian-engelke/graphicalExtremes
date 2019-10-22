@@ -47,6 +47,7 @@ alpha <- matrix(runif((d - 1) * 2), ncol = 2)
 
 igraph::plot.igraph(treee)
 
+
 S <- (get.adjacency(treee) - diag(0.5, nrow = d)) %>%  as.matrix() %>% solve()
 
 G <- matrix(nrow = d, ncol = d)

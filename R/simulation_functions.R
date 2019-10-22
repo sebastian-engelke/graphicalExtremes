@@ -37,7 +37,7 @@ rmpareto <- function(n,
                      d, par) {
 
   # methods
-  methods_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
+  model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 
   # check arguments ####
   if (d != round(d) | d < 1){
@@ -48,8 +48,8 @@ rmpareto <- function(n,
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% methods_nms)){
-    stop(paste("The model must be one of", methods_nms))
+  if (!(model %in% model_nms)){
+    stop(paste("The model must be one of", model_nms))
   }
 
   if (model == "HR") {
@@ -64,24 +64,24 @@ rmpareto <- function(n,
   } else if (model == "logistic") {
     if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
       stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
-          "when model = logistic."))
+                 "when model = logistic."))
     }
 
   } else if (model == "neglogistic") {
     if (par <= 1e-12){
       stop(paste("The argument par must be scalar greater than 1e-12,",
-           "when model = neglogistic."))
+                 "when model = neglogistic."))
     }
 
   } else if (model == "dirichlet") {
     if (length(par) != d){
       stop(paste("The argument par must be a vector with d elements,",
-           "when model = dirichlet."))
+                 "when model = dirichlet."))
     }
 
     if (any(par <= 1e-12)){
       stop(paste("The elements of par must be greater than 1e-12,",
-           "when model = dirichlet."))
+                 "when model = dirichlet."))
     }
 
   }
@@ -106,7 +106,7 @@ rmpareto <- function(n,
     trend <- t(sapply(1:d, function(k){
       sapply(1:d, function(j){
         Gamma[j, k] / 2
-        }
+      }
       )}))
 
   } else if (model == "logistic") {
@@ -143,7 +143,7 @@ rmpareto <- function(n,
                    simu_px_neglogistic(n = n.k, idx = k, d = d, theta = theta),
                  "dirichlet" =
                    simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha)
-        )
+          )
 
         if (any(dim(proc) != c(n.k, d))) {
           stop("The generated sample has wrong size.")
@@ -202,45 +202,86 @@ rmpareto <- function(n,
 #'
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
-  # !!! code this
-  require("igraph")
-  # !!! check if it is tree
-  # if yes, check if is undirected,
-  # if yes good
-  # if not -> warning + undircted
-  # if not, stop!
-  adj =  as.matrix(as_adj(tree))
-  d <- nrow(adj)
-  e <- ecount(tree)
-  ends.mat = ends(tree, E(tree))
 
+  # methods
+  model_nms <- c("HR", "logistic", "dirichlet")
+
+  # graph theory objects ####
+  # set graph theory objects
+  adj =  as.matrix(igraph::as_adj(tree))
+  d <- NROW(adj)
+  e <- igraph::ecount(tree)
+  ends.mat = igraph::ends(tree, igraph::E(tree))
+
+  # check graph theory objects
+  is_connected <- igraph::is_connected(tree)
+  is_tree <- is_connected & (e == d - 1)
+  is_directed <- igraph::is_directed(tree)
+
+  # check if it is tree
+  if (is_tree){
+    if (is_directed(tree)){
+      warning("The given tree is directed. Converted to undirected.")
+      tree <- igraph::as.undirected(tree)
+    }
+  } else {
+    stop("The given graph is not a tree.")
+  }
+
+
+  # check arguments ####
+  if (d != round(d) | d < 1){
+    stop("The argument d must be a positive integer.")
+  }
+
+  stopifnot((n==round(n)) & (n>=1))
+  if (n != round(n) | n < 1){
+    stop("The argument n must be a positive integer.")
+  }
+
+  if (!(model %in% model_nms)){
+    stop(paste("The model must be one of", model_nms))
+  }
+
+  if (model == "HR") {
+    if (!is.matrix(par)){
+      if (length(par) != d){
+        stop(paste("The argument par must be a d x d matrix,",
+                   "or a vector with d elements, when model = HR."))
+      }
+    } else {
+      if (nrow(par) != d | ncol(par) != d){
+        stop(paste("The argument par must be a d x d matrix,",
+                   "or a vector with d elements, when model = HR."))
+      }
+    }
+  } else if (model == "logistic") {
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
+      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+                 "when model = logistic."))
+    }
+
+  } else if (model == "dirichlet") {
+    if (nrow(alpha.mat) != d-1 | ncol(alpha.mat) != 2){
+      stop(paste("The argument par must be a (d-1) x 2 ,",
+                 "when model = dirichlet."))
+    }
+    if (any(par <= 1e-12)){
+      stop(paste("The elements of par must be greater than 1e-12,",
+                 "when model = dirichlet."))
+    }
+  }
+
+  # prepare arguments ####
   if (model == "HR"){
     Gamma <- par
-  }else if(model == "logistic"){
+  } else if(model == "logistic"){
     theta <- par
-  }else if(model == "dirichlet"){
+  } else if(model == "dirichlet"){
     alpha.mat <- par
   }
 
-  stopifnot(model %in% c("logistic", "HR", "dirichlet"))
-  stopifnot((d==round(d)) & (d>=1))
-  stopifnot((n==round(n)) & (n>=1))
-
-  if (length(loc)  ==1) loc   <- rep(loc  , times=d)
-  if (length(scale)==1) scale <- rep(scale, times=d)
-  if (length(shape)==1) shape <- rep(shape, times=d)
-  stopifnot(all(scale>1e-12))
-
-  if (model=="logistic") {
-    stopifnot(1e-12 < theta & theta < 1 - 1e-12)
-  } else if (model=="HR") {
-    # !!! check that # of nodes == ncol(Gamma)
-    # Gamma2Graph()
-    par.vec = Gamma[ends.mat]
-  } else if (model=="dirichlet") {
-    stopifnot(nrow(alpha.mat) == d-1 & ncol(alpha.mat) == 2)
-  }
-
+  # function body ####
   ## Define a matrix A[[k]] choosing the paths from k to other vertices
   idx.e <- matrix(0, nrow=d, ncol=d)
   idx.e[ends.mat] = 1:e
@@ -257,11 +298,16 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       path = short.paths$vpath[[h]]
       idx.tmp = idx.e[cbind(path[-length(path)], path[-1])]
       A[[k]][h,idx.tmp] <- 1
-      e.start[[k]][idx.tmp] = apply(ends.mat[idx.tmp,] == matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2), MARGIN=1, FUN = function(x) which(x==TRUE)) #path[-length(path)]
-      e.end[[k]][idx.tmp] = apply(ends.mat[idx.tmp,] == matrix(path[-1], nrow = length(idx.tmp), ncol=2), MARGIN=1, FUN = function(x) which(x==TRUE))  #path[-1]
+      e.start[[k]][idx.tmp] =
+        apply(ends.mat[idx.tmp,] ==
+                matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2),
+              MARGIN=1, FUN = function(x) which(x==TRUE))
+      e.end[[k]][idx.tmp] =
+        apply(ends.mat[idx.tmp,] ==
+                matrix(path[-1], nrow = length(idx.tmp), ncol=2),
+              MARGIN=1, FUN = function(x) which(x==TRUE))
     }
   }
-
 
   counter <- 0
   res <- numeric(0)
