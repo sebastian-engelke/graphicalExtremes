@@ -24,6 +24,33 @@ cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
 
+my_tree <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
+                                                   c(1, 0, 1, 0),
+                                                   c(0, 1, 0, 1),
+                                                   c(0, 0, 1, 0)),
+                                             mode = "undirected")
+my_tree_dir <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
+                                                         c(1, 0, 1, 0),
+                                                         c(0, 1, 0, 1),
+                                                         c(0, 0, 1, 0)))
+graph_connected <-  igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
+                                                              c(1, 0, 1, 1),
+                                                              c(0, 1, 0, 1),
+                                                              c(0, 1, 1, 0)),
+                                                        mode = "undirected")
+graph_disconnected <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
+                                                                c(1, 0, 1, 0),
+                                                                c(0, 1, 0, 0),
+                                                                c(0, 0, 0, 0)),
+                                                          mode = "undirected")
+
+G_tree <- matrix(nrow = d, ncol = d)
+for (i in 1:d){
+  for (j in 1:d){
+    G_tree[i, j] = 2 * abs(i - j)
+  }
+}
+
 # Run tests
 test_that("rmpareto works", {
   expect_error(rmpareto(n, "HR", -1, par = G))
@@ -38,6 +65,12 @@ test_that("rmpareto works", {
   expect_error(rmpareto(n, "dirichlet", d, par = alpha_wrong2))
   expect_error(rmpareto(n, "HR", d, par = G_wrong2))
   expect_error(rmpareto(n, "HR", d, par = G_wrong3))
+
+  res <- rmpareto(n, d = d, par = G)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
 
   res <- rmpareto(n, "HR", d, par = G)
   expect_length(res, 2)
@@ -65,5 +98,7 @@ test_that("rmpareto works", {
 })
 
 test_that("rmpareto_tree works", {
-
+  expect_warning(rmpareto_tree(n, tree = my_tree_dir, par = G_tree))
+  # res <- rmpareto_tree(n, tree = my_tree_dir, par = G_tree)
+  # expect_length(res, 2)
 })

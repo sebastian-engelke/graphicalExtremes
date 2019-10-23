@@ -207,23 +207,23 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   model_nms <- c("HR", "logistic", "dirichlet")
 
   # graph theory objects ####
+  # check if it is directed
+  if (igraph::is_directed(tree)){
+    tree <- igraph::as.undirected(tree)
+  }
+
   # set graph theory objects
   adj =  as.matrix(igraph::as_adj(tree))
   d <- NROW(adj)
   e <- igraph::ecount(tree)
   ends.mat = igraph::ends(tree, igraph::E(tree))
 
-  # check graph theory objects
+  # check if it is tree
   is_connected <- igraph::is_connected(tree)
   is_tree <- is_connected & (e == d - 1)
-  is_directed <- igraph::is_directed(tree)
 
-  # check if it is tree
   if (is_tree){
-    if (is_directed(tree)){
       warning("The given tree is directed. Converted to undirected.")
-      tree <- igraph::as.undirected(tree)
-    }
   } else {
     stop("The given graph is not a tree.")
   }
@@ -274,7 +274,11 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   # prepare arguments ####
   if (model == "HR"){
-    Gamma <- par
+    if (is.matrix(par)){
+      par.vec <- par[ends.mat]
+    } else {
+      par.vec <- par
+    }
   } else if(model == "logistic"){
     theta <- par
   } else if(model == "dirichlet"){
@@ -293,7 +297,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   for (k in 1:d) {
     A[[k]] <- matrix(0, nrow=d, ncol=e)
     e.start[[k]] = e.end[[k]] = numeric(e)
-    short.paths <- shortest_paths(tree, from = k, to=1:d)
+    short.paths <- igraph::shortest_paths(tree, from = k, to=1:d)
     for(h in 1:d){
       path = short.paths$vpath[[h]]
       idx.tmp = idx.e[cbind(path[-length(path)], path[-1])]
