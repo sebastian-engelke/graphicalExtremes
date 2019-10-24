@@ -244,9 +244,9 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   if (model == "HR") {
     if (!is.matrix(par)){
-      if (length(par) != d){
+      if (length(par) != (d - 1)){
         stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d elements, when model = HR."))
+                   "or a vector with d - 1 elements, when model = HR."))
       }
     } else {
       if (NROW(par) != d | NCOL(par) != d){
@@ -583,9 +583,9 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   if (model == "HR") {
     if (!is.matrix(par)){
-      if (length(par) != d){
+      if (length(par) != (d - 1)){
         stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d elements, when model = HR."))
+                   "or a vector with d - 1 elements, when model = HR."))
       }
     } else {
       if (NROW(par) != d | NCOL(par) != d){

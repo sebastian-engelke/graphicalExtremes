@@ -10,6 +10,13 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
             c(1.5, 0, 2, 1.5),
             c(1.5, 2, 0, 1.5),
             c(2, 1.5, 1.5, 0))
+G_tree <- matrix(nrow = d, ncol = d)
+for (i in 1:d){
+  for (j in 1:d){
+    G_tree[i, j] = 2 * abs(i - j)
+  }
+}
+G_tree_vec <- runif(d - 1)
 G_wrong <- 0.2
 G_wrong2 <- matrix(rep(0, d * d), nrow = d)
 G_wrong3 <- G[, -1]
@@ -49,12 +56,6 @@ graph_disconnected <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
 
 empty_graph <- igraph::as.undirected(igraph::graph(n = 0, edges = integer(0)))
 
-G_tree <- matrix(nrow = d, ncol = d)
-for (i in 1:d){
-  for (j in 1:d){
-    G_tree[i, j] = 2 * abs(i - j)
-  }
-}
 
 # Run tests
 test_that("rmpareto works", {
@@ -132,7 +133,19 @@ test_that("rmpareto_tree works", {
   expect_type(res$counter, "double")
   expect_equal(dim(res$res), c(n, d))
 
+  res <- rmpareto_tree(n, tree = my_tree, par = G_tree)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
   res <- rmpareto_tree(n, model = "HR", tree = my_tree, par = G_tree)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmpareto_tree(n, model = "HR", tree = my_tree, par = G_tree_vec)
   expect_length(res, 2)
   expect_type(res$res, "double")
   expect_type(res$counter, "double")
@@ -226,7 +239,19 @@ test_that("rmstable_tree works", {
   expect_type(res$counter, "double")
   expect_equal(dim(res$res), c(n, d))
 
+  res <- rmstable_tree(n, tree = my_tree, par = G_tree_vec)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
   res <- rmstable_tree(n, model = "HR", tree = my_tree, par = G_tree)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable_tree(n, model = "HR", tree = my_tree, par = G_tree_vec)
   expect_length(res, 2)
   expect_type(res$res, "double")
   expect_type(res$counter, "double")
