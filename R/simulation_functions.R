@@ -662,6 +662,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       n.ind <- sum(ind)
       idx <- (1:n)[ind]
       counter[ind] <- counter[ind] + 1
+      browser()
       proc <-
         switch(model,
                "HR" =

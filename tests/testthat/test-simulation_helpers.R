@@ -9,6 +9,15 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
             c(1.5, 0, 2, 1.5),
             c(1.5, 2, 0, 1.5),
             c(2, 1.5, 1.5, 0))
+G.vec <- c(2, 3)
+A <- list(
+  rbind(c(0, 0),
+        c(0, 1),
+        c(1, 1))
+)
+# !!! continue with building A, tests with simulation_helpers, and
+# change explanation of A in the function descriptions
+
 cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
@@ -71,6 +80,13 @@ test_that("simu_px_dirchlet works", {
   res <- simu_px_dirichlet(7, sample(x = 1:4, size = 7, replace = T), d,
                            alpha = c(0.2, 1, 1.2, 0.1))
 
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+})
+
+
+test_that("simu_px_tree_HR works", {
+  res <- simu_px_tree_HR(n, G.vec = )
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 })
