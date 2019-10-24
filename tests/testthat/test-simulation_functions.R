@@ -151,6 +151,51 @@ test_that("rmpareto_tree works", {
   expect_equal(dim(res$res), c(n, d))
 })
 
+test_that("rmstable works",{
+  expect_error(rmstable(n = n, d = d, par = theta_1))
+  expect_error(rmstable(n, "HR", -1, par = G))
+  expect_error(rmstable(n, "HR", 1.2, par = G))
+  expect_error(rmstable(-1, "HR", d, par = G))
+  expect_error(rmstable(1.2, "HR", d, par = G))
+  expect_error(rmstable(n, "HRrrrrrrrr", d, par = G))
+  expect_error(rmstable(n, "HR", d, par = G_wrong))
+  expect_error(rmstable(n, "logistic", d, par = theta_wrong1))
+  expect_error(rmstable(n, "neglogistic", d, par = theta_wrong2))
+  expect_error(rmstable(n, "dirichlet", d, par = alpha_wrong1))
+  expect_error(rmstable(n, "dirichlet", d, par = alpha_wrong2))
+  expect_error(rmstable(n, "HR", d, par = G_wrong2))
+  expect_error(rmstable(n, "HR", d, par = G_wrong3))
+
+  res <- rmstable(n, d = d, par = G)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable(n, "HR", d, par = G)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable(n, "logistic", d, par = theta_1)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable(n, "neglogistic", d, par = theta_2)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable(n, "dirichlet", d, par = alpha)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+})
 
 test_that("rmstable_tree works", {
   expect_warning(rmstable_tree(n, tree = my_tree_dir, par = G_tree))

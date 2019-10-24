@@ -163,6 +163,7 @@ rmpareto <- function(n,
 }
 
 
+
 #' Simulate samples of multivariate Pareto distribution from a tree
 #'
 #' Simulates a tree graphical model, following a multivariate Pareto
@@ -335,7 +336,11 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                                             alpha.mat[cbind(1:e, e.end[[k]])],
                                           A=A[[k]])
         )
-        stopifnot(dim(proc)==c(n.k, d))
+
+        if (any(dim(proc) != c(n.k, d))) {
+          stop("The generated sample has wrong size.")
+        }
+
         proc <- proc/rowSums(proc) / (1-runif(NROW(proc)))
         idx.sim <- which(apply(proc,1,max) > 1)
         res <- rbind(res, proc[idx.sim,])
@@ -346,6 +351,176 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   return(list(res=res[sample(1:NROW(res), n, replace=FALSE),], counter=counter))
 }
+
+
+
+#' Simulate samples of max-stable process
+#'
+#' Simulates exact samples of max-stable process
+#' @param n Positive integer. Number of simulations.
+#' @param model String. The parametric model type. Is one of:
+#' \itemize{
+#' \item \code{HR} (default),
+#' \item \code{logistic},
+#' \item \code{neglogistic},
+#' \item \code{dirichlet}.
+#' }
+#' @param d Positive integer. Dimension of the multivariate Pareto
+#' distribution.
+#' @param par Is the respective parameter for the given \code{model}.
+#' Is one of:
+#' \itemize{
+#' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
+#' variogram, if \code{model = HR}.
+#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
+#' \item \eqn{\theta > 0}, if \code{model = neglogistic}.
+#' \item \eqn{\alpha > 0}, numeric vector of size \code{d},
+#' if \code{model = dirichlet}.
+#' }
+#'
+#' @return List. The list is made of:
+#' \itemize{
+#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+#' The simulated multivariate Pareto data.
+#' \item \code{counter} Positive integer. The number of times needed to sweep
+#' over the \code{d} variables to simulate \code{n} multivariate
+#' observations.
+#' }
+#' ## !!! add examples (define params and call function)
+#'
+rmstable <- function(n,
+                     model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
+                     d, par) {
+
+  # methods
+  model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
+
+  # check arguments ####
+  if (d != round(d) | d < 1){
+    stop("The argument d must be a positive integer.")
+  }
+
+  if (n != round(n) | n < 1){
+    stop("The argument n must be a positive integer.")
+  }
+
+  if (!(model %in% model_nms)){
+    stop(paste("The model must be one of", model_nms))
+  }
+
+  if (model == "HR") {
+    if (!is.matrix(par)){
+      stop("The argument par must be a matrix, when model = HR.")
+    }
+
+    if (NROW(par) != d | NCOL(par) != d){
+      stop("The argument par must be a d x d matrix, when model = HR.")
+    }
+
+  } else if (model == "logistic") {
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
+      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+                 "when model = logistic."))
+    }
+
+  } else if (model == "neglogistic") {
+    if (par <= 1e-12){
+      stop(paste("The argument par must be scalar greater than 1e-12,",
+                 "when model = neglogistic."))
+    }
+
+  } else if (model == "dirichlet") {
+    if (length(par) != d){
+      stop(paste("The argument par must be a vector with d elements,",
+                 "when model = dirichlet."))
+    }
+
+    if (any(par <= 1e-12)){
+      stop(paste("The elements of par must be greater than 1e-12,",
+                 "when model = dirichlet."))
+    }
+
+  }
+
+  # prepare arguments ####
+  if (model == "HR") {
+    Gamma <- par
+
+    # compute cholesky decomposition
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    chol_mat <- matrix(0, d, d)
+
+    result <- tryCatch({
+      chol_mat[-1, -1] <- chol(cov.mat)
+    },
+    error = function(e) {
+      stop(paste("The covariance matrix associated to Gamma",
+                 "cannot be factorized with Cholesky."))
+    })
+
+    # compute trend (matrix where each row is one variable)
+    trend <- t(sapply(1:d, function(k){
+      sapply(1:d, function(j){
+        Gamma[j, k] / 2
+      }
+      )}))
+
+  } else if (model == "logistic") {
+    theta <- par
+
+  } else if (model == "neglogistic") {
+    theta <- par
+
+  } else if (model == "dirichlet") {
+    alpha <- par
+
+  }
+
+  # function body ####
+  counter <- rep(0, times=n)
+  res <- matrix(0, nrow=n, ncol=d)
+  for (k in 1:d) {
+    poisson <- rexp(n)
+
+    while (any(1/poisson > res[,k])) {
+      ind <- (1/poisson > res[,k])
+      n.ind <- sum(ind)
+      idx <- (1:n)[ind]
+      counter[ind] <- counter[ind] + 1
+      proc <-
+        switch(model,
+               "HR" =
+                 simu_px_HR(n = n.ind, idx = k, d = d, trend = trend[k, ],
+                            chol_mat = chol_mat),
+               "logistic" =
+                 simu_px_logistic(n = n.ind, idx = k, d = d, theta = theta),
+               "neglogistic" =
+                 simu_px_neglogistic(n = n.ind, idx = k, d = d, theta = theta),
+               "dirichlet" =
+                 simu_px_dirichlet(n = n.ind, idx = k, d = d, alpha = alpha))
+
+      if (any(dim(proc) != c(n.ind, d))) {
+        stop("The generated sample has wrong size.")
+      }
+
+      if (k==1) {
+        ind.upd <- rep(TRUE, times=n.ind)
+      } else {
+        ind.upd <- sapply(1:n.ind, function(i)
+          all(1/poisson[idx[i]]*proc[i,1:(k-1)] <= res[idx[i],1:(k-1)]))
+      }
+      if (any(ind.upd)) {
+        idx.upd <- idx[ind.upd]
+        res[idx.upd,] <- pmax(res[idx.upd,], 1/poisson[idx.upd]*proc[ind.upd,])
+      }
+      poisson[ind] <- poisson[ind] + rexp(n.ind)
+    }
+  }
+
+  return(list(res = res[sample(1:NROW(res), n, replace=FALSE), ],
+              counter = counter))
+}
+
 
 
 #' Simulate samples of max-stable process from a tree
@@ -502,7 +677,11 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                                           alpha.mat[cbind(1:e, e.end[[k]])],
                                         A=A[[k]])
       )
-      stopifnot(dim(proc)==c(n.ind, d))
+
+      if (any(dim(proc) != c(n.ind, d))) {
+        stop("The generated sample has wrong size.")
+      }
+
       if (k==1) {
         ind.upd <- rep(TRUE, times=n.ind)
       } else {
