@@ -12,12 +12,12 @@
 #'
 simu_px_HR <- function(n, idx, d, trend, chol_mat) {
   # check arguments
-  if (length(idx)!=1) stop("Argument idx must be a scalar.")
+  if (length(idx) != 1) stop("Argument idx must be a scalar.")
 
   # function body
   d <- nrow(chol_mat)
-  proc <- t(chol_mat)%*%matrix(rnorm(d*n), ncol=n) - trend
-  proc <- exp(t(proc) - proc[idx,])
+  proc <- t(chol_mat) %*% matrix(rnorm(d * n), ncol = n) - trend
+  proc <- exp(t(proc) - proc[idx, ])
   return(proc)
 }
 
@@ -42,10 +42,11 @@ simu_px_logistic <- function(n, idx, d, theta) {
 
 
   # function body
-  res <- matrix(1/gamma(1-theta)*(-log(runif(n*d)))^(-theta),
-                      nrow=n, ncol=d)
-  res[cbind(1:n,idx)] <- 1/gamma(1-theta)*rgamma(n,shape=1-theta)^(-theta)
-  return(res/res[cbind(1:n,idx)])
+  res <- matrix(1 / gamma(1 - theta) * (-log(runif(n * d))) ^ (-theta),
+                      nrow = n, ncol = d)
+  res[cbind(1:n, idx)] <- 1 / gamma(1 - theta) * rgamma(n, shape = 1 - theta) ^
+    (-theta)
+  return(res / res[cbind(1:n, idx)])
 }
 
 
@@ -67,10 +68,11 @@ simu_px_neglogistic <- function(n, idx, d, theta) {
   }
 
   # function body
-  res <- matrix(rweibull(n*d, shape=theta, scale=1/gamma(1+1/theta)),
-                nrow=n, ncol=d)
-  res[cbind(1:n,idx)] <- 1/gamma(1+1/theta)*rgamma(n,shape=1+1/theta)^(1/theta)
-  return(res/res[cbind(1:n,idx)])
+  res <- matrix(rweibull(n * d, shape = theta, scale = 1 /
+                           gamma(1 + 1 / theta)), nrow = n, ncol = d)
+  res[cbind(1:n, idx)] <- 1 / gamma(1 + 1 / theta) *
+    rgamma(n, shape = 1 + 1 / theta) ^ (1 / theta)
+  return(res / res[cbind(1:n, idx)])
 }
 
 
@@ -94,10 +96,11 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
   # function body
   shape <- alpha
   shape[idx] <- alpha[idx] + 1
-  shape.mat <- matrix(shape, nrow=d, ncol=n)
-  rate.mat <- matrix(alpha, nrow=d, ncol=n)
-  res <- t(matrix(rgamma(d*n, shape=shape.mat, rate=rate.mat), nrow=d, ncol=n))
-  return(res/res[cbind(1:n,idx)])
+  shape.mat <- matrix(shape, nrow = d, ncol = n)
+  rate.mat <- matrix(alpha, nrow = d, ncol = n)
+  res <- t(matrix(rgamma(d * n, shape = shape.mat, rate = rate.mat),
+                  nrow = d, ncol = n))
+  return(res / res[cbind(1:n, idx)])
 }
 
 
@@ -119,10 +122,10 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
 #'
 simu_px_tree_HR <- function(n, G.vec, A_mat) {
   res <- exp(A_mat %*%
-               matrix(rnorm(length(G.vec)*n,
-                            mean= -G.vec/2,
-                            sd=sqrt(G.vec)),
-                      ncol=n))
+               matrix(rnorm(length(G.vec) * n,
+                            mean = -G.vec / 2,
+                            sd = sqrt(G.vec)),
+                      ncol = n))
   return(t(res))
 }
 
@@ -154,11 +157,11 @@ simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
 
   # function body
   res <- exp(A[[idx]] %*%
-               log(matrix(1/gamma(1-theta)*
-                            (-log(runif(n*nb.edges)))^(-theta) /
-                            (1/gamma(1-theta)*
-                               rgamma(n*nb.edges,shape=1-theta)^(-theta)),
-                          ncol=n)))
+               log(matrix(1 / gamma(1 - theta) *
+                            (-log(runif(n * nb.edges))) ^ (-theta) /
+                            (1 / gamma(1 - theta) *
+                               rgamma(n * nb.edges, shape = 1 - theta) ^
+                               (-theta)), ncol = n)))
   return(t(res))
 }
 
@@ -177,8 +180,8 @@ simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
 #' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
 #' These are the parameter of one "side" of the Dirichlet distribution
 #' ???Sebastian
-#' @param A_mat Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
-#' in the tree, the columns represent the edges. For a fixed node
+#' @param A_mat Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
+#' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 #' equal to 1 if the edge in position \eqn{j} is on the directed path from node
 #' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
@@ -186,14 +189,15 @@ simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
 simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A_mat) {
-  e = length(alpha.start)
-  shape.start = matrix(alpha.start + 1, nrow=e, ncol=n)
-  rate.start = matrix(alpha.start, nrow=e, ncol=n)
-  shape.end = matrix(alpha.end, nrow=e, ncol=n)
-  rate.end = matrix(alpha.end, nrow=e, ncol=n)
-  sim.start = matrix(rgamma(e*n, shape=shape.start, rate=rate.start),
-                     nrow=e, ncol=n)
-  sim.end = matrix(rgamma(e*n, shape=shape.end, rate=rate.end), nrow=e, ncol=n)
-  res       <- exp(A_mat %*% log(sim.end / sim.start))
+  e <- length(alpha.start)
+  shape.start <- matrix(alpha.start + 1, nrow = e, ncol = n)
+  rate.start <- matrix(alpha.start, nrow = e, ncol = n)
+  shape.end <- matrix(alpha.end, nrow = e, ncol = n)
+  rate.end <- matrix(alpha.end, nrow = e, ncol = n)
+  sim.start <-  matrix(rgamma(e * n, shape = shape.start, rate = rate.start),
+                     nrow = e, ncol = n)
+  sim.end <- matrix(rgamma(e * n, shape = shape.end, rate = rate.end),
+                   nrow = e, ncol = n)
+  res <- exp(A_mat %*% log(sim.end / sim.start))
   return(t(res))
 }

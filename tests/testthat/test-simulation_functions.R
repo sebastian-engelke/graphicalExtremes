@@ -13,7 +13,7 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
 G_tree <- matrix(nrow = d, ncol = d)
 for (i in 1:d){
   for (j in 1:d){
-    G_tree[i, j] = 2 * abs(i - j)
+    G_tree[i, j] <- 2 * abs(i - j)
   }
 }
 G_tree_vec <- runif(d - 1)
@@ -25,11 +25,11 @@ theta_2 <- 1.5
 theta_wrong1 <- 10
 theta_wrong2 <- -3
 alpha <- runif(d)
-alpha2 <- matrix(runif((d - 1) * 2), nrow = d - 1)
+alpha2 <- matrix(runif( (d - 1) * 2), nrow = d - 1)
 alpha_wrong1 <- 43
 alpha_wrong2 <- c(1, 1, 1, -0.2)
 alpha_wrong3 <- matrix(runif(d * 2), nrow = d)
-alpha_wrong4 <- matrix(-runif((d - 1) * 2), nrow = d - 1)
+alpha_wrong4 <- matrix(-runif( (d - 1) * 2), nrow = d - 1)
 cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
@@ -164,7 +164,7 @@ test_that("rmpareto_tree works", {
   expect_equal(dim(res$res), c(n, d))
 })
 
-test_that("rmstable works",{
+test_that("rmstable works", {
   expect_error(rmstable(n = n, d = d, par = theta_1))
   expect_error(rmstable(n, "HR", -1, par = G))
   expect_error(rmstable(n, "HR", 1.2, par = G))

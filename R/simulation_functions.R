@@ -644,60 +644,63 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       idx.tmp <- idx.e[cbind(path[-length(path)], path[-1])]
       A[[k]][h, idx.tmp] <- 1
       e.start[[k]][idx.tmp] <-
-        apply(ends.mat[idx.tmp,] ==
-                matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2),
-              MARGIN=1, FUN = function(x) which(x==TRUE))
-      e.end[[k]][idx.tmp] =
-        apply(ends.mat[idx.tmp,] ==
-                matrix(path[-1], nrow = length(idx.tmp), ncol=2),
-              MARGIN=1, FUN = function(x) which(x==TRUE))
+        apply(ends.mat[idx.tmp, ] ==
+                matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
+              MARGIN = 1, FUN = function(x) which(x == TRUE))
+      e.end[[k]][idx.tmp] <-
+        apply(ends.mat[idx.tmp, ] ==
+                matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
+              MARGIN = 1, FUN = function(x) which(x == TRUE))
     }
   }
 
 
-  counter <- rep(0, times=n)
-  res <- matrix(0, nrow=n, ncol=d)
+  counter <- rep(0, times = n)
+  res <- matrix(0, nrow = n, ncol = d)
   for (k in 1:d) {
     poisson <- rexp(n)
 
-    while (any(1/poisson > res[,k])) {
-      ind <- (1/poisson > res[,k])
+    while (any(1 / poisson > res[, k])) {
+      ind <- (1 / poisson > res[, k])
       n.ind <- sum(ind)
       idx <- (1:n)[ind]
       counter[ind] <- counter[ind] + 1
       proc <-
         switch(model,
                "HR" =
-                 simu_px_tree_HR(n=n.ind, G.vec=par.vec, A_mat = A[[k]]),
+                 simu_px_tree_HR(n = n.ind, G.vec = par.vec, A_mat = A[[k]]),
                "logistic" =
-                 simu_px_tree_logistic(n=n.ind, idx=k, nb.edges=e,
-                                       theta=theta, A=A),
+                 simu_px_tree_logistic(n = n.ind, idx = k, nb.edges = e,
+                                       theta = theta, A = A),
                "dirichlet" =
-                 simu_px_tree_dirichlet(n=n.ind,
+                 simu_px_tree_dirichlet(n = n.ind,
                                         alpha.start =
                                           alpha.mat[cbind(1:e, e.start[[k]])],
                                         alpha.end =
                                           alpha.mat[cbind(1:e, e.end[[k]])],
-                                        A_mat =A[[k]])
+                                        A_mat = A[[k]])
       )
 
       if (any(dim(proc) != c(n.ind, d))) {
         stop("The generated sample has wrong size.")
       }
 
-      if (k==1) {
-        ind.upd <- rep(TRUE, times=n.ind)
+      if (k == 1) {
+        ind.upd <- rep(TRUE, times = n.ind)
       } else {
         ind.upd <- sapply(1:n.ind, function(i)
-          all(1/poisson[idx[i]]*proc[i,1:(k-1)] <= res[idx[i],1:(k-1)]))
+          all(1 / poisson[idx[i]] * proc[i, 1:(k - 1)] <=
+                res[idx[i], 1:(k - 1)]))
       }
       if (any(ind.upd)) {
         idx.upd <- idx[ind.upd]
-        res[idx.upd,] <- pmax(res[idx.upd,], 1/poisson[idx.upd]*proc[ind.upd,])
+        res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
+                                proc[ind.upd, ])
       }
       poisson[ind] <- poisson[ind] + rexp(n.ind)
     }
   }
 
-  return(list(res=res[sample(1:NROW(res), n, replace=FALSE),], counter=counter))
+  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
+              counter = counter))
 }

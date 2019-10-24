@@ -4,8 +4,23 @@
 \alias{simu_px_tree_HR}
 \title{Simulate HR extremal functions on a tree}
 \usage{
-simu_px_tree_HR(n, G.vec, A)
+simu_px_tree_HR(n, G.vec, A_mat)
+}
+\arguments{
+\item{n}{Positive integer. Number of simulations.}
+
+\item{G.vec}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
+number of nodes in the tree (and \eqn{d - 1} is the number of edges).}
+
+\item{A_mat}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
+in the tree, the columns represent the edges. For a fixed node
+\eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
+equal to 1 if the edge in position \eqn{j} is on the directed path from node
+\eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.}
+}
+\value{
+Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 }
 \description{
-Simulates HR extremal functions on a tree
+Simulates the Huessler-Reiss extremal functions on a tree
 }

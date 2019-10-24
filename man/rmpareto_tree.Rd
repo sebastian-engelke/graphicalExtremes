@@ -26,7 +26,7 @@ Is one of:
 variogram, if \code{model = HR}. Alternatively, can be a vector of
 length \eqn{d - 1}, containing the entries of the variogram corresponding
 to the edges of the given \code{tree}.
-\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}
+\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
 \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2} containing
 the relative \eqn{\alpha > 0} coefficients, if \code{model = dirichlet}.
 }}

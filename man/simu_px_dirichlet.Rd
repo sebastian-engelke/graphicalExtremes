@@ -15,7 +15,7 @@ simu_px_dirichlet(n, idx, d, alpha)
 \item{d}{Positive integer. Dimension of the multivariate Pareto
 distribution.}
 
-\item{theta}{Numeric vector of size \code{d}.}
+\item{alpha}{Numeric vector of size \code{d}.}
 }
 \value{
 Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
