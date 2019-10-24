@@ -1,6 +1,6 @@
 context("test-simulation_helpers")
 
-# Define variables
+# Define variables 1
 n <- 7
 idx <- 2
 d <- 4
@@ -9,21 +9,12 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
             c(1.5, 0, 2, 1.5),
             c(1.5, 2, 0, 1.5),
             c(2, 1.5, 1.5, 0))
-G.vec <- c(2, 3)
-A <- list(
-  rbind(c(0, 0),
-        c(0, 1),
-        c(1, 1))
-)
-# !!! continue with building A, tests with simulation_helpers, and
-# change explanation of A in the function descriptions
-
 cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
 
 
-# Run tests
+# Run tests 1
 test_that("simu_px_HR works", {
   expect_error(simu_px_HR(n, c(1, 3), d, trend, chol_mat))
 
@@ -34,7 +25,7 @@ test_that("simu_px_HR works", {
 
 test_that("simu_px_logistic works", {
   expect_error(simu_px_logistic(n, idx = c(1, 3), d, theta = 0.2))
-  expect_error(simu_px_logistic(n, idx = c(sample(1:d, n, replace = F), 1),
+  expect_error(simu_px_logistic(n, idx = c(sample(1:d, n, replace = T), 1),
                                 d, theta = 0.2))
 
   res <- simu_px_logistic(n, idx, d, theta = 0.2)
@@ -51,7 +42,7 @@ test_that("simu_px_logistic works", {
 test_that("simu_px_neglogistic works", {
   expect_error(simu_px_neglogistic(n, idx = c(1, 3), d, theta = 0.2))
   expect_error(simu_px_neglogistic(n, idx = c(sample(1:d, n, replace = T), 1),
-                                d, theta = 0.2))
+                                   d, theta = 0.2))
 
 
   res <- simu_px_neglogistic(n, idx, d, theta = 0.2)
@@ -59,7 +50,7 @@ test_that("simu_px_neglogistic works", {
   expect_equal(dim(res), c(n, d))
 
   res <- simu_px_neglogistic(7, sample(x = 1:4, size = 7, replace = T), d,
-                          theta = 0.2)
+                             theta = 0.2)
 
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
@@ -70,7 +61,7 @@ test_that("simu_px_dirchlet works", {
   expect_error(simu_px_dirichlet(n, idx = c(1, 3), d,
                                  alpha = c(0.2, 1, 1.2, 0.8)))
   expect_error(simu_px_dirichlet(n, idx = c(sample(1:d, n, replace = T), 1),
-                                   d, alpha = c(0.2, 1, 1.2, 0.8)))
+                                 d, alpha = c(0.2, 1, 1.2, 0.8)))
 
 
   res <- simu_px_dirichlet(n, idx, d, alpha = c(0.2, 1, 1.2, 0.8))
@@ -84,9 +75,45 @@ test_that("simu_px_dirchlet works", {
   expect_equal(dim(res), c(n, d))
 })
 
+# Define variables 2
+n <- 5
+d <- 3
+G.vec <- c(2, 3)
+A <- list(
+  rbind(c(0, 0),
+        c(1, 0),
+        c(1, 1)),
+  rbind(c(1, 0),
+        c(0, 0),
+        c(0, 1)),
+  rbind(c(1, 1),
+        c(0, 1),
+        c(0, 0))
+)
+alpha_start <- runif(d - 1)
+alpha_end <- runif(d - 1)
 
+
+# Run tests 2
 test_that("simu_px_tree_HR works", {
-  res <- simu_px_tree_HR(n, G.vec = )
+  res <- simu_px_tree_HR(n, G.vec = G.vec, A_mat = A[[3]])
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+})
+
+test_that("simu_px_tree_logistic works", {
+  expect_error(simu_px_tree_logistic(n, idx = c(1, 3), nb.edges = 2,
+                                     theta = 0.2, A = A))
+  expect_error(simu_px_tree_logistic(n, idx = c(sample(1:d, n, replace = T), 1),
+                                nb.edges = 2, theta = 0.2, A = A))
+
+  res <- simu_px_tree_logistic(n, idx = 2, nb.edges = 2, theta = 0.3, A = A)
+  expect_type(res, "double")
+  expect_equal(dim(res), c(n, d))
+})
+
+test_that("simu_px_tree_dirichlet works", {
+  res <- simu_px_tree_dirichlet(n, alpha_start, alpha_end, A_mat = A[[2]])
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 })

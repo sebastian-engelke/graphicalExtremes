@@ -109,16 +109,16 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
 #' @inheritParams rmpareto
 #' @param G.vec Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
 #' number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' @param A List. The list is made of \eqn{d} elements, one for each node of the
-#' tree. Each element \eqn{k = 1, \dots, d}{k = 1, ..., d} of the list is
-#' a numeric matrix \eqn{d \times (d - 1)}. For example, the \eqn{k}-th element
-#' of \code{A} is a matrix where each entry \eqn{(i, j)} is equal to 1
-#' if there is a directed edge from node \eqn{i} to node \eqn{j} in the polytree
-#' rooted at node \eqn{k}.
+#' @param A_mat Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
+#' in the tree, the columns represent the edges. For a fixed node
+#' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
+#' equal to 1 if the edge in position \eqn{j} is on the directed path from node
+#' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_tree_HR <- function(n, G.vec, A) {
-  res <- exp(A %*%
+simu_px_tree_HR <- function(n, G.vec, A_mat) {
+  res <- exp(A_mat %*%
                matrix(rnorm(length(G.vec)*n,
                             mean= -G.vec/2,
                             sd=sqrt(G.vec)),
@@ -136,12 +136,14 @@ simu_px_tree_HR <- function(n, G.vec, A) {
 #' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
 #' 1 to \code{d}, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
-#' @param A List. The list is made of \eqn{d} elements, one for each node of the
-#' tree. Each element \eqn{k = 1, \dots, d}{k = 1, ..., d} of the list is
-#' a numeric matrix \eqn{d \times (d - 1)}. For example, the \eqn{k}-th element
+#' @param A List. The list is made of \eqn{d} elements.
+#' Each element \eqn{k = 1, \dots, d}{k = 1, ..., d} of the list is
+#' a numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes in the
+#' tree, the columns represent the edges. The \eqn{k}-th element
 #' of \code{A} is a matrix where each entry \eqn{(i, j)} is equal to 1
-#' if there is a directed edge from node \eqn{i} to node \eqn{j} in the polytree
-#' rooted at node \eqn{k}.
+#' if the edge in position \eqn{j} is on the directed path from node \eqn{k}
+#' to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
 simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
@@ -175,15 +177,15 @@ simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
 #' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
 #' These are the parameter of one "side" of the Dirichlet distribution
 #' ???Sebastian
-#' @param A List. The list is made of \eqn{d} elements, one for each node of the
-#' tree. Each element \eqn{k = 1, \dots, d}{k = 1, ..., d} of the list is
-#' a numeric matrix \eqn{d \times (d - 1)}. For example, the \eqn{k}-th element
-#' of \code{A} is a matrix where each entry \eqn{(i, j)} is equal to 1
-#' if there is a directed edge from node \eqn{i} to node \eqn{j} in the polytree
-#' rooted at node \eqn{k}.
+#' @param A_mat Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
+#' in the tree, the columns represent the edges. For a fixed node
+#' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
+#' equal to 1 if the edge in position \eqn{j} is on the directed path from node
+#' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {
+simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A_mat) {
   e = length(alpha.start)
   shape.start = matrix(alpha.start + 1, nrow=e, ncol=n)
   rate.start = matrix(alpha.start, nrow=e, ncol=n)
@@ -192,6 +194,6 @@ simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {
   sim.start = matrix(rgamma(e*n, shape=shape.start, rate=rate.start),
                      nrow=e, ncol=n)
   sim.end = matrix(rgamma(e*n, shape=shape.end, rate=rate.end), nrow=e, ncol=n)
-  res       <- exp(A %*% log(sim.end / sim.start))
+  res       <- exp(A_mat %*% log(sim.end / sim.start))
   return(t(res))
 }

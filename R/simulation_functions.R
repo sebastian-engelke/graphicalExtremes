@@ -158,7 +158,7 @@ rmpareto <- function(n,
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace=FALSE), ],
+  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
               counter = counter))
 }
 
@@ -215,10 +215,10 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   # set graph theory objects
-  adj =  as.matrix(igraph::as_adj(tree))
+  adj <- as.matrix(igraph::as_adj(tree))
   d <- NROW(adj)
   e <- igraph::ecount(tree)
-  ends.mat = igraph::ends(tree, igraph::E(tree))
+  ends.mat <- igraph::ends(tree, igraph::E(tree))
 
   # check if it is tree
   is_connected <- igraph::is_connected(tree)
@@ -261,7 +261,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
 
   } else if (model == "dirichlet") {
-    if (NROW(par) != d-1 | NCOL(par) != 2){
+    if (NROW(par) != d - 1 | NCOL(par) != 2){
       stop(paste("The argument par must be a (d-1) x 2 ,",
                  "when model = dirichlet."))
     }
@@ -278,37 +278,37 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     } else {
       par.vec <- par
     }
-  } else if(model == "logistic"){
+  } else if (model == "logistic"){
     theta <- par
-  } else if(model == "dirichlet"){
+  } else if (model == "dirichlet"){
     alpha.mat <- par
   }
 
   # function body ####
-  ## Define a matrix A[[k]] choosing the paths from k to other vertices
-  idx.e <- matrix(0, nrow=d, ncol=d)
-  idx.e[ends.mat] = 1:e
-  idx.e = idx.e + t(idx.e)
+  # Define a matrix A[[k]] choosing the paths from k to other vertices
+  idx.e <- matrix(0, nrow = d, ncol = d)
+  idx.e[ends.mat] <- 1:e
+  idx.e <- idx.e + t(idx.e)
 
   # e.start[[k]][h] gives the index (1 or 2) of the starting node in the h edge
   # in the tree rooted at k
   A <- e.start <- e.end <- list()
   for (k in 1:d) {
-    A[[k]] <- matrix(0, nrow=d, ncol=e)
-    e.start[[k]] = e.end[[k]] = numeric(e)
-    short.paths <- igraph::shortest_paths(tree, from = k, to=1:d)
-    for(h in 1:d){
-      path = short.paths$vpath[[h]]
-      idx.tmp = idx.e[cbind(path[-length(path)], path[-1])]
-      A[[k]][h,idx.tmp] <- 1
-      e.start[[k]][idx.tmp] =
-        apply(ends.mat[idx.tmp,] ==
-                matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2),
-              MARGIN=1, FUN = function(x) which(x==TRUE))
-      e.end[[k]][idx.tmp] =
-        apply(ends.mat[idx.tmp,] ==
-                matrix(path[-1], nrow = length(idx.tmp), ncol=2),
-              MARGIN=1, FUN = function(x) which(x==TRUE))
+    A[[k]] <- matrix(0, nrow = d, ncol = e)
+    e.start[[k]] <- e.end[[k]] <- numeric(e)
+    short.paths <- igraph::shortest_paths(tree, from = k, to = 1:d)
+    for (h in 1:d){
+      path <- short.paths$vpath[[h]]
+      idx.tmp <- idx.e[cbind(path[-length(path)], path[-1])]
+      A[[k]][h, idx.tmp] <- 1
+      e.start[[k]][idx.tmp] <-
+        apply(ends.mat[idx.tmp, ] ==
+                matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
+              MARGIN = 1, FUN = function(x) which(x == TRUE))
+      e.end[[k]][idx.tmp] <-
+        apply(ends.mat[idx.tmp, ] ==
+                matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
+              MARGIN = 1, FUN = function(x) which(x == TRUE))
     }
   }
 
@@ -317,39 +317,40 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   n.total <- 0
   while (n.total < n) {
     counter <- counter + 1
-    shift <- sample(1:d, n, replace=TRUE)
-    for(k in 1:d){
-      n.k <- sum(shift==k)
-      if(n.k>0){
+    shift <- sample(1:d, n, replace = TRUE)
+    for (k in 1:d){
+      n.k <- sum(shift == k)
+      if (n.k > 0){
         proc <-
           switch(model,
                  "HR" =
-                   simu_px_tree_HR(n=n.k, G.vec=par.vec, A = A[[k]]),
+                   simu_px_tree_HR(n = n.k, G.vec = par.vec, A_mat = A[[k]]),
                  "logistic" =
-                   simu_px_tree_logistic(n=n.k, idx=k, nb.edges=e,
-                                         theta=theta, A=A),
+                   simu_px_tree_logistic(n = n.k, idx = k, nb.edges = e,
+                                         theta = theta, A = A),
                  "dirichlet" =
                    simu_px_tree_dirichlet(n = n.k,
                                           alpha.start =
                                             alpha.mat[cbind(1:e, e.start[[k]])],
                                           alpha.end =
                                             alpha.mat[cbind(1:e, e.end[[k]])],
-                                          A=A[[k]])
+                                              A_mat = A[[k]])
         )
 
         if (any(dim(proc) != c(n.k, d))) {
           stop("The generated sample has wrong size.")
         }
 
-        proc <- proc/rowSums(proc) / (1-runif(NROW(proc)))
-        idx.sim <- which(apply(proc,1,max) > 1)
-        res <- rbind(res, proc[idx.sim,])
+        proc <- proc / rowSums(proc) / (1 - runif(NROW(proc)))
+        idx.sim <- which(apply(proc, 1, max) > 1)
+        res <- rbind(res, proc[idx.sim, ])
         n.total <- NROW(res)
       }
     }
   }
 
-  return(list(res=res[sample(1:NROW(res), n, replace=FALSE),], counter=counter))
+  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
+              counter = counter))
 }
 
 
@@ -477,13 +478,13 @@ rmstable <- function(n,
   }
 
   # function body ####
-  counter <- rep(0, times=n)
-  res <- matrix(0, nrow=n, ncol=d)
+  counter <- rep(0, times = n)
+  res <- matrix(0, nrow = n, ncol = d)
   for (k in 1:d) {
     poisson <- rexp(n)
 
-    while (any(1/poisson > res[,k])) {
-      ind <- (1/poisson > res[,k])
+    while (any(1 / poisson > res[, k])) {
+      ind <- (1 / poisson > res[, k])
       n.ind <- sum(ind)
       idx <- (1:n)[ind]
       counter[ind] <- counter[ind] + 1
@@ -503,21 +504,23 @@ rmstable <- function(n,
         stop("The generated sample has wrong size.")
       }
 
-      if (k==1) {
-        ind.upd <- rep(TRUE, times=n.ind)
+      if (k == 1) {
+        ind.upd <- rep(TRUE, times = n.ind)
       } else {
         ind.upd <- sapply(1:n.ind, function(i)
-          all(1/poisson[idx[i]]*proc[i,1:(k-1)] <= res[idx[i],1:(k-1)]))
+          all(1 / poisson[idx[i]] * proc[i, 1:(k - 1)] <=
+                res[idx[i], 1:(k - 1)]))
       }
       if (any(ind.upd)) {
         idx.upd <- idx[ind.upd]
-        res[idx.upd,] <- pmax(res[idx.upd,], 1/poisson[idx.upd]*proc[ind.upd,])
+        res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
+                                 proc[ind.upd, ])
       }
       poisson[ind] <- poisson[ind] + rexp(n.ind)
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace=FALSE), ],
+  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
               counter = counter))
 }
 
@@ -554,10 +557,10 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   # set graph theory objects
-  adj =  as.matrix(igraph::as_adj(tree))
+  adj <- as.matrix(igraph::as_adj(tree))
   d <- NROW(adj)
   e <- igraph::ecount(tree)
-  ends.mat = igraph::ends(tree, igraph::E(tree))
+  ends.mat <- igraph::ends(tree, igraph::E(tree))
 
   # check if it is tree
   is_connected <- igraph::is_connected(tree)
@@ -600,7 +603,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
 
   } else if (model == "dirichlet") {
-    if (NROW(par) != d-1 | NCOL(par) != 2){
+    if (NROW(par) != d - 1 | NCOL(par) != 2){
       stop(paste("The argument par must be a (d-1) x 2 ,",
                  "when model = dirichlet."))
     }
@@ -617,30 +620,30 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     } else {
       par.vec <- par
     }
-  } else if(model == "logistic"){
+  } else if (model == "logistic"){
     theta <- par
-  } else if(model == "dirichlet"){
+  } else if (model == "dirichlet"){
     alpha.mat <- par
   }
 
   # function body ####
-  ## Define a matrix A[[k]] choosing the paths from k to other vertices
-  idx.e <- matrix(0, nrow=d, ncol=d)
-  idx.e[ends.mat] = 1:e
-  idx.e = idx.e + t(idx.e)
+  # Define a matrix A[[k]] choosing the paths from k to other vertices
+  idx.e <- matrix(0, nrow = d, ncol = d)
+  idx.e[ends.mat] <- 1:e
+  idx.e <- idx.e + t(idx.e)
 
   # e.start[[k]][h] gives the index (1 or 2) of the starting node in the h edge
   # in the tree rooted at k
   A <- e.start <- e.end <- list()
   for (k in 1:d) {
-    A[[k]] <- matrix(0, nrow=d, ncol=e)
-    e.start[[k]] = e.end[[k]] = numeric(e)
-    short.paths <- igraph::shortest_paths(tree, from = k, to=1:d)
-    for(h in 1:d){
-      path = short.paths$vpath[[h]]
-      idx.tmp = idx.e[cbind(path[-length(path)], path[-1])]
-      A[[k]][h,idx.tmp] <- 1
-      e.start[[k]][idx.tmp] =
+    A[[k]] <- matrix(0, nrow = d, ncol = e)
+    e.start[[k]] <- e.end[[k]] <- numeric(e)
+    short.paths <- igraph::shortest_paths(tree, from = k, to = 1:d)
+    for (h in 1:d){
+      path <-  short.paths$vpath[[h]]
+      idx.tmp <- idx.e[cbind(path[-length(path)], path[-1])]
+      A[[k]][h, idx.tmp] <- 1
+      e.start[[k]][idx.tmp] <-
         apply(ends.mat[idx.tmp,] ==
                 matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2),
               MARGIN=1, FUN = function(x) which(x==TRUE))
@@ -662,11 +665,10 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       n.ind <- sum(ind)
       idx <- (1:n)[ind]
       counter[ind] <- counter[ind] + 1
-      browser()
       proc <-
         switch(model,
                "HR" =
-                 simu_px_tree_HR(n=n.ind, G.vec=par.vec, A = A[[k]]),
+                 simu_px_tree_HR(n=n.ind, G.vec=par.vec, A_mat = A[[k]]),
                "logistic" =
                  simu_px_tree_logistic(n=n.ind, idx=k, nb.edges=e,
                                        theta=theta, A=A),
@@ -676,7 +678,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                                           alpha.mat[cbind(1:e, e.start[[k]])],
                                         alpha.end =
                                           alpha.mat[cbind(1:e, e.end[[k]])],
-                                        A=A[[k]])
+                                        A_mat =A[[k]])
       )
 
       if (any(dim(proc) != c(n.ind, d))) {
