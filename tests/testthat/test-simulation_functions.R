@@ -150,3 +150,52 @@ test_that("rmpareto_tree works", {
   expect_type(res$counter, "double")
   expect_equal(dim(res$res), c(n, d))
 })
+
+
+test_that("rmstable_tree works", {
+  expect_warning(rmstable_tree(n, tree = my_tree_dir, par = G_tree))
+  expect_error(rmstable_tree(n, tree = graph_connected, par = G_tree))
+  expect_error(rmstable_tree(n, tree = graph_disconnected, par = G_tree))
+  expect_error(rmstable_tree(n, tree = empty_graph, par = G_tree))
+  expect_error(rmstable_tree(n, tree = my_tree, par = alpha2))
+  expect_error(rmstable_tree(n = -1, model = "HR", tree = my_tree,
+                             par = G_tree))
+  expect_error(rmstable_tree(n = 1.2, model = "HR", tree = my_tree,
+                             par = G_tree))
+  expect_error(rmstable_tree(n = n, model = "foo", tree = my_tree,
+                             par = G_tree))
+  expect_error(rmstable_tree(n = n, model = "HR", tree = my_tree,
+                             par = c(0.3, 0.2)))
+  expect_error(rmstable_tree(n = n, model = "HR", tree = my_tree,
+                             par = G_wrong3))
+  expect_error(rmstable_tree(n = n, model = "logistic", tree = my_tree,
+                             par = theta_wrong1))
+  expect_error(rmstable_tree(n = n, model = "dirichlet", tree = my_tree,
+                             par = alpha_wrong3))
+  expect_error(rmstable_tree(n = n, model = "dirichlet", tree = my_tree,
+                             par = alpha_wrong4))
+
+  res <- rmstable_tree(n, tree = my_tree, par = G_tree)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable_tree(n, model = "HR", tree = my_tree, par = G_tree)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable_tree(n, model = "logistic", tree = my_tree, par = theta_1)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+
+  res <- rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha2)
+  expect_length(res, 2)
+  expect_type(res$res, "double")
+  expect_type(res$counter, "double")
+  expect_equal(dim(res$res), c(n, d))
+})

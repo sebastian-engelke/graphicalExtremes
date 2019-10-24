@@ -320,11 +320,20 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     for(k in 1:d){
       n.k <- sum(shift==k)
       if(n.k>0){
-        proc <- switch(model,
-                       "HR" = simu_px_tree_HR(n=n.k, G.vec=par.vec, A = A[[k]]),
-                       "logistic"     = simu_px_tree_logistic(n=n.k, idx=k, nb.edges=e, theta=theta, A=A),
-                       "dirichlet"     = simu_px_tree_dirichlet(n=n.k, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
-                                                                alpha.end = alpha.mat[cbind(1:e, e.end[[k]])], A=A[[k]])
+        proc <-
+          switch(model,
+                 "HR" =
+                   simu_px_tree_HR(n=n.k, G.vec=par.vec, A = A[[k]]),
+                 "logistic" =
+                   simu_px_tree_logistic(n=n.k, idx=k, nb.edges=e,
+                                         theta=theta, A=A),
+                 "dirichlet" =
+                   simu_px_tree_dirichlet(n = n.k,
+                                          alpha.start =
+                                            alpha.mat[cbind(1:e, e.start[[k]])],
+                                          alpha.end =
+                                            alpha.mat[cbind(1:e, e.end[[k]])],
+                                          A=A[[k]])
         )
         stopifnot(dim(proc)==c(n.k, d))
         proc <- proc/rowSums(proc) / (1-runif(NROW(proc)))
@@ -358,38 +367,88 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #'
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
-  # !!! code this
-  require("igraph")
-  adj =  as.matrix(as_adj(tree))
-  d <- NROW(adj)
-  e <- ecount(tree)
-  ends.mat = ends(tree, E(tree))
 
+  # methods
+  model_nms <- c("HR", "logistic", "dirichlet")
+
+  # graph theory objects ####
+  # check if it is directed
+  if (igraph::is_directed(tree)){
+    warning("The given tree is directed. Converted to undirected.")
+    tree <- igraph::as.undirected(tree)
+  }
+
+  # set graph theory objects
+  adj =  as.matrix(igraph::as_adj(tree))
+  d <- NROW(adj)
+  e <- igraph::ecount(tree)
+  ends.mat = igraph::ends(tree, igraph::E(tree))
+
+  # check if it is tree
+  is_connected <- igraph::is_connected(tree)
+  is_tree <- is_connected & (e == d - 1)
+
+  if (!is_tree){
+    stop("The given graph is not a tree.")
+  }
+
+
+  # check arguments ####
+  if (d != round(d) | d < 1){
+    stop("The argument d must be a positive integer.")
+  }
+
+  if (n != round(n) | n < 1){
+    stop("The argument n must be a positive integer.")
+  }
+
+  if (!(model %in% model_nms)){
+    stop(paste("The model must be one of", model_nms))
+  }
+
+  if (model == "HR") {
+    if (!is.matrix(par)){
+      if (length(par) != d){
+        stop(paste("The argument par must be a d x d matrix,",
+                   "or a vector with d elements, when model = HR."))
+      }
+    } else {
+      if (NROW(par) != d | NCOL(par) != d){
+        stop(paste("The argument par must be a d x d matrix,",
+                   "or a vector with d elements, when model = HR."))
+      }
+    }
+  } else if (model == "logistic") {
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
+      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+                 "when model = logistic."))
+    }
+
+  } else if (model == "dirichlet") {
+    if (NROW(par) != d-1 | NCOL(par) != 2){
+      stop(paste("The argument par must be a (d-1) x 2 ,",
+                 "when model = dirichlet."))
+    }
+    if (any(par <= 1e-12)){
+      stop(paste("The elements of par must be greater than 1e-12,",
+                 "when model = dirichlet."))
+    }
+  }
+
+  # prepare arguments ####
   if (model == "HR"){
-    Gamma <- par
-  }else if(model == "logistic"){
+    if (is.matrix(par)){
+      par.vec <- par[ends.mat]
+    } else {
+      par.vec <- par
+    }
+  } else if(model == "logistic"){
     theta <- par
-  }else if(model == "dirichlet"){
+  } else if(model == "dirichlet"){
     alpha.mat <- par
   }
 
-  stopifnot(model %in% c("logistic", "HR", "dirichlet"))
-  stopifnot((d==round(d)) & (d>=1))
-  stopifnot((n==round(n)) & (n>=1))
-
-  if (length(loc)  ==1) loc   <- rep(loc  , times=d)
-  if (length(scale)==1) scale <- rep(scale, times=d)
-  if (length(shape)==1) shape <- rep(shape, times=d)
-  stopifnot(all(scale>1e-12))
-
-  if (model=="logistic") {
-    stopifnot(1e-12 < theta & theta < 1 - 1e-12)
-  } else if (model=="HR") {
-    par.vec = Gamma[ends.mat]
-  } else if (model=="dirichlet") {
-    stopifnot(NROW(alpha.mat) == d-1 & NCOL(alpha.mat) == 2)
-  }
-
+  # function body ####
   ## Define a matrix A[[k]] choosing the paths from k to other vertices
   idx.e <- matrix(0, nrow=d, ncol=d)
   idx.e[ends.mat] = 1:e
@@ -401,13 +460,19 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   for (k in 1:d) {
     A[[k]] <- matrix(0, nrow=d, ncol=e)
     e.start[[k]] = e.end[[k]] = numeric(e)
-    short.paths <- shortest_paths(tree, from = k, to=1:d)
+    short.paths <- igraph::shortest_paths(tree, from = k, to=1:d)
     for(h in 1:d){
       path = short.paths$vpath[[h]]
       idx.tmp = idx.e[cbind(path[-length(path)], path[-1])]
       A[[k]][h,idx.tmp] <- 1
-      e.start[[k]][idx.tmp] = apply(ends.mat[idx.tmp,] == matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2), MARGIN=1, FUN = function(x) which(x==TRUE)) #path[-length(path)]
-      e.end[[k]][idx.tmp] = apply(ends.mat[idx.tmp,] == matrix(path[-1], nrow = length(idx.tmp), ncol=2), MARGIN=1, FUN = function(x) which(x==TRUE))  #path[-1]
+      e.start[[k]][idx.tmp] =
+        apply(ends.mat[idx.tmp,] ==
+                matrix(path[-length(path)], nrow = length(idx.tmp), ncol=2),
+              MARGIN=1, FUN = function(x) which(x==TRUE))
+      e.end[[k]][idx.tmp] =
+        apply(ends.mat[idx.tmp,] ==
+                matrix(path[-1], nrow = length(idx.tmp), ncol=2),
+              MARGIN=1, FUN = function(x) which(x==TRUE))
     }
   }
 
@@ -422,11 +487,20 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       n.ind <- sum(ind)
       idx <- (1:n)[ind]
       counter[ind] <- counter[ind] + 1
-      proc <- switch(model,
-                     "HR" = simu_px_tree_HR(n=n.ind, G.vec=par.vec, A = A[[k]]),
-                     "logistic"     = simu_px_tree_logistic(n=n.ind, idx=k, nb.edges=e, theta=theta, A=A),
-                     "dirichlet"     = simu_px_tree_dirichlet(n=n.ind, alpha.start = alpha.mat[cbind(1:e, e.start[[k]])],
-                                                              alpha.end = alpha.mat[cbind(1:e, e.end[[k]])], A=A[[k]])
+      proc <-
+        switch(model,
+               "HR" =
+                 simu_px_tree_HR(n=n.ind, G.vec=par.vec, A = A[[k]]),
+               "logistic" =
+                 simu_px_tree_logistic(n=n.ind, idx=k, nb.edges=e,
+                                       theta=theta, A=A),
+               "dirichlet" =
+                 simu_px_tree_dirichlet(n=n.ind,
+                                        alpha.start =
+                                          alpha.mat[cbind(1:e, e.start[[k]])],
+                                        alpha.end =
+                                          alpha.mat[cbind(1:e, e.end[[k]])],
+                                        A=A[[k]])
       )
       stopifnot(dim(proc)==c(n.ind, d))
       if (k==1) {
