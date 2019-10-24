@@ -147,14 +147,19 @@ data2mpareto <- function(data, p){
 
 ### Transforms Gamma matrix to graph and plots it
 #Gamma: the parameter matrix
-Gamma2Graph <- function(Gamma){
-  # !!! put a flag plot = T
-  # !!! add properties to the graph object
+Gamma2Graph <- function(Gamma, to_plot = T){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
-  for(i in 1:nrow(Gamma))
+  for(i in 1:nrow(Gamma)){
     null.mat[-i,-i] <- null.mat[-i,-i] + (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
-  graph = graph_from_adjacency_matrix(null.mat==0, diag =FALSE, mode="undirected")
-  plot.igraph(graph, vertex.color="cyan2", vertex.size=15, edge.width=2, edge.color="darkgrey")
+  }
+    graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE, mode="undirected")
+  igraph::V(graph)$color <- "cyan2"
+  igraph::V(graph)$size <- 15
+  igraph::E(graph)$width <- 2
+  igraph::E(graph)$color <- "darkgrey"
+  if (to_plot){
+    igraph::plot.igraph(graph)
+  }
   return(graph)
 }
 
