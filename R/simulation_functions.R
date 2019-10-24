@@ -209,6 +209,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   # graph theory objects ####
   # check if it is directed
   if (igraph::is_directed(tree)){
+    warning("The given tree is directed. Converted to undirected.")
     tree <- igraph::as.undirected(tree)
   }
 
@@ -222,9 +223,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   is_connected <- igraph::is_connected(tree)
   is_tree <- is_connected & (e == d - 1)
 
-  if (is_tree){
-      warning("The given tree is directed. Converted to undirected.")
-  } else {
+  if (!is_tree){
     stop("The given graph is not a tree.")
   }
 
@@ -234,7 +233,6 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     stop("The argument d must be a positive integer.")
   }
 
-  stopifnot((n==round(n)) & (n>=1))
   if (n != round(n) | n < 1){
     stop("The argument n must be a positive integer.")
   }
@@ -262,7 +260,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
 
   } else if (model == "dirichlet") {
-    if (NROW(alpha.mat) != d-1 | NCOL(alpha.mat) != 2){
+    if (NROW(par) != d-1 | NCOL(par) != 2){
       stop(paste("The argument par must be a (d-1) x 2 ,",
                  "when model = dirichlet."))
     }
