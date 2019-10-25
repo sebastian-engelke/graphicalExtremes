@@ -176,7 +176,8 @@ rmpareto <- function(n,
 #' \item \code{logistic},
 #' \item \code{dirichlet}.
 #' }
-#' @param tree igraph object. An igraph object representing a tree, i.e., an
+#' @param tree Graph object from \code{igraph} package.
+#' This object represents a tree, i.e., an
 #' undirected graph that is connected and has no cycles.
 #' @param par Is the respective parameter for the given \code{model}.
 #' Is one of:

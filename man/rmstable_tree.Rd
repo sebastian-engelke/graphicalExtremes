@@ -16,7 +16,8 @@ rmstable_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 \item \code{dirichlet}.
 }}
 
-\item{tree}{igraph object. An igraph object representing a tree, i.e., an
+\item{tree}{Graph object from \code{igraph} package.
+This object represents a tree, i.e., an
 undirected graph that is connected and has no cycles.}
 
 \item{par}{Is the respective parameter for the given \code{model}.
