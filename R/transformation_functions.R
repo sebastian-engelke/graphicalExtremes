@@ -39,6 +39,10 @@ Gamma2Graph <- function(Gamma, to_plot = T){
 #' Gamma matrix.
 fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
 
+  # set up main variables
+  d <- igraph::vcount(graph)
+  e <- igraph::ecount(graph)
+
   # check if it is directed
   if (igraph::is_directed(graph)){
     warning("The given graph is directed. Converted to undirected.")
@@ -46,7 +50,11 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
   }
 
   # check if it is connected
-  # !!!
+  is_connected <- igraph::is_connected(graph)
+
+  if (!is_connected){
+    stop("The given graph is not connected.")
+  }
 
   # check if graph is decomposable
   is_decomposable <- igraph::is_chordal(graph)$chordal
@@ -56,12 +64,33 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
 
   # transform Gamma if needed
   if(is.vector(Gamma)){
+
+    if (length(Gamma) != e){
+      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
+                 "or a vector with as many entries as the number of edges",
+                 "in the graph."))
+    }
     G = matrix(0,d,d)
-    G[ends(graph,igraph::E(graph))] = Gamma
+    G[igraph::ends(graph,igraph::E(graph))] = Gamma
     G = G + t(G)
-  }
-  else{
+  }  else{
     G = Gamma
+
+    # check that Gamma is d x d
+
+    if (NROW(G) != d | NCOL(G) != d){
+      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
+                 "or a vector with as many entries as the number of edges",
+                 "in the graph."))
+    }
+
+    # check that Gamma is symmetric
+    if (any(G != t(G))) {
+      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
+                 "or a vector with as many entries as the number of edges",
+                 "in the graph."))
+    }
+
   }
 
   # computes cliques
