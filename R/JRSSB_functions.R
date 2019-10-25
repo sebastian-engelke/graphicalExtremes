@@ -199,7 +199,8 @@ Theta2Gamma <- function(theta) (2*qnorm(theta/2))^2
 Gamma2Theta <- function(gamma) 2*pnorm(sqrt(gamma)/2)
 
 
-
+# !!! produce scalar which is a d-variate chi coefficient
+# !!! make it bi-variate
 ### Estimates the chi and chibar coefficients empirically (modified version from evd::chiplot function)
 # !!! we don't need chibar! dont need rowmin
 #data: nxd data matrix
@@ -226,13 +227,14 @@ chi.est <- function(data, u, pot=FALSE)
   return(c(chiu, chibaru)) #!!! don't return chibaru
 }
 
-
+# !!! chi_mat (d x d bivariate coefficients)
+# !!! use est.theta (delete 2- in line 242)
 ### Estimates empirically the extremal coefficient
 #data: nxd data matrix
 #u: probability threshold for chi.est
 #Gtrue: if supplied then the estimated EC are plotted against the once implied from this HR matrix
 #pot: if TRUE, then pot-type estimation of EC is used
-# !!! Gtrue
+# !!! Gtrue goes away
 est.theta <- function(data, u, Gtrue=NULL, pot=FALSE){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
@@ -266,7 +268,7 @@ chi3D = function(Gamma){ #!!! rename Gamma2Chi_HR and make it internal
 #u: probability threshold for chi.est
 #Gtrue: if supplied then the estimated chi are plotted against the once implied from this HR matrix
 #pot: if TRUE, then pot-type estimation of chi is used
-#!!! don't put into package
+#!!! put it into Sebastian's file
 est.chi3D <- function(data, triplets, u, Gtrue=NULL, pot=FALSE, main=""){
   d <- ncol(data)
   chi <- apply(triplets, 1, function(x) chi.est(data[,x], u=u, pot=pot))[1,]
@@ -290,16 +292,33 @@ est.chi3D <- function(data, triplets, u, Gtrue=NULL, pot=FALSE, main=""){
 #k: component that is conditioned to be larger than u
 #p: probability threshold for the kth components
 vario.est <- function(data, k=NULL, p=NULL){
+  # helper ####
+  G.fun = function(i, data){
+    idx = which(data[,i]>1)
+    if(length(idx) > 1)
+      xx = Sigma2Gamma(cov(log(data[idx,])), full=TRUE)
+    else{
+      xx = matrix(0,d,d)
+      cat("### no exceedance ###")
+    }
+    return(xx)
+  }
+
+  # body ####
   d <- ncol(data)
   if(!is.null(p)){
     xx <- 1/(1-apply(data, 2, unif))
     q <- quantile(xx[,1], p)
     data.std = xx[which(apply(xx, 1, max) > q),]/q
-  }
+  } # !!! replace data.std = rm2pareto(data, p)
   else
     data.std = data
 
   if(!is.null(k)){
+
+    G = G.fun(k, data.std)
+
+    # remove from here
     idx <- which(data.std[,k]>1)
     if(length(idx) > 1)
       G = Sigma2Gamma(cov(log(data.std[idx,])), full=TRUE)
@@ -307,24 +326,17 @@ vario.est <- function(data, k=NULL, p=NULL){
       G = matrix(0,d,d)
       cat("### no exceedance ###")
     }
+    # to here
   }
   else{
-    G.fun = function(i){
-      idx = which(data.std[,i]>1)
-      if(length(idx) > 1)
-        xx = Sigma2Gamma(cov(log(data.std[idx,])), full=TRUE)
-      else{
-        xx = matrix(0,d,d)
-        cat("### no exceedance ###")
-      }
-      return(xx)
-    }
-    G = matrix(rowMeans(sapply(1:d, FUN=function(i)  G.fun(i))) ,d,d)
+    # take the average
+    G = matrix(rowMeans(sapply(1:d, FUN=function(i)  G.fun(i, data.std))), d,d)
   }
   return(G)
 }
 
 ### Estimates chi for multivariate Pareto distributions empirically
+# !!! goes away
 chi.mpd.est <- function(data, pot=FALSE)
 {
   d <- ncol(data)
@@ -334,6 +346,7 @@ chi.mpd.est <- function(data, pot=FALSE)
 }
 
 ### Plots two chi-estimates against each other
+# !!! take it to Sebastian's file
 plotChi <- function(Chi.emp,
                     Chi.theo,
                     is.con,
@@ -501,6 +514,7 @@ Gamma2par = function(Gamma){
 ### Exponent measure of HR distribution
 #x: vector of dimension d where the exponent measure is to be evaluated
 #par: upper triangular Gamma matrix
+# !!! add _HR
 V <- function(x, par){
   d <- length(x)
   G = par2Gamma(par)
@@ -515,6 +529,7 @@ V <- function(x, par){
 ### Exponent measure density of HR distribution
 #x: vector of dimension d or matrix of dimension nxd where the exponent measure density is to be evaluated
 #par: upper triangular Gamma matrix
+# !!! add _HR
 logdV <- function(x,par){
   if (is.vector(x)){d <- length(x)}
   if (is.matrix(x)){d <- ncol(x)}
@@ -539,6 +554,7 @@ logdV <- function(x,par){
 #x: vector of dimension d where the censored exponent measure density is to be evaluated
 #K: the index set that is NOT censored
 #par: upper triangular Gamma matrix
+# !!! logdvk_HR
 logdVK <- function(x,K,par){
   d <- length(x)
   k <- length(K)
@@ -627,6 +643,7 @@ logLH_HR <- function(data,Gamma,cens=FALSE){
 #maxit: maximum number of iteration in the optimization
 #graph: if not null, then only edge parameters are fit
 #method: optimization method
+# !!! if you have a tree,
 fpareto_HR <- function(data,
                        cens=TRUE,
                        init,

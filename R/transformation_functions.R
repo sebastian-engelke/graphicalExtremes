@@ -121,7 +121,10 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
 
 # par2Gamma
 # Gamma2par
+# Theta2Gamma chi2Gamma
 
+
+#!!! theta = 2 - chi (chi extremal correlation)
 
 # unif
 # selectEdges
@@ -129,13 +132,15 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
 # est.theta
 # chi3D
 # est.chi3D
+
+
 # vario.est
 # chi.mpd.est
 # V
 # logdV
 # logdVK
 # logLH_HR
-# fpareto_HR
+# fpareto_HR (wait)
 # mst_HR
-# estGraph_HR
+# estGraph_HR (wait)
 

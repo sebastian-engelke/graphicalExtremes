@@ -72,6 +72,14 @@ empty_graph <- igraph::graph_from_adjacency_matrix(
   mode = "undirected"
 )
 
+Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
+                          c(2, 0, 2, 2, 2, 4, 4),
+                          c(4, 2, 0, 2, 2, 2, 2),
+                          c(4, 2, 2, 0, 2, 4, 4),
+                          c(4, 2, 2, 2, 0, 4, 4),
+                          c(6, 4, 2, 4, 4, 0, 2),
+                          c(6, 4, 2, 4, 4, 2, 0))
+
 
 # Run tests
 test_that("fullGamma works", {
@@ -81,8 +89,14 @@ test_that("fullGamma works", {
   expect_warning(fullGamma(igraph::as.directed(block), Gamma3))
   expect_error(fullGamma(empty_graph, Gamma3))
   expect_error(fullGamma(block, Gamma3_wrong))
-  # gg <- fullGamma(block, Gamma3_vec_wrong)
-  # Gamma2Graph(gg)
+  expect_error(fullGamma(block, Gamma3_vec_wrong))
+  expect_error(fullGamma(block, Gamma2))
+
+  res1 <- fullGamma(block, Gamma3)
+  res2 <- fullGamma(block, Gamma3_vec)
+  expect_equal(res1, Gamma3_completed)
+  expect_equal(res2, Gamma3_completed)
+
 
 })
 
