@@ -201,7 +201,8 @@ Gamma2Theta <- function(gamma) 2*pnorm(sqrt(gamma)/2)
 
 
 ### Estimates the chi and chibar coefficients empirically (modified version from evd::chiplot function)
-#data: nx2 data matrix
+# !!! we don't need chibar! dont need rowmin
+#data: nxd data matrix
 #u: probability threshold
 #pot: if TRUE, then pot-type estimation of EC is used
 chi.est <- function(data, u, pot=FALSE)
@@ -221,8 +222,8 @@ chi.est <- function(data, u, pot=FALSE)
   for (i in 1:nq) cbaru[i] <- mean(rowmin > u[i])
   if(pot) chiu <- cbaru / (1-u)
   if(!pot) chiu <- 2 - log(cu)/log(u)
-  chibaru <- (2 * log(1 - u))/log(cbaru) - 1
-  return(c(chiu, chibaru))
+  chibaru <- (2 * log(1 - u))/log(cbaru) - 1 #!!! don't need chibaru
+  return(c(chiu, chibaru)) #!!! don't return chibaru
 }
 
 
@@ -231,6 +232,7 @@ chi.est <- function(data, u, pot=FALSE)
 #u: probability threshold for chi.est
 #Gtrue: if supplied then the estimated EC are plotted against the once implied from this HR matrix
 #pot: if TRUE, then pot-type estimation of EC is used
+# !!! Gtrue
 est.theta <- function(data, u, Gtrue=NULL, pot=FALSE){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
@@ -244,18 +246,18 @@ est.theta <- function(data, u, Gtrue=NULL, pot=FALSE){
     plot(Gamma2Theta(Gtrue[res]), theta, xlim=c(1,2), ylim=c(1,2))
     abline(0,1, xlim=c(1,2))
   }
+  # !!! remove plot
   return(theta.mat)
 }
 
 ### Computes the theoretical chi coefficient in 3 dimensions
 #Gamma: dxd parameter matrix
-chi3D = function(Gamma){
+chi3D = function(Gamma){ #!!! rename Gamma2Chi_HR and make it internal
   res = 3 - V(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,2),c(1,2)])) -
     V(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,3),c(1,3)])) -
     V(x=rep(1, times=2),par= Gamma2par(Gamma[c(2,3),c(2,3)])) +
     V(x=rep(1, times=3),par= Gamma2par(Gamma))
   return(res)
-
 }
 
 ### Estimates empirically the chi coefficient in 3 dimensions
@@ -264,6 +266,7 @@ chi3D = function(Gamma){
 #u: probability threshold for chi.est
 #Gtrue: if supplied then the estimated chi are plotted against the once implied from this HR matrix
 #pot: if TRUE, then pot-type estimation of chi is used
+#!!! don't put into package
 est.chi3D <- function(data, triplets, u, Gtrue=NULL, pot=FALSE, main=""){
   d <- ncol(data)
   chi <- apply(triplets, 1, function(x) chi.est(data[,x], u=u, pot=pot))[1,]
@@ -272,7 +275,8 @@ est.chi3D <- function(data, triplets, u, Gtrue=NULL, pot=FALSE, main=""){
 
     par(cex = 1.3, cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5, pch = 19,
         mar = c(5,5,4,2) +.1)
-    plot(chi, chi.theo, xlim = c(0.1,.9), ylim = c(0.1,.9), main=main, xlab="Fitted Model", ylab="Empirical")
+    plot(chi, chi.theo, xlim = c(0.1,.9), ylim = c(0.1,.9), main=main,
+         xlab="Fitted Model", ylab="Empirical")
     abline(0,1, xlim=c(1,2))
   }
   return(chi)

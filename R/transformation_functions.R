@@ -45,6 +45,9 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
     graph <- igraph::as.undirected(graph)
   }
 
+  # check if it is connected
+  # !!!
+
   # check if graph is decomposable
   is_decomposable <- igraph::is_chordal(graph)$chordal
   if (!is_decomposable){

@@ -68,5 +68,6 @@ test_that("fullGamma works", {
   expect_error(fullGamma(non_decomposable, Gamma1))
   expect_error(fullGamma(non_block, Gamma2))
   expect_warning(fullGamma(igraph::as.directed(block), Gamma3))
+  fullGamma(g, G)
 
 })
