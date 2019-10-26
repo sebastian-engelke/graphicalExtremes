@@ -9,9 +9,9 @@ fullGamma(graph, Gamma)
 \arguments{
 \item{graph}{Graph object from \code{igraph} package.
 An undirected block graph, i.e., a decomposable
-graph where the minimal separators of the cliques are of size at most one.}
+graph where the minimal separators of the cliques have size at most one.}
 
-\item{Gamma}{numeric matrix representing a \eqn{d \times d}{d x d}
+\item{Gamma}{Numeric matrix representing a \eqn{d \times d}{d x d}
 variogram, with entries only inside the cliques. Alternatively, can be a
 vector containing the entries for each edge in the same order as in
 graph object.}
@@ -21,7 +21,7 @@ Numeric matrix \eqn{d \times d}{d x d} representing the completed
 Gamma matrix.
 }
 \description{
-Given a graph and Gamma matrix specified only on the edges/cliques
-of the graph, it returns the full Gamma matrix implied by the conditional
-independencies.
+Given a \code{graph} and \code{Gamma} matrix with entries only on the
+edges/cliques of the \code{graph}, it returns the full Gamma matrix
+implied by the conditional independencies.
 }

@@ -77,6 +77,14 @@ Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
                           c(6, 4, 2, 4, 4, 0, 2),
                           c(6, 4, 2, 4, 4, 2, 0))
 
+data <- mvtnorm::rmvnorm(n = 1e2, mean = runif(5))
+
+G <-  cbind(c(0, 1.5, 1.5, 2),
+            c(1.5, 0, 2, 1.5),
+            c(1.5, 2, 0, 1.5),
+            c(2, 1.5, 1.5, 0))
+
+
 
 # Run tests
 test_that("fullGamma works", {
@@ -93,10 +101,75 @@ test_that("fullGamma works", {
   res2 <- fullGamma(block, Gamma3_vec)
   expect_equal(res1, Gamma3_completed)
   expect_equal(res2, Gamma3_completed)
-
-
 })
 
 test_that("Gamma2Graph works", {
+  res1 <- fullGamma(block, Gamma3)
+  expect_s3_class(Gamma2Graph(res1), "igraph")
+  expect_s3_class(Gamma2Graph(res1, to_plot = T), "igraph")
+  expect_s3_class(Gamma2Graph(res1, to_plot = F), "igraph")
+})
 
+
+test_that("data2rmpareto works", {
+  p <- .999
+  m <- 1 / (1 - apply(data, 2, unif))
+  q <- 1 / (1 - p)
+  idx <- which(apply(m, 1, max) > q)
+  res <- m[idx, ] / q
+  expect_equal(data2mpareto(data, p), res)
+
+  p <- .95
+  m <- 1 / (1 - apply(data, 2, unif))
+  q <- 1 / (1 - p)
+  idx <- which(apply(m, 1, max) > q)
+  res <- m[idx, ] / q
+  expect_equal(data2mpareto(data, p), res)
+
+  p <- 0
+  m <- 1 / (1 - apply(data, 2, unif))
+  q <- 1 / (1 - p)
+  idx <- which(apply(m, 1, max) > q)
+  res <- m[idx, ] / q
+  expect_equal(data2mpareto(data, p), res)
+
+})
+
+
+test_that("Sigma2Gamma works", {
+  for (k in 1:NCOL(G)){
+    S <- Gamma2Sigma(G, k = k, full = F)
+    expect_equal(Sigma2Gamma(S = S, k = k, full = F), G)
+  }
+
+  for (k in 1:NCOL(G)){
+    S <- Gamma2Sigma(G, k = k, full = T)
+    expect_equal(Sigma2Gamma(S, k = k, full = T), G)
+    expect_equal(Sigma2Gamma(S, full = T), G)
+  }
+})
+
+
+test_that("Gamma2Sigma works", {
+  d <- sample(2:10, 1)
+  S <- matrix(runif(d ^ 2), nrow = d, ncol = d) + diag(d)
+
+  for (k in 1:d){
+    G <- Sigma2Gamma(S = S, k = k, full = F)
+    expect_equal(Gamma2Sigma(Gamma = G, k = k, full = F), S)
+  }
+
+  S <- cbind(rep(0, d + 1), rbind(rep(0, d), S))
+  G <- Sigma2Gamma(S = S, full = T)
+  expect_equal(Gamma2Sigma(Gamma = G, full = T), S)
+
+  for (k in 1:d){
+    shuffle <- 1:(d + 1)
+    shuffle[shuffle <= k] <- shuffle[shuffle <= k] - 1
+    shuffle[1] <- k
+    shuffle <- order(shuffle)
+    S_shuffled <- S[shuffle, shuffle]
+    G <- Sigma2Gamma(S = S_shuffled, k = 20, full = T)
+    expect_equal(Gamma2Sigma(Gamma = G, k = k, full = T), S_shuffled)
+  }
 })

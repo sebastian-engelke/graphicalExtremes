@@ -11,4 +11,5 @@ Suggests:
     testthat (>= 2.1.0)
 RoxygenNote: 6.1.1
 Imports: 
-    igraph (>= 1.2.4.1)
+    igraph (>= 1.2.4.1),
+    mvtnorm (>= 1.0.10)
