@@ -229,6 +229,7 @@ chi.est <- function(data, u, pot=FALSE)
 
 # !!! chi_mat (d x d bivariate coefficients)
 # !!! use est.theta (delete 2- in line 242)
+# !!! theta = 2 - chi (chi extremal correlation)
 ### Estimates empirically the extremal coefficient
 #data: nxd data matrix
 #u: probability threshold for chi.est

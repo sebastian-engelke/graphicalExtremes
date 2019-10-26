@@ -1,26 +1,3 @@
-# Gamma2Graph
-### Transforms Gamma matrix to graph and plots it
-#Gamma: the parameter matrix
-Gamma2Graph <- function(Gamma, to_plot = T){
-  null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
-  for(i in 1:nrow(Gamma)){
-    null.mat[-i,-i] <- null.mat[-i,-i] + (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
-  }
-  graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE, mode="undirected")
-  igraph::V(graph)$color <- "cyan2"
-  igraph::V(graph)$size <- 15
-  igraph::E(graph)$width <- 2
-  igraph::E(graph)$color <- "darkgrey"
-  if (to_plot){
-    igraph::plot.igraph(graph)
-  }
-  return(graph)
-}
-
-
-# data2mpareto
-# Sigma2Gamma
-
 #' fullGamma
 #'
 #' Given a \code{graph} and \code{Gamma} matrix with entries only on the
@@ -119,28 +96,32 @@ fullGamma = function(graph, Gamma){ # !!! change name -> block_gamma_completion
   return(G)
 }
 
-# par2Gamma
-# Gamma2par
-# Theta2Gamma chi2Gamma
 
 
-#!!! theta = 2 - chi (chi extremal correlation)
+# Gamma2Graph
+### Transforms Gamma matrix to graph and plots it
+#Gamma: the parameter matrix
+Gamma2Graph <- function(Gamma, to_plot = T){
+  null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
+  for(i in 1:nrow(Gamma)){
+    null.mat[-i,-i] <- null.mat[-i,-i] + (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
+  }
+  graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE, mode="undirected")
+  igraph::V(graph)$color <- "cyan2"
+  igraph::V(graph)$size <- 15
+  igraph::E(graph)$width <- 2
+  igraph::E(graph)$color <- "darkgrey"
+  if (to_plot){
+    igraph::plot.igraph(graph)
+  }
+  return(graph)
+}
 
-# unif
-# selectEdges
-# chi.est
-# est.theta
-# chi3D
-# est.chi3D
 
 
-# vario.est
-# chi.mpd.est
-# V
-# logdV
-# logdVK
-# logLH_HR
-# fpareto_HR (wait)
-# mst_HR
-# estGraph_HR (wait)
+
+
+
+
+
 

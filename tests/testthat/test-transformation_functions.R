@@ -11,7 +11,6 @@ non_decomposable <- igraph::graph_from_adjacency_matrix(
         c(0, 0, 1, 1, 0, 0)),
   mode = "undirected"
 )
-plot(non_decomposable)
 igraph::is_chordal(non_decomposable)$chordal
 
 non_block <- igraph::graph_from_adjacency_matrix(
@@ -23,7 +22,6 @@ non_block <- igraph::graph_from_adjacency_matrix(
         c(0, 0, 1, 1, 0, 0)),
   mode = "undirected"
 )
-plot(non_block)
 igraph::is_chordal(non_block)$chordal
 
 block <- igraph::graph_from_adjacency_matrix(
@@ -36,7 +34,6 @@ block <- igraph::graph_from_adjacency_matrix(
         c(0, 0, 1, 0, 0, 1, 0)),
   mode = "undirected"
 )
-plot(block)
 igraph::is_chordal(block)$chordal
 
 Gamma1 <- rbind(c(0, 2, 0, 0, 0, 0),
