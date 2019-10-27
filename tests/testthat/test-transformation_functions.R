@@ -1,4 +1,4 @@
-context("test-transformation_function")
+context("test-transformation_functions")
 
 
 # Define variables
@@ -84,7 +84,7 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
             c(1.5, 2, 0, 1.5),
             c(2, 1.5, 1.5, 0))
 
-
+par <- G[upper.tri(G)]
 
 # Run tests
 test_that("fullGamma works", {
@@ -110,7 +110,6 @@ test_that("Gamma2Graph works", {
   expect_s3_class(Gamma2Graph(res1, to_plot = F), "igraph")
 })
 
-
 test_that("data2rmpareto works", {
   p <- .999
   m <- 1 / (1 - apply(data, 2, unif))
@@ -135,7 +134,6 @@ test_that("data2rmpareto works", {
 
 })
 
-
 test_that("Sigma2Gamma works", {
   for (k in 1:NCOL(G)){
     S <- Gamma2Sigma(G, k = k, full = F)
@@ -148,7 +146,6 @@ test_that("Sigma2Gamma works", {
     expect_equal(Sigma2Gamma(S, full = T), G)
   }
 })
-
 
 test_that("Gamma2Sigma works", {
   d <- sample(2:10, 1)
@@ -172,4 +169,17 @@ test_that("Gamma2Sigma works", {
     G <- Sigma2Gamma(S = S_shuffled, k = 20, full = T)
     expect_equal(Gamma2Sigma(Gamma = G, k = k, full = T), S_shuffled)
   }
+})
+
+test_that("par2Gamma works", {
+  G1 <- matrix(0, nrow = 4, ncol = 4)
+  G1[upper.tri(G1)] <- par
+  G1 <- G1 + t(G1)
+  expect_error(par2Gamma(par = 1:4))
+  expect_equal(par2Gamma(par = par), G1)
+})
+
+test_that("Gamma2par works", {
+  expect_equal(Gamma2par(Gamma = G), G[upper.tri(G)])
+  expect_equal(Gamma2par(Gamma = c(1.5, 2, 1.5)), c(1.5, 2, 1.5))
 })

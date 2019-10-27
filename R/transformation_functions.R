@@ -218,7 +218,56 @@ Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
 
 
 
+#' par2Gamma
+#'
+#' This function takes the parameters in the vector \code{par}
+#' (upper triangular Gamma matrix) and returns full Gamma.
+#'
+#' @param par Numeric vector with \eqn{d} elements.
+#' Upper triangular part of a Gamma matrix.
+#'
+#' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma matrix.
+#'
+par2Gamma = function(par){
+  d = 1/2 + sqrt(1/4 + 2*length(par))
+  if (round(d)!=d) {
+    stop("The length of par does not agree with any square matrix.")
+  }
+  G = matrix(0, nrow=d, ncol=d)
+  G[upper.tri(G)] = par
+  return(G + t(G))
+}
 
 
 
+#' Gamma2par
+#'
+#' This function returns a vector containing the upper triangular part
+#' of the matrix \code{Gamma}. If \code{Gamma} is already a vector, it returns
+#' it as it is.
+#'
+#' @param Gamma Numeric matrix \eqn{d\times d}{d x d}.
+#' It represents a variogram matrix.
+#' Alternatively, it can be passed as a a numeric vector with
+#' \eqn{d} elements.
+#'
+#' @return Numeric vector with \eqn{d} elements.
+#' The upper triangular part of the given \code{Gamma} matrix.
+#'
+Gamma2par = function(Gamma){
+  if(is.matrix(Gamma))
+    return(Gamma[upper.tri(Gamma)])
+  else
+    return(Gamma)
+}
 
+
+
+#' chi2Gamma
+#'
+#' Transform the \code{chi} extremal correlation into HR parameter.
+#'
+#'
+chi2Gamma <- function(chi){
+  # !!!
+}
