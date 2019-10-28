@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Graph}
 \alias{Gamma2Graph}
-\title{Gamma2Graph}
+\title{Transform \eqn{\Gamma} matrix to graph}
 \usage{
 Gamma2Graph(Gamma, to_plot = T)
 }
@@ -17,5 +17,6 @@ graph.}
 Graph object from \code{igraph} package. An undirected graph.
 }
 \description{
-Transforms Gamma matrix to an \code{igraph} object plots it (optionally).
+Transforms \code{Gamma} matrix to an \code{igraph} object
+and plots it (optionally).
 }

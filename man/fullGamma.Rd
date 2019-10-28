@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{fullGamma}
 \alias{fullGamma}
-\title{fullGamma}
+\title{Complete \eqn{\Gamma} matrix}
 \usage{
 fullGamma(graph, Gamma)
 }

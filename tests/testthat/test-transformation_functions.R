@@ -2,6 +2,7 @@ context("test-transformation_functions")
 
 
 # Define variables
+set.seed(1234)
 non_decomposable <- igraph::graph_from_adjacency_matrix(
   rbind(c(0, 1, 0, 0, 0, 0),
         c(1, 0, 1, 0, 1, 0),
@@ -182,4 +183,15 @@ test_that("par2Gamma works", {
 test_that("Gamma2par works", {
   expect_equal(Gamma2par(Gamma = G), G[upper.tri(G)])
   expect_equal(Gamma2par(Gamma = c(1.5, 2, 1.5)), c(1.5, 2, 1.5))
+})
+
+test_that("Chi2Gamma works", {
+  chi <- runif(1)
+  expect_error(Chi2Gamma(2))
+  expect_equal(Chi2Gamma(0), Inf)
+  expect_equal(Chi2Gamma(1), 0)
+  expect_equal(Chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+
+  theta <- 2 - chi
+  expect_equal(Chi2Gamma(chi), (2*qnorm(theta/2))^2)
 })

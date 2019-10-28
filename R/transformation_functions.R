@@ -1,4 +1,4 @@
-#' fullGamma
+#' Complete \eqn{\Gamma} matrix
 #'
 #' Given a \code{graph} and \code{Gamma} matrix with entries only on the
 #' edges/cliques of the \code{graph}, it returns the full Gamma matrix
@@ -98,9 +98,10 @@ fullGamma = function(graph, Gamma){
 
 
 
-#' Gamma2Graph
+#' Transform \eqn{\Gamma} matrix to graph
 #'
-#' Transforms Gamma matrix to an \code{igraph} object plots it (optionally).
+#' Transforms \code{Gamma} matrix to an \code{igraph} object
+#' and plots it (optionally).
 #'
 #' @param Gamma Numeric matrix representing a \eqn{d \times d}{d x d}
 #' variogram.
@@ -129,7 +130,7 @@ Gamma2Graph <- function(Gamma, to_plot = T){
 
 
 
-#' data2mpareto
+#' Convert \code{data} to Pareto scale
 #'
 #' Transfroms the data empirically to multivariate Pareto scale.
 #'
@@ -148,9 +149,9 @@ data2mpareto <- function(data, p){
 
 
 
-#' Sigma2Gamma
+#' Transform \eqn{S} to \eqn{\Gamma}
 #'
-#' Transforms \eqn{\Sigma^(k)} to the respective Gamma matrix.
+#' Transforms \eqn{\Sigma^(k)} to the respective \eqn{\Gamma} matrix.
 #'
 #'  @param S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
 #'  It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
@@ -189,7 +190,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 
 
 
-#' Gamma2Sigma
+#' Transform \eqn{\Gamma} to \eqn{S}
 #'
 #' Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
 #'
@@ -218,7 +219,7 @@ Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
 
 
 
-#' par2Gamma
+#' Create \eqn{\Gamma} from vector
 #'
 #' This function takes the parameters in the vector \code{par}
 #' (upper triangular Gamma matrix) and returns full Gamma.
@@ -240,7 +241,7 @@ par2Gamma = function(par){
 
 
 
-#' Gamma2par
+#' Extract upper triangular part of \eqn{\Gamma}
 #'
 #' This function returns a vector containing the upper triangular part
 #' of the matrix \code{Gamma}. If \code{Gamma} is already a vector, it returns
@@ -263,11 +264,20 @@ Gamma2par = function(Gamma){
 
 
 
-#' chi2Gamma
+#' Convert \eqn{\chi} to \eqn{\Gamma}
 #'
 #' Transform the \code{chi} extremal correlation into HR parameter.
 #'
+#' @param chi Numeric between 0 and 1. The extremal correlation coefficient.
 #'
-chi2Gamma <- function(chi){
-  # !!!
+#' @return Numeric
+#'
+Chi2Gamma <- function(chi){
+  if (chi < 0 | chi > 1){
+    stop("The argument chi must be between 0 and 1.")
+  }
+  gamma <- (2 * qnorm(1 - 0.5 * chi)) ^ 2
+  return(gamma)
 }
+
+

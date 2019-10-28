@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{data2mpareto}
 \alias{data2mpareto}
-\title{data2mpareto}
+\title{Convert \code{data} to Pareto scale}
 \usage{
 data2mpareto(data, p)
 }

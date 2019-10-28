@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Gamma2Sigma}
+\title{Transform \eqn{\Gamma} to \eqn{S}}
 \usage{
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
 }
@@ -11,17 +11,17 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 matrix.}
 
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
-It represents the index that is missing in \eqn{\Sigma^k}.}
+It represents the index that is missing in \eqn{\Sigma^(k)}.}
 
 \item{full}{Boolean. If true, then \code{S} must be a
 \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.}
 }
 \value{
 S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-It represents the \eqn{\Sigma^k} matrix as defined in equation (10) in
+It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
 the paper of Engelke, S., and Hitz, A.,
 \url{https://arxiv.org/abs/1812.01734}.
 }
 \description{
-Transforms Gamma matrix to \eqn{\Sigma^k} matrix.
+Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
 }

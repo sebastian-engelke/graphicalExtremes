@@ -2,6 +2,7 @@ context("test-simulation_functions")
 
 
 # Define variables
+set.seed(1234)
 n <- 7
 idx <- 2
 d <- 4

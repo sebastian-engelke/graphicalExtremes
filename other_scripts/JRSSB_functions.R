@@ -311,7 +311,7 @@ vario.est <- function(data, k=NULL, p=NULL){
     xx <- 1/(1-apply(data, 2, unif))
     q <- quantile(xx[,1], p)
     data.std = xx[which(apply(xx, 1, max) > q),]/q
-  } # !!! replace data.std = rm2pareto(data, p)
+  } # !!! replace data.std = data2mpareto(data, p)
   else
     data.std = data
 
@@ -522,7 +522,7 @@ V <- function(x, par){
   stopifnot(nrow(G)==d)
   f1 <- function(i,x){
     S <- Gamma2Sigma(G, k=i)
-    return(1/x[i]*pmvnorm(upper=(log(x/x[i])+G[,i]/2)[-i],mean=rep(0,d-1),sigma= S)[1])
+    return(1/x[i]*mvtnorm::pmvnorm(upper=(log(x/x[i])+G[,i]/2)[-i],mean=rep(0,d-1),sigma= S)[1])
   }
   return(sum(apply(cbind(1:d),1,f1,x=x)))
 }
@@ -579,12 +579,12 @@ logdVK <- function(x,K,par){
       SCondK <- SnK - SnKK %*% SKm1 %*% SKnK
     if(k == d-1)
       SCondK <- SnK - t(SnKK) %*% SKm1 %*% t(SKnK)
-    logdvnK <- log(pmvnorm(upper=c(log(x[-K]/x[i])-muCondK),sigma=SCondK)[1])
+    logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i])-muCondK),sigma=SCondK)[1])
     logdv <- logdvK + logdvnK
   }
   if(k==1){
     logdvK <- - 2*log(x[i])
-    logdvnK <- log(pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),sigma=S[-K,-K])[1])
+    logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),sigma=S[-K,-K])[1])
     logdv <- logdvK + logdvnK
   }
 
