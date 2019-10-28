@@ -126,6 +126,7 @@ simu_px_dirichlet_mix <- function(no.simu, idx, N, weights, alpha, norm.alpha) {
 # !!! this is used for fitting
 ### This function selects all possible edges that can be added to graph
 ### while still remaining in the class of graphs described in the paper
+### i.e., block graphs.
 #graph: the initial graph object
 selectEdges = function(graph){
   d = vcount(graph)
@@ -634,10 +635,18 @@ logLH_HR <- function(data,Gamma,cens=FALSE){
 
 
 
-
-### This function fits the parameters of a multivariate HR Pareto distribution using (censored) likelihood estimation.
-### If a graph is given, it assumes the cond. independence structure of this graph fits only the parameters on the edges,
-##  but with the full likelihood. This should only be used for small dimensions; for graphs use fpareto_graph
+# comment: if you give data, and not graph, fit HR with the whole matrix
+# very complex!! This only works for small dimensions (e.g., 3, 4)
+# You can also give a graph object -> it will use only the needed parameters
+# needed in the graph. E.g., in a tree only d - 1 parameters. Still, it uses
+# the full likelihood.
+# !!!
+### This function fits the parameters of a multivariate HR Pareto distribution
+# using (censored) likelihood estimation.
+### If a graph is given, it assumes the cond. independence
+# structure of this graph fits only the parameters on the edges,
+##  but with the full likelihood. This should only be used for small dimensions;
+# for graphs use fpareto_graph
 #data: data nxd matrix of observation of multivariate HR Pareto distribution
 #cens: if TRUE then censored log-likelihood is computed
 #init: initial parameter value
@@ -648,6 +657,7 @@ logLH_HR <- function(data,Gamma,cens=FALSE){
 fpareto_HR <- function(data,
                        cens=TRUE,
                        init,
+                       p = NULL, # !!! if NULL, keep data, else, convert with data2mpareto
                        maxit = 100,
                        graph=NULL,
                        method = "BFGS"){
@@ -799,16 +809,35 @@ mst_HR = function(data, cens=TRUE){
   return(mst.tree)
 }
 
-### This function estimates the parameters of a HR block graph maximizes the (censored) LLH
+# !!!
+mparetomargins <- function(data, set_indices){
+  data_sub <- data[, set_indices]
+  idx <- which(apply(data_sub, 1, max) > 1)
+  return(data[idx, set_indices])
+}
+
+# comment: give a graph (must be block graph)
+#
+### This function estimates the parameters of a HR block graph maximizes the
+# (censored) LLH
 #graph: graph object from igraph package
-#data: nxd data matrix, where d is the number of nodes of the graph and n the sample size
-#q: the theshold probability, e.g. 0.9
+#data: nxd data matrix, where d is the number of nodes of the graph and n the
+#sample size
+#q: the theshold probability, e.g. 0.9 # !!! maybe p
 #thr: alternative to q, the absolute threshold
 #cens: logical, whether censored estimation is performed
-#sel.edges: if provided, then it must be mx2 matrix, where m is the number of edges that are tried to add in forward selection
+#sel.edges: if provided, then it must be mx2 matrix, where m is the number
+# of edges that are tried to add in forward selection
 estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL){
   stopifnot((is.null(q) + is.null(thr)) == 1)
-  cli = max_cliques(graph)
+
+  if(!is.null(p)){
+    data.std = data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+   cli = max_cliques(graph)
   ncli = length(cli)
   nnodes = vcount(graph)
   stopifnot(nnodes==ncol(data))
@@ -823,22 +852,45 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
     #cat("Fitting clique ",i," with nodes ", cli[[i]]," \n")
     cli.idx = cli[[i]]
     cli.len = length(cli.idx)
-    data.cli = data[,cli.idx]
+    data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
+    # data.cli = data[,cli.idx]
+
+    # remove from here
     if(!is.null(q))  quant = quantile(data.cli,q)
     if(!is.null(thr)) quant = thr
     data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
-    G.est <- matrix(rowMeans(sapply(1:cli.len, FUN=function(i) vario.est(data=data.thr, k=i))),cli.len,cli.len)
-    init = G.est[upper.tri(G.est)]
-    Ghat[[l]][cli.idx, cli.idx] = fpareto_HR(data=data.thr, init=init, cens=cens)$Gamma
+    # to here
+    data.thr <- data2mpareto(data.cli, p = q) # not needed as fpareto_HR accepts
+    # raw data + p
+
+    G.est <- vario.est(data = data.cli, p = q)
+    row_averages <- rowMeans(sapply(1:cli.len,
+                                    FUN=function(i) vario.est(data=data.thr, k=i)))
+    G.est <- matrix(row_means,cli.len,cli.len)
+    init = Gamma2par(G.est)
+    Ghat[[l]][cli.idx, cli.idx] = fpareto_HR(data=data.cli, init=init, cens=cens)$Gamma
   }
   Ghat[[l]] = fullGamma(graph=graph.cur[[l]], Gamma=Ghat[[l]])
 
   if(!is.null(sel.edges)){
+    # maybe data2mpareto?
+    d <- ncol(data)
+    if(!is.null(p)){
+      data.full.thr = data2mpareto(data, p)
+    } else {
+      data.full.thr <- data
+    }
+
+    # replace from here
     if(!is.null(q))  quant = quantile(data,q)
     if(!is.null(thr)) quant = thr
     data.full.thr = data[which(apply(data, 1, max) > quant),]/quant
+    # to here
+
+
     stop.flag = FALSE
-    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.full.thr, Gamma = Ghat[[l]], cens=cens)
+    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.full.thr,
+                                                  Gamma = Ghat[[l]], cens=cens)
     added.edges = c()
 
     while(length(sel.edges)!=0 & stop.flag==FALSE){
@@ -858,10 +910,13 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
             cli.idx = cli[[ii]]
             cli.len = length(cli.idx)
             data.cli = data[,cli.idx]
+            # change as before
             if(!is.null(q))  quant = quantile(data.cli,q)
             if(!is.null(thr)) quant = thr
             data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
             G.est <- matrix(rowMeans(sapply(1:cli.len, FUN=function(i) vario.est(data=data.thr, k=i))),cli.len,cli.len)
+            ###
+            G.est <- vario.est(data = data.cli, p = p)
             init = G.est[upper.tri(G.est)]
             Ghat.tmp[[k]][cli.idx, cli.idx] = fpareto_HR(data=data.thr, init=init, cens=cens)$Gamma
             Ghat.tmp[[k]] = fullGamma(graph=graph.tmp, Gamma=Ghat.tmp[[k]])

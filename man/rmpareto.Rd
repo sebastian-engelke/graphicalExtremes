@@ -41,8 +41,21 @@ The simulated multivariate Pareto data.
 over the \code{d} variables to simulate \code{n} multivariate
 observations.
 }
-## !!! add examples (define params and call function)
 }
 \description{
-Simulates exact samples of multivariate Pareto distributions
+Simulates exact samples of multivariate Pareto distributions.
+}
+\details{
+aasdfasdfasdfasdf
+}
+\examples{
+n <- 7
+d <- 4
+G <-  cbind(c(0, 1.5, 1.5, 2),
+            c(1.5, 0, 2, 1.5),
+            c(1.5, 2, 0, 1.5),
+            c(2, 1.5, 1.5, 0))
+
+rmpareto(n, d = d, par = G)
+
 }

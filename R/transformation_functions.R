@@ -14,6 +14,7 @@
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d} representing the completed
 #' Gamma matrix.
+#'
 fullGamma = function(graph, Gamma){
 
   # set up main variables
@@ -110,7 +111,15 @@ fullGamma = function(graph, Gamma){
 #'
 #' @return Graph object from \code{igraph} package. An undirected graph.
 #'
-Gamma2Graph <- function(Gamma, to_plot = T){
+#' @examples
+#' G <-  cbind(c(0, 1.5, 1.5, 2),
+#'             c(1.5, 0, 2, 1.5),
+#'             c(1.5, 2, 0, 1.5),
+#'             c(2, 1.5, 1.5, 0))
+#'
+#' Gamma2Graph(G, to_plot = TRUE)
+#'
+Gamma2Graph <- function(Gamma, to_plot = TRUE){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
   for(i in 1:nrow(Gamma)){
     null.mat[-i,-i] <- null.mat[-i,-i] +

@@ -4,7 +4,7 @@
 \alias{Gamma2Graph}
 \title{Transform \eqn{\Gamma} matrix to graph}
 \usage{
-Gamma2Graph(Gamma, to_plot = T)
+Gamma2Graph(Gamma, to_plot = TRUE)
 }
 \arguments{
 \item{Gamma}{Numeric matrix representing a \eqn{d \times d}{d x d}
@@ -19,4 +19,13 @@ Graph object from \code{igraph} package. An undirected graph.
 \description{
 Transforms \code{Gamma} matrix to an \code{igraph} object
 and plots it (optionally).
+}
+\examples{
+G <-  cbind(c(0, 1.5, 1.5, 2),
+            c(1.5, 0, 2, 1.5),
+            c(1.5, 2, 0, 1.5),
+            c(2, 1.5, 1.5, 0))
+
+Gamma2Graph(G, to_plot = TRUE)
+
 }

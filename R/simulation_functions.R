@@ -1,6 +1,9 @@
 #' Simulate samples of multivariate Pareto distribution
 #'
-#' Simulates exact samples of multivariate Pareto distributions
+#' Simulates exact samples of multivariate Pareto distributions.
+#'
+#' aasdfasdfasdfasdf
+#'
 #' @param n Positive integer. Number of simulations.
 #' @param model String. The parametric model type. Is one of:
 #' \itemize{
@@ -30,7 +33,16 @@
 #' over the \code{d} variables to simulate \code{n} multivariate
 #' observations.
 #' }
-#' ## !!! add examples (define params and call function)
+#'
+#' @examples
+#' n <- 7
+#' d <- 4
+#' G <-  cbind(c(0, 1.5, 1.5, 2),
+#'             c(1.5, 0, 2, 1.5),
+#'             c(1.5, 2, 0, 1.5),
+#'             c(2, 1.5, 1.5, 0))
+#'
+#' rmpareto(n, d = d, par = G)
 #'
 rmpareto <- function(n,
                      model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
