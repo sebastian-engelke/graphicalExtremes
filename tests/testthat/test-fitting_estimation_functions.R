@@ -22,6 +22,55 @@ for (i in 1:7){
 
 data3 <- rmpareto(n = n, model = "HR", d = NCOL(G3), par = G3)
 
+non_decomposable <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1, 0, 0, 0, 0),
+        c(1, 0, 1, 0, 1, 0),
+        c(0, 1, 0, 1, 0, 1),
+        c(0, 0, 1, 0, 1, 1),
+        c(0, 1, 0, 1, 0, 0),
+        c(0, 0, 1, 1, 0, 0)),
+  mode = "undirected"
+)
+igraph::is_chordal(non_decomposable)$chordal
+
+non_block <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1, 0, 0, 0, 0),
+        c(1, 0, 1, 1, 1, 0),
+        c(0, 1, 0, 1, 1, 1),
+        c(0, 1, 1, 0, 1, 1),
+        c(0, 1, 1, 1, 0, 0),
+        c(0, 0, 1, 1, 0, 0)),
+  mode = "undirected"
+)
+igraph::is_chordal(non_block)$chordal
+
+block <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1, 0, 0, 0, 0, 0),
+        c(1, 0, 1, 1, 1, 0, 0),
+        c(0, 1, 0, 1, 1, 1, 1),
+        c(0, 1, 1, 0, 0, 0, 0),
+        c(0, 1, 1, 1, 0, 0, 0),
+        c(0, 0, 1, 0, 0, 0, 1),
+        c(0, 0, 1, 0, 0, 1, 0)),
+  mode = "undirected"
+)
+igraph::is_chordal(block)$chordal
+
+block2 <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1),
+        c(1, 0)),
+  mode = "undirected")
+igraph::is_chordal(block2)$chordal
+
+Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
+                          c(2, 0, 2, 2, 2, 4, 4),
+                          c(4, 2, 0, 2, 2, 2, 2),
+                          c(4, 2, 2, 0, 2, 4, 4),
+                          c(4, 2, 2, 2, 0, 4, 4),
+                          c(6, 4, 2, 4, 4, 0, 2),
+                          c(6, 4, 2, 4, 4, 2, 0))
+
+
 # Run tests
 test_that("chi.est works", {
   expect_warning(chi.est(data = data1$res, u = .95, pot = F))
@@ -114,13 +163,54 @@ test_that("V_HR works", {
   expect_length(res, 1)
 })
 
+test_that("logdV_HR works", {
+  d <- NROW(G1)
+  par <- G1[upper.tri(G1)]
+  expect_error(logdV_HR(x = rep(0, d), par = par))
+  expect_error(logdV_HR(x = rep(1, d + 1), par = par))
+  res <- logdV_HR(x = rep(1, d), par = par)
+  expect_type(res, "double")
+  expect_length(res, 1)
+})
+
 test_that("logdVK_HR works", {
   d <- NROW(G1)
   par <- G1[upper.tri(G1)]
-  logdVK_HR(x = rep(1, d), par = par)
-  expect_error(V_HR(x = rep(0, d), par = par))
-  expect_error(V_HR(x = rep(1, d + 1), par = par))
-  res <- V_HR(x = rep(1, d), par = par)
+  expect_error(logdVK_HR(x = rep(0, d), K = sample(1:d, ceiling(runif(1) * d)),
+                         par = par))
+  expect_error(logdVK_HR(x = rep(1, d + 1),
+                         K = sample(1:d, ceiling(runif(1) * d)),
+                         par = par))
+  res <- logdVK_HR(x = rep(1, d), K = sample(1:d, ceiling(runif(1) * d)),
+                   par = par)
   expect_type(res, "double")
   expect_length(res, 1)
+})
+
+test_that("logLH_HR works", {
+
+  res <- logLH_HR(data1$res, G1)
+  expect_type(res, "double")
+  expect_length(res, 1)
+
+  res <- logLH_HR(data1$res, G1, cens = FALSE)
+  expect_type(res, "double")
+  expect_length(res, 1)
+
+  res <- logLH_HR(data1$res, G1, cens = TRUE)
+  expect_type(res, "double")
+  expect_length(res, 1)
+})
+
+test_that("estGraph_HR works", {
+  data <- rmpareto(1e2, "HR", 2, Gamma3_completed)
+  estGraph_HR(block2, data$res, p = .95)
+})
+
+test_that("fpareto_HR works", {
+
+})
+
+test_that("mst_HR works", {
+
 })

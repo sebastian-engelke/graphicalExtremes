@@ -37,6 +37,12 @@ block <- igraph::graph_from_adjacency_matrix(
 )
 igraph::is_chordal(block)$chordal
 
+block2 <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1),
+        c(1, 0)),
+  mode = "undirected")
+igraph::is_chordal(block2)$chordal
+
 Gamma1 <- rbind(c(0, 2, 0, 0, 0, 0),
                 c(2, 0, 2, 0, 2, 0),
                 c(0, 2, 0, 2, 0, 2),
@@ -87,6 +93,7 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
 
 par <- G[upper.tri(G)]
 
+
 # Run tests
 test_that("fullGamma works", {
 
@@ -102,6 +109,11 @@ test_that("fullGamma works", {
   res2 <- fullGamma(block, Gamma3_vec)
   expect_equal(res1, Gamma3_completed)
   expect_equal(res2, Gamma3_completed)
+
+  res1 <- fullGamma(block2, Gamma3[1:2, 1:2])
+  res2 <- fullGamma(block2, c(2))
+  expect_equal(res1, Gamma3[1:2, 1:2])
+  expect_equal(res2, Gamma3[1:2, 1:2])
 })
 
 test_that("Gamma2Graph works", {

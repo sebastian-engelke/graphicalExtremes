@@ -5,7 +5,7 @@
 #' implied by the conditional independencies.
 #'
 #' @param graph Graph object from \code{igraph} package.
-#' An undirected block graph, i.e., a decomposable
+#' An undirected block graph, i.e., a decomposable, connected
 #' graph where the minimal separators of the cliques have size at most one.
 #' @param Gamma Numeric matrix representing a \eqn{d \times d}{d x d}
 #' variogram, with entries only inside the cliques. Alternatively, can be a
@@ -74,6 +74,11 @@ fullGamma = function(graph, Gamma){
   # computes cliques
   cli = igraph::max_cliques(graph)
   ncli = length(cli)
+
+  # if only one clique terminate
+  if (ncli == 1) {return(G)}
+
+  # else, continue
   cli.selected = 1
   idx1 = cli[[1]]
   V = 1:ncli
