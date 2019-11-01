@@ -203,7 +203,7 @@ test_that("logLH_HR works", {
 })
 
 test_that("estGraph_HR works", {
-  data <- rmpareto(1e2, "HR", 2, Gamma3_completed)
+  data <- rmpareto(1e2, "HR", d = 2, Gamma3_completed[1:2, 1:2])
   estGraph_HR(block2, data$res, p = .95)
 })
 

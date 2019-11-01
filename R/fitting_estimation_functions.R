@@ -440,7 +440,6 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
     data.std <- data
   }
 
-
   l = 1
 
   graph.cur = list()
