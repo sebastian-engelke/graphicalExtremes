@@ -14,7 +14,8 @@ observations following a Huesler-Reiss distribution.}
 observations that is conditioned to be larger than the threshold \code{p}.}
 
 \item{p}{Numeric between 0 and 1. Probability threshold for the
-the components \code{k}.}
+the components \code{k}. If \code{NULL},
+it is assumed that \code{data} has already multivariate Pareto margins.}
 }
 \value{
 Numeric matrix \eqn{d \times d}{d x d}. The estimated

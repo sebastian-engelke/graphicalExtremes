@@ -111,12 +111,6 @@ test_that("chi_mat works", {
   expect_equal(NCOL(res), NCOL(dat))
 })
 
-test_that("Gamma2Chi_HR works", {
-  expect_error(Gamma2Chi_HR(G3))
-  expect_gte(Gamma2Chi_HR(1e16 * G3[1:3, 1:3]), 0)
-  expect_lte(Gamma2Chi_HR(1e-16 * G3[1:3, 1:3]), 1)
-})
-
 test_that("vario.est works", {
   data <- rmpareto(1e1, "HR", d = 4, G1)
   dd <- NCOL(data$res)

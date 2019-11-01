@@ -69,30 +69,6 @@ chi_mat <- function(data, u, pot=FALSE){
 
 
 
-#' Compute theoretical \eqn{\chi} in 3D
-#'
-#' Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
-#'
-#' @param Gamma Numeric matrix \eqn{3\times 3}{3 x 3}.
-#'
-#' @return The 3-dimensional \eqn{\chi} coefficient, i.e.,
-#' the extremal correlation coefficient for the HR distribution. Note that
-#' \eqn{0 \leq \chi \leq 1}.
-#'
-Gamma2Chi_HR = function(Gamma){
-  d <- NROW(Gamma)
-  if (d != 3){
-    stop("Gamma must be a 3 x 3 matrix.")
-  }
-  res = 3 - V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,2),c(1,2)])) -
-    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,3),c(1,3)])) -
-    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(2,3),c(2,3)])) +
-    V_HR(x=rep(1, times=3),par= Gamma2par(Gamma))
-  return(res)
-}
-
-
-
 #' Estimate \eqn{\Gamma}
 #'
 #' Estimates the variogram of the Huesler-Reiss distribution empirically.
@@ -362,7 +338,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains \eqn{n}
 #' observations following a \eqn{d}-variate HR Pareto distribution.
 #' @param p Numeric between 0 and 1. Threshold probability. If \code{NULL},
-#' it is assumed that \code{data} has already multivariate Pareto margins.
+#' it is assumed that \code{data} is already distributed as multivariate Pareto.
 #' @param cens Boolean. If TRUE, then censored log-likelihood is computed.
 #' By default, \code{cens = FALSE}.
 #' @param sel.edges Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
@@ -425,7 +401,7 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
     stop("The given graph is not a block graph.")
   }
 
-  # check if the number of nodes in the graph matches with the number
+  # check if the number of nodes in the graph matches the number
   # of variables in the data matrix
   nnodes = igraph::vcount(graph)
   if (nnodes != NCOL(data)){
@@ -446,6 +422,8 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
   graph.cur[[l]] = graph
   Ghat = list()
   Ghat[[l]] = matrix(NA, nrow=nnodes, ncol=nnodes)
+
+  ## take from JRSSB
 
   for(i in 1:ncli){
     #cat("Fitting clique ",i," with nodes ", cli[[i]]," \n")

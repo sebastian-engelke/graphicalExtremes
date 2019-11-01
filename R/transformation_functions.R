@@ -295,3 +295,41 @@ Chi2Gamma <- function(chi){
 }
 
 
+
+
+
+dim_Gamma <- function(Gamma){
+  # NUMERIC_MATRIX -> NUMERIC
+  # RETURN DIMENSION, IF SQUARE MATRIX, ELSE ERROR
+  dimension <- dim(Gamma)
+
+  if ((length(dimension) == 2) & (dimension[1] == dimension[2])){
+    dimension[1]
+  } else {
+    stop("Not a square matrix!")
+  }
+}
+
+
+#' Compute theoretical \eqn{\chi} in 3D
+#'
+#' Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
+#'
+#' @param Gamma Numeric matrix \eqn{3\times 3}{3 x 3}.
+#'
+#' @return The 3-dimensional \eqn{\chi} coefficient, i.e.,
+#' the extremal correlation coefficient for the HR distribution. Note that
+#' \eqn{0 \leq \chi \leq 1}.
+#'
+Gamma2Chi_HR = function(Gamma){
+  d <- dim_Gamma(Gamma) #!!! give back dimension o
+
+  if (d != 3){
+    stop("Gamma must be a 3 x 3 matrix.")
+  }
+  res = 3 - V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,2),c(1,2)])) -
+    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,3),c(1,3)])) -
+    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(2,3),c(2,3)])) +
+    V_HR(x=rep(1, times=3),par= Gamma2par(Gamma))
+  return(res)
+}

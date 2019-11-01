@@ -8,7 +8,7 @@ fullGamma(graph, Gamma)
 }
 \arguments{
 \item{graph}{Graph object from \code{igraph} package.
-An undirected block graph, i.e., a decomposable
+An undirected block graph, i.e., a decomposable, connected
 graph where the minimal separators of the cliques have size at most one.}
 
 \item{Gamma}{Numeric matrix representing a \eqn{d \times d}{d x d}

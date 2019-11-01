@@ -93,6 +93,13 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
 
 par <- G[upper.tri(G)]
 
+G3 <- matrix(nrow = 7, ncol = 7)
+for (i in 1:7){
+  for (j in 1:7){
+    G3[i, j] <- abs(i - j)/2
+  }
+}
+
 
 # Run tests
 test_that("fullGamma works", {
@@ -207,3 +214,10 @@ test_that("Chi2Gamma works", {
   theta <- 2 - chi
   expect_equal(Chi2Gamma(chi), (2*qnorm(theta/2))^2)
 })
+
+test_that("Gamma2Chi_HR works", {
+  expect_error(Gamma2Chi_HR(G3))
+  expect_gte(Gamma2Chi_HR(1e16 * G3[1:3, 1:3]), 0)
+  expect_lte(Gamma2Chi_HR(1e-16 * G3[1:3, 1:3]), 1)
+})
+

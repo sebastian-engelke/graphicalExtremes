@@ -668,8 +668,8 @@ fpareto_HR <- function(data,
     data.std <- data # if p not provided -> data already Pareto
   }
 
-  require("mvtnorm")
-  ti <- proc.time()
+  # require("mvtnorm")
+  # ti <- proc.time()
   u = 1  #censoring at 1 since data already normalized
   d <- ncol(data)
   if (length(u)==1){u <- rep(u,d)}
@@ -721,7 +721,7 @@ fpareto_HR <- function(data,
     nllik <- function(par){
       if(!is.null(graph)){
         Gtmp = fullGamma(graph = graph, Gamma = par)
-        par = Gtmp[upper.tri(Gtmp)]
+        par = Gamma2par(Gtmp)
       }
 
       G = par2Gamma(par)
@@ -843,7 +843,7 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
     data.std <- data # if p not provided -> data already Pareto
   }
 
-   cli = max_cliques(graph) # list with maximal cliques
+  cli = max_cliques(graph) # list with maximal cliques
   ncli = length(cli) # how many cliques? (what if one?)
   nnodes = vcount(graph) # how many nodes?
   stopifnot(nnodes==ncol(data)) # does the number of nodes matches the number of cols in the dataset?
@@ -856,54 +856,54 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
 
   # loop through all cliques
   for(i in 1:ncli){
-    #cat("Fitting clique ",i," with nodes ", cli[[i]]," \n")
     cli.idx = cli[[i]] # pick the curren cliques
     cli.len = length(cli.idx) # how many nodes in the current cliques? (what if clique has size 1? only possible for non-connected graph, maybe?)
     data.cli <- mparetomargins(data = data.std, set_indices = cli.idx) # compute marginal pareto, on the nodes of the current clique
-    # data.cli = data[,cli.idx] # OLD take from data only cols corresponding to nodes in current clique
+    #data.cli = data[,cli.idx] # OLD take from data only cols corresponding to nodes in current clique
 
     # remove from here
-    if(!is.null(q))  quant = quantile(data.cli,q) # OLD if provide q, compute quantile quant
-    if(!is.null(thr)) quant = thr # OLD if provide thr (a quantile), set it as the quantile quant
-    data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant # OLD from dataset, select rows where the max is above the quantile
+    #if(!is.null(q))  quant = quantile(data.cli,q) # OLD if provide q, compute quantile quant
+    #if(!is.null(thr)) quant = thr # OLD if provide thr (a quantile), set it as the quantile quant
+    #data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant # OLD from dataset, select rows where the max is above the quantile
     # if the data is already standardized, it is more convenient, because quant = 1!!!
-    data.thr <- data2mpareto(data.cli, p = q) # standardize data to Pareto (but with the new option, already standardized!!)
+    #data.thr <- data2mpareto(data.cli, p = q) # standardize data to Pareto (but with the new option, already standardized!!)
     # not needed as fpareto_HR accepts raw data + p?
     # to here
 
     G.est <- vario.est(data = data.cli)
 
     # remove from here
-    G.est <- vario.est(data = data.cli, p = q)
-    row_averages <- rowMeans(sapply(1:cli.len,
-                                    FUN=function(i) vario.est(data=data.thr, k=i)))
-    G.est <- matrix(row_means,cli.len,cli.len)
+    #G.est <- vario.est(data = data.cli, p = q)
+    #row_averages <- rowMeans(sapply(1:cli.len,
+                                  #  FUN=function(i) vario.est(data=data.thr, k=i)))
+    #G.est <- matrix(row_means,cli.len,cli.len)
     # to here
 
     init = Gamma2par(G.est)
-    Ghat[[l]][cli.idx, cli.idx] = fpareto_HR(data=data.cli, init=init, cens=cens)$Gamma
+    Ghat[[l]][cli.idx, cli.idx] = fpareto_HR(data=data.cli,
+                                             init=init, cens=cens)$Gamma
   }
   Ghat[[l]] = fullGamma(graph=graph.cur[[l]], Gamma=Ghat[[l]])
 
   if(!is.null(sel.edges)){ # if you have chosen some edges
     # maybe data2mpareto?
-    d <- ncol(data)
+    # d <- ncol(data)
     # remove from here
-    if(!is.null(p)){
-      data.full.thr = data2mpareto(data, p)
-    } else {
-      data.full.thr <- data
-    }
+    # if(!is.null(p)){
+      # data.full.thr = data2mpareto(data, p)
+    # } else {
+      # data.full.thr <- data
+    # }
 
-    if(!is.null(q))  quant = quantile(data,q)
-    if(!is.null(thr)) quant = thr
-    data.full.thr = data[which(apply(data, 1, max) > quant),]/quant
+    # if(!is.null(q))  quant = quantile(data,q)
+    # if(!is.null(thr)) quant = thr
+    # data.full.thr = data[which(apply(data, 1, max) > quant),]/quant
     # to here
 
-    data.full.thr <- data.std
+    # data.std <- data.std
 
     stop.flag = FALSE
-    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.full.thr,
+    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
                                                   Gamma = Ghat[[l]], cens=cens)
     added.edges = c()
 
@@ -914,29 +914,39 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
       Ghat.tmp = list()
 
       # loop through the selected edges
+      # go through proposed edges one after the other while retaining a block
+      # graph
+      # m number of proposed edges
       for(k in 1:m){
-        Ghat.tmp[[k]] = Ghat[[l]]
-        graph.tmp = add_edges(graph = graph.cur[[l]], edges = sel.edges[k,])
-        if(is_chordal(graph.tmp)$chordal){
-          cli = max_cliques(graph.tmp)
-          ii = which(sapply(cli, FUN=function(x) length(intersect(x,sel.edges[k,]))==2)==TRUE)
-          if(sum(sapply(cli, FUN=function(x) length(intersect(x,cli[[ii]])) > 1))==1){
+        Ghat.tmp[[k]] = Ghat[[l]] # current temporary graph
+        graph.tmp = igraph::add_edges(graph = graph.cur[[l]],
+                                      edges = sel.edges[k,]) # add the current proposed edge to the graph
+        if(is_chordal(graph.tmp)$chordal){ # if the obtained graph is decomposable
+          cli = max_cliques(graph.tmp) # find list of max cliques
+          ii = which(sapply(cli, FUN=function(x) length(intersect(x,
+                                                                  sel.edges[k,]))==2)==TRUE)
+          # find in which clique the new proposed edge is
+
+          # only in the clique itself the separator can be of size > 1
+          if(sum(sapply(cli, FUN=function(x) length(intersect(x, cli[[ii]])) > 1))==1){
             cat("Try edge", sel.edges[k,]," \n")
             cli.idx = cli[[ii]]
             cli.len = length(cli.idx)
             data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
             # data.cli = data[,cli.idx]
             # remove from here
-            if(!is.null(q))  quant = quantile(data.cli,q)
-            if(!is.null(thr)) quant = thr
-            data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
-            G.est <- matrix(rowMeans(sapply(1:cli.len, FUN=function(i) vario.est(data=data.thr, k=i))),cli.len,cli.len)
+            # if(!is.null(q))  quant = quantile(data.cli,q)
+            # if(!is.null(thr)) quant = thr
+            # data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
+            # G.est <- matrix(rowMeans(sapply(1:cli.len, FUN=function(i) vario.est(data=data.thr, k=i))),cli.len,cli.len)
             # to here
             G.est <- vario.est(data = data.cli)
-            init = G.est[upper.tri(G.est)]
-            Ghat.tmp[[k]][cli.idx, cli.idx] = fpareto_HR(data=data.cli, init=init, cens=cens)$Gamma
+            init = Gamma2par(G.est)
+            Ghat.tmp[[k]][cli.idx, cli.idx] = fpareto_HR(data=data.cli,
+                                                         init=init, cens=cens)$Gamma
             Ghat.tmp[[k]] = fullGamma(graph=graph.tmp, Gamma=Ghat.tmp[[k]])
-            AIC.tmp[k] = 2*ecount(graph.tmp) - 2 * logLH_HR(data=data.full.thr, Gamma = Ghat.tmp[[k]], cens=cens)
+            AIC.tmp[k] = 2*igraph::ecount(graph.tmp) -
+              2 * logLH_HR(data = data.std, Gamma = Ghat.tmp[[k]], cens=cens)
           }
         }
       }
