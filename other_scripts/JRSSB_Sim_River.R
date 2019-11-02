@@ -2,10 +2,10 @@
 #### Code for simulation study and application of
 #### Engelke & Hitz, Graphical Models for Extremes (2018, preprint)
 ###################################################################
-setwd("other_scripts")
+setwd("other_scripts") # we will delete
 library("graphicalExtremes")
 library("igraph")
-library("matrixcalc")
+# library("matrixcalc")
 
 ##############################################################
 #### Function definitions
@@ -73,7 +73,7 @@ G.vec = c(1,2,1,2)
 G0 = complete_Gamma(graph = graph0, Gamma = G.vec)
 p = length(G.vec)
 
-nexp <- 200
+nexp <- 2 # !!! 200
 n.vec <- c(100)
 method.vec <- c("full", "graph")
 est.par <- array(NA, dim = c(nexp, p, length(method.vec),length(n.vec)))
@@ -140,13 +140,14 @@ added.edges.true = rbind(c(2,3),c(15,16),c(6,7))
 
 graph.true = star.tree
 for(i in 1:nrow(added.edges.true))  graph.true = add_edges(graph = graph.true, edges = added.edges.true[i,])
-plot(graph.true, vertex.color="lightblue", vertex.size=10, edge.width=2)
 
 set.seed(9119770)
 G.vec = runif(ecount(graph.true), min = 0.5, max = 1)
 Gamma = complete_Gamma(graph = graph.true, Gamma = G.vec) ## choose seed such that all cliques have valid Gamma matrix
 
-nexp <- 100
+Gamma2graph(Gamma = Gamma)
+
+nexp <- 1 # !!! 100
 n <- c(100)
 est.AIC <- array(NA, dim = c(nexp, 2*d))
 nb.chosen.edges = matrix(0,d,d)

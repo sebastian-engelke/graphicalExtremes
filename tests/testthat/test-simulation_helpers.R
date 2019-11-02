@@ -97,24 +97,22 @@ alpha_end <- runif(d - 1)
 
 # Run tests 2
 test_that("simu_px_tree_HR works", {
-  res <- simu_px_tree_HR(n, Gamma_vec = G.vec, A_mat = A[[3]])
+  res <- simu_px_tree_HR(n, Gamma_vec = G.vec, A = A[[3]])
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 })
 
 test_that("simu_px_tree_logistic works", {
-  expect_error(simu_px_tree_logistic(n, idx = c(1, 3),
-                                     theta = 0.2, A = A))
-  expect_error(simu_px_tree_logistic(n, idx = c(sample(1:d, n, replace = T), 1),
-                                theta = 0.2, A = A))
+  expect_error(simu_px_tree_logistic(n, theta = runif(4), A = A[[2]]))
 
-  res <- simu_px_tree_logistic(n, idx = 2, theta = 0.3, A = A)
+
+  res <- simu_px_tree_logistic(n, theta = 0.3, A = A[[2]])
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 })
 
 test_that("simu_px_tree_dirichlet works", {
-  res <- simu_px_tree_dirichlet(n, alpha_start, alpha_end, A_mat = A[[2]])
+  res <- simu_px_tree_dirichlet(n, alpha_start, alpha_end, A = A[[2]])
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 })

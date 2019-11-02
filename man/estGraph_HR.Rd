@@ -4,7 +4,7 @@
 \alias{estGraph_HR}
 \title{Maximum likelihood parameters of a HR block graph.}
 \usage{
-estGraph_HR(graph, data, p = NULL, cens = FALSE, sel.edges = NULL)
+estGraph_HR(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
 }
 \arguments{
 \item{graph}{Graph object from \code{igraph} package.
@@ -20,9 +20,9 @@ it is assumed that \code{data} is already distributed as multivariate Pareto.}
 \item{cens}{Boolean. If TRUE, then censored log-likelihood is computed.
 By default, \code{cens = FALSE}.}
 
-\item{sel.edges}{Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
+\item{edges_to_add}{Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
 the number of edges that are tried to be added in the forward selection.
-By default, \code{sel.edges = NULL}.}
+By default, \code{edges_to_add = NULL}.}
 }
 \value{
 List. The list is made of:

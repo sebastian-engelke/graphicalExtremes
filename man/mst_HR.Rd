@@ -7,7 +7,7 @@
 mst_HR(data, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix eqn{n\times d}{n x d}. It contains
+\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
 observations following a multivariate HR Pareto distribution.}
 
 \item{cens}{Boolean. If TRUE, then censored log-likelihood is computed.

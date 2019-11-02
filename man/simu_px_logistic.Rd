@@ -4,16 +4,16 @@
 \alias{simu_px_logistic}
 \title{Simulate logistic extremal functions}
 \usage{
-simu_px_logistic(n, idx, d, theta)
+simu_px_logistic(n, d, idx, theta)
 }
 \arguments{
 \item{n}{Positive integer. Number of simulations.}
 
-\item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-1 to \code{d}, that determine which extremal function to simulate.}
-
 \item{d}{Positive integer. Dimension of the multivariate Pareto
 distribution.}
+
+\item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+1 to \code{d}, that determine which extremal function to simulate.}
 
 \item{theta}{Numeric --- assume \eqn{0 < \theta < 1}.}
 }

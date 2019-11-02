@@ -335,17 +335,17 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
         proc <-
           switch(model,
                  "HR" =
-                   simu_px_tree_HR(n = n.k, Gamma_vec = par.vec, A_mat = A[[k]]),
+                   simu_px_tree_HR(n = n.k, Gamma_vec = par.vec, A = A[[k]]),
                  "logistic" =
-                   simu_px_tree_logistic(n = n.k, idx = k,
-                                         theta = theta, A = A),
+                   simu_px_tree_logistic(n = n.k,
+                                         theta = theta, A = A[[k]]),
                  "dirichlet" =
                    simu_px_tree_dirichlet(n = n.k,
                                           alpha.start =
                                             alpha.mat[cbind(1:e, e.start[[k]])],
                                           alpha.end =
                                             alpha.mat[cbind(1:e, e.end[[k]])],
-                                              A_mat = A[[k]])
+                                              A = A[[k]])
         )
 
         if (any(dim(proc) != c(n.k, d))) {
@@ -679,17 +679,17 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       proc <-
         switch(model,
                "HR" =
-                 simu_px_tree_HR(n = n.ind, Gamma_vec = par.vec, A_mat = A[[k]]),
+                 simu_px_tree_HR(n = n.ind, Gamma_vec = par.vec, A = A[[k]]),
                "logistic" =
-                 simu_px_tree_logistic(n = n.ind, idx = k,
-                                       theta = theta, A = A),
+                 simu_px_tree_logistic(n = n.ind,
+                                       theta = theta, A = A[[k]]),
                "dirichlet" =
                  simu_px_tree_dirichlet(n = n.ind,
                                         alpha.start =
                                           alpha.mat[cbind(1:e, e.start[[k]])],
                                         alpha.end =
                                           alpha.mat[cbind(1:e, e.end[[k]])],
-                                        A_mat = A[[k]])
+                                        A = A[[k]])
       )
 
       if (any(dim(proc) != c(n.ind, d))) {

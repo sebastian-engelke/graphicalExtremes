@@ -113,6 +113,8 @@ complete_Gamma = function(Gamma, graph){
 #' variogram.
 #' @param to_plot Boolean. If \code{TRUE} (default), it plots the produced
 #' graph.
+#' @param ... Graphical parameters for the \code{\link[igraph]{plot}} function
+#' of the package \code{igraph}.
 #'
 #' @return Graph object from \code{igraph} package. An undirected graph.
 #'
@@ -124,7 +126,7 @@ complete_Gamma = function(Gamma, graph){
 #'
 #' Gamma2graph(G, to_plot = TRUE)
 #'
-Gamma2graph <- function(Gamma, to_plot = TRUE){
+Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
   for(i in 1:nrow(Gamma)){
     null.mat[-i,-i] <- null.mat[-i,-i] +
@@ -132,12 +134,14 @@ Gamma2graph <- function(Gamma, to_plot = TRUE){
   }
   graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE,
                                               mode="undirected")
-  igraph::V(graph)$color <- "cyan2"
+  igraph::V(graph)$color <- adjustcolor(col = "#4477AA", alpha.f = 0.4)
+  igraph::V(graph)$frame.color <- adjustcolor(col = "#4477AA", alpha.f = 1)
+  igraph::V(graph)$label.color <- "black"
   igraph::V(graph)$size <- 15
   igraph::E(graph)$width <- 2
   igraph::E(graph)$color <- "darkgrey"
   if (to_plot){
-    igraph::plot.igraph(graph)
+    igraph::plot.igraph(graph, ...)
   }
   return(graph)
 }

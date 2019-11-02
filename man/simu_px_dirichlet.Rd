@@ -4,16 +4,16 @@
 \alias{simu_px_dirichlet}
 \title{Simulate Dirichlet extremal functions}
 \usage{
-simu_px_dirichlet(n, idx, d, alpha)
+simu_px_dirichlet(n, d, idx, alpha)
 }
 \arguments{
 \item{n}{Positive integer. Number of simulations.}
 
-\item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-1 to \code{d}, that determine which extremal function to simulate.}
-
 \item{d}{Positive integer. Dimension of the multivariate Pareto
 distribution.}
+
+\item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+1 to \code{d}, that determine which extremal function to simulate.}
 
 \item{alpha}{Numeric vector of size \code{d}.}
 }

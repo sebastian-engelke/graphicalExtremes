@@ -264,7 +264,7 @@ logdVK_HR <- function(x, K, par){
 #'
 #' Computes the full (censored) log-likelihood of HR model.
 #'
-#' @param data Numeric matrix eqn{n\times d}{n x d}. It contains
+#' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
 #' observations following a multivariate HR Pareto distribution.
 #' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
 #' It represents a variogram matrix \eqn{\Gamma}.

@@ -7,7 +7,7 @@
 logLH_HR(data, Gamma, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix eqn{n\times d}{n x d}. It contains
+\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
 observations following a multivariate HR Pareto distribution.}
 
 \item{Gamma}{Numeric matrix \eqn{n\times d}{n x d}.

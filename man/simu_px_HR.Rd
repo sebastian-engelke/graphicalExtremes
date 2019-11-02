@@ -4,16 +4,16 @@
 \alias{simu_px_HR}
 \title{Simulate HR extremal functions}
 \usage{
-simu_px_HR(n, idx, d, trend, chol_mat)
+simu_px_HR(n, d, idx, trend, chol_mat)
 }
 \arguments{
 \item{n}{Positive integer. Number of simulations.}
 
-\item{idx}{Integer. Index corresponding to the variable over which
-the extremal function is simulated.}
-
 \item{d}{Positive integer. Dimension of the multivariate Pareto
 distribution.}
+
+\item{idx}{Integer. Index corresponding to the variable over which
+the extremal function is simulated.}
 
 \item{trend}{Numeric. Trend corresponding to the variable \code{idx}.}
 

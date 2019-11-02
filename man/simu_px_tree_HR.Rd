@@ -4,12 +4,12 @@
 \alias{simu_px_tree_HR}
 \title{Simulate HR extremal functions on a tree}
 \usage{
-simu_px_tree_HR(n, G.vec, A_mat)
+simu_px_tree_HR(n, Gamma_vec, A_mat)
 }
 \arguments{
 \item{n}{Positive integer. Number of simulations.}
 
-\item{G.vec}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
+\item{Gamma_vec}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
 number of nodes in the tree (and \eqn{d - 1} is the number of edges).}
 
 \item{A_mat}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
