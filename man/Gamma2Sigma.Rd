@@ -29,5 +29,5 @@ the paper of Engelke, S., and Hitz, A.,
 \url{https://arxiv.org/abs/1812.01734}.
 }
 \references{
-\insertRef{"asadi2015extremes"}{"graphicalExtremes"}
+\insertRef{asadi2015extremes}{graphicalExtremes}
 }

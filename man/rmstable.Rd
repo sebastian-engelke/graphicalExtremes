@@ -30,18 +30,12 @@ variogram, if \code{model = HR}.
 \item \eqn{\theta > 0}, if \code{model = neglogistic}.
 \item \eqn{\alpha > 0}, numeric vector of size \code{d},
 if \code{model = dirichlet}.
-}}
 }
-\value{
-List. The list is made of:
-\itemize{
-\item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+
+#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
 The simulated multivariate Pareto data.
-\item \code{counter} Positive integer. The number of times needed to sweep
-over the \code{d} variables to simulate \code{n} multivariate
-observations.
-}
-## !!! add examples (define params and call function)
+
+## !!! add examples (define params and call function)}
 }
 \description{
 Simulates exact samples of max-stable process

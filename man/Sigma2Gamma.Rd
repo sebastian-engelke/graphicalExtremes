@@ -6,19 +6,22 @@
 \usage{
 Sigma2Gamma(S, k = 1, full = FALSE)
 }
+\arguments{
+\item{S}{Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
+It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
+the paper of Engelke, S., and Hitz, A.,
+\url{https://arxiv.org/abs/1812.01734}.}
+
+\item{k}{Integer between \code{1} (the default value) and \code{d}.
+It represents the index that is missing in \eqn{\Sigma^(k)}.}
+
+\item{full}{Boolean. If true, then \code{S} must be a
+\eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.}
+}
+\value{
+Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
+matrix.
+}
 \description{
 Transforms \eqn{\Sigma^(k)} to the respective \eqn{\Gamma} matrix.
-}
-\details{
-@param S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
- It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
- the paper of Engelke, S., and Hitz, A.,
- \url{https://arxiv.org/abs/1812.01734}.
- @param k Integer between \code{1} (the default value) and \code{d}.
- It represents the index that is missing in \eqn{\Sigma^(k)}.
- @param full Boolean. If true, then \code{S} must be a
- \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
-
-@return Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
- matrix.
 }

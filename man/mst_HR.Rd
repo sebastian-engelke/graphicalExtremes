@@ -4,11 +4,14 @@
 \alias{mst_HR}
 \title{Estimate the HR minimum spanning tree}
 \usage{
-mst_HR(data, cens = FALSE)
+mst_HR(data, p = NULL, cens = FALSE)
 }
 \arguments{
 \item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
 observations following a multivariate HR Pareto distribution.}
+
+\item{p}{Numeric between 0 and 1. Threshold probability. If \code{NULL},
+it is assumed that \code{data} is already distributed as multivariate Pareto.}
 
 \item{cens}{Boolean. If TRUE, then censored log-likelihood is computed.
 By default, \code{cens = FALSE}.}

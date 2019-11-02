@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.6.1)
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
@@ -14,7 +14,6 @@ Imports:
     igraph (>= 1.2.4.1),
     mvtnorm (>= 1.0.10),
     matrixcalc (>= 1.0.3),
-    Rdpack
+    Rdpack,
+    stats (>= 3.6.1)
 RdMacros: Rdpack
-
-

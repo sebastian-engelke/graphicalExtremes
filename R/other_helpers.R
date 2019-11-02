@@ -35,11 +35,16 @@ dim_Gamma <- function(Gamma){
 
 
 
-### This function selects all possible edges that can be added to graph
-### while still remaining in the class of graphs described in the paper
-### i.e., block graphs.
-#graph: the initial graph object
-selectEdges = function(graph){
+#' Select edges to add to a graph
+#'
+#' This function selects all possible edges that can be added to graph
+#' while still remaining in the class of block graphs.
+#'
+#' @inheritParams complete_Gamma
+#'
+#' @return Numeric vector.
+#'
+select_edges = function(graph){
   d = vcount(graph)
   sel.edges = matrix(0, nrow=0, ncol=2)
   for(i in 1:(d-1)) for(j in (i+1):d) if(is_chordal(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
@@ -48,11 +53,15 @@ selectEdges = function(graph){
 
 
 
-### Sets graphical parameters to graph
-## graph -> graph
-## sets graphical parameters to the graph
+#' Set graphical parameters
+#'
+#' Set graphical parameters to \code{graph} which is an object from the
+#' \code{igraph} package.
+#'
+#' @inheritParams complete_Gamma
+#'
+#' @return Graph object from \code{igraph} package.
 set_graph_parameters <- function(graph){
-
   # set parameters
   igraph::V(graph)$color <- adjustcolor(col = "#4477AA", alpha.f = 0.4)
   igraph::V(graph)$frame.color <- adjustcolor(col = "#4477AA", alpha.f = 1)

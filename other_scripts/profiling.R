@@ -14,7 +14,7 @@ profvis(rmpareto(n, "dirichlet", d, runif(d)))
 n <- 1e3
 d <- 1e2
 gg <- igraph::make_tree(n = d, 2, mode = "undirected")
-G_tree <- fullGamma(gg, runif(d-1))
+G_tree <- complete_Gamma(gg, runif(d-1))
 gg_check <- Gamma2Graph(G_tree)
 igraph::V(gg_check)$color <- "white"
 igraph::tkplot(gg_check)

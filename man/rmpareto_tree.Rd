@@ -33,14 +33,9 @@ the relative \eqn{\alpha > 0} coefficients, if \code{model = dirichlet}.
 }}
 }
 \value{
-List. The list is made of:
-\itemize{
-\item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+Numeric matrix of size \eqn{n \times d}{n x d}.
 The simulated multivariate Pareto data.
-\item \code{counter} Positive integer. The number of times needed to sweep
-over the \code{d} variables to simulate \code{n} multivariate
-observations.
-}
+
 ## !!! add examples (define params and call function)
 }
 \description{

@@ -114,35 +114,35 @@ test_that("emp_chi_mat works", {
   expect_equal(NCOL(res), NCOL(dat))
 })
 
-test_that("est_vario works", {
+test_that("emp_vario works", {
   data <- rmpareto(1e1, "HR", d = 4, G1)
   dd <- NCOL(data)
 
-  res <- est_vario(data)
+  res <- emp_vario(data)
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data, k = sample(1:dd, 1))
+  res <- emp_vario(data, k = sample(1:dd, 1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data, p = runif(1))
+  res <- emp_vario(data, p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data, p = .99)
+  res <- emp_vario(data, p = .99)
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data, k = sample(1:dd, 1), p = runif(1))
+  res <- emp_vario(data, k = sample(1:dd, 1), p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")

@@ -125,7 +125,7 @@ complete_Gamma = function(Gamma, graph){
 #'             c(2, 1.5, 1.5, 0))
 #'
 #' Gamma2graph(G, to_plot = TRUE)
-#'
+#' @export
 Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
   for(i in 1:nrow(Gamma)){
@@ -167,17 +167,17 @@ data2mpareto <- function(data, p){
 #'
 #' Transforms \eqn{\Sigma^(k)} to the respective \eqn{\Gamma} matrix.
 #'
-#'  @param S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-#'  It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
-#'  the paper of Engelke, S., and Hitz, A.,
-#'  \url{https://arxiv.org/abs/1812.01734}.
-#'  @param k Integer between \code{1} (the default value) and \code{d}.
-#'  It represents the index that is missing in \eqn{\Sigma^(k)}.
-#'  @param full Boolean. If true, then \code{S} must be a
-#'  \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
+#' @param S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
+#' It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
+#' the paper of Engelke, S., and Hitz, A.,
+#' \url{https://arxiv.org/abs/1812.01734}.
+#' @param k Integer between \code{1} (the default value) and \code{d}.
+#' It represents the index that is missing in \eqn{\Sigma^(k)}.
+#' @param full Boolean. If true, then \code{S} must be a
+#' \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
 #'
-#'  @return Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
-#'  matrix.
+#' @return Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
+#' matrix.
 Sigma2Gamma <- function(S, k = 1, full = FALSE){
   # complete S
   if (!full){
@@ -213,7 +213,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' the paper of Engelke, S., and Hitz, A.,
 #' \url{https://arxiv.org/abs/1812.01734}.
 #'
-#' @references \insertRef{"asadi2015extremes"}{"graphicalExtremes"}
+#' @references \insertRef{asadi2015extremes}{graphicalExtremes}
 #'
 #'
 #' @param Gamma Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
@@ -312,7 +312,7 @@ chi2Gamma <- function(chi){
 #' @return Numeric. The extremal correlation coefficient.
 Gamma2chi <- function(Gamma){
 
-  chi <- 2 - 2 * pnorm(sqrt(Gamma) / 2)
+  chi <- 2 - 2 * stats::pnorm(sqrt(Gamma) / 2)
   return(chi)
 }
 

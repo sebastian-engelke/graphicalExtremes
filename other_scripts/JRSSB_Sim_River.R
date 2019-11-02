@@ -86,7 +86,7 @@ for(i in 1:nexp){
     n <- n.vec[l]
     set.seed(i+10*l)
     data = rmpareto(n=n, model="HR", d=d,  par=G0)
-    G.est <- est_vario(data=data)
+    G.est <- emp_vario(data=data)
     est.par[i,,1,l] = (fmpareto_HR(data=data, init=G.est[edges], cens=TRUE,
                                   graph=graph0)$Gamma)[edges]
     est.par[i,,2,l] = (estGraph_HR(graph=graph0, data=data,
@@ -159,7 +159,7 @@ for(i in 1:nexp){
   set.seed(i)
   data = rmpareto(n=n, model="HR", d=d, par=Gamma)
   tree.tmp = mst_HR(data = data, cens = TRUE)
-  sel.edges = selectEdges(graph=tree.tmp)
+  sel.edges = select_edges(graph=tree.tmp)
   fit.tmp = estGraph_HR(graph=tree.tmp, data=data, cens=TRUE, edges_to_add =sel.edges)
   est.AIC[i,1:length(fit.tmp$AIC)] = fit.tmp$AIC
   chosen.edges.tmp = (rbind(ends(tree.tmp,E(tree.tmp)),fit.tmp$added.edges))[1:vcount(graph.true),]
@@ -275,10 +275,10 @@ abline(sameEdgesGauss, 0, lty=2, col="orange", lwd=2)
 ########################################
 
 ### Do not run ####
-sel.edges = selectEdges(FlowGraph)
+sel.edges = select_edges(FlowGraph)
 Mfit_flow = estGraph_HR(graph=FlowGraph, data=X, cens=TRUE, edges_to_add=sel.edges)
 
-sel.edges = selectEdges(mstFit)
+sel.edges = select_edges(mstFit)
 Mfit_mst = estGraph_HR(graph=mstFit, data=X, cens=TRUE, edges_to_add=sel.edges)
 ###################
 

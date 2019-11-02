@@ -35,7 +35,7 @@
 #'             c(2, 1.5, 1.5, 0))
 #'
 #' rmpareto(n, d = d, par = G)
-#'
+#' @export
 rmpareto <- function(n,
                      model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
                      d, par) {

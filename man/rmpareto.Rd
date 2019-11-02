@@ -33,14 +33,8 @@ if \code{model = dirichlet}.
 }}
 }
 \value{
-List. The list is made of:
-\itemize{
-\item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+Numeric matrix of size \eqn{n \times d}{n x d}.
 The simulated multivariate Pareto data.
-\item \code{counter} Positive integer. The number of times needed to sweep
-over the \code{d} variables to simulate \code{n} multivariate
-observations.
-}
 }
 \description{
 Simulates exact samples of multivariate Pareto distributions.
@@ -54,5 +48,4 @@ G <-  cbind(c(0, 1.5, 1.5, 2),
             c(2, 1.5, 1.5, 0))
 
 rmpareto(n, d = d, par = G)
-
 }

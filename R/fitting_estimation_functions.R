@@ -88,7 +88,7 @@ emp_chi_mat <- function(data, p, pot=FALSE){
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
 #' variogram of the Huesler-Reiss distribution.
 #'
-est_vario <- function(data, k=NULL, p=NULL){
+emp_vario <- function(data, k=NULL, p=NULL){
   # helper ####
   G.fun = function(i, data){
     idx = which(data[,i]>1)
@@ -571,7 +571,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
     # compute marginal pareto, on the nodes of the current clique
     data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
 
-    G.est <- est_vario(data = data.cli)
+    G.est <- emp_vario(data = data.cli)
     init = Gamma2par(G.est)
     Ghat[[l]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
                                              init=init, cens=cens)$Gamma
@@ -622,7 +622,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
             cli.len = length(cli.idx)
             data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
 
-            G.est <- est_vario(data = data.cli)
+            G.est <- emp_vario(data = data.cli)
             init = Gamma2par(G.est)
             Ghat.tmp[[k]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
                                                          init=init, cens=cens)$Gamma
@@ -661,6 +661,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
 #' the (censored) log-likelihood.
 #'
 #' @inheritParams logLH_HR
+#' @inheritParams fmpareto_HR
 #'
 #' @return Graph object from \code{igraph} package. A tree.
 #'
@@ -676,7 +677,7 @@ mst_HR = function(data, p = NULL, cens = FALSE){
   n <- nrow(data)
   d = ncol(data)
   graph.full <- make_full_graph(d)
-  G.emp = est_vario(data=data)
+  G.emp = emp_vario(data=data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
   if(cens)
