@@ -1,40 +1,66 @@
-#' Simulate samples of multivariate Pareto distribution
+#' Sampling of a multivariate Pareto distribution
 #'
-#' Simulates exact samples of multivariate Pareto distributions.
+#' Simulates exact samples of a multivariate Pareto distribution.
 #'
-#' @param n Positive integer. Number of simulations.
-#' @param model String. The parametric model type. Is one of:
+#' @param n Number of simulations.
+#' @param model The parametric model type; one of:
 #' \itemize{
 #' \item \code{HR} (default),
 #' \item \code{logistic},
 #' \item \code{neglogistic},
 #' \item \code{dirichlet}.
 #' }
-#' @param d Positive integer. Dimension of the multivariate Pareto
+#' @param d Dimension of the multivariate Pareto
 #' distribution.
-#' @param par Is the respective parameter for the given \code{model}.
-#' Is one of:
+#' @param par Respective parameter for the given \code{model}, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
-#' variogram, if \code{model = HR}.
+#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#' if \code{model = HR}.
 #' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
 #' \item \eqn{\theta > 0}, if \code{model = neglogistic}.
-#' \item \eqn{\alpha > 0}, numeric vector of size \code{d},
+#' \item \eqn{\alpha}, numeric vector of size \code{d} with positive entries,
 #' if \code{model = dirichlet}.
 #' }
 #'
-#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
-#' The simulated multivariate Pareto data.
+#' @return
+#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' multivariate Pareto distribution.
+#'
+#' @details
+#' The simulation follows the algorithm in CITE eng2018a.
+#' For details on the parameters of the Huesler--Reiss, logistic
+#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
+#' distribution see CITE coles1991modelling.
 #'
 #' @examples
-#' n <- 7
+#' ## A 4-dimensional HR distribution
+#' n <- 10
 #' d <- 4
 #' G <-  cbind(c(0, 1.5, 1.5, 2),
 #'             c(1.5, 0, 2, 1.5),
 #'             c(1.5, 2, 0, 1.5),
 #'             c(2, 1.5, 1.5, 0))
 #'
-#' rmpareto(n, d = d, par = G)
+#' rmpareto(n, "HR", d = d, par = G)
+#'
+#' ## A 3-dimensional logistic distribution
+#' n <- 10
+#' d <- 3
+#' theta <- .6
+#' rmpareto(n, "logistic", d, par = theta)
+#'
+#' ## A 5-dimensional negative logistic distribution
+#' n <- 10
+#' d <- 5
+#' theta <- 1.5
+#' rmpareto(n, "neglogistic", d, par = theta)
+#'
+#' ## A 4-dimensional Dirichlet distribution
+#' n <- 10
+#' d <- 4
+#' alpha <- c(.8, 1, .5, 2)
+#' rmpareto(n, "dirichlet", d, par = alpha)
+#'
 #' @export
 rmpareto <- function(n,
                      model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
@@ -167,31 +193,34 @@ rmpareto <- function(n,
 
 
 
-#' Simulate samples of multivariate Pareto distribution from a tree
+#' Sampling of a multivariate Pareto distribution on a tree
 #'
-#' Simulates a tree graphical model, following a multivariate Pareto
-#' distribution.
+#' Simulates exact samples of a multivariate Pareto distribution that
+#' is an extremal graphical model on a tree as defined in CITE eng2018a.
 #'
-#' @param n Positive integer. Number of simulations.
-#' @param model String. The parametric model type. Is one of:
+#' @param n Number of simulations.
+#' @param model The parametric model type; one of:
 #' \itemize{
 #' \item \code{HR} (default),
 #' \item \code{logistic},
 #' \item \code{dirichlet}.
 #' }
 #' @param tree Graph object from \code{igraph} package.
-#' This object represents a tree, i.e., an
+#' This object must be tree, i.e., an
 #' undirected graph that is connected and has no cycles.
-#' @param par Is the respective parameter for the given \code{model}.
-#' Is one of:
+#' @param par Respective parameter for the given \code{model}, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
-#' variogram, if \code{model = HR}. Alternatively, can be a vector of
-#' length \eqn{d - 1}, containing the entries of the variogram corresponding
+#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#' where only the entries corresponding to the edges of the \code{tree} are used,
+#' if \code{model = HR}. Alternatively, can be a vector of
+#' length \eqn{d - 1} containing the entries of the variogram corresponding
 #' to the edges of the given \code{tree}.
-#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
-#' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2} containing
-#' the relative \eqn{\alpha > 0} coefficients, if \code{model = dirichlet}.
+#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#' containing the logistic parameters corresponding
+#' to the edges of the given \code{tree}, if \code{model = logistic}.
+#' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
+#' contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+#' for each of the edges in \cote{trDee}, if \code{model = dirichlet}.
 #' }
 #'
 #'
@@ -353,35 +382,70 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
 
 
-#' Simulate samples of max-stable process
+#' Sampling of a multivariate max-stable distribution
 #'
-#' Simulates exact samples of max-stable process
-#' @param n Positive integer. Number of simulations.
-#' @param model String. The parametric model type. Is one of:
+#' Simulates exact samples of a multivariate max-stable distribution.
+#'
+#' @param n Number of simulations.
+#' @param model The parametric model type; one of:
 #' \itemize{
 #' \item \code{HR} (default),
 #' \item \code{logistic},
 #' \item \code{neglogistic},
 #' \item \code{dirichlet}.
 #' }
-#' @param d Positive integer. Dimension of the multivariate Pareto
+#' @param d Dimension of the multivariate Pareto
 #' distribution.
-#' @param par Is the respective parameter for the given \code{model}.
-#' Is one of:
+#' @param par Respective parameter for the given \code{model}, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
-#' variogram, if \code{model = HR}.
+#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#' if \code{model = HR}.
 #' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
 #' \item \eqn{\theta > 0}, if \code{model = neglogistic}.
-#' \item \eqn{\alpha > 0}, numeric vector of size \code{d},
+#' \item \eqn{\alpha}, numeric vector of size \code{d} with positive entries,
 #' if \code{model = dirichlet}.
 #' }
 #'
-#'#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
-#' The simulated multivariate Pareto data.
+#' @return
+#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' multivariate max-stable distribution.
 #'
-#' ## !!! add examples (define params and call function)
+#' @details
+#' The simulation follows the extremal function algorithm in CITE dom2016.
+#' For details on the parameters of the Huesler--Reiss, logistic
+#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
+#' distribution see CITE coles1991modelling.
 #'
+#' @examples
+#' ## A 4-dimensional HR distribution
+#' n <- 10
+#' d <- 4
+#' G <-  cbind(c(0, 1.5, 1.5, 2),
+#'             c(1.5, 0, 2, 1.5),
+#'             c(1.5, 2, 0, 1.5),
+#'             c(2, 1.5, 1.5, 0))
+#'
+#' rmstable(n, "HR", d = d, par = G)
+#'
+#' ## A 3-dimensional logistic distribution
+#' n <- 10
+#' d <- 3
+#' theta <- .6
+#' rmstable(n, "logistic", d, par = theta)
+#'
+#' ## A 5-dimensional negative logistic distribution
+#' n <- 10
+#' d <- 5
+#' theta <- 1.5
+#' rmstable(n, "neglogistic", d, par = theta)
+#'
+#' ## A 4-dimensional Dirichlet distribution
+#' n <- 10
+#' d <- 4
+#' alpha <- c(.8, 1, .5, 2)
+#' rmstable(n, "dirichlet", d, par = alpha)
+#'
+#' @export
 rmstable <- function(n,
                      model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
                      d, par) {
