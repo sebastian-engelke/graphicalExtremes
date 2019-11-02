@@ -32,3 +32,16 @@ dim_Gamma <- function(Gamma){
     stop("Not a square matrix!")
   }
 }
+
+
+
+### This function selects all possible edges that can be added to graph
+### while still remaining in the class of graphs described in the paper
+### i.e., block graphs.
+#graph: the initial graph object
+selectEdges = function(graph){
+  d = vcount(graph)
+  sel.edges = matrix(0, nrow=0, ncol=2)
+  for(i in 1:(d-1)) for(j in (i+1):d) if(is_chordal(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
+  return(sel.edges)
+}

@@ -613,7 +613,7 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
           # only in the clique itself the separator can be of size > 1
           if(sum(sapply(cli, FUN=function(x)
             length(intersect(x, cli[[ii]])) > 1))==1){
-            cat("Try edge", edges_to_add[k,]," \n")
+            cat("\nTry edge", edges_to_add[k,])
             cli.idx = cli[[ii]]
             cli.len = length(cli.idx)
             data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
@@ -630,7 +630,7 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
       }
       if(!all(is.na(AIC.tmp))){
         add.idx = which(AIC.tmp == min(AIC.tmp, na.rm = TRUE))
-        cat("Added edge ", edges_to_add[add.idx,]," \n")
+        cat("\nAdded edge ", edges_to_add[add.idx,])
         l = l+1
         graph.cur[[l]] =
           add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
