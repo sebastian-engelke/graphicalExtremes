@@ -2,8 +2,6 @@
 #'
 #' Simulates exact samples of multivariate Pareto distributions.
 #'
-#' aasdfasdfasdfasdf
-#'
 #' @param n Positive integer. Number of simulations.
 #' @param model String. The parametric model type. Is one of:
 #' \itemize{
@@ -337,9 +335,9 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
         proc <-
           switch(model,
                  "HR" =
-                   simu_px_tree_HR(n = n.k, G.vec = par.vec, A_mat = A[[k]]),
+                   simu_px_tree_HR(n = n.k, Gamma_vec = par.vec, A_mat = A[[k]]),
                  "logistic" =
-                   simu_px_tree_logistic(n = n.k, idx = k, nb.edges = e,
+                   simu_px_tree_logistic(n = n.k, idx = k,
                                          theta = theta, A = A),
                  "dirichlet" =
                    simu_px_tree_dirichlet(n = n.k,
@@ -681,9 +679,9 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       proc <-
         switch(model,
                "HR" =
-                 simu_px_tree_HR(n = n.ind, G.vec = par.vec, A_mat = A[[k]]),
+                 simu_px_tree_HR(n = n.ind, Gamma_vec = par.vec, A_mat = A[[k]]),
                "logistic" =
-                 simu_px_tree_logistic(n = n.ind, idx = k, nb.edges = e,
+                 simu_px_tree_logistic(n = n.ind, idx = k,
                                        theta = theta, A = A),
                "dirichlet" =
                  simu_px_tree_dirichlet(n = n.ind,

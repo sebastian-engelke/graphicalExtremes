@@ -270,3 +270,4 @@ test_that("rmstable_tree works", {
   expect_type(res$counter, "double")
   expect_equal(dim(res$res), c(n, d))
 })
+

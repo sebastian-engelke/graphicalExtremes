@@ -15,7 +15,7 @@
 #' @return Numeric matrix \eqn{d \times d}{d x d} representing the completed
 #' Gamma matrix.
 #'
-fullGamma = function(graph, Gamma){
+complete_Gamma = function(Gamma, graph){
 
   # set up main variables
   d <- igraph::vcount(graph)
@@ -63,7 +63,7 @@ fullGamma = function(graph, Gamma){
     }
 
     # check that Gamma is symmetric
-    if (any(G != t(G))) {
+    if (any(G != t(G), na.rm = T)) {
       stop(paste("The argument Gamma must be a symmetric d x d matrix,",
                  "or a vector with as many entries as the number of edges",
                  "in the graph."))
@@ -122,9 +122,9 @@ fullGamma = function(graph, Gamma){
 #'             c(1.5, 2, 0, 1.5),
 #'             c(2, 1.5, 1.5, 0))
 #'
-#' Gamma2Graph(G, to_plot = TRUE)
+#' Gamma2graph(G, to_plot = TRUE)
 #'
-Gamma2Graph <- function(Gamma, to_plot = TRUE){
+Gamma2graph <- function(Gamma, to_plot = TRUE){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
   for(i in 1:nrow(Gamma)){
     null.mat[-i,-i] <- null.mat[-i,-i] +
@@ -297,20 +297,6 @@ Chi2Gamma <- function(chi){
 
 
 
-
-dim_Gamma <- function(Gamma){
-  # NUMERIC_MATRIX -> NUMERIC
-  # RETURN DIMENSION, IF SQUARE MATRIX, ELSE ERROR
-  dimension <- dim(Gamma)
-
-  if ((length(dimension) == 2) & (dimension[1] == dimension[2])){
-    dimension[1]
-  } else {
-    stop("Not a square matrix!")
-  }
-}
-
-
 #' Compute theoretical \eqn{\chi} in 3D
 #'
 #' Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
@@ -321,8 +307,8 @@ dim_Gamma <- function(Gamma){
 #' the extremal correlation coefficient for the HR distribution. Note that
 #' \eqn{0 \leq \chi \leq 1}.
 #'
-Gamma2Chi_HR = function(Gamma){
-  d <- dim_Gamma(Gamma) #!!! give back dimension o
+Gamma2chi = function(Gamma){
+  d <- dim_Gamma(Gamma)
 
   if (d != 3){
     stop("Gamma must be a 3 x 3 matrix.")
@@ -332,4 +318,25 @@ Gamma2Chi_HR = function(Gamma){
     V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(2,3),c(2,3)])) +
     V_HR(x=rep(1, times=3),par= Gamma2par(Gamma))
   return(res)
+}
+
+
+
+#' Marginalize multivariate Pareto dataset
+#'
+#' Marginalize a multivariate Pareto dataset \code{data} with respect to the
+#' variables in \code{set_indices}.
+#'
+#' @param data Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
+#' observations following a multivariate Pareto distribution.
+#' @param set_indices Numeric vector with at most \eqn{d} different elements in
+#' 1, ..., \eqn{d}. The variable with respect to which you want to marginalize
+#' the multivariate distribution.
+#'
+#' @return Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length
+#' of \code{set_indices}. Marginalized multivariate Pareto data.
+mparetomargins <- function(data, set_indices){
+  data_sub <- data[, set_indices]
+  idx <- which(apply(data_sub, 1, max) > 1)
+  return(data[idx, set_indices])
 }

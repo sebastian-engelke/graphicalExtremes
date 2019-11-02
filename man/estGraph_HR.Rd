@@ -11,8 +11,8 @@ estGraph_HR(graph, data, p = NULL, cens = FALSE, sel.edges = NULL)
 An undirected block graph, i.e., a decomposable, connected
 graph where the minimal separators of the cliques have size at most one.}
 
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains \eqn{n}
-observations following a \eqn{d}-variate HR Pareto distribution.}
+\item{data}{Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
+\eqn{n} observations following a \eqn{d}-variate HR Pareto distribution.}
 
 \item{p}{Numeric between 0 and 1. Threshold probability. If \code{NULL},
 it is assumed that \code{data} is already distributed as multivariate Pareto.}

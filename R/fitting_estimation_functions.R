@@ -7,7 +7,7 @@
 #'
 #' @param data Numeric matrix \eqn{n \times 2}{n x 2}. A data matrix
 #' containing two variables.
-#' @param u Numeric, between 0 and 1. It is the probability threshold used to
+#' @param p Numeric, between 0 and 1. It is the probability threshold used to
 #' compute the \eqn{\chi} coefficient.
 #' @param pot Boolean. if TRUE, then pot-type estimation of EC is used.
 #' By default, \code{pot = FALSE}.
@@ -15,7 +15,7 @@
 #' @return Numeric. The empirical \eqn{\chi} coefficient between the 2 variables
 #' in \code{data}.
 #'
-chi.est <- function(data, u, pot=FALSE){
+est_chi <- function(data, p, pot=FALSE){
   if (NCOL(data) > 2){
     warning("The data matrix should contain only two columns.")
   }
@@ -29,12 +29,12 @@ chi.est <- function(data, u, pot=FALSE){
   qlim2 <- c(min(rowmax) + eps, max(rowmin) - eps)
 
   qlim <- qlim2
-  nq <- length(u)
+  nq <- length(p)
   cu <- cbaru <- numeric(nq)
-  for (i in 1:nq) cu[i] <- mean(rowmax < u[i])
-  for (i in 1:nq) cbaru[i] <- mean(rowmin > u[i])
-  if(pot) chiu <- cbaru / (1-u)
-  if(!pot) chiu <- 2 - log(cu)/log(u)
+  for (i in 1:nq) cu[i] <- mean(rowmax < p[i])
+  for (i in 1:nq) cbaru[i] <- mean(rowmin > p[i])
+  if(pot) chiu <- cbaru / (1-p)
+  if(!pot) chiu <- 2 - log(cu)/log(p)
   return(chiu)
 }
 
@@ -47,17 +47,17 @@ chi.est <- function(data, u, pot=FALSE){
 #'
 #' @param data Numeric matrix \eqn{n \times d}{n x d}. A data matrix
 #' containing \eqn{d} variables.
-#' @inheritParams chi.est
+#' @inheritParams est_chi
 #'
 #' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix containing the
 #' bivariate extremal coefficientes \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 #'
-chi_mat <- function(data, u, pot=FALSE){
+est_chi_mat <- function(data, p, pot=FALSE){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
   chi <- apply(res, 1, function(x){
-    chi.est(cbind(data[,x[1]], data[,x[2]]), u=u, pot=pot)
+    est_chi(cbind(data[,x[1]], data[,x[2]]), p=p, pot=pot)
   })[1]
   chi.mat <- matrix(NA, ncol=d, nrow=d)
   chi.mat[res] <- chi
@@ -84,7 +84,7 @@ chi_mat <- function(data, u, pot=FALSE){
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
 #' variogram of the Huesler-Reiss distribution.
 #'
-vario.est <- function(data, k=NULL, p=NULL){
+est_vario <- function(data, k=NULL, p=NULL){
   # helper ####
   G.fun = function(i, data){
     idx = which(data[,i]>1)
@@ -275,20 +275,22 @@ logdVK_HR <- function(x, K, par){
 #'
 logLH_HR <- function(data, Gamma, cens = FALSE){
   # helper function
-  censor <- function(x,u){
-    f2 <- function(x,u){
+  censor <- function(x,p){
+    f2 <- function(x,p){
       y <- c()
-      y[x>u] <- x[x>u]
-      y[x<=u] <- u[x<=u]
+      y[x>p] <- x[x>p]
+      y[x<=p] <- p[x<=p]
       return(y)
     }
-    return(t(apply(x,1,f2,u)))
+    return(t(apply(x, 1, f2, p)))
   }
 
   # function body
   if (is.vector(data)){
     d <- length(data)
     n = 1
+    data <- t(as.matrix(data))
+    # !!! put mistake because n = 1??
   }
   if (is.matrix(data)){
     d <- NCOL(data)
@@ -303,26 +305,166 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
   }
 
   # if cens = TRUE
-  u <- rep(1,d)
-  data.u <- censor(data,u)
-  r <- nrow(data.u)
-  L <- apply(data.u>matrix(u,ncol=d,nrow=r,byrow=TRUE),1,which)
+  p <- rep(1,d)
+  data.p <- censor(data,p)
+  r <- nrow(data.p)
+  L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
   I <- which(lapply(L,length)>0 & lapply(L,length)<d)
   J <- which(lapply(L,length)==d)
 
   if (length(I)>0){
-    y1 <- mapply(logdVK_HR,x=as.list(data.frame(t(data.u)))[I],K=L[I],
+    y1 <- mapply(logdVK_HR,x=as.list(data.frame(t(data.p)))[I],K=L[I],
                  MoreArgs=list(par=par))
   } else {
     y1 <- 0
   }
 
   if (length(J)>0){
-    y2 <- logdV_HR(x=data.u[J,],par=par)
+    y2 <- logdV_HR(x=data.p[J,],par=par)
   } else {
     y2 <- 0
   }
-  return(sum(y1)+sum(y2) - (length(I)+length(J))*log(V_HR(u,par=par)))
+  return(sum(y1)+sum(y2) - (length(I)+length(J))*log(V_HR(p,par=par)))
+}
+
+
+
+#' Fit parameters of multivariate HR Pareto distribution
+#'
+#' This function fits the parameters of a multivariate HR Pareto distribution
+#'  using (censored) likelihood estimation.
+#'
+#'  If \code{graph} is given, it assumes the conditional independence
+#'  structure of this graph and fits only the parameters on the edges,
+#'  but with the full likelihood. This should only be used for small dimensions.
+#'  If you give \code{data}, and not \code{graph}, then the function fits HR
+#'  with the whole matrix. This is computationally heavy and works only for
+#'  small dimensions, e.g., 3 or 4.
+#'
+#' @param data Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
+#' \eqn{n} observations following a \eqn{d}-variate HR Pareto distribution.
+#' @param p Numeric between 0 and 1. Threshold probability. If \code{NULL},
+#' it is assumed that \code{data} is already distributed as multivariate Pareto.
+#' @param cens Boolean. If TRUE, then censored log-likelihood is computed.
+#' By default, \code{cens = FALSE}.
+#' @param init Numeric vector. Initial parameter values.
+#' @param maxit Positive integer. The maximum number of iterations in the
+#' optimization.
+#' @param graph Graph object from \code{igraph} package or
+#' \code{NULL}.
+#' If \code{graph} is not \code{NULL}, then only edge parameters are fit.
+#' @param method String. A valid optimization method used by the function
+#' \code{\link[stats]{optim}}. By default, \code{method = "BFGS"}.
+#'
+#' @return List. The list made of:
+#' \itemize{
+#' \item \code{convergence} Boolean. Whether the optimization converged or not.
+#' \item \code{par} Numeric vector. Optimized parameters.
+#' \item \code{Gamma} Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
+#' matrix.
+#' \item \code{nllik} Numeric. Optimum value of the likelihood function.
+#' \item \code{hessian} Numeric matrix. Estimated Hessian matrix of the
+#' estimated parameters.
+#' }
+# !!! check if graph has specific form?
+fmpareto_HR <- function(data,
+                       p = NULL,
+                       cens = FALSE,
+                       init,
+                       maxit = 100,
+                       graph = NULL,
+                       method = "BFGS"){
+
+  if(!is.null(p)){
+    # if p provided -> data not Pareto -> to convert
+    data.std = data2mpareto(data, p)
+  } else {
+    # if p not provided -> data already Pareto
+    data.std <- data
+  }
+
+  # censoring at 1 since data already normalized
+  p = 1
+  d <- ncol(data)
+  if (length(p)==1){p <- rep(p,d)}
+
+  # negative log likelihood function
+  if(cens){
+    # censor below the (multivariate) threshold
+    censor <- function(x,p){
+      f2 <- function(x,p){
+        y <- c()
+        y[x>p] <- x[x>p]
+        y[x<=p] <- p[x<=p]
+        return(y)
+      }
+      return(t(apply(x,1,f2,p)))
+    }
+    data.p <- censor(data,p)
+    r <- nrow(data.p)
+
+    L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+    I <- which(lapply(L,length)>0 & lapply(L,length)<d)
+    J <- which(lapply(L,length)==d)
+
+    nllik <- function(par){
+      if(!is.null(graph)){
+        Gtmp = complete_Gamma(graph = graph, Gamma = par)
+        par = Gtmp[upper.tri(Gtmp)]
+      }
+
+      G = par2Gamma(par)
+      S <- Gamma2Sigma(G, k=1)
+
+      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)){return(10^50)}
+
+      else {
+        if (length(I)>0){y1 <- mapply(logdVK_HR,
+                                      x=as.list(data.frame(t(data.p)))[I],
+                                      K=L[I],MoreArgs=list(par=par))}
+        else {y1 <- 0}
+        if (length(J)>0){y2 <- logdV_HR(x=data.p[J,],par=par)}
+        else {y2 <- 0}
+        y <- sum(y1)+sum(y2) - (length(I)+length(J))*log(V_HR(p,par=par))
+        return(-y)
+      }
+    }
+  }
+  else{
+    r <- nrow(data)
+    L <- apply(data>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+    I <- which(lapply(L,length)>0) #1:r
+    nllik <- function(par){
+      if(!is.null(graph)){
+        Gtmp = complete_Gamma(graph = graph, Gamma = par)
+        par = Gamma2par(Gtmp)
+      }
+
+      G = par2Gamma(par)
+      S <- Gamma2Sigma(G, k=1)
+
+      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)){return(10^50)}
+      else {
+        if (length(I)>0){y1 <- logdV_HR(x=data[I,],par=par)}
+        else {y1 <- 0}
+        y <- sum(y1) - length(I)*log(V_HR(p,par=par))
+        return(-y)
+      }
+    }
+  }
+
+  # optimize likelihood
+  opt <- optim(init, nllik, hessian = TRUE,
+               control = list(maxit = maxit), method = method)
+
+  z <- list()
+  z$convergence <- opt$convergence
+  z$par <- opt$par
+  if(is.null(graph)) z$Gamma <- par2Gamma(z$par)
+  else z$Gamma <- complete_Gamma(graph = graph, Gamma = z$par)
+  z$nllik <- opt$value
+  z$hessian <- opt$hessian
+  return(z)
 }
 
 
@@ -332,18 +474,13 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' Estimates the parameters of a HR block graph by maximizing the
 #' (censored) log-likelihood.
 #'
+#' @inheritParams fmpareto_HR
 #' @param graph Graph object from \code{igraph} package.
 #' An undirected block graph, i.e., a decomposable, connected
 #' graph where the minimal separators of the cliques have size at most one.
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains \eqn{n}
-#' observations following a \eqn{d}-variate HR Pareto distribution.
-#' @param p Numeric between 0 and 1. Threshold probability. If \code{NULL},
-#' it is assumed that \code{data} is already distributed as multivariate Pareto.
-#' @param cens Boolean. If TRUE, then censored log-likelihood is computed.
-#' By default, \code{cens = FALSE}.
-#' @param sel.edges Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
+#' @param edges_to_add Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
 #' the number of edges that are tried to be added in the forward selection.
-#' By default, \code{sel.edges = NULL}.
+#' By default, \code{edges_to_add = NULL}.
 #'
 #' @return List. The list is made of:
 #' \itemize{
@@ -353,7 +490,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' the estimated variogram matrix \eqn{\Gamma}.
 #' }
 #'
-estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
+estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL){
 
   # set up main variables
   d <- igraph::vcount(graph)
@@ -379,7 +516,6 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
   }
 
   # check if it is block graph
-  browser()
   cli = igraph::max_cliques(graph)
   ncli = length(cli)
   min_sep <- 0
@@ -388,7 +524,6 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
     cli1 <- cli[[i]]
     for (j in 1:ncli){
       if (j <= i) {next}
-      cat(i, j)
       cli2 <- cli[[j]]
 
       min_sep <- max(min_sep, length(intersect(cli1, cli2)))
@@ -423,93 +558,86 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, sel.edges = NULL){
   Ghat = list()
   Ghat[[l]] = matrix(NA, nrow=nnodes, ncol=nnodes)
 
-  ## take from JRSSB
-
+  # loop through all cliques
   for(i in 1:ncli){
-    #cat("Fitting clique ",i," with nodes ", cli[[i]]," \n")
+    # pick the curren cliques
     cli.idx = cli[[i]]
+    # how many nodes in the current cliques?
     cli.len = length(cli.idx)
+    # compute marginal pareto, on the nodes of the current clique
     data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
-    # data.cli = data[,cli.idx]
 
-    # remove from here
-    if(!is.null(q))  quant = quantile(data.cli,q)
-    if(!is.null(thr)) quant = thr
-    data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
-    # to here
-    data.thr <- data2mpareto(data.cli, p = q) # not needed as fpareto_HR accepts
-    # raw data + p
-
-    G.est <- vario.est(data = data.cli, p = q)
-    row_averages <- rowMeans(sapply(1:cli.len,
-                                    FUN=function(i) vario.est(data=data.thr, k=i)))
-    G.est <- matrix(row_means,cli.len,cli.len)
+    G.est <- est_vario(data = data.cli)
     init = Gamma2par(G.est)
-    Ghat[[l]][cli.idx, cli.idx] = fpareto_HR(data=data.cli, init=init, cens=cens)$Gamma
+    Ghat[[l]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
+                                             init=init, cens=cens)$Gamma
+
   }
-  Ghat[[l]] = fullGamma(graph=graph.cur[[l]], Gamma=Ghat[[l]])
 
-  if(!is.null(sel.edges)){
-    # maybe data2mpareto?
-    d <- ncol(data)
-    if(!is.null(p)){
-      data.full.thr = data2mpareto(data, p)
-    } else {
-      data.full.thr <- data
-    }
+  Ghat[[l]] = complete_Gamma(graph=graph.cur[[l]], Gamma=Ghat[[l]])
 
-    # replace from here
-    if(!is.null(q))  quant = quantile(data,q)
-    if(!is.null(thr)) quant = thr
-    data.full.thr = data[which(apply(data, 1, max) > quant),]/quant
-    # to here
-
-
+  # if you want to add some edges
+  if(!is.null(edges_to_add)){
     stop.flag = FALSE
-    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.full.thr,
+    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
                                                   Gamma = Ghat[[l]], cens=cens)
     added.edges = c()
 
-    while(length(sel.edges)!=0 & stop.flag==FALSE){
-      if(is.vector(sel.edges)) sel.edges = t(as.matrix(sel.edges))
-      m = nrow(sel.edges)
+    while(length(edges_to_add)!=0 & stop.flag==FALSE){
+      if(is.vector(edges_to_add)) edges_to_add = t(as.matrix(edges_to_add))
+      m = nrow(edges_to_add)
       AIC.tmp = rep(NA,times=m)
       Ghat.tmp = list()
 
+      # go through proposed edges one after the other while retaining a block
+      # graph
+      # m number of proposed edges
       for(k in 1:m){
+        # current temporary graph
         Ghat.tmp[[k]] = Ghat[[l]]
-        graph.tmp = add_edges(graph = graph.cur[[l]], edges = sel.edges[k,])
+        # add the current proposed edge to the graph
+        graph.tmp = igraph::add_edges(graph = graph.cur[[l]],
+                                      edges = edges_to_add[k,])
+
+        # if the obtained graph is decomposable
         if(is_chordal(graph.tmp)$chordal){
+          # find list of max cliques
           cli = max_cliques(graph.tmp)
-          ii = which(sapply(cli, FUN=function(x) length(intersect(x,sel.edges[k,]))==2)==TRUE)
-          if(sum(sapply(cli, FUN=function(x) length(intersect(x,cli[[ii]])) > 1))==1){
-            cat("Try edge", sel.edges[k,]," \n")
+          # find in which clique the new proposed edge is. It can be in at most
+          # one clique, otherwise, the original graph were not decomposable.
+          intersections <-
+            sapply(cli, FUN=function(x) length(intersect(x, edges_to_add[k,]))==2)
+          ii <-  which(intersections == TRUE)
+
+
+          # only in the clique itself the separator can be of size > 1
+          if(sum(sapply(cli, FUN=function(x)
+            length(intersect(x, cli[[ii]])) > 1))==1){
+            cat("Try edge", edges_to_add[k,]," \n")
             cli.idx = cli[[ii]]
             cli.len = length(cli.idx)
-            data.cli = data[,cli.idx]
-            # change as before
-            if(!is.null(q))  quant = quantile(data.cli,q)
-            if(!is.null(thr)) quant = thr
-            data.thr = data.cli[which(apply(data.cli, 1, max) > quant),]/quant
-            G.est <- matrix(rowMeans(sapply(1:cli.len, FUN=function(i) vario.est(data=data.thr, k=i))),cli.len,cli.len)
-            ###
-            G.est <- vario.est(data = data.cli, p = p)
-            init = G.est[upper.tri(G.est)]
-            Ghat.tmp[[k]][cli.idx, cli.idx] = fpareto_HR(data=data.thr, init=init, cens=cens)$Gamma
-            Ghat.tmp[[k]] = fullGamma(graph=graph.tmp, Gamma=Ghat.tmp[[k]])
-            AIC.tmp[k] = 2*ecount(graph.tmp) - 2 * logLH_HR(data=data.full.thr, Gamma = Ghat.tmp[[k]], cens=cens)
+            data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
+
+            G.est <- est_vario(data = data.cli)
+            init = Gamma2par(G.est)
+            Ghat.tmp[[k]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
+                                                         init=init, cens=cens)$Gamma
+            Ghat.tmp[[k]] = complete_Gamma(graph=graph.tmp, Gamma=Ghat.tmp[[k]])
+            AIC.tmp[k] = 2*igraph::ecount(graph.tmp) -
+              2 * logLH_HR(data = data.std, Gamma = Ghat.tmp[[k]], cens=cens)
           }
         }
       }
       if(!all(is.na(AIC.tmp))){
         add.idx = which(AIC.tmp == min(AIC.tmp, na.rm = TRUE))
-        cat("Added edge ", sel.edges[add.idx,]," \n")
+        cat("Added edge ", edges_to_add[add.idx,]," \n")
         l = l+1
-        graph.cur[[l]] = add_edges(graph = graph.cur[[l-1]], edges = sel.edges[add.idx,])
+        graph.cur[[l]] =
+          add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
         Ghat[[l]] = Ghat.tmp[[add.idx]]
         AIC = c(AIC, AIC.tmp[add.idx])
-        added.edges = rbind(added.edges, t(as.matrix(sel.edges[add.idx,])))
-        sel.edges = sel.edges[-add.idx,]
+        added.edges = rbind(added.edges, t(as.matrix(edges_to_add[add.idx,])))
+        edges_to_add = edges_to_add[-add.idx,]
       }
       if(all(is.na(AIC.tmp))) stop.flag=TRUE
     }
@@ -534,14 +662,14 @@ mst_HR = function(data, cens = FALSE){
   n <- nrow(data)
   d = ncol(data)
   graph.full <- make_full_graph(d)
-  G.emp = vario.est(data=data)
+  G.emp = est_vario(data=data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
   if(cens)
-    bivLLH <- apply(res[,1:2], 1, function(x) -(fpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$nllik -
+    bivLLH <- apply(res[,1:2], 1, function(x) -(fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$nllik -
                                                   2*(sum(log(data[which(data[,x[1]] > 1),x[1]])) + sum(log(data[which(data[,x[2]] > 1),x[2]])))))
   if(!cens)
-    bivLLH <- apply(res[,1:2], 1, function(x) {par.est = fpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$par;
+    bivLLH <- apply(res[,1:2], 1, function(x) {par.est = fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$par;
     logLH_HR(data=data[,x], Gamma=par2Gamma(par.est)) + 2*(sum(log(data[,x[1]])) + sum(log(data[,x[2]]))) })
 
   bivLLH.mat <- matrix(NA, ncol=d, nrow=d)

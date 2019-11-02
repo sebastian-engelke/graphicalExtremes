@@ -45,9 +45,6 @@ observations.
 \description{
 Simulates exact samples of multivariate Pareto distributions.
 }
-\details{
-aasdfasdfasdfasdf
-}
 \examples{
 n <- 7
 d <- 4

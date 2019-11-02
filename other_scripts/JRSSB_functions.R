@@ -815,7 +815,7 @@ mst_HR = function(data, cens=TRUE){
   return(mst.tree)
 }
 
-# !!!
+# Marginalize a multivariate Pareto dataset wrt to the variables in set_indices
 mparetomargins <- function(data, set_indices){
   data_sub <- data[, set_indices]
   idx <- which(apply(data_sub, 1, max) > 1)

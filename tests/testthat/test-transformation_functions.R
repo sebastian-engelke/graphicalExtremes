@@ -102,32 +102,32 @@ for (i in 1:7){
 
 
 # Run tests
-test_that("fullGamma works", {
+test_that("complete_Gamma works", {
 
-  expect_error(fullGamma(non_decomposable, Gamma1))
-  expect_error(fullGamma(non_block, Gamma2))
-  expect_warning(fullGamma(igraph::as.directed(block), Gamma3))
-  expect_error(fullGamma(empty_graph, Gamma3))
-  expect_error(fullGamma(block, Gamma3_wrong))
-  expect_error(fullGamma(block, Gamma3_vec_wrong))
-  expect_error(fullGamma(block, Gamma2))
+  expect_error(complete_Gamma(Gamma1, non_decomposable))
+  expect_error(complete_Gamma(Gamma2, non_block))
+  expect_warning(complete_Gamma(Gamma3, igraph::as.directed(block)))
+  expect_error(complete_Gamma(Gamma3, empty_graph))
+  expect_error(complete_Gamma(Gamma3_wrong, block))
+  expect_error(complete_Gamma(Gamma3_vec_wrong, block))
+  expect_error(complete_Gamma(Gamma2, block))
 
-  res1 <- fullGamma(block, Gamma3)
-  res2 <- fullGamma(block, Gamma3_vec)
-  expect_equal(res1, Gamma3_completed)
-  expect_equal(res2, Gamma3_completed)
+  res1 <- complete_Gamma(Gamma3, block)
+  res2 <- complete_Gamma(Gamma3_vec, block)
+  expect_equal(Gamma3_completed, res1)
+  expect_equal(Gamma3_completed, res2)
 
-  res1 <- fullGamma(block2, Gamma3[1:2, 1:2])
-  res2 <- fullGamma(block2, c(2))
-  expect_equal(res1, Gamma3[1:2, 1:2])
-  expect_equal(res2, Gamma3[1:2, 1:2])
+  res1 <- complete_Gamma(Gamma3[1:2, 1:2], block2)
+  res2 <- complete_Gamma(c(2), block2)
+  expect_equal(Gamma3[1:2, 1:2], res1)
+  expect_equal(Gamma3[1:2, 1:2], res2)
 })
 
-test_that("Gamma2Graph works", {
-  res1 <- fullGamma(block, Gamma3)
-  expect_s3_class(Gamma2Graph(res1), "igraph")
-  expect_s3_class(Gamma2Graph(res1, to_plot = T), "igraph")
-  expect_s3_class(Gamma2Graph(res1, to_plot = F), "igraph")
+test_that("Gamma2graph works", {
+  res1 <- complete_Gamma(Gamma3, block)
+  expect_s3_class(Gamma2graph(res1), "igraph")
+  expect_s3_class(Gamma2graph(res1, to_plot = T), "igraph")
+  expect_s3_class(Gamma2graph(res1, to_plot = F), "igraph")
 })
 
 test_that("data2rmpareto works", {
@@ -215,9 +215,9 @@ test_that("Chi2Gamma works", {
   expect_equal(Chi2Gamma(chi), (2*qnorm(theta/2))^2)
 })
 
-test_that("Gamma2Chi_HR works", {
-  expect_error(Gamma2Chi_HR(G3))
-  expect_gte(Gamma2Chi_HR(1e16 * G3[1:3, 1:3]), 0)
-  expect_lte(Gamma2Chi_HR(1e-16 * G3[1:3, 1:3]), 1)
+test_that("Gamma2chi works", {
+  expect_error(Gamma2chi(G3))
+  expect_gte(Gamma2chi(1e16 * G3[1:3, 1:3]), 0)
+  expect_lte(Gamma2chi(1e-16 * G3[1:3, 1:3]), 1)
 })
 

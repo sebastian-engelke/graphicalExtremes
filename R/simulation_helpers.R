@@ -10,7 +10,7 @@
 #' Cholesky decomposition of the desired covariance matrix.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_HR <- function(n, idx, d, trend, chol_mat) {
+simu_px_HR <- function(n, d, idx, trend, chol_mat) {
   # check arguments
   if (length(idx) != 1) stop("Argument idx must be a scalar.")
 
@@ -33,7 +33,7 @@ simu_px_HR <- function(n, idx, d, trend, chol_mat) {
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_logistic <- function(n, idx, d, theta) {
+simu_px_logistic <- function(n, d, idx, theta) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n){
     stop("Argument idx must be a scalar or a vector with n entries")
@@ -61,7 +61,7 @@ simu_px_logistic <- function(n, idx, d, theta) {
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_neglogistic <- function(n, idx, d, theta) {
+simu_px_neglogistic <- function(n, d, idx, theta) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n){
     stop("Argument idx must be a scalar or a vector with n entries")
@@ -87,7 +87,7 @@ simu_px_neglogistic <- function(n, idx, d, theta) {
 #' @param alpha Numeric vector of size \code{d}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_dirichlet <- function(n, idx, d, alpha) {
+simu_px_dirichlet <- function(n, d, idx, alpha) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n){
     stop("Argument idx must be a scalar or a vector with n entries")
@@ -110,7 +110,7 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
 #' Simulates the Huessler-Reiss extremal functions on a tree
 #'
 #' @inheritParams rmpareto
-#' @param G.vec Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
+#' @param Gamma_vec Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
 #' number of nodes in the tree (and \eqn{d - 1} is the number of edges).
 #' @param A_mat Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
 #' in the tree, the columns represent the edges. For a fixed node
@@ -120,11 +120,11 @@ simu_px_dirichlet <- function(n, idx, d, alpha) {
 #'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_tree_HR <- function(n, G.vec, A_mat) {
+simu_px_tree_HR <- function(n, Gamma_vec, A_mat) {
   res <- exp(A_mat %*%
-               matrix(rnorm(length(G.vec) * n,
-                            mean = -G.vec / 2,
-                            sd = sqrt(G.vec)),
+               matrix(rnorm(length(Gamma_vec) * n,
+                            mean = -Gamma_vec / 2,
+                            sd = sqrt(Gamma_vec)),
                       ncol = n))
   return(t(res))
 }
@@ -149,11 +149,14 @@ simu_px_tree_HR <- function(n, G.vec, A_mat) {
 #'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
-simu_px_tree_logistic <- function(n, idx, nb.edges, theta, A) {
+simu_px_tree_logistic <- function(n, idx, theta, A) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n){
     stop("Argument idx must be a scalar or a vector with n entries")
   }
+
+  # define number of edges
+  nb.edges <- length(A) - 1
 
   # function body
   res <- exp(A[[idx]] %*%
