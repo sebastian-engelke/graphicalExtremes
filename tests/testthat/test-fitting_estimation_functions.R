@@ -75,74 +75,74 @@ Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
 
 
 # Run tests
-test_that("est_chi works", {
-  expect_warning(est_chi(data = data1$res, p = .95, pot = F))
-  expect_warning(est_chi(data = data1$res, p = .95, pot = T))
-  expect_length(est_chi(data = data2$res, p = .95, pot = F), 1)
-  expect_length(est_chi(data = data2$res, p = .95, pot = T), 1)
+test_that("emp_chi works", {
+  expect_error(emp_chi(data = data1[, 1], p = .95, pot = F))
+  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95, pot = T))
+  expect_length(emp_chi(data = data2, p = .95, pot = F), 1)
+  expect_length(emp_chi(data = data2, p = .95, pot = T), 1)
 })
 
-test_that("est_chi_mat works", {
-  dat <- data1$res
-  res <- est_chi_mat(data = dat, p = .95, pot = T)
+test_that("emp_chi_mat works", {
+  dat <- data1
+  res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 
-  dat <- data1$res
-  res <- est_chi_mat(data = dat, p = .95, pot = F)
+  dat <- data1
+  res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 
-  dat <- data2$res
-  res <- est_chi_mat(data = dat, p = .95, pot = T)
+  dat <- data2
+  res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 
-  dat <- data2$res
-  res <- est_chi_mat(data = dat, p = .95, pot = F)
+  dat <- data2
+  res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 
-  dat <- data3$res
-  res <- est_chi_mat(data = dat, p = .95, pot = T)
+  dat <- data3
+  res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 
-  dat <- data3$res
-  res <- est_chi_mat(data = dat, p = .95, pot = F)
+  dat <- data3
+  res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
 })
 
 test_that("est_vario works", {
   data <- rmpareto(1e1, "HR", d = 4, G1)
-  dd <- NCOL(data$res)
+  dd <- NCOL(data)
 
-  res <- est_vario(data$res)
+  res <- est_vario(data)
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data$res, k = sample(1:dd, 1))
+  res <- est_vario(data, k = sample(1:dd, 1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data$res, p = runif(1))
+  res <- est_vario(data, p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data$res, p = .99)
+  res <- est_vario(data, p = .99)
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
   expect_equal(all(res >= 0), T)
 
-  res <- est_vario(data$res, k = sample(1:dd, 1), p = runif(1))
+  res <- est_vario(data, k = sample(1:dd, 1), p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
@@ -186,33 +186,33 @@ test_that("logdVK_HR works", {
 
 test_that("logLH_HR works", {
 
-  res <- logLH_HR(data1$res, G1)
+  res <- logLH_HR(data1, G1)
   expect_type(res, "double")
   expect_length(res, 1)
 
-  res <- logLH_HR(data1$res, G1, cens = FALSE)
+  res <- logLH_HR(data1, G1, cens = FALSE)
   expect_type(res, "double")
   expect_length(res, 1)
 
-  res <- logLH_HR(data1$res, G1, cens = TRUE)
+  res <- logLH_HR(data1, G1, cens = TRUE)
   expect_type(res, "double")
   expect_length(res, 1)
 
 })
 
-test_that("estGraph_HR works", {
-  expect_warning(estGraph_HR(graph = igraph::as.directed(block),
-                             data = data3$res, p = .95, cens = FALSE))
-  # expect_warning(estGraph_HR(graph = igraph::as.directed(block),
-                             # data = data3$res, p = .95, cens = TRUE))
-  expect_error(estGraph_HR(graph = non_connected,
-                           data = data3$res, p = .95, cens = FALSE))
-  expect_error(estGraph_HR(graph = non_decomposable,
-                           data = data3$res, p = .95, cens = FALSE))
+test_that("fmpareto_graph_HR works", {
+  expect_warning(fmpareto_graph_HR(graph = igraph::as.directed(block),
+                             data = data3, p = .95, cens = FALSE))
+  # expect_warning(fmpareto_graph_HR(graph = igraph::as.directed(block),
+                             # data = data3, p = .95, cens = TRUE))
+  expect_error(fmpareto_graph_HR(graph = non_connected,
+                           data = data3, p = .95, cens = FALSE))
+  expect_error(fmpareto_graph_HR(graph = non_decomposable,
+                           data = data3, p = .95, cens = FALSE))
 
 
   data <- rmpareto(1e3, "HR", d = 2, Gamma3_completed[1:2, 1:2])
-  res <- estGraph_HR(block2, data$res, p = .95)
+  res <- fmpareto_graph_HR(block2, data, p = .95)
   expect_type(res, "list")
   expect_length(res, 2)
 })

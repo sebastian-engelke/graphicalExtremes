@@ -204,20 +204,36 @@ test_that("Gamma2par works", {
   expect_equal(Gamma2par(Gamma = c(1.5, 2, 1.5)), c(1.5, 2, 1.5))
 })
 
-test_that("Chi2Gamma works", {
+test_that("chi2Gamma works", {
   chi <- runif(1)
-  expect_error(Chi2Gamma(2))
-  expect_equal(Chi2Gamma(0), Inf)
-  expect_equal(Chi2Gamma(1), 0)
-  expect_equal(Chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+  expect_error(chi2Gamma(2))
+  expect_equal(chi2Gamma(0), Inf)
+  expect_equal(chi2Gamma(1), 0)
+  expect_equal(chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+
+  chi <- matrix(runif(4 * 4), nrow = 4, ncol = 4)
+  diag(chi) <- 1
+  res <- chi2Gamma(chi)
+  expect_equal(res, (2 * qnorm(1 - 0.5 * chi)) ^ 2)
 
   theta <- 2 - chi
-  expect_equal(Chi2Gamma(chi), (2*qnorm(theta/2))^2)
+  expect_equal(chi2Gamma(chi), (2*qnorm(theta/2))^2)
 })
 
 test_that("Gamma2chi works", {
-  expect_error(Gamma2chi(G3))
-  expect_gte(Gamma2chi(1e16 * G3[1:3, 1:3]), 0)
-  expect_lte(Gamma2chi(1e-16 * G3[1:3, 1:3]), 1)
+  chi <- runif(1)
+  expect_error(chi2Gamma(2))
+  expect_equal(chi2Gamma(0), Inf)
+  expect_equal(chi2Gamma(1), 0)
+  expect_equal(chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+
+  theta <- 2 - chi
+  expect_equal(chi2Gamma(chi), (2*qnorm(theta/2))^2)
+})
+
+test_that("Gamma2chi_3D works", {
+  expect_error(Gamma2chi_3D(G3))
+  expect_gte(Gamma2chi_3D(1e16 * G3[1:3, 1:3]), 0)
+  expect_lte(Gamma2chi_3D(1e-16 * G3[1:3, 1:3]), 1)
 })
 

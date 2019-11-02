@@ -5,19 +5,23 @@
 #' The \eqn{\chi} coefficient is a scalar coefficient that represents
 #' the extremal correlation between two variables.
 #'
-#' @param data Numeric matrix \eqn{n \times 2}{n x 2}. A data matrix
-#' containing two variables.
+#' @param data Numeric matrix \eqn{n \times d}{n x d}. A data matrix
+#' containing \eqn{d} variables.
 #' @param p Numeric, between 0 and 1. It is the probability threshold used to
 #' compute the \eqn{\chi} coefficient.
 #' @param pot Boolean. if TRUE, then pot-type estimation of EC is used.
 #' By default, \code{pot = FALSE}.
 #'
-#' @return Numeric. The empirical \eqn{\chi} coefficient between the 2 variables
-#' in \code{data}.
+#' @return Numeric. The empirical \eqn{\chi} coefficient between the \eqn{d}
+#' variables in \code{data}.
 #'
-est_chi <- function(data, p, pot=FALSE){
-  if (NCOL(data) > 2){
-    warning("The data matrix should contain only two columns.")
+emp_chi <- function(data, p, pot=FALSE){
+  if (!is.matrix(data)){
+    stop("The data should be a matrix")
+  }
+
+  if (ncol(data) <= 1){
+    stop("The data should be a matrix with at least two columns.")
   }
 
   data <- na.omit(data)
@@ -47,18 +51,18 @@ est_chi <- function(data, p, pot=FALSE){
 #'
 #' @param data Numeric matrix \eqn{n \times d}{n x d}. A data matrix
 #' containing \eqn{d} variables.
-#' @inheritParams est_chi
+#' @inheritParams emp_chi
 #'
 #' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix containing the
 #' bivariate extremal coefficientes \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 #'
-est_chi_mat <- function(data, p, pot=FALSE){
+emp_chi_mat <- function(data, p, pot=FALSE){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
   chi <- apply(res, 1, function(x){
-    est_chi(cbind(data[,x[1]], data[,x[2]]), p=p, pot=pot)
-  })[1]
+    emp_chi(cbind(data[,x[1]], data[,x[2]]), p=p, pot=pot)
+  })
   chi.mat <- matrix(NA, ncol=d, nrow=d)
   chi.mat[res] <- chi
   chi.mat[res[,2:1]] <- chi
@@ -490,7 +494,7 @@ fmpareto_HR <- function(data,
 #' the estimated variogram matrix \eqn{\Gamma}.
 #' }
 #'
-estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL){
+fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL){
 
   # set up main variables
   d <- igraph::vcount(graph)
@@ -634,6 +638,7 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
         l = l+1
         graph.cur[[l]] =
           add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
+        graph.cur[[l]] <- set_graph_parameters(graph.cur[[l]])
         Ghat[[l]] = Ghat.tmp[[add.idx]]
         AIC = c(AIC, AIC.tmp[add.idx])
         added.edges = rbind(added.edges, t(as.matrix(edges_to_add[add.idx,])))
@@ -641,10 +646,11 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
       }
       if(all(is.na(AIC.tmp))) stop.flag=TRUE
     }
-    return(list(graph=graph.cur, Gamma=Ghat, AIC=AIC, added.edges=added.edges))
+    return(list(graph=graph.cur,
+                Gamma=Ghat, AIC=AIC, added.edges=added.edges))
   }
 
-  return(list(graph=graph, Gamma=Ghat[[1]]))
+  return(list(graph=set_graph_parameters(graph), Gamma=Ghat[[1]]))
 }
 
 
@@ -658,7 +664,15 @@ estGraph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL)
 #'
 #' @return Graph object from \code{igraph} package. A tree.
 #'
-mst_HR = function(data, cens = FALSE){
+mst_HR = function(data, p = NULL, cens = FALSE){
+
+  # check if you need to rescale data or not
+  if(!is.null(p)){
+    data.std = data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
   n <- nrow(data)
   d = ncol(data)
   graph.full <- make_full_graph(d)
@@ -677,5 +691,10 @@ mst_HR = function(data, cens = FALSE){
   bivLLH.mat[res[,2:1]] <- bivLLH
   diag(bivLLH.mat) <- 0
   mst.tree = igraph::mst(graph=graph.full, weights = -bivLLH.mat[ends(graph.full,E(graph.full))], algorithm = "prim")
+
+  # set graphical parameters
+  mst.tree <- set_graph_parameters(mst.tree)
+
+  # return tree
   return(mst.tree)
 }

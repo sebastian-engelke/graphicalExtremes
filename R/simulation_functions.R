@@ -23,14 +23,8 @@
 #' if \code{model = dirichlet}.
 #' }
 #'
-#' @return List. The list is made of:
-#' \itemize{
-#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
 #' The simulated multivariate Pareto data.
-#' \item \code{counter} Positive integer. The number of times needed to sweep
-#' over the \code{d} variables to simulate \code{n} multivariate
-#' observations.
-#' }
 #'
 #' @examples
 #' n <- 7
@@ -168,8 +162,7 @@ rmpareto <- function(n,
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
-              counter = counter))
+  return(res[sample(1:NROW(res), n, replace = FALSE), ])
 }
 
 
@@ -202,14 +195,9 @@ rmpareto <- function(n,
 #' }
 #'
 #'
-#' @return List. The list is made of:
-#' \itemize{
-#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
 #' The simulated multivariate Pareto data.
-#' \item \code{counter} Positive integer. The number of times needed to sweep
-#' over the \code{d} variables to simulate \code{n} multivariate
-#' observations.
-#' }
+#'
 #' ## !!! add examples (define params and call function)
 #'
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
@@ -360,8 +348,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
-              counter = counter))
+  return(res[sample(1:NROW(res), n, replace = FALSE), ])
 }
 
 
@@ -390,14 +377,9 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' if \code{model = dirichlet}.
 #' }
 #'
-#' @return List. The list is made of:
-#' \itemize{
-#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+#'#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
 #' The simulated multivariate Pareto data.
-#' \item \code{counter} Positive integer. The number of times needed to sweep
-#' over the \code{d} variables to simulate \code{n} multivariate
-#' observations.
-#' }
+#'
 #' ## !!! add examples (define params and call function)
 #'
 rmstable <- function(n,
@@ -531,8 +513,7 @@ rmstable <- function(n,
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
-              counter = counter))
+  return(res[sample(1:NROW(res), n, replace = FALSE), ])
 }
 
 
@@ -543,15 +524,9 @@ rmstable <- function(n,
 #'
 #' @inheritParams rmpareto_tree
 #'
-#'
-#' @return List. The list is made of:
-#' \itemize{
-#' \item \code{res} Numeric matrix of size \eqn{n \times d}{n x d}.
+#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
 #' The simulated multivariate Pareto data.
-#' \item \code{counter} Positive integer. The number of times needed to sweep
-#' over the \code{d} variables to simulate \code{n} multivariate
-#' observations.
-#' }
+#'
 #' ## !!! add examples (define params and call function)
 #'
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
@@ -712,6 +687,5 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     }
   }
 
-  return(list(res = res[sample(1:NROW(res), n, replace = FALSE), ],
-              counter = counter))
+  return(res[sample(1:NROW(res), n, replace = FALSE), ])
 }

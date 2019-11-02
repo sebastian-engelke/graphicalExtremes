@@ -2,18 +2,19 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2chi}
 \alias{Gamma2chi}
-\title{Compute theoretical \eqn{\chi} in 3D}
+\title{Convert \eqn{\Gamma} to \eqn{\chi}}
 \usage{
 Gamma2chi(Gamma)
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{3\times 3}{3 x 3}.}
+\item{Gamma}{Numeric matrix \eqn{d\times d}{d x d}.
+It represents a variogram matrix.
+Alternatively, it can be passed as a a numeric vector with
+\eqn{d} elements.}
 }
 \value{
-The 3-dimensional \eqn{\chi} coefficient, i.e.,
-the extremal correlation coefficient for the HR distribution. Note that
-\eqn{0 \leq \chi \leq 1}.
+Numeric. The extremal correlation coefficient.
 }
 \description{
-Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
+Transform the \eqn{\Gamma} HR variogram into \code{chi} extremal correlation.
 }

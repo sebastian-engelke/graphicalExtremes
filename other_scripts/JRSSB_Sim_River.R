@@ -13,15 +13,15 @@ library("igraph")
 ### Estimates empirically the chi coefficient in 3 dimensions
 #data: nxd data matrix
 #triplets: mx3 matrix with locations out of 1:d to be evaluated
-#u: probability threshold for chi.est
+#p: probability threshold for emp_chi
 #Gtrue: if supplied then the estimated chi are plotted against the once implied
 #from this HR matrix
 #pot: if TRUE, then pot-type estimation of chi is used
-est.chi3D <- function(data, triplets, u, Gtrue=NULL, pot=FALSE, main=""){
+est.chi3D <- function(data, triplets, p, Gtrue=NULL, pot=FALSE, main=""){
   d <- ncol(data)
-  chi <- apply(triplets, 1, function(x) chi.est(data[,x], u=u, pot=pot))[1,]
+  chi <- apply(triplets, 1, function(x) emp_chi(data[,x], p=p, pot=pot))
   if(!is.null(Gtrue)){
-    chi.theo = apply(triplets, 1, function(x) chi3D(Gamma=Gtrue[x,x]))
+    chi.theo = apply(triplets, 1, function(x) Gamma2chi_3D(Gamma=Gtrue[x,x]))
 
     par(cex = 1.3, cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5, pch = 19,
         mar = c(5,5,4,2) +.1)
@@ -67,7 +67,8 @@ edges = rbind(c(1,2),c(1,3),c(2,4), c(2,5))
 d = max(edges)
 graph0 = make_empty_graph(n = d, directed = FALSE)
 for(i in 1:nrow(edges))  graph0 = add_edges(graph = graph0, edges = edges[i,])
-plot.igraph(graph0, vertex.color="cyan2", vertex.size=15, edge.width=2, edge.color="darkgrey")
+graph0 <- set_graph_parameters(graph0)
+plot.igraph(graph0)
 
 G.vec = c(1,2,1,2)
 G0 = complete_Gamma(graph = graph0, Gamma = G.vec)
@@ -84,7 +85,7 @@ for(i in 1:nexp){
   for(l in 1:length(n.vec)){
     n <- n.vec[l]
     set.seed(i+10*l)
-    data = rmpareto(n=n, model="HR", d=d,  par=G0)$res
+    data = rmpareto(n=n, model="HR", d=d,  par=G0)
     G.est <- est_vario(data=data)
     est.par[i,,1,l] = (fmpareto_HR(data=data, init=G.est[edges], cens=TRUE,
                                   graph=graph0)$Gamma)[edges]
@@ -156,7 +157,7 @@ nb.chosen.edges = matrix(0,d,d)
 for(i in 1:nexp){
   cat("\r Simulation", i, " of ", nexp)
   set.seed(i)
-  data = rmpareto(n=n, model="HR", d=d, par=Gamma)$res
+  data = rmpareto(n=n, model="HR", d=d, par=Gamma)
   tree.tmp = mst_HR(data = data, cens = TRUE)
   sel.edges = selectEdges(graph=tree.tmp)
   fit.tmp = estGraph_HR(graph=tree.tmp, data=data, cens=TRUE, edges_to_add =sel.edges)
@@ -200,7 +201,8 @@ edges = rbind(c(12,11),c(11,10),c(10,9),c(9,8),c(8,7),c(7,6),c(6,5),c(5,4),c(4,3
 
 FlowGraphDirected = make_empty_graph(n = d, directed = TRUE)
 for(i in 1:nrow(edges)) FlowGraphDirected = add_edges(graph = FlowGraphDirected, edges = edges[i,])
-FlowGraph = as.undirected(FlowGraphDirected)
+FlowGraph = set_graph_parameters(as.undirected(FlowGraphDirected))
+
 
 ##################################
 #### Figure 6 (left) in the paper
@@ -216,7 +218,7 @@ mstFit = mst_HR(data = X, cens = TRUE)
 #### Figure 9 (left) in the paper
 ##################################
 
-plot(mstFit,  layout = coordinates_river, vertex.color="lightblue", vertex.size=10, edge.width=2)
+plot(mstFit,  layout = coordinates_river)
 
 
 
@@ -227,9 +229,9 @@ plot(mstFit,  layout = coordinates_river, vertex.color="lightblue", vertex.size=
 
 graph.full <- make_full_graph(d)
 logDataEvents = log(DataEvents)
-Gauss_mst = igraph::mst(graph=graph.full, weights = log(1- (cor(logDataEvents)[ends(graph.full,E(graph.full))])^2), algorithm = "prim")
+Gauss_mst = set_graph_parameters(igraph::mst(graph=graph.full, weights = log(1- (cor(logDataEvents)[ends(graph.full,E(graph.full))])^2), algorithm = "prim"))
 
-plot(Gauss_mst,  layout = coordinates_river, vertex.color="lightblue", vertex.size=10, edge.width=2)
+plot(Gauss_mst, layout = coordinates_river)
 
 
 ##################################
@@ -242,7 +244,7 @@ thr.vector = c(.4,.5,.6,.7,.75,.775,.8,.825,.85,.875,.9,.925,.95)
 MSTAll = list()
 for(t in 1:length(thr.vector)){
   print(t)
-  Xtmp <- data2mpd(data=DataEvents, p=thr.vector[t])
+  Xtmp <- data2mpareto(data=DataEvents, p=thr.vector[t])
   MSTAll[[t]] = mst_HR(data = Xtmp, cens = TRUE)
 }
 ###################
@@ -274,10 +276,10 @@ abline(sameEdgesGauss, 0, lty=2, col="orange", lwd=2)
 
 ### Do not run ####
 sel.edges = selectEdges(FlowGraph)
-Mfit_flow = estGraph_HR(graph=FlowGraph, data=X, thr=1, cens=TRUE, edges_to_add=sel.edges)
+Mfit_flow = estGraph_HR(graph=FlowGraph, data=X, cens=TRUE, edges_to_add=sel.edges)
 
 sel.edges = selectEdges(mstFit)
-Mfit_mst = estGraph_HR(graph=mstFit, data=X, thr=1, cens=TRUE, edges_to_add=sel.edges)
+Mfit_mst = estGraph_HR(graph=mstFit, data=X, cens=TRUE, edges_to_add=sel.edges)
 ###################
 
 load("data/Mfit_flow.Rdata")
@@ -290,11 +292,11 @@ p.vec = ecount(FlowGraph)+0:(L-1)
 AIC.min.idx = which.min(Mfit_flow$AIC)
 Mfit_flow$added.edges[1:AIC.min.idx,]
 
-plot(Mfit_mst$graph[[1]],  layout = coordinates_river, vertex.color="lightblue", vertex.size=10, edge.width=2)
+plot(Mfit_mst$graph[[1]],  layout = coordinates_river)
 
-plot(Mfit_flow$graph[[1]],  layout = coordinates_river, vertex.color="lightblue", vertex.size=10, edge.width=2)
+plot(Mfit_flow$graph[[1]],  layout = coordinates_river)
 
-plot(Mfit_flow$graph[[AIC.min.idx]], layout = coordinates_river, vertex.color="lightblue", vertex.size=10, edge.width=2)
+plot(Mfit_flow$graph[[AIC.min.idx]], layout = coordinates_river)
 
 results = matrix(NA, nrow=4, ncol=3)
 colnames(results) = c("twice neg logLH", "nb par", "AIC")
@@ -317,12 +319,12 @@ matplot(p.vec, cbind(Mfit_flow$AIC, c(Mfit_mst$AIC,NA)), type="b", ylab="AIC", m
 abline(results[4,3],0, lty=2, col="orange", lwd=2)
 
 
-chi.emp = 2 - est.theta(data=DataEvents, u=.9, Gtrue=NULL, pot=TRUE)
-plotChi(Chi.emp = chi.emp, Chi.theo = 2 - Gamma2Theta(Mfit_flow$Gamma[[AIC.min.idx]]),
+chi.emp = emp_chi_mat(data=DataEvents, p=.9, pot=TRUE)
+plotChi(Chi.emp = chi.emp, Chi.theo = Gamma2chi(Mfit_flow$Gamma[[AIC.min.idx]]),
         main="Hüsler-Reiss graphical model",
         PDF = FALSE,
         is.con = FlowCon)
-plotChi(Chi.emp = chi.emp, Chi.theo = 2 - Gamma2Theta(GfitM4),
+plotChi(Chi.emp = chi.emp, Chi.theo = Gamma2chi(GfitM4),
         main="Hüsler-Reiss model in Asadi et al. (2015)",
         PDF = FALSE,
         is.con = FlowCon)
@@ -336,8 +338,10 @@ set.seed(222)
 triplets <- as.matrix(expand.grid(1:d,1:d, 1:d))[sample(1:d^3, size = 400, replace = FALSE),]
 triplets = triplets[which(apply(triplets,1, function(x) length(unique(x)))==3),,drop=FALSE]
 
-chi3D.spatial = est.chi3D(data=DataEvents, triplets=triplets, u=.9, Gtrue=GfitM4, pot=TRUE, main="Hüsler-Reiss model in Asadi et al. (2015)")
-chi3D.graph = est.chi3D(data=DataEvents, triplets=triplets, u=.9, Gtrue=Mfit_flow$Gamma[[AIC.min.idx]], pot=TRUE, main="Hüsler-Reiss graphical model")
+chi3D.spatial = est.chi3D(data=DataEvents, triplets=triplets, p=.9, Gtrue=GfitM4,
+                          pot=TRUE, main="Hüsler-Reiss model in Asadi et al. (2015)")
+chi3D.graph = est.chi3D(data=DataEvents, triplets=triplets, p=.9,
+                        Gtrue=Mfit_flow$Gamma[[AIC.min.idx]], pot=TRUE, main="Hüsler-Reiss graphical model")
 
 
 

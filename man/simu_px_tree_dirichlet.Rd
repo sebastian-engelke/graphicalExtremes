@@ -4,7 +4,7 @@
 \alias{simu_px_tree_dirichlet}
 \title{Simulate Dirichlet extremal functions on a tree}
 \usage{
-simu_px_tree_dirichlet(n, alpha.start, alpha.end, A_mat)
+simu_px_tree_dirichlet(n, alpha.start, alpha.end, A)
 }
 \arguments{
 \item{n}{Positive integer. Number of simulations.}
@@ -19,7 +19,7 @@ the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
 These are the parameter of one "side" of the Dirichlet distribution
 ???Sebastian}
 
-\item{A_mat}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
+\item{A}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
 nodes in the tree, the columns represent the edges. For a fixed node
 \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 equal to 1 if the edge in position \eqn{j} is on the directed path from node

@@ -13,4 +13,8 @@ RoxygenNote: 6.1.1
 Imports: 
     igraph (>= 1.2.4.1),
     mvtnorm (>= 1.0.10),
-    matrixcalc (>= 1.0.3)
+    matrixcalc (>= 1.0.3),
+    Rdpack
+RdMacros: Rdpack
+
+

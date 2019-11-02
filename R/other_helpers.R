@@ -45,3 +45,22 @@ selectEdges = function(graph){
   for(i in 1:(d-1)) for(j in (i+1):d) if(is_chordal(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
   return(sel.edges)
 }
+
+
+
+### Sets graphical parameters to graph
+## graph -> graph
+## sets graphical parameters to the graph
+set_graph_parameters <- function(graph){
+
+  # set parameters
+  igraph::V(graph)$color <- adjustcolor(col = "#4477AA", alpha.f = 0.4)
+  igraph::V(graph)$frame.color <- adjustcolor(col = "#4477AA", alpha.f = 1)
+  igraph::V(graph)$label.color <- "black"
+  igraph::V(graph)$size <- 15
+  igraph::E(graph)$width <- 2
+  igraph::E(graph)$color <- "darkgrey"
+
+  # return graph
+  return(graph)
+}

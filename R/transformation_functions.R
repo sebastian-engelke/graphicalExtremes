@@ -134,12 +134,8 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
   }
   graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE,
                                               mode="undirected")
-  igraph::V(graph)$color <- adjustcolor(col = "#4477AA", alpha.f = 0.4)
-  igraph::V(graph)$frame.color <- adjustcolor(col = "#4477AA", alpha.f = 1)
-  igraph::V(graph)$label.color <- "black"
-  igraph::V(graph)$size <- 15
-  igraph::E(graph)$width <- 2
-  igraph::E(graph)$color <- "darkgrey"
+
+  graph <- set_graph_parameters(graph)
   if (to_plot){
     igraph::plot.igraph(graph, ...)
   }
@@ -212,6 +208,14 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #'
 #' Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
 #'
+#' @details It returns the matrix \eqn{S = \Sigma^(k) = ...}
+#' as defined in equation (10) in
+#' the paper of Engelke, S., and Hitz, A.,
+#' \url{https://arxiv.org/abs/1812.01734}.
+#'
+#' @references \insertRef{"asadi2015extremes"}{"graphicalExtremes"}
+#'
+#'
 #' @param Gamma Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
 #' matrix.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
@@ -219,11 +223,9 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' @param full Boolean. If true, then \code{S} must be a
 #' \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
 #'
-#' @return S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-#' It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
-#' the paper of Engelke, S., and Hitz, A.,
-#' \url{https://arxiv.org/abs/1812.01734}.
+#' @return S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
 #'
+#' @importFrom Rdpack reprompt
 Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
   d <- ncol(Gamma)
   if(full)
@@ -286,16 +288,32 @@ Gamma2par = function(Gamma){
 #'
 #' Transform the \code{chi} extremal correlation into HR parameter.
 #'
-#' @param chi Numeric between 0 and 1. The extremal correlation coefficient.
+#' @param chi Numeric or matrix, with entries
+#' between 0 and 1.
 #'
 #' @return Numeric
 #'
-Chi2Gamma <- function(chi){
-  if (chi < 0 | chi > 1){
+chi2Gamma <- function(chi){
+  if (any(chi < 0 | chi > 1)){
     stop("The argument chi must be between 0 and 1.")
   }
-  gamma <- (2 * qnorm(1 - 0.5 * chi)) ^ 2
-  return(gamma)
+  Gamma <- (2 * qnorm(1 - 0.5 * chi)) ^ 2
+  return(Gamma)
+}
+
+
+
+#' Convert \eqn{\Gamma} to \eqn{\chi}
+#'
+#' Transform the \eqn{\Gamma} HR variogram into \code{chi} extremal correlation.
+#'
+#' @inheritParams Gamma2par
+#'
+#' @return Numeric. The extremal correlation coefficient.
+Gamma2chi <- function(Gamma){
+
+  chi <- 2 - 2 * pnorm(sqrt(Gamma) / 2)
+  return(chi)
 }
 
 
@@ -311,7 +329,7 @@ Chi2Gamma <- function(chi){
 #' the extremal correlation coefficient for the HR distribution. Note that
 #' \eqn{0 \leq \chi \leq 1}.
 #'
-Gamma2chi = function(Gamma){
+Gamma2chi_3D = function(Gamma){
   d <- dim_Gamma(Gamma)
 
   if (d != 3){

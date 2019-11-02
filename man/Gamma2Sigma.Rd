@@ -17,11 +17,17 @@ It represents the index that is missing in \eqn{\Sigma^(k)}.}
 \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.}
 }
 \value{
-S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
-the paper of Engelke, S., and Hitz, A.,
-\url{https://arxiv.org/abs/1812.01734}.
+S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
 }
 \description{
 Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
+}
+\details{
+It returns the matrix \eqn{S = \Sigma^(k) = ...}
+as defined in equation (10) in
+the paper of Engelke, S., and Hitz, A.,
+\url{https://arxiv.org/abs/1812.01734}.
+}
+\references{
+\insertRef{"asadi2015extremes"}{"graphicalExtremes"}
 }
