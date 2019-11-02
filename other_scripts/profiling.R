@@ -11,8 +11,11 @@ profvis(rmpareto(n, "neglogistic", d, 1.3))
 profvis(rmpareto(n, "dirichlet", d, runif(d)))
 
 
-n <- 50
-d <- 20
+n <- 1e3
+d <- 1e2
 gg <- igraph::make_tree(n = d, 2, mode = "undirected")
-G_tree <- fullGamma(gg, runif(d - 1))
+G_tree <- fullGamma(gg, runif(d-1))
+gg_check <- Gamma2Graph(G_tree)
+igraph::V(gg_check)$color <- "white"
+igraph::tkplot(gg_check)
 profvis(rmpareto_tree(n, tree = gg, par = G_tree))
