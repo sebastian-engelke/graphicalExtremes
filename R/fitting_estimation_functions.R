@@ -339,7 +339,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #'
 #'
 #' If \code{graph = NULL}, then the parameters of a \eqn{d \time d}{d x d}
-#' parameter matric \Gamma of a Huesler--Reiss Pareto distribution are fitted.
+#' parameter matrix \Gamma of a Huesler--Reiss Pareto distribution are fitted.
 #'  If \code{graph} is given, it assumes the conditional independence
 #'  structure of this graph and fits only the parameters on the edges.
 #'  In
