@@ -2,26 +2,54 @@
 % Please edit documentation in R/transformation_functions.R
 \name{complete_Gamma}
 \alias{complete_Gamma}
-\title{Complete \eqn{\Gamma} matrix}
+\title{Completion of \eqn{\Gamma} matrix on block graphs}
 \usage{
 complete_Gamma(Gamma, graph)
 }
 \arguments{
-\item{Gamma}{Numeric matrix representing a \eqn{d \times d}{d x d}
-variogram, with entries only inside the cliques. Alternatively, can be a
-vector containing the entries for each edge in the same order as in
-graph object.}
+\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix
+with entries only specified within the cliques of the \code{graph}. Alternatively, can be a
+vector containing the \code{Gamma} entries for each edge in the same order as in
+\code{graph} object.}
 
 \item{graph}{Graph object from \code{igraph} package.
-An undirected block graph, i.e., a decomposable, connected
-graph where the minimal separators of the cliques have size at most one.}
+The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+graph with singleton separator sets.}
 }
 \value{
-Numeric matrix \eqn{d \times d}{d x d} representing the completed
-Gamma matrix.
+Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
 }
 \description{
-Given a \code{graph} and \code{Gamma} matrix with entries only on the
-edges/cliques of the \code{graph}, it returns the full Gamma matrix
+Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
+edges within the cliques of the \code{graph}, it returns the full \eqn{\Gamma} matrix
 implied by the conditional independencies.
+}
+\details{
+For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
+distribution within the cliques of the \code{graph}, the remaining entries are implied
+by the conditional independence properties. For details see CITE eng2018a.
+}
+\examples{
+## Complete a 4-dimensional HR distribution
+
+my_graph <- igraph::graph_from_adjacency_matrix(rbind(
+c(0, 1, 0, 0),
+c(1, 0, 1, 1),
+c(0, 1, 0, 1),
+c(0, 1, 1, 0)),
+mode = "undirected")
+
+Gamma <- rbind(
+c(0, .5, NA, NA),
+c(.5, 0, 1, 1.5),
+c(NA, 1, 0, .8),
+c(NA, 1.5, .8, 0))
+
+complete_Gamma(Gamma, my_graph)
+
+## Alternative
+
+Gamma_vec <- c(.5, 1, 1.5, .8)
+complete_Gamma(Gamma_vec, my_graph)
+
 }

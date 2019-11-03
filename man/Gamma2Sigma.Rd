@@ -2,31 +2,45 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Transform \eqn{\Gamma} to \eqn{S}}
+\title{Transformation of \eqn{\Gamma} matrix to \eqn{Sigma} matrix}
 \usage{
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
-matrix.}
+\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
-It represents the index that is missing in \eqn{\Sigma^(k)}.}
+Indicates which matrix \eqn{\Sigma^(k)} should be produced.}
 
-\item{full}{Boolean. If true, then \code{S} must be a
-\eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.}
+\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+are included and the function returns a \eqn{d \times d}{d x d} matrix.
+By default, \code{full = FALSE}.}
 }
 \value{
-S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
+Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
+\code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
 }
 \description{
-Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
+Transforms the \code{Gamma} matrix from the definition of a
+Huesler--Reiss distribution to the corresponding \eqn{\Sigma^(k)} matrix.
 }
 \details{
-It returns the matrix \eqn{S = \Sigma^(k) = ...}
-as defined in equation (10) in
-the paper of Engelke, S., and Hitz, A.,
-\url{https://arxiv.org/abs/1812.01734}.
+Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+Huesler--Reiss distribution can be transformed into a
+\eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix,
+for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^(k)}
+contains the graph structure corresponding to the Huesler--Reiss distribution
+with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
+is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
+that contain zeros. For details see CITE eng2018a.
+}
+\examples{
+Gamma <-  cbind(c(0, 1.5, 1.5, 2),
+                c(1.5, 0, 2, 1.5),
+                c(1.5, 2, 0, 1.5),
+                c(2, 1.5, 1.5, 0))
+Gamma2Sigma(Gamma, k = 1, full = FALSE)
+
 }
 \references{
 \insertRef{asadi2015extremes}{graphicalExtremes}

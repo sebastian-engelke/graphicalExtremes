@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulation_functions.R
 \name{rmstable_tree}
 \alias{rmstable_tree}
-\title{Simulate samples of max-stable process from a tree}
+\title{Sampling of a multivariate max-stable distribution on a tree}
 \usage{
 rmstable_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 }
@@ -36,11 +36,36 @@ for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }
 \value{
-Numeric matrix of size \eqn{n \times d}{n x d}.
-The simulated multivariate Pareto data.
-
-## !!! add examples (define params and call function)
+Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+multivariate max-stable distribution.
 }
 \description{
-Simulates a tree graphical model, following a max-stable process.
+Simulates exact samples of a multivariate max-stable distribution that
+is an extremal graphical model on a tree as defined in CITE eng2018a.
+}
+\details{
+The simulation follows a combination of the extremal function algorithm in CITE dom2016
+and the theory in CITE eng2018a to sample from a single extremal function.
+For details on the parameters of the Huesler--Reiss, logistic
+and negative logistic distributions see CITE dom2016, and for the Dirichlet
+distribution see CITE coles1991modelling.
+}
+\examples{
+## A 4-dimensional HR tree model
+
+my_tree <- igraph::graph_from_adjacency_matrix(rbind(
+c(0, 1, 0, 0),
+c(1, 0, 1, 1),
+c(0, 1, 0, 0),
+c(0, 1, 0, 0)),
+mode = "undirected")
+n <- 10
+Gamma_vec <- c(.5,1.4,.8)
+rmstable_tree(n, "HR", tree = my_tree, par = Gamma_vec)
+
+## A 4-dimensional Dirichlet model with asymmetric edge distributions
+
+alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+
 }

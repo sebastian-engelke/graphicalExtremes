@@ -1,19 +1,48 @@
-#' Complete \eqn{\Gamma} matrix
+#' Completion of \eqn{\Gamma} matrix on block graphs
 #'
-#' Given a \code{graph} and \code{Gamma} matrix with entries only on the
-#' edges/cliques of the \code{graph}, it returns the full Gamma matrix
+#' Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
+#' edges within the cliques of the \code{graph}, it returns the full \eqn{\Gamma} matrix
 #' implied by the conditional independencies.
 #'
 #' @param graph Graph object from \code{igraph} package.
-#' An undirected block graph, i.e., a decomposable, connected
-#' graph where the minimal separators of the cliques have size at most one.
-#' @param Gamma Numeric matrix representing a \eqn{d \times d}{d x d}
-#' variogram, with entries only inside the cliques. Alternatively, can be a
-#' vector containing the entries for each edge in the same order as in
-#' graph object.
+#' The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+#' graph with singleton separator sets.
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix
+#' with entries only specified within the cliques of the \code{graph}. Alternatively, can be a
+#' vector containing the \code{Gamma} entries for each edge in the same order as in
+#' \code{graph} object.
 #'
-#' @return Numeric matrix \eqn{d \times d}{d x d} representing the completed
-#' Gamma matrix.
+#' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
+#'
+#' @details
+#' For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
+#' distribution within the cliques of the \code{graph}, the remaining entries are implied
+#' by the conditional independence properties. For details see CITE eng2018a.
+#'
+#' @examples
+#' ## Complete a 4-dimensional HR distribution
+#'
+#' my_graph <- igraph::graph_from_adjacency_matrix(rbind(
+#' c(0, 1, 0, 0),
+#' c(1, 0, 1, 1),
+#' c(0, 1, 0, 1),
+#' c(0, 1, 1, 0)),
+#' mode = "undirected")
+#'
+#' Gamma <- rbind(
+#' c(0, .5, NA, NA),
+#' c(.5, 0, 1, 1.5),
+#' c(NA, 1, 0, .8),
+#' c(NA, 1.5, .8, 0))
+#'
+#' complete_Gamma(Gamma, my_graph)
+#'
+#' ## Alternative
+#'
+#' Gamma_vec <- c(.5, 1, 1.5, .8)
+#' complete_Gamma(Gamma_vec, my_graph)
+#'
+#' @export
 #'
 complete_Gamma = function(Gamma, graph){
 
@@ -104,27 +133,33 @@ complete_Gamma = function(Gamma, graph){
 
 
 
-#' Transform \eqn{\Gamma} matrix to graph
+#' Transformation of \eqn{\Gamma} matrix to graph object
 #'
-#' Transforms \code{Gamma} matrix to an \code{igraph} object
+#' Transforms \code{Gamma} matrix to an \code{igraph} object for
+#' the corresponding Huesler--Reiss extremal graphical model,
 #' and plots it (optionally).
 #'
-#' @param Gamma Numeric matrix representing a \eqn{d \times d}{d x d}
-#' variogram.
-#' @param to_plot Boolean. If \code{TRUE} (default), it plots the produced
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param to_plot Logical. If \code{TRUE} (default), it plots the resulting
 #' graph.
 #' @param ... Graphical parameters for the \code{\link[igraph]{plot.igraph}}
 #' function of the package \code{igraph}.
 #'
 #' @return Graph object from \code{igraph} package. An undirected graph.
 #'
-#' @examples
-#' G <-  cbind(c(0, 1.5, 1.5, 2),
-#'             c(1.5, 0, 2, 1.5),
-#'             c(1.5, 2, 0, 1.5),
-#'             c(2, 1.5, 1.5, 0))
+#' @details
+#' The variogram uniquely determines the extremal graph structure of the
+#' corresponding Huesler--Reiss distribution. The conditional independencies
+#' can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
+#' defined in equation (10) in CITE eng2018a. !!! Refere to function Gamma2Sigma !!!
 #'
-#' Gamma2graph(G, to_plot = TRUE)
+#' @examples
+#' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
+#'                 c(1.5, 0, 2, 1.5),
+#'                 c(1.5, 2, 0, 1.5),
+#'                 c(2, 1.5, 1.5, 0))
+#'
+#' Gamma2graph(Gamma, to_plot = TRUE)
 #' @export
 Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
@@ -144,16 +179,39 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
 
 
 
-#' Convert \code{data} to Pareto scale
+#' Data standardization to multivariate Pareto scale
 #'
-#' Transfroms the data empirically to multivariate Pareto scale.
+#' Transforms the \code{data} matrix empirically to the multivariate Pareto scale.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}.
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1. Probability used for the quantile to
 #' threshold the data.
 #'
 #' @return Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
 #' of rows in the original \code{data} matrix that are above the threshold.
+#'
+#' @details
+#' The columns of the \code{data} matrix are first transformed empirically to
+#' standard Pareto distributions. Then, only the observations where at least
+#' one component exceeds the \code{p}-quantile of the standard Pareto distribution
+#' are kept. Those observations are finally divided by the \code{p}-quantile
+#' of the standard Pareto distribution to standardize them to the multivariate Pareto scale.
+#'
+#' @examples
+#' n <- 20
+#' d <- 4
+#' p <- .8
+#' G <-  cbind(c(0, 1.5, 1.5, 2),
+#'             c(1.5, 0, 2, 1.5),
+#'             c(1.5, 2, 0, 1.5),
+#'             c(2, 1.5, 1.5, 0))
+#'
+#' my_data = rmstable(n, "HR", d = d, par = G)
+#'
+#' data2mpareto(my_data, p)
+#'
+#' @export
 data2mpareto <- function(data, p){
   xx <- 1/(1-apply(data, 2, unif))
   q <- 1 / (1 - p)
@@ -162,22 +220,45 @@ data2mpareto <- function(data, p){
 }
 
 
-
-#' Transform \eqn{S} to \eqn{\Gamma}
+#' Transformation of \eqn{Sigma} matrix to \eqn{\Gamma} matrix
 #'
-#' Transforms \eqn{\Sigma^(k)} to the respective \eqn{\Gamma} matrix.
+#' Transforms the \eqn{\Sigma^(k)} matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \code{Gamma} matrix.
 #'
-#' @param S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-#' It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
-#' the paper of Engelke, S., and Hitz, A.,
-#' \url{https://arxiv.org/abs/1812.01734}.
+#'
+#' @references \insertRef{asadi2015extremes}{graphicalExtremes}
+#' \insertRef{Rpack:bibtex}{Rdpack}
+#' @param S Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^(k)}
+#' from the definition of a Huesler--Reiss distribution.
+#' Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
+#' parameter.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
-#' It represents the index that is missing in \eqn{\Sigma^(k)}.
-#' @param full Boolean. If true, then \code{S} must be a
-#' \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
+#' Indicates which matrix \eqn{\Sigma^(k)} is represented by \code{S}.
+#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+#' are included and the function returns a \eqn{d \times d}{d x d} matrix.
+#' By default, \code{full = FALSE}.
 #'
-#' @return Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
-#' matrix.
+#' @details
+#' For any \code{k} from \code{1} to \code{d},
+#' the \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)}
+#' matrix in the definition of a
+#' Huesler--Reiss distribution can be transformed into a the
+#' corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
+#' If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
+#' matrix with \code{k}th row and column
+#' containng zeros. For details see CITE eng2018a.
+#'
+#' @return Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
+#'
+#' @examples
+#' Sigma1 <-  rbind(c(1.5, 0.5, 1),
+#'                  c(0.5, 1.5, 1),
+#'                  c(1, 1, 2))
+#' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
+#'
+#' @importFrom Rdpack reprompt
+#'
+#' @export
 Sigma2Gamma <- function(S, k = 1, full = FALSE){
   # complete S
   if (!full){
@@ -204,29 +285,45 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 
 
 
-#' Transform \eqn{\Gamma} to \eqn{S}
+#' Transformation of \eqn{\Gamma} matrix to \eqn{Sigma} matrix
 #'
-#' Transforms Gamma matrix to \eqn{\Sigma^(k)} matrix.
+#' Transforms the \code{Gamma} matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \eqn{\Sigma^(k)} matrix.
 #'
-#' @details It returns the matrix \eqn{S = \Sigma^(k) = ...}
-#' as defined in equation (10) in
-#' the paper of Engelke, S., and Hitz, A.,
-#' \url{https://arxiv.org/abs/1812.01734}.
 #'
 #' @references \insertRef{asadi2015extremes}{graphicalExtremes}
 #' \insertRef{Rpack:bibtex}{Rdpack}
 #'
-#'
-#' @param Gamma Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
-#' matrix.
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
-#' It represents the index that is missing in \eqn{\Sigma^(k)}.
-#' @param full Boolean. If true, then \code{S} must be a
-#' \eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.
+#' Indicates which matrix \eqn{\Sigma^(k)} should be produced.
+#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+#' are included and the function returns a \eqn{d \times d}{d x d} matrix.
+#' By default, \code{full = FALSE}.
 #'
-#' @return S Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
+#' @details
+#' Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+#' Huesler--Reiss distribution can be transformed into a
+#' \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix,
+#' for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^(k)}
+#' contains the graph structure corresponding to the Huesler--Reiss distribution
+#' with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
+#' is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
+#' that contain zeros. For details see CITE eng2018a.
+#'
+#' @return Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
+#' \code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
+#'
+#' @examples
+#' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
+#'                 c(1.5, 0, 2, 1.5),
+#'                 c(1.5, 2, 0, 1.5),
+#'                 c(2, 1.5, 1.5, 0))
+#' Gamma2Sigma(Gamma, k = 1, full = FALSE)
 #'
 #' @importFrom Rdpack reprompt
+#'
+#' @export
 Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
   d <- ncol(Gamma)
   if(full)
@@ -285,15 +382,19 @@ Gamma2par = function(Gamma){
 
 
 
-#' Convert \eqn{\chi} to \eqn{\Gamma}
+#' Transformation of extremal correlation \eqn{\chi} to the Huesler--Reiss variogram \eqn{\Gamma}
 #'
-#' Transform the \code{chi} extremal correlation into HR parameter.
+#' Transforms the extremal correlation \eqn{\chi} into the \code{Gamma} matrix
+#' from the definition of a Huesler--Reiss
+#' distribution.
 #'
 #' @param chi Numeric or matrix, with entries
 #' between 0 and 1.
 #'
-#' @return Numeric
+#' @return Numeric or matrix. The \eqn{\Gamma} parameters in the Huesler--Reiss
+#' distribution.
 #'
+#' @export
 chi2Gamma <- function(chi){
   if (any(chi < 0 | chi > 1)){
     stop("The argument chi must be between 0 and 1.")
@@ -303,14 +404,17 @@ chi2Gamma <- function(chi){
 }
 
 
-
-#' Convert \eqn{\Gamma} to \eqn{\chi}
+#' Transformation of the Huesler--Reiss variogram \eqn{\Gamma} to extremal correlation \eqn{\chi}
 #'
-#' Transform the \eqn{\Gamma} HR variogram into \code{chi} extremal correlation.
+#' Transforms the \code{Gamma} matrix from the definition of a Huesler--Reiss
+#' distribution into the corresponding extremal correlation \eqn{\chi}.
 #'
-#' @inheritParams Gamma2par
 #'
-#' @return Numeric. The extremal correlation coefficient.
+#' @param Gamma Numeric or matrix, with positive entries.
+#'
+#' @return Numeric or matrix. The extremal correlation coefficient.
+#'
+#' @export
 Gamma2chi <- function(Gamma){
 
   chi <- 2 - 2 * stats::pnorm(sqrt(Gamma) / 2)

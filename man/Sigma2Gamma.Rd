@@ -2,26 +2,48 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Sigma2Gamma}
 \alias{Sigma2Gamma}
-\title{Transform \eqn{S} to \eqn{\Gamma}}
+\title{Transformation of \eqn{Sigma} matrix to \eqn{\Gamma} matrix}
 \usage{
 Sigma2Gamma(S, k = 1, full = FALSE)
 }
 \arguments{
-\item{S}{Numeric matrix \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}.
-It represents the \eqn{\Sigma^(k)} matrix as defined in equation (10) in
-the paper of Engelke, S., and Hitz, A.,
-\url{https://arxiv.org/abs/1812.01734}.}
+\item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^(k)}
+from the definition of a Huesler--Reiss distribution.
+Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
+parameter.}
 
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
-It represents the index that is missing in \eqn{\Sigma^(k)}.}
+Indicates which matrix \eqn{\Sigma^(k)} is represented by \code{S}.}
 
-\item{full}{Boolean. If true, then \code{S} must be a
-\eqn{d \times d}{d x d} matrix. By default, \code{full = FALSE}.}
+\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+are included and the function returns a \eqn{d \times d}{d x d} matrix.
+By default, \code{full = FALSE}.}
 }
 \value{
-Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
-matrix.
+Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
 }
 \description{
-Transforms \eqn{\Sigma^(k)} to the respective \eqn{\Gamma} matrix.
+Transforms the \eqn{\Sigma^(k)} matrix from the definition of a
+Huesler--Reiss distribution to the corresponding \code{Gamma} matrix.
+}
+\details{
+For any \code{k} from \code{1} to \code{d},
+the \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)}
+matrix in the definition of a
+Huesler--Reiss distribution can be transformed into a the
+corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
+If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
+matrix with \code{k}th row and column
+containng zeros. For details see CITE eng2018a.
+}
+\examples{
+Sigma1 <-  rbind(c(1.5, 0.5, 1),
+                 c(0.5, 1.5, 1),
+                 c(1, 1, 2))
+Sigma2Gamma(Sigma1, k = 1, full = FALSE)
+
+}
+\references{
+\insertRef{asadi2015extremes}{graphicalExtremes}
+\insertRef{Rpack:bibtex}{Rdpack}
 }

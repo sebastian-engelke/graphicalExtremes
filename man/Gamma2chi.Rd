@@ -2,19 +2,17 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2chi}
 \alias{Gamma2chi}
-\title{Convert \eqn{\Gamma} to \eqn{\chi}}
+\title{Transformation of the Huesler--Reiss variogram \eqn{\Gamma} to extremal correlation \eqn{\chi}}
 \usage{
 Gamma2chi(Gamma)
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{d\times d}{d x d}.
-It represents a variogram matrix.
-Alternatively, it can be passed as a a numeric vector with
-\eqn{d} elements.}
+\item{Gamma}{Numeric or matrix, with positive entries.}
 }
 \value{
-Numeric. The extremal correlation coefficient.
+Numeric or matrix. The extremal correlation coefficient.
 }
 \description{
-Transform the \eqn{\Gamma} HR variogram into \code{chi} extremal correlation.
+Transforms the \code{Gamma} matrix from the definition of a Huesler--Reiss
+distribution into the corresponding extremal correlation \eqn{\chi}.
 }

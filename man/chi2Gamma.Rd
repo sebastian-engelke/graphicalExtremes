@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{chi2Gamma}
 \alias{chi2Gamma}
-\title{Convert \eqn{\chi} to \eqn{\Gamma}}
+\title{Transformation of extremal correlation \eqn{\chi} to the Huesler--Reiss variogram \eqn{\Gamma}}
 \usage{
 chi2Gamma(chi)
 }
@@ -11,8 +11,11 @@ chi2Gamma(chi)
 between 0 and 1.}
 }
 \value{
-Numeric
+Numeric or matrix. The \eqn{\Gamma} parameters in the Huesler--Reiss
+distribution.
 }
 \description{
-Transform the \code{chi} extremal correlation into HR parameter.
+Transforms the extremal correlation \eqn{\chi} into the \code{Gamma} matrix
+from the definition of a Huesler--Reiss
+distribution.
 }

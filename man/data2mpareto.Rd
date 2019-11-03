@@ -2,12 +2,13 @@
 % Please edit documentation in R/transformation_functions.R
 \name{data2mpareto}
 \alias{data2mpareto}
-\title{Convert \code{data} to Pareto scale}
+\title{Data standardization to multivariate Pareto scale}
 \usage{
 data2mpareto(data, p)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1. Probability used for the quantile to
 threshold the data.}
@@ -17,5 +18,26 @@ Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
 of rows in the original \code{data} matrix that are above the threshold.
 }
 \description{
-Transfroms the data empirically to multivariate Pareto scale.
+Transforms the \code{data} matrix empirically to the multivariate Pareto scale.
+}
+\details{
+The columns of the \code{data} matrix are first transformed empirically to
+standard Pareto distributions. Then, only the observations where at least
+one component exceeds the \code{p}-quantile of the standard Pareto distribution
+are kept. Those observations are finally divided by the \code{p}-quantile
+of the standard Pareto distribution to standardize them to the multivariate Pareto scale.
+}
+\examples{
+n <- 20
+d <- 4
+p <- .8
+G <-  cbind(c(0, 1.5, 1.5, 2),
+            c(1.5, 0, 2, 1.5),
+            c(1.5, 2, 0, 1.5),
+            c(2, 1.5, 1.5, 0))
+
+my_data = rmstable(n, "HR", d = d, par = G)
+
+data2mpareto(my_data, p)
+
 }

@@ -223,12 +223,35 @@ rmpareto <- function(n,
 #' for each of the edges in \code{tree}, if \code{model = dirichlet}.
 #' }
 #'
+#' @return
+#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' multivariate Pareto distribution.
 #'
-#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
-#' The simulated multivariate Pareto data.
+#' @details
+#' The simulation follows the algorithm in CITE eng2018a.
+#' For details on the parameters of the Huesler--Reiss, logistic
+#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
+#' distribution see CITE coles1991modelling.
 #'
-#' ## !!! add examples (define params and call function)
+#' @examples
+#' ## A 4-dimensional HR tree model
 #'
+#' my_tree <- igraph::graph_from_adjacency_matrix(rbind(
+#' c(0, 1, 0, 0),
+#' c(1, 0, 1, 1),
+#' c(0, 1, 0, 0),
+#' c(0, 1, 0, 0)),
+#' mode = "undirected")
+#' n <- 10
+#' Gamma_vec <- c(.5,1.4,.8)
+#' rmpareto_tree(n, "HR", tree = my_tree, par = Gamma_vec)
+#'
+#' ## A 4-dimensional Dirichlet model with asymmetric edge distributions
+#'
+#' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+#' rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+#'
+#' @export
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
 
@@ -582,17 +605,66 @@ rmstable <- function(n,
 
 
 
-#' Simulate samples of max-stable process from a tree
+#' Sampling of a multivariate max-stable distribution on a tree
 #'
-#' Simulates a tree graphical model, following a max-stable process.
+#' Simulates exact samples of a multivariate max-stable distribution that
+#' is an extremal graphical model on a tree as defined in CITE eng2018a.
 #'
-#' @inheritParams rmpareto_tree
+#' @param n Number of simulations.
+#' @param model The parametric model type; one of:
+#' \itemize{
+#' \item \code{HR} (default),
+#' \item \code{logistic},
+#' \item \code{dirichlet}.
+#' }
+#' @param tree Graph object from \code{igraph} package.
+#' This object must be tree, i.e., an
+#' undirected graph that is connected and has no cycles.
+#' @param par Respective parameter for the given \code{model}, that is,
+#' \itemize{
+#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#' where only the entries corresponding to the edges of the \code{tree} are used,
+#' if \code{model = HR}. Alternatively, can be a vector of
+#' length \eqn{d - 1} containing the entries of the variogram corresponding
+#' to the edges of the given \code{tree}.
+#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#' containing the logistic parameters corresponding
+#' to the edges of the given \code{tree}, if \code{model = logistic}.
+#' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
+#' contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+#' for each of the edges in \code{tree}, if \code{model = dirichlet}.
+#' }
 #'
-#' @return Numeric matrix of size \eqn{n \times d}{n x d}.
-#' The simulated multivariate Pareto data.
+#' @return
+#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' multivariate max-stable distribution.
 #'
-#' ## !!! add examples (define params and call function)
+#' @details
+#' The simulation follows a combination of the extremal function algorithm in CITE dom2016
+#' and the theory in CITE eng2018a to sample from a single extremal function.
+#' For details on the parameters of the Huesler--Reiss, logistic
+#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
+#' distribution see CITE coles1991modelling.
 #'
+#' @examples
+#' ## A 4-dimensional HR tree model
+#'
+#' my_tree <- igraph::graph_from_adjacency_matrix(rbind(
+#' c(0, 1, 0, 0),
+#' c(1, 0, 1, 1),
+#' c(0, 1, 0, 0),
+#' c(0, 1, 0, 0)),
+#' mode = "undirected")
+#' n <- 10
+#' Gamma_vec <- c(.5,1.4,.8)
+#' rmstable_tree(n, "HR", tree = my_tree, par = Gamma_vec)
+#'
+#' ## A 4-dimensional Dirichlet model with asymmetric edge distributions
+#'
+#' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+#' rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+#'
+#' @export
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
 

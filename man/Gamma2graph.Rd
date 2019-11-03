@@ -2,15 +2,14 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2graph}
 \alias{Gamma2graph}
-\title{Transform \eqn{\Gamma} matrix to graph}
+\title{Transformation of \eqn{\Gamma} matrix to graph object}
 \usage{
 Gamma2graph(Gamma, to_plot = TRUE, ...)
 }
 \arguments{
-\item{Gamma}{Numeric matrix representing a \eqn{d \times d}{d x d}
-variogram.}
+\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
-\item{to_plot}{Boolean. If \code{TRUE} (default), it plots the produced
+\item{to_plot}{Logical. If \code{TRUE} (default), it plots the resulting
 graph.}
 
 \item{...}{Graphical parameters for the \code{\link[igraph]{plot.igraph}}
@@ -20,14 +19,21 @@ function of the package \code{igraph}.}
 Graph object from \code{igraph} package. An undirected graph.
 }
 \description{
-Transforms \code{Gamma} matrix to an \code{igraph} object
+Transforms \code{Gamma} matrix to an \code{igraph} object for
+the corresponding Huesler--Reiss extremal graphical model,
 and plots it (optionally).
 }
+\details{
+The variogram uniquely determines the extremal graph structure of the
+corresponding Huesler--Reiss distribution. The conditional independencies
+can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
+defined in equation (10) in CITE eng2018a. !!! Refere to function Gamma2Sigma !!!
+}
 \examples{
-G <-  cbind(c(0, 1.5, 1.5, 2),
-            c(1.5, 0, 2, 1.5),
-            c(1.5, 2, 0, 1.5),
-            c(2, 1.5, 1.5, 0))
+Gamma <-  cbind(c(0, 1.5, 1.5, 2),
+                c(1.5, 0, 2, 1.5),
+                c(1.5, 2, 0, 1.5),
+                c(2, 1.5, 1.5, 0))
 
-Gamma2graph(G, to_plot = TRUE)
+Gamma2graph(Gamma, to_plot = TRUE)
 }

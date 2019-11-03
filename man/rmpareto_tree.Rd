@@ -36,12 +36,35 @@ for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }
 \value{
-Numeric matrix of size \eqn{n \times d}{n x d}.
-The simulated multivariate Pareto data.
-
-## !!! add examples (define params and call function)
+Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+multivariate Pareto distribution.
 }
 \description{
 Simulates exact samples of a multivariate Pareto distribution that
 is an extremal graphical model on a tree as defined in CITE eng2018a.
+}
+\details{
+The simulation follows the algorithm in CITE eng2018a.
+For details on the parameters of the Huesler--Reiss, logistic
+and negative logistic distributions see CITE dom2016, and for the Dirichlet
+distribution see CITE coles1991modelling.
+}
+\examples{
+## A 4-dimensional HR tree model
+
+my_tree <- igraph::graph_from_adjacency_matrix(rbind(
+c(0, 1, 0, 0),
+c(1, 0, 1, 1),
+c(0, 1, 0, 0),
+c(0, 1, 0, 0)),
+mode = "undirected")
+n <- 10
+Gamma_vec <- c(.5,1.4,.8)
+rmpareto_tree(n, "HR", tree = my_tree, par = Gamma_vec)
+
+## A 4-dimensional Dirichlet model with asymmetric edge distributions
+
+alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+
 }

@@ -15,6 +15,6 @@ Imports:
     mvtnorm (>= 1.0.10),
     matrixcalc (>= 1.0.3),
     Rdpack,
-    stats (>= 3.6.1),
-    grDevices (>= 3.6.1)
+    stats (>= 3.6.0),
+    grDevices (>= 3.6.0)
 RdMacros: Rdpack
