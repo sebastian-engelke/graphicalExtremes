@@ -373,7 +373,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' \item \code{hessian} Numeric matrix. Estimated Hessian matrix of the
 #' estimated parameters.
 #' }
-# !!! check if graph has specific form?
+# !!! check if graph has specific form??
 fmpareto_HR <- function(data,
                        p = NULL,
                        cens = FALSE,
