@@ -22,6 +22,6 @@ test_that("dim_Gamma works", {
 test_that("select_edges works", {
   small_graph <- igraph::make_empty_graph(n = 4, directed = FALSE)
   small_graph <- igraph::add_edges(small_graph, c(1, 2, 2, 3, 2, 4))
+  expect_equal(select_edges(small_graph), rbind(c(1, 3), c(1, 4), c(3, 4)))
 
-  select_edges(small_graph)
 })

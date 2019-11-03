@@ -45,29 +45,41 @@ dim_Gamma <- function(Gamma){
 #' @return Numeric vector.
 #'
 select_edges = function(graph){
-  browser()
+
   d = igraph::vcount(graph)
-  edges_mat <- igraph::ends(graph, igraph::E(graph))
-  edges_mat <-  rbind(edges_mat, cbind(edges_mat[, 2], edges_mat[, 1]))
-  m <-  nrow(edges_to_add)
+  adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
+
+
   sel.edges = matrix(0, nrow=0, ncol=2)
+
   for (i in 1:(d-1)){
     for (j in (i+1):d){
+
+      # set new_edge
       new_edge <- c(i, j)
 
-      # check if new_edge is in edges_mat
-      if (m > 0) {
-        check_new_edges <- 0
+      # check if new_edge is already in the graph
+      is_already_edge <- adj_mat[i, j] | adj_mat[j, i]
 
+
+      # if not, add it to the graph; else skip to the next
+      if (!is_already_edge){
+        extended_graph <- igraph::add_edges(graph = graph, edges = new_edge)
+      } else {next}
+
+      # check if new graph is decomposable
+      is_chordal <- igraph::is_chordal(extended_graph)$chordal
+
+      # measure the length of the path from i to j in the old graph
+      length_path <- length(as.vector(
+        igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]]))
+
+       if(is_chordal & length_path !=2){
+        sel.edges <- rbind(sel.edges, new_edge, deparse.level = 0)
       }
-
-
-
-      igraph::add_edges(graph = graph,
-                        edges = new_edge)
     }
-  } if(igraph::is_chordal(
-    igraph::add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
+  }
+
   return(sel.edges)
 }
 

@@ -565,6 +565,8 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
     if(is.vector(edges_to_add)) edges_to_add = t(as.matrix(edges_to_add))
 
     # check if any proposed edge is already in the given graph
+    adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
+
     edges_mat <- igraph::ends(graph, igraph::E(graph))
     edges_mat <-  rbind(edges_mat, cbind(edges_mat[, 2], edges_mat[, 1]))
 
@@ -572,14 +574,14 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
     check_new_edges <- 0
     for (k in 1:m){
       current_edge <- edges_to_add[k, ]
-      check_new_edges <-
-        max(check_new_edges,
-            sum(apply(edges_mat, 1, function(x) {identical(x, current_edge)})))
 
-      if (check_new_edges > 0) {break}
+      is_already_edge <- adj_mat[current_edge[1], current_edge[2]] |
+        adj_mat[current_edge[2], current_edge[1]]
+
+      if (is_already_edge) {break}
     }
 
-    if (check_new_edges > 0){
+    if (is_already_edge){
       stop(paste("The argument edges_to_add cannot contain edges already",
                  "present in the given graph."))
     }
