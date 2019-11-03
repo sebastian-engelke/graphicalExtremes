@@ -332,13 +332,17 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 
 
 
-#' Fit parameters of multivariate HR Pareto distribution
+#' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
 #'
-#' This function fits the parameters of a multivariate HR Pareto distribution
-#'  using (censored) likelihood estimation.
+#' Fits the parameters of a multivariate HR Pareto distribution
+#' using (censored) likelihood estimation.
 #'
+#'
+#' If \code{graph = NULL}, then the parameters of a \eqn{d \time d}{d x d}
+#' parameter matric \Gamma of a Huesler--Reiss Pareto distribution are fitted.
 #'  If \code{graph} is given, it assumes the conditional independence
-#'  structure of this graph and fits only the parameters on the edges,
+#'  structure of this graph and fits only the parameters on the edges.
+#'  In
 #'  but with the full likelihood. This should only be used for small dimensions.
 #'  If you give \code{data}, and not \code{graph}, then the function fits HR
 #'  with the whole matrix. This is computationally heavy and works only for
