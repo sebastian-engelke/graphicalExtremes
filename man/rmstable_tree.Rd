@@ -41,14 +41,14 @@ multivariate max-stable distribution.
 }
 \description{
 Simulates exact samples of a multivariate max-stable distribution that
-is an extremal graphical model on a tree as defined in CITE eng2018a.
+is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
 }
 \details{
-The simulation follows a combination of the extremal function algorithm in CITE dom2016
-and the theory in CITE eng2018a to sample from a single extremal function.
+The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
+and the theory in \insertCite{eng2018a;textual}{graphicalExtremes} to sample from a single extremal function.
 For details on the parameters of the Huesler--Reiss, logistic
-and negative logistic distributions see CITE dom2016, and for the Dirichlet
-distribution see CITE coles1991modelling.
+and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }
 \examples{
 ## A 4-dimensional HR tree model
@@ -68,4 +68,7 @@ rmstable_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
 rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
 
+}
+\references{
+\insertAllCited{}
 }

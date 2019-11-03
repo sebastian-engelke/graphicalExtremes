@@ -27,10 +27,10 @@
 #' multivariate Pareto distribution.
 #'
 #' @details
-#' The simulation follows the algorithm in CITE eng2018a.
+  #' The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
-#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
-#' distribution see CITE coles1991modelling.
+#' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+#' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' ## A 4-dimensional HR distribution
@@ -60,6 +60,9 @@
 #' d <- 4
 #' alpha <- c(.8, 1, .5, 2)
 #' rmpareto(n, "dirichlet", d, par = alpha)
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 rmpareto <- function(n,
@@ -196,7 +199,7 @@ rmpareto <- function(n,
 #' Sampling of a multivariate Pareto distribution on a tree
 #'
 #' Simulates exact samples of a multivariate Pareto distribution that
-#' is an extremal graphical model on a tree as defined in CITE eng2018a.
+#' is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
 #'
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
@@ -228,10 +231,10 @@ rmpareto <- function(n,
 #' multivariate Pareto distribution.
 #'
 #' @details
-#' The simulation follows the algorithm in CITE eng2018a.
+#' The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
-#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
-#' distribution see CITE coles1991modelling.
+#' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+#' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' ## A 4-dimensional HR tree model
@@ -250,6 +253,9 @@ rmpareto <- function(n,
 #'
 #' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
 #' rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
@@ -434,10 +440,10 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' multivariate max-stable distribution.
 #'
 #' @details
-#' The simulation follows the extremal function algorithm in CITE dom2016.
+#' The simulation follows the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
-#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
-#' distribution see CITE coles1991modelling.
+#' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+#' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' ## A 4-dimensional HR distribution
@@ -467,6 +473,9 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' d <- 4
 #' alpha <- c(.8, 1, .5, 2)
 #' rmstable(n, "dirichlet", d, par = alpha)
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 rmstable <- function(n,
@@ -608,7 +617,7 @@ rmstable <- function(n,
 #' Sampling of a multivariate max-stable distribution on a tree
 #'
 #' Simulates exact samples of a multivariate max-stable distribution that
-#' is an extremal graphical model on a tree as defined in CITE eng2018a.
+#' is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
 #'
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
@@ -640,11 +649,11 @@ rmstable <- function(n,
 #' multivariate max-stable distribution.
 #'
 #' @details
-#' The simulation follows a combination of the extremal function algorithm in CITE dom2016
-#' and the theory in CITE eng2018a to sample from a single extremal function.
+#' The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
+#' and the theory in \insertCite{eng2018a;textual}{graphicalExtremes} to sample from a single extremal function.
 #' For details on the parameters of the Huesler--Reiss, logistic
-#' and negative logistic distributions see CITE dom2016, and for the Dirichlet
-#' distribution see CITE coles1991modelling.
+#' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+#' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' ## A 4-dimensional HR tree model
@@ -663,6 +672,9 @@ rmstable <- function(n,
 #'
 #' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
 #' rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],

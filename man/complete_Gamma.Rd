@@ -27,7 +27,7 @@ implied by the conditional independencies.
 \details{
 For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
 distribution within the cliques of the \code{graph}, the remaining entries are implied
-by the conditional independence properties. For details see CITE eng2018a.
+by the conditional independence properties. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
 }
 \examples{
 ## Complete a 4-dimensional HR distribution
@@ -52,4 +52,7 @@ complete_Gamma(Gamma, my_graph)
 Gamma_vec <- c(.5, 1, 1.5, .8)
 complete_Gamma(Gamma_vec, my_graph)
 
+}
+\references{
+\insertAllCited{}
 }
