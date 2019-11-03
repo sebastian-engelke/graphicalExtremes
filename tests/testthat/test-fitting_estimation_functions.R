@@ -82,31 +82,37 @@ test_that("emp_chi_mat works", {
   res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data1
   res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data2
   res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data2
   res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data3
   res <- emp_chi_mat(data = dat, p = .95, pot = T)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data3
   res <- emp_chi_mat(data = dat, p = .95, pot = F)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
+  expect_equal(all(!is.na(res)), TRUE)
 })
 
 test_that("emp_vario works", {
