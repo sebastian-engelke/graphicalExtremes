@@ -45,10 +45,41 @@ dim_Gamma <- function(Gamma){
 #' @return Numeric vector.
 #'
 select_edges = function(graph){
+
   d = igraph::vcount(graph)
+  adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
+
+
   sel.edges = matrix(0, nrow=0, ncol=2)
-  for(i in 1:(d-1)) for(j in (i+1):d) if(igraph::is_chordal(
-    igraph::add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
+
+  for (i in 1:(d-1)){
+    for (j in (i+1):d){
+
+      # set new_edge
+      new_edge <- c(i, j)
+
+      # check if new_edge is already in the graph
+      is_already_edge <- adj_mat[i, j] | adj_mat[j, i]
+
+
+      # if not, add it to the graph; else skip to the next
+      if (!is_already_edge){
+        extended_graph <- igraph::add_edges(graph = graph, edges = new_edge)
+      } else {next}
+
+      # check if new graph is decomposable
+      is_chordal <- igraph::is_chordal(extended_graph)$chordal
+
+      # measure the length of the path from i to j in the old graph
+      length_path <- length(as.vector(
+        igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]]))
+
+       if(is_chordal & length_path !=2){
+        sel.edges <- rbind(sel.edges, new_edge, deparse.level = 0)
+      }
+    }
+  }
+
   return(sel.edges)
 }
 
@@ -73,4 +104,23 @@ set_graph_parameters <- function(graph){
 
   # return graph
   return(graph)
+}
+
+
+#' Censor dataset
+#'
+#' Censors each row of matrix \code{x} with vector \code{p}.
+#'
+#' @param x Numeric matrix \eqn{n \times d}{n x d}.
+#' @param p Numeric vector with \eqn{d} elements.
+#'
+#' @return Numeric matrix \eqn{n \times d}{n x d}.
+censor <- function(x,p){
+  f2 <- function(x,p){
+    x_is_less <- x <= p
+    y <- x
+    y[x_is_less] <- p[x_is_less]
+    return(y)
+  }
+  return(t(apply(x,1,f2,p)))
 }
