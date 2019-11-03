@@ -71,45 +71,28 @@ Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
 
 # Run tests
 test_that("emp_chi works", {
-  expect_error(emp_chi(data = data1[, 1], p = .95, pot = F))
-  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95, pot = T))
-  expect_length(emp_chi(data = data2, p = .95, pot = F), 1)
-  expect_length(emp_chi(data = data2, p = .95, pot = T), 1)
+  expect_error(emp_chi(data = data1[, 1], p = .95))
+  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95))
+  expect_length(emp_chi(data = data2, p = .95), 1)
 })
 
 test_that("emp_chi_mat works", {
-  dat <- data1
-  res <- emp_chi_mat(data = dat, p = .95, pot = T)
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data1
-  res <- emp_chi_mat(data = dat, p = .95, pot = F)
+  res <- emp_chi_mat(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data2
-  res <- emp_chi_mat(data = dat, p = .95, pot = T)
+  res <- emp_chi_mat(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
 
-  dat <- data2
-  res <- emp_chi_mat(data = dat, p = .95, pot = F)
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
 
   dat <- data3
-  res <- emp_chi_mat(data = dat, p = .95, pot = T)
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
-
-  dat <- data3
-  res <- emp_chi_mat(data = dat, p = .95, pot = F)
+  res <- emp_chi_mat(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)

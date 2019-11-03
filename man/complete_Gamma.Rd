@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{complete_Gamma}
 \alias{complete_Gamma}
-\title{Completion of \eqn{\Gamma} matrix on block graphs}
+\title{Completion of Gamma matrix on block graphs}
 \usage{
 complete_Gamma(Gamma, graph)
 }

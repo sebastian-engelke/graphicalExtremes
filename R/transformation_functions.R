@@ -1,4 +1,4 @@
-#' Completion of \eqn{\Gamma} matrix on block graphs
+#' Completion of Gamma matrix on block graphs
 #'
 #' Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
 #' edges within the cliques of the \code{graph}, it returns the full \eqn{\Gamma} matrix

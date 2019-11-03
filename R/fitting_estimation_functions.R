@@ -209,7 +209,7 @@ logdV_HR <- function(x,par){
     logdv <- - sum(log(x)) - log(x[i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * t(y)%*%Sm1%*%y
   }
   if (is.matrix(x)){
-    y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = F]
+    y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = FALSE]
     logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * diag(y%*%Sm1%*%t(y))
   }
   return(logdv)
@@ -577,9 +577,6 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
 
     # check if any proposed edge is already in the given graph
     adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
-
-    edges_mat <- igraph::ends(graph, igraph::E(graph))
-    edges_mat <-  rbind(edges_mat, cbind(edges_mat[, 2], edges_mat[, 1]))
 
     m <-  nrow(edges_to_add)
     check_new_edges <- 0
