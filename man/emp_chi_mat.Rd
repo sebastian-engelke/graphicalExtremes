@@ -2,25 +2,36 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{emp_chi_mat}
 \alias{emp_chi_mat}
-\title{Estimate matrix of \eqn{\chi}}
+\title{Empirical estimation of extremal correlation matrix \eqn{\chi}}
 \usage{
-emp_chi_mat(data, p, pot = FALSE)
+emp_chi_mat(data, p)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n \times d}{n x d}. A data matrix
-containing \eqn{d} variables.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
-\item{p}{Numeric, between 0 and 1. It is the probability threshold used to
+\item{p}{Numeric between 0 and 1. Probability used for the quantile to
 compute the \eqn{\chi} coefficient.}
-
-\item{pot}{Boolean. if TRUE, then pot-type estimation of EC is used.
-By default, \code{pot = FALSE}.}
 }
 \value{
-Numeric matrix \eqn{d\times d}{d x d}. The matrix containing the
-bivariate extremal coefficientes \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
+Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
+bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 }
 \description{
-Estimates empirically the extremal \eqn{\chi} correlation coefficient
-given the dataset \code{data}.
+Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
+}
+\examples{
+n <- 100
+d <- 4
+p <- .8
+Gamma <- cbind(c(0, 1.5, 1.5, 2),
+               c(1.5, 0, 2, 1.5),
+               c(1.5, 2, 0, 1.5),
+               c(2, 1.5, 1.5, 0))
+
+set.seed(123)
+my_data = rmstable(n, "HR", d = d, par = Gamma)
+
+emp_chi_mat(my_data, p)
+
 }

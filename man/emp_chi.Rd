@@ -2,28 +2,38 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{emp_chi}
 \alias{emp_chi}
-\title{Estimate \eqn{\chi}}
+\title{Empirical estimation of extremal correlation \eqn{\chi}}
 \usage{
-emp_chi(data, p, pot = FALSE)
+emp_chi(data, p)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n \times d}{n x d}. A data matrix
-containing \eqn{d} variables.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
-\item{p}{Numeric, between 0 and 1. It is the probability threshold used to
+\item{p}{Numeric between 0 and 1. Probability used for the quantile to
 compute the \eqn{\chi} coefficient.}
-
-\item{pot}{Boolean. if TRUE, then pot-type estimation of EC is used.
-By default, \code{pot = FALSE}.}
 }
 \value{
-Numeric. The empirical \eqn{\chi} coefficient between the \eqn{d}
-variables in \code{data}.
+Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
+for the \code{data}.
 }
 \description{
-Estimates the chi coefficient empirically.
+Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
 }
 \details{
 The \eqn{\chi} coefficient is a scalar coefficient that represents
 the extremal correlation between two variables.
+}
+\examples{
+n <- 100
+d <- 2
+p <- .8
+G <-  cbind(c(0, 1.5),
+            c(1.5, 0))
+
+set.seed(123)
+my_data = rmstable(n, "HR", d = d, par = G)
+
+emp_chi(my_data, p)
+
 }

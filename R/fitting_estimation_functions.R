@@ -1,21 +1,33 @@
-#' Estimate \eqn{\chi}
+#' Empirical estimation of extremal correlation \eqn{\chi}
 #'
-#' Estimates the chi coefficient empirically.
+#' Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
 #'
+#' @details
 #' The \eqn{\chi} coefficient is a scalar coefficient that represents
 #' the extremal correlation between two variables.
 #'
-#' @param data Numeric matrix \eqn{n \times d}{n x d}. A data matrix
-#' containing \eqn{d} variables.
-#' @param p Numeric, between 0 and 1. It is the probability threshold used to
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1. Probability used for the quantile to
 #' compute the \eqn{\chi} coefficient.
-#' @param pot Boolean. if TRUE, then pot-type estimation of EC is used.
-#' By default, \code{pot = FALSE}.
 #'
-#' @return Numeric. The empirical \eqn{\chi} coefficient between the \eqn{d}
-#' variables in \code{data}.
+#' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
+#' for the \code{data}.
+#' @examples
+#' n <- 100
+#' d <- 2
+#' p <- .8
+#' G <-  cbind(c(0, 1.5),
+#'             c(1.5, 0))
 #'
-emp_chi <- function(data, p, pot=FALSE){
+#' set.seed(123)
+#' my_data = rmstable(n, "HR", d = d, par = G)
+#'
+#' emp_chi(my_data, p)
+#'
+#' @export
+#'
+emp_chi <- function(data, p){
   if (!is.matrix(data)){
     stop("The data should be a matrix")
   }
@@ -25,47 +37,46 @@ emp_chi <- function(data, p, pot=FALSE){
   }
 
   data <- stats::na.omit(data)
-  n <- nrow(data)
   data <-  apply(data, 2, unif)
-  rowmax <- apply(data, 1, max)
   rowmin <- apply(data, 1, min)
-  eps <- .Machine$double.eps^0.5
-  qlim2 <- c(min(rowmax) + eps, max(rowmin) - eps)
-
-  qlim <- qlim2
-  nq <- length(p)
-  cu <- cbaru <- numeric(nq)
-  for (i in 1:nq) cu[i] <- mean(rowmax < p[i])
-  for (i in 1:nq) cbaru[i] <- mean(rowmin > p[i])
-  if(pot) chiu <- cbaru / (1-p)
-  if(!pot) chiu <- 2 - log(cu)/log(p)
-  return(chiu)
+  chi <- sapply(1:length(p), FUN = function(i) mean(rowmin > p[i])) / (1-p)
+  return(chi)
 }
 
 
-
-#' Estimate matrix of \eqn{\chi}
+#' Empirical estimation of extremal correlation matrix \eqn{\chi}
 #'
-#' Estimates empirically the extremal \eqn{\chi} correlation coefficient
-#' given the dataset \code{data}.
+#' Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
 #'
-#' @param data Numeric matrix \eqn{n \times d}{n x d}. A data matrix
-#' containing \eqn{d} variables.
 #' @inheritParams emp_chi
 #'
-#' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix containing the
-#' bivariate extremal coefficientes \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
+#' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
+#' bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
+#' @examples
+#' n <- 100
+#' d <- 4
+#' p <- .8
+#' Gamma <- cbind(c(0, 1.5, 1.5, 2),
+#'                c(1.5, 0, 2, 1.5),
+#'                c(1.5, 2, 0, 1.5),
+#'                c(2, 1.5, 1.5, 0))
 #'
-emp_chi_mat <- function(data, p, pot=FALSE){
+#' set.seed(123)
+#' my_data = rmstable(n, "HR", d = d, par = Gamma)
+#'
+#' emp_chi_mat(my_data, p)
+#'
+#' @export
+emp_chi_mat <- function(data, p){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
   chi <- apply(res, 1, function(x){
-    emp_chi(cbind(data[,x[1]], data[,x[2]]), p=p, pot=pot)
+    emp_chi(cbind(data[,x[1]], data[,x[2]]), p=p)
   })
   chi.mat <- matrix(NA, ncol=d, nrow=d)
   chi.mat[res] <- chi
-  chi.mat[res[,2:1]] <- chi
+  chi.mat[res[,2:1, drop=FALSE]] <- chi
   diag(chi.mat) <- 1
 
   return(chi.mat)
