@@ -39,10 +39,10 @@ multivariate max-stable distribution.
 Simulates exact samples of a multivariate max-stable distribution.
 }
 \details{
-The simulation follows the extremal function algorithm in CITE dom2016.
+The simulation follows the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}.
 For details on the parameters of the Huesler--Reiss, logistic
-and negative logistic distributions see CITE dom2016, and for the Dirichlet
-distribution see CITE coles1991modelling.
+and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }
 \examples{
 ## A 4-dimensional HR distribution
@@ -73,4 +73,7 @@ d <- 4
 alpha <- c(.8, 1, .5, 2)
 rmstable(n, "dirichlet", d, par = alpha)
 
+}
+\references{
+\insertAllCited{}
 }

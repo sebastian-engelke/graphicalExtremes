@@ -17,7 +17,7 @@
 #' @details
 #' For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
 #' distribution within the cliques of the \code{graph}, the remaining entries are implied
-#' by the conditional independence properties. For details see CITE eng2018a.
+#' by the conditional independence properties. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' ## Complete a 4-dimensional HR distribution
@@ -41,6 +41,9 @@
 #'
 #' Gamma_vec <- c(.5, 1, 1.5, .8)
 #' complete_Gamma(Gamma_vec, my_graph)
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 #'
@@ -151,7 +154,7 @@ complete_Gamma = function(Gamma, graph){
 #' The variogram uniquely determines the extremal graph structure of the
 #' corresponding Huesler--Reiss distribution. The conditional independencies
 #' can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
-#' defined in equation (10) in CITE eng2018a. !!! Refere to function Gamma2Sigma !!!
+#' defined in equation (10) in \insertCite{eng2018a;textual}{graphicalExtremes}. !!! Refere to function Gamma2Sigma !!!
 #'
 #' @examples
 #' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
@@ -160,6 +163,10 @@ complete_Gamma = function(Gamma, graph){
 #'                 c(2, 1.5, 1.5, 0))
 #'
 #' Gamma2graph(Gamma, to_plot = TRUE)
+#'
+#' @references
+#'  \insertAllCited{}
+#'
 #' @export
 Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
   null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
@@ -225,9 +232,6 @@ data2mpareto <- function(data, p){
 #' Transforms the \eqn{\Sigma^(k)} matrix from the definition of a
 #' Huesler--Reiss distribution to the corresponding \code{Gamma} matrix.
 #'
-#'
-#' @references \insertRef{asadi2015extremes}{graphicalExtremes}
-#' \insertRef{Rpack:bibtex}{Rdpack}
 #' @param S Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^(k)}
 #' from the definition of a Huesler--Reiss distribution.
 #' Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
@@ -246,7 +250,7 @@ data2mpareto <- function(data, p){
 #' corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
 #' If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 #' matrix with \code{k}th row and column
-#' containng zeros. For details see CITE eng2018a.
+#' containing zeros. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
 #'
 #' @return Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
 #'
@@ -257,6 +261,9 @@ data2mpareto <- function(data, p){
 #' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
 #'
 #' @importFrom Rdpack reprompt
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 Sigma2Gamma <- function(S, k = 1, full = FALSE){
@@ -309,7 +316,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' contains the graph structure corresponding to the Huesler--Reiss distribution
 #' with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
-#' that contain zeros. For details see CITE eng2018a.
+#' that contain zeros. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
 #'
 #' @return Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
 #' \code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
@@ -322,6 +329,9 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' Gamma2Sigma(Gamma, k = 1, full = FALSE)
 #'
 #' @importFrom Rdpack reprompt
+#'
+#' @references
+#'  \insertAllCited{}
 #'
 #' @export
 Gamma2Sigma <- function(Gamma,k=1,full=FALSE){

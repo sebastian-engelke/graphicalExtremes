@@ -34,7 +34,7 @@ Huesler--Reiss distribution can be transformed into a the
 corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
 If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 matrix with \code{k}th row and column
-containng zeros. For details see CITE eng2018a.
+containing zeros. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
 }
 \examples{
 Sigma1 <-  rbind(c(1.5, 0.5, 1),
@@ -44,6 +44,5 @@ Sigma2Gamma(Sigma1, k = 1, full = FALSE)
 
 }
 \references{
-\insertRef{asadi2015extremes}{graphicalExtremes}
-\insertRef{Rpack:bibtex}{Rdpack}
+\insertAllCited{}
 }

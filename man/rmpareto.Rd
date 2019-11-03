@@ -39,10 +39,10 @@ multivariate Pareto distribution.
 Simulates exact samples of a multivariate Pareto distribution.
 }
 \details{
-The simulation follows the algorithm in CITE eng2018a.
+The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
 For details on the parameters of the Huesler--Reiss, logistic
-and negative logistic distributions see CITE dom2016, and for the Dirichlet
-distribution see CITE coles1991modelling.
+and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
+distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }
 \examples{
 ## A 4-dimensional HR distribution
@@ -73,4 +73,7 @@ d <- 4
 alpha <- c(.8, 1, .5, 2)
 rmpareto(n, "dirichlet", d, par = alpha)
 
+}
+\references{
+\insertAllCited{}
 }
