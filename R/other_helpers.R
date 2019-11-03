@@ -45,9 +45,28 @@ dim_Gamma <- function(Gamma){
 #' @return Numeric vector.
 #'
 select_edges = function(graph){
+  browser()
   d = igraph::vcount(graph)
+  edges_mat <- igraph::ends(graph, igraph::E(graph))
+  edges_mat <-  rbind(edges_mat, cbind(edges_mat[, 2], edges_mat[, 1]))
+  m <-  nrow(edges_to_add)
   sel.edges = matrix(0, nrow=0, ncol=2)
-  for(i in 1:(d-1)) for(j in (i+1):d) if(igraph::is_chordal(
+  for (i in 1:(d-1)){
+    for (j in (i+1):d){
+      new_edge <- c(i, j)
+
+      # check if new_edge is in edges_mat
+      if (m > 0) {
+        check_new_edges <- 0
+
+      }
+
+
+
+      igraph::add_edges(graph = graph,
+                        edges = new_edge)
+    }
+  } if(igraph::is_chordal(
     igraph::add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
   return(sel.edges)
 }
@@ -73,4 +92,23 @@ set_graph_parameters <- function(graph){
 
   # return graph
   return(graph)
+}
+
+
+#' Censor dataset
+#'
+#' Censors each row of matrix \code{x} with vector \code{p}.
+#'
+#' @param x Numeric matrix \eqn{n \times d}{n x d}.
+#' @param p Numeric vector with \eqn{d} elements.
+#'
+#' @return Numeric matrix \eqn{n \times d}{n x d}.
+censor <- function(x,p){
+  f2 <- function(x,p){
+    x_is_less <- x <= p
+    y <- x
+    y[x_is_less] <- p[x_is_less]
+    return(y)
+  }
+  return(t(apply(x,1,f2,p)))
 }

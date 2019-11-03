@@ -198,7 +198,7 @@ logdV_HR <- function(x,par){
     logdv <- - sum(log(x)) - log(x[i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * t(y)%*%Sm1%*%y
   }
   if (is.matrix(x)){
-    y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i]
+    y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = F]
     logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * diag(y%*%Sm1%*%t(y))
   }
   return(logdv)
@@ -278,23 +278,10 @@ logdVK_HR <- function(x, K, par){
 #' @return Numeric. The full censored log-likelihood of HR model.
 #'
 logLH_HR <- function(data, Gamma, cens = FALSE){
-  # helper function
-  censor <- function(x,p){
-    f2 <- function(x,p){
-      y <- c()
-      y[x>p] <- x[x>p]
-      y[x<=p] <- p[x<=p]
-      return(y)
-    }
-    return(t(apply(x, 1, f2, p)))
-  }
-
-  # function body
   if (is.vector(data)){
     d <- length(data)
     n = 1
     data <- t(as.matrix(data))
-    # !!! put mistake because n = 1??
   }
   if (is.matrix(data)){
     d <- NCOL(data)
@@ -312,6 +299,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
   p <- rep(1,d)
   data.p <- censor(data,p)
   r <- nrow(data.p)
+
   L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
   I <- which(lapply(L,length)>0 & lapply(L,length)<d)
   J <- which(lapply(L,length)==d)
@@ -395,15 +383,6 @@ fmpareto_HR <- function(data,
   # negative log likelihood function
   if(cens){
     # censor below the (multivariate) threshold
-    censor <- function(x,p){
-      f2 <- function(x,p){
-        y <- c()
-        y[x>p] <- x[x>p]
-        y[x<=p] <- p[x<=p]
-        return(y)
-      }
-      return(t(apply(x,1,f2,p)))
-    }
     data.p <- censor(data,p)
     r <- nrow(data.p)
 
@@ -545,7 +524,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
   nnodes = igraph::vcount(graph)
   if (nnodes != NCOL(data)){
     stop(paste("The number of nodes in the graph doesn't match with the number",
-               "of variables (i.e., columns) in the data matrix"))
+               "of variables (i.e., columns) in the data matrix."))
   }
 
   # check if you need to rescale data or not
@@ -582,13 +561,36 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
 
   # if you want to add some edges
   if(!is.null(edges_to_add)){
+    # check if edges_to_add is vector
+    if(is.vector(edges_to_add)) edges_to_add = t(as.matrix(edges_to_add))
+
+    # check if any proposed edge is already in the given graph
+    edges_mat <- igraph::ends(graph, igraph::E(graph))
+    edges_mat <-  rbind(edges_mat, cbind(edges_mat[, 2], edges_mat[, 1]))
+
+    m <-  nrow(edges_to_add)
+    check_new_edges <- 0
+    for (k in 1:m){
+      current_edge <- edges_to_add[k, ]
+      check_new_edges <-
+        max(check_new_edges,
+            sum(apply(edges_mat, 1, function(x) {identical(x, current_edge)})))
+
+      if (check_new_edges > 0) {break}
+    }
+
+    if (check_new_edges > 0){
+      stop(paste("The argument edges_to_add cannot contain edges already",
+                 "present in the given graph."))
+    }
+
+
     stop.flag = FALSE
     AIC = 2*igraph::ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
                                                   Gamma = Ghat[[l]], cens=cens)
     added.edges = c()
 
     while(length(edges_to_add)!=0 & stop.flag==FALSE){
-      if(is.vector(edges_to_add)) edges_to_add = t(as.matrix(edges_to_add))
       m = nrow(edges_to_add)
       AIC.tmp = rep(NA,times=m)
       Ghat.tmp = list()

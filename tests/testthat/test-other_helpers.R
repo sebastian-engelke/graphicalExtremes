@@ -18,3 +18,10 @@ test_that("dim_Gamma works", {
   expect_equal(dim_Gamma(G2), 1)
   expect_equal(dim_Gamma(G3), 3)
 })
+
+test_that("select_edges works", {
+  small_graph <- igraph::make_empty_graph(n = 4, directed = FALSE)
+  small_graph <- igraph::add_edges(small_graph, c(1, 2, 2, 3, 2, 4))
+
+  select_edges(small_graph)
+})

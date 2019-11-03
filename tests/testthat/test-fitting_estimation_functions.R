@@ -9,6 +9,7 @@ G1 <-  cbind(c(0, 1.5, 1.5, 2),
              c(1.5, 2, 0, 1.5),
              c(2, 1.5, 1.5, 0))
 data1 <- rmpareto(n = n, model = "HR", d = NCOL(G1), par = G1)
+
 G2 <- G1[-(3:4), -(3:4)]
 data2 <- rmpareto(n = n, model = "HR", d = NCOL(G2), par = G2)
 
@@ -58,12 +59,6 @@ igraph::is_chordal(block)$chordal
 
 non_connected <- block
 non_connected[1, 2] <- non_connected[2, 1] <- 0
-
-block2 <- igraph::graph_from_adjacency_matrix(
-  rbind(c(0, 1),
-        c(1, 0)),
-  mode = "undirected")
-igraph::is_chordal(block2)$chordal
 
 Gamma3_completed <- rbind(c(0, 2, 4, 4, 4, 6, 6),
                           c(2, 0, 2, 2, 2, 4, 4),
@@ -190,6 +185,10 @@ test_that("logLH_HR works", {
   expect_type(res, "double")
   expect_length(res, 1)
 
+  res <- logLH_HR(data1[1, ], G1)
+  expect_type(res, "double")
+  expect_length(res, 1)
+
   res <- logLH_HR(data1, G1, cens = FALSE)
   expect_type(res, "double")
   expect_length(res, 1)
@@ -203,24 +202,117 @@ test_that("logLH_HR works", {
 test_that("fmpareto_graph_HR works", {
   expect_warning(fmpareto_graph_HR(graph = igraph::as.directed(block),
                              data = data3, p = .95, cens = FALSE))
-  # expect_warning(fmpareto_graph_HR(graph = igraph::as.directed(block),
-                             # data = data3, p = .95, cens = TRUE))
   expect_error(fmpareto_graph_HR(graph = non_connected,
                            data = data3, p = .95, cens = FALSE))
   expect_error(fmpareto_graph_HR(graph = non_decomposable,
                            data = data3, p = .95, cens = FALSE))
+  expect_error(fmpareto_graph_HR(graph = non_block,
+                                 data = data3, p = .95, cens = FALSE))
+  expect_error(fmpareto_graph_HR(graph = block,
+                                 data = data3[, -1], p = .95, cens = FALSE))
 
 
-  data <- rmpareto(1e3, "HR", d = 2, Gamma3_completed[1:2, 1:2])
-  res <- fmpareto_graph_HR(block2, data, p = .95)
+
+  d <- 4
+  v_idx <- c(5, 4, 3, 7)
+  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
+  small_block <- igraph::induced_subgraph(block, v_idx)
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+  sel_edges <- rbind(c(2, 4), c(2, 1))
+
+  res <- fmpareto_graph_HR(small_block, data = data, p = .95,
+                           cens = FALSE, edges_to_add = NULL)
   expect_type(res, "list")
   expect_length(res, 2)
+  expect_equal(class(res$graph), "igraph")
+  expect_equal(t(res$Gamma), res$Gamma)
+
+  res <- fmpareto_graph_HR(small_block, data = data, p = NULL,
+                           cens = FALSE, edges_to_add = NULL)
+  expect_type(res, "list")
+  expect_length(res, 2)
+  expect_equal(class(res$graph), "igraph")
+  expect_equal(t(res$Gamma), res$Gamma)
+
+  expect_error(fmpareto_graph_HR(small_block, data = data, p = NULL,
+                                 cens = FALSE, edges_to_add = sel_edges))
+
+
+  sel_edges <- rbind(c(2, 4), c(3, 4))
+  res <- fmpareto_graph_HR(small_block, data = data, p = NULL,
+                           cens = FALSE, edges_to_add = sel_edges)
+  expect_type(res, "list")
+  expect_length(res, 4)
+  expect_equal(class(res$graph[[1]]), "igraph")
+  expect_equal(t(res$Gamma[[1]]), res$Gamma[[1]])
+
+  sel_edges <- c(2, 4)
+  res <- fmpareto_graph_HR(small_block, data = data, p = NULL,
+                           cens = FALSE, edges_to_add = sel_edges)
+  expect_type(res, "list")
+  expect_length(res, 4)
+  expect_equal(class(res$graph[[1]]), "igraph")
+  expect_equal(t(res$Gamma[[1]]), res$Gamma[[1]])
+  expect_equal(length(res$Gamma), NROW(res$added.edges) + 1)
+
+  small_graph <- igraph::make_empty_graph(n = 4, directed = FALSE)
+  small_graph <- igraph::add_edges(small_graph, c(1, 2, 2, 3, 2, 4))
+  sel_edges <- c(1, 3)
+  res <- fmpareto_graph_HR(small_graph, data = data, p = NULL,
+                           cens = FALSE, edges_to_add = sel_edges)
+  expect_type(res, "list")
+  expect_length(res, 4)
+  expect_equal(class(res$graph[[1]]), "igraph")
+  expect_equal(t(res$Gamma[[1]]), res$Gamma[[1]])
+  expect_equal(length(res$Gamma), NROW(res$added.edges) + 1)
 })
 
 test_that("fmpareto_HR works", {
+  d <- 3
+  v_idx <- c(2, 4, 1)
+  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
+  small_block <- igraph::induced_subgraph(block, v_idx)
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+  init_param <- Gamma_small_block[upper.tri(Gamma_small_block)]
+
+  res <- fmpareto_HR(data = data, p = 0.95, cens = FALSE,
+                     init = init_param)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(t(res$hessian), res$hessian)
+
+  init_param <- c(2, 2)
+  res <- fmpareto_HR(data = data, p = 0.95, cens = FALSE,
+                     init = init_param, graph = small_block)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(t(res$hessian), res$hessian)
+
+
+  res <- fmpareto_HR(data = data, p = 0.95, cens = TRUE,
+                     init = init_param, graph = small_block)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(t(res$hessian), res$hessian)
 
 })
 
 test_that("mst_HR works", {
+  d <- 3
+  v_idx <- c(2, 4, 1)
+  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+
+  res <- mst_HR(data = data, p = NULL, cens = FALSE)
+  expect_equal(class(res), "igraph")
+
+  res <- mst_HR(data = data, p = 0.95, cens = FALSE)
+  expect_equal(class(res), "igraph")
+
+  res <- mst_HR(data = data, p = NULL, cens = TRUE)
+  expect_equal(class(res), "igraph")
 
 })
