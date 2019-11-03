@@ -24,7 +24,7 @@ emp_chi <- function(data, p, pot=FALSE){
     stop("The data should be a matrix with at least two columns.")
   }
 
-  data <- na.omit(data)
+  data <- stats::na.omit(data)
   n <- nrow(data)
   data <-  apply(data, 2, unif)
   rowmax <- apply(data, 1, max)
@@ -93,7 +93,7 @@ emp_vario <- function(data, k=NULL, p=NULL){
   G.fun = function(i, data){
     idx = which(data[,i]>1)
     if(length(idx) > 1)
-      xx = Sigma2Gamma(cov(log(data[idx,])), full=TRUE)
+      xx = Sigma2Gamma(stats::cov(log(data[idx,])), full=TRUE)
     else{
       xx = matrix(0,d,d)
     }
@@ -458,7 +458,7 @@ fmpareto_HR <- function(data,
   }
 
   # optimize likelihood
-  opt <- optim(init, nllik, hessian = TRUE,
+  opt <- stats::optim(init, nllik, hessian = TRUE,
                control = list(maxit = maxit), method = method)
 
   z <- list()
@@ -583,7 +583,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
   # if you want to add some edges
   if(!is.null(edges_to_add)){
     stop.flag = FALSE
-    AIC = 2*ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
+    AIC = 2*igraph::ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
                                                   Gamma = Ghat[[l]], cens=cens)
     added.edges = c()
 
@@ -604,9 +604,9 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
                                       edges = edges_to_add[k,])
 
         # if the obtained graph is decomposable
-        if(is_chordal(graph.tmp)$chordal){
+        if(igraph::is_chordal(graph.tmp)$chordal){
           # find list of max cliques
-          cli = max_cliques(graph.tmp)
+          cli = igraph::max_cliques(graph.tmp)
           # find in which clique the new proposed edge is. It can be in at most
           # one clique, otherwise, the original graph were not decomposable.
           intersections <-
@@ -637,7 +637,7 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
         cat("\nAdded edge ", edges_to_add[add.idx,])
         l = l+1
         graph.cur[[l]] =
-          add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
+          igraph::add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
         graph.cur[[l]] <- set_graph_parameters(graph.cur[[l]])
         Ghat[[l]] = Ghat.tmp[[add.idx]]
         AIC = c(AIC, AIC.tmp[add.idx])
@@ -676,7 +676,7 @@ mst_HR = function(data, p = NULL, cens = FALSE){
 
   n <- nrow(data)
   d = ncol(data)
-  graph.full <- make_full_graph(d)
+  graph.full <- igraph::make_full_graph(d)
   G.emp = emp_vario(data=data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
@@ -691,7 +691,7 @@ mst_HR = function(data, p = NULL, cens = FALSE){
   bivLLH.mat[res] <- bivLLH
   bivLLH.mat[res[,2:1]] <- bivLLH
   diag(bivLLH.mat) <- 0
-  mst.tree = igraph::mst(graph=graph.full, weights = -bivLLH.mat[ends(graph.full,E(graph.full))], algorithm = "prim")
+  mst.tree = igraph::mst(graph=graph.full, weights = -bivLLH.mat[igraph::ends(graph.full,igraph::E(graph.full))], algorithm = "prim")
 
   # set graphical parameters
   mst.tree <- set_graph_parameters(mst.tree)

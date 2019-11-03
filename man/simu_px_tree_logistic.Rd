@@ -7,7 +7,7 @@
 simu_px_tree_logistic(n, theta, A)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
 \item{theta}{Numeric vector with 1 or \eqn{d - 1} elements.
 Assume that the entry are such that \eqn{0 < \theta < 1}.}

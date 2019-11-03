@@ -16,7 +16,7 @@ simu_px_HR <- function(n, d, idx, trend, chol_mat) {
 
   # function body
   d <- nrow(chol_mat)
-  proc <- t(chol_mat) %*% matrix(rnorm(d * n), ncol = n) - trend
+  proc <- t(chol_mat) %*% matrix(stats::rnorm(d * n), ncol = n) - trend
   proc <- exp(t(proc) - proc[idx, ])
   return(proc)
 }
@@ -42,9 +42,9 @@ simu_px_logistic <- function(n, d, idx, theta) {
 
 
   # function body
-  res <- matrix(1 / gamma(1 - theta) * (-log(runif(n * d))) ^ (-theta),
+  res <- matrix(1 / gamma(1 - theta) * (-log(stats::runif(n * d))) ^ (-theta),
                       nrow = n, ncol = d)
-  res[cbind(1:n, idx)] <- 1 / gamma(1 - theta) * rgamma(n, shape = 1 - theta) ^
+  res[cbind(1:n, idx)] <- 1 / gamma(1 - theta) * stats::rgamma(n, shape = 1 - theta) ^
     (-theta)
   return(res / res[cbind(1:n, idx)])
 }
@@ -68,10 +68,10 @@ simu_px_neglogistic <- function(n, d, idx, theta) {
   }
 
   # function body
-  res <- matrix(rweibull(n * d, shape = theta, scale = 1 /
+  res <- matrix(stats::rweibull(n * d, shape = theta, scale = 1 /
                            gamma(1 + 1 / theta)), nrow = n, ncol = d)
   res[cbind(1:n, idx)] <- 1 / gamma(1 + 1 / theta) *
-    rgamma(n, shape = 1 + 1 / theta) ^ (1 / theta)
+    stats::rgamma(n, shape = 1 + 1 / theta) ^ (1 / theta)
   return(res / res[cbind(1:n, idx)])
 }
 
@@ -98,7 +98,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
   shape[idx] <- alpha[idx] + 1
   shape.mat <- matrix(shape, nrow = d, ncol = n)
   rate.mat <- matrix(alpha, nrow = d, ncol = n)
-  res <- t(matrix(rgamma(d * n, shape = shape.mat, rate = rate.mat),
+  res <- t(matrix(stats::rgamma(d * n, shape = shape.mat, rate = rate.mat),
                   nrow = d, ncol = n))
   return(res / res[cbind(1:n, idx)])
 }
@@ -122,7 +122,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 #'
 simu_px_tree_HR <- function(n, Gamma_vec, A) {
   res <- exp(A %*%
-               matrix(rnorm(length(Gamma_vec) * n,
+               matrix(stats::rnorm(length(Gamma_vec) * n,
                             mean = -Gamma_vec / 2,
                             sd = sqrt(Gamma_vec)),
                       ncol = n))
@@ -162,9 +162,9 @@ simu_px_tree_logistic <- function(n, theta, A) {
   # function body
   res <- exp(A %*%
                log(matrix(1 / gamma(1 - theta) *
-                            (-log(runif(n * nb.edges))) ^ (-theta) /
+                            (-log(stats::runif(n * nb.edges))) ^ (-theta) /
                             (1 / gamma(1 - theta) *
-                               rgamma(n * nb.edges, shape = 1 - theta) ^
+                               stats::rgamma(n * nb.edges, shape = 1 - theta) ^
                                (-theta)), ncol = n)))
   return(t(res))
 }
@@ -198,9 +198,9 @@ simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {
   rate.start <- matrix(alpha.start, nrow = e, ncol = n)
   shape.end <- matrix(alpha.end, nrow = e, ncol = n)
   rate.end <- matrix(alpha.end, nrow = e, ncol = n)
-  sim.start <-  matrix(rgamma(e * n, shape = shape.start, rate = rate.start),
+  sim.start <-  matrix(stats::rgamma(e * n, shape = shape.start, rate = rate.start),
                      nrow = e, ncol = n)
-  sim.end <- matrix(rgamma(e * n, shape = shape.end, rate = rate.end),
+  sim.end <- matrix(stats::rgamma(e * n, shape = shape.end, rate = rate.end),
                    nrow = e, ncol = n)
   res <- exp(A %*% log(sim.end / sim.start))
   return(t(res))

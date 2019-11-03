@@ -7,9 +7,9 @@
 rmstable_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
-\item{model}{String. The parametric model type. Is one of:
+\item{model}{The parametric model type; one of:
 \itemize{
 \item \code{HR} (default),
 \item \code{logistic},
@@ -17,19 +17,22 @@ rmstable_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 }}
 
 \item{tree}{Graph object from \code{igraph} package.
-This object represents a tree, i.e., an
+This object must be tree, i.e., an
 undirected graph that is connected and has no cycles.}
 
-\item{par}{Is the respective parameter for the given \code{model}.
-Is one of:
+\item{par}{Respective parameter for the given \code{model}, that is,
 \itemize{
-\item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
-variogram, if \code{model = HR}. Alternatively, can be a vector of
-length \eqn{d - 1}, containing the entries of the variogram corresponding
+\item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+where only the entries corresponding to the edges of the \code{tree} are used,
+if \code{model = HR}. Alternatively, can be a vector of
+length \eqn{d - 1} containing the entries of the variogram corresponding
 to the edges of the given \code{tree}.
-\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
-\item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2} containing
-the relative \eqn{\alpha > 0} coefficients, if \code{model = dirichlet}.
+\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+containing the logistic parameters corresponding
+to the edges of the given \code{tree}, if \code{model = logistic}.
+\item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
+contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }
 \value{

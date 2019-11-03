@@ -30,4 +30,5 @@ the paper of Engelke, S., and Hitz, A.,
 }
 \references{
 \insertRef{asadi2015extremes}{graphicalExtremes}
+\insertRef{Rpack:bibtex}{Rdpack}
 }

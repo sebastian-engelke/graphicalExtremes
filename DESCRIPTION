@@ -3,7 +3,7 @@ Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
-Depends: R (>= 3.6.1)
+Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -15,5 +15,6 @@ Imports:
     mvtnorm (>= 1.0.10),
     matrixcalc (>= 1.0.3),
     Rdpack,
-    stats (>= 3.6.1)
+    stats (>= 3.6.1),
+    grDevices (>= 3.6.1)
 RdMacros: Rdpack

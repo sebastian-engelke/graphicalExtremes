@@ -45,9 +45,10 @@ dim_Gamma <- function(Gamma){
 #' @return Numeric vector.
 #'
 select_edges = function(graph){
-  d = vcount(graph)
+  d = igraph::vcount(graph)
   sel.edges = matrix(0, nrow=0, ncol=2)
-  for(i in 1:(d-1)) for(j in (i+1):d) if(is_chordal(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
+  for(i in 1:(d-1)) for(j in (i+1):d) if(igraph::is_chordal(
+    igraph::add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
   return(sel.edges)
 }
 
@@ -63,8 +64,8 @@ select_edges = function(graph){
 #' @return Graph object from \code{igraph} package.
 set_graph_parameters <- function(graph){
   # set parameters
-  igraph::V(graph)$color <- adjustcolor(col = "#4477AA", alpha.f = 0.4)
-  igraph::V(graph)$frame.color <- adjustcolor(col = "#4477AA", alpha.f = 1)
+  igraph::V(graph)$color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 0.4)
+  igraph::V(graph)$frame.color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 1)
   igraph::V(graph)$label.color <- "black"
   igraph::V(graph)$size <- 15
   igraph::E(graph)$width <- 2

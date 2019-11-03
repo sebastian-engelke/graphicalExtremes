@@ -7,9 +7,9 @@
 simu_px_HR(n, d, idx, trend, chol_mat)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
-\item{d}{Positive integer. Dimension of the multivariate Pareto
+\item{d}{Dimension of the multivariate Pareto
 distribution.}
 
 \item{idx}{Integer. Index corresponding to the variable over which

@@ -7,9 +7,9 @@
 simu_px_logistic(n, d, idx, theta)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
-\item{d}{Positive integer. Dimension of the multivariate Pareto
+\item{d}{Dimension of the multivariate Pareto
 distribution.}
 
 \item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from

@@ -7,7 +7,7 @@
 simu_px_tree_dirichlet(n, alpha.start, alpha.end, A)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
 \item{alpha.start}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
 the number of nodes in the tree (and \eqn{d - 1} is the number of edges).

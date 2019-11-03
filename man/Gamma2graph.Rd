@@ -13,8 +13,8 @@ variogram.}
 \item{to_plot}{Boolean. If \code{TRUE} (default), it plots the produced
 graph.}
 
-\item{...}{Graphical parameters for the \code{\link[igraph]{plot}} function
-of the package \code{igraph}.}
+\item{...}{Graphical parameters for the \code{\link[igraph]{plot.igraph}}
+function of the package \code{igraph}.}
 }
 \value{
 Graph object from \code{igraph} package. An undirected graph.

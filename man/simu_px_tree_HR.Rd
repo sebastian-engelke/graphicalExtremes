@@ -7,7 +7,7 @@
 simu_px_tree_HR(n, Gamma_vec, A)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
 \item{Gamma_vec}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
 number of nodes in the tree (and \eqn{d - 1} is the number of edges).}

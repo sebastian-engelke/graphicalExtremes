@@ -2,4 +2,5 @@
 
 export(Gamma2graph)
 export(rmpareto)
+export(rmstable)
 importFrom(Rdpack,reprompt)

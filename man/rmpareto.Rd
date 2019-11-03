@@ -2,15 +2,15 @@
 % Please edit documentation in R/simulation_functions.R
 \name{rmpareto}
 \alias{rmpareto}
-\title{Simulate samples of multivariate Pareto distribution}
+\title{Sampling of a multivariate Pareto distribution}
 \usage{
 rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
   d, par)
 }
 \arguments{
-\item{n}{Positive integer. Number of simulations.}
+\item{n}{Number of simulations.}
 
-\item{model}{String. The parametric model type. Is one of:
+\item{model}{The parametric model type; one of:
 \itemize{
 \item \code{HR} (default),
 \item \code{logistic},
@@ -18,34 +18,59 @@ rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
 \item \code{dirichlet}.
 }}
 
-\item{d}{Positive integer. Dimension of the multivariate Pareto
+\item{d}{Dimension of the multivariate Pareto
 distribution.}
 
-\item{par}{Is the respective parameter for the given \code{model}.
-Is one of:
+\item{par}{Respective parameter for the given \code{model}, that is,
 \itemize{
-\item \eqn{\Gamma}, numeric matrix representing a \eqn{d \times d}{d x d}
-variogram, if \code{model = HR}.
+\item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+if \code{model = HR}.
 \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
 \item \eqn{\theta > 0}, if \code{model = neglogistic}.
-\item \eqn{\alpha > 0}, numeric vector of size \code{d},
+\item \eqn{\alpha}, numeric vector of size \code{d} with positive entries,
 if \code{model = dirichlet}.
 }}
 }
 \value{
-Numeric matrix of size \eqn{n \times d}{n x d}.
-The simulated multivariate Pareto data.
+Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+multivariate Pareto distribution.
 }
 \description{
-Simulates exact samples of multivariate Pareto distributions.
+Simulates exact samples of a multivariate Pareto distribution.
+}
+\details{
+The simulation follows the algorithm in CITE eng2018a.
+For details on the parameters of the Huesler--Reiss, logistic
+and negative logistic distributions see CITE dom2016, and for the Dirichlet
+distribution see CITE coles1991modelling.
 }
 \examples{
-n <- 7
+## A 4-dimensional HR distribution
+n <- 10
 d <- 4
 G <-  cbind(c(0, 1.5, 1.5, 2),
             c(1.5, 0, 2, 1.5),
             c(1.5, 2, 0, 1.5),
             c(2, 1.5, 1.5, 0))
 
-rmpareto(n, d = d, par = G)
+rmpareto(n, "HR", d = d, par = G)
+
+## A 3-dimensional logistic distribution
+n <- 10
+d <- 3
+theta <- .6
+rmpareto(n, "logistic", d, par = theta)
+
+## A 5-dimensional negative logistic distribution
+n <- 10
+d <- 5
+theta <- 1.5
+rmpareto(n, "neglogistic", d, par = theta)
+
+## A 4-dimensional Dirichlet distribution
+n <- 10
+d <- 4
+alpha <- c(.8, 1, .5, 2)
+rmpareto(n, "dirichlet", d, par = alpha)
+
 }

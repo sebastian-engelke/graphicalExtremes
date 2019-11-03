@@ -113,8 +113,8 @@ complete_Gamma = function(Gamma, graph){
 #' variogram.
 #' @param to_plot Boolean. If \code{TRUE} (default), it plots the produced
 #' graph.
-#' @param ... Graphical parameters for the \code{\link[igraph]{plot}} function
-#' of the package \code{igraph}.
+#' @param ... Graphical parameters for the \code{\link[igraph]{plot.igraph}}
+#' function of the package \code{igraph}.
 #'
 #' @return Graph object from \code{igraph} package. An undirected graph.
 #'
@@ -214,6 +214,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' \url{https://arxiv.org/abs/1812.01734}.
 #'
 #' @references \insertRef{asadi2015extremes}{graphicalExtremes}
+#' \insertRef{Rpack:bibtex}{Rdpack}
 #'
 #'
 #' @param Gamma Numeric matrix \eqn{d\times d}{d x d}. It represents a variogram
@@ -297,7 +298,7 @@ chi2Gamma <- function(chi){
   if (any(chi < 0 | chi > 1)){
     stop("The argument chi must be between 0 and 1.")
   }
-  Gamma <- (2 * qnorm(1 - 0.5 * chi)) ^ 2
+  Gamma <- (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2
   return(Gamma)
 }
 

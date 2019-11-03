@@ -209,15 +209,15 @@ test_that("chi2Gamma works", {
   expect_error(chi2Gamma(2))
   expect_equal(chi2Gamma(0), Inf)
   expect_equal(chi2Gamma(1), 0)
-  expect_equal(chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+  expect_equal(chi2Gamma(chi),  (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2)
 
   chi <- matrix(runif(4 * 4), nrow = 4, ncol = 4)
   diag(chi) <- 1
   res <- chi2Gamma(chi)
-  expect_equal(res, (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+  expect_equal(res, (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2)
 
   theta <- 2 - chi
-  expect_equal(chi2Gamma(chi), (2*qnorm(theta/2))^2)
+  expect_equal(chi2Gamma(chi), (2*stats::qnorm(theta/2))^2)
 })
 
 test_that("Gamma2chi works", {
@@ -225,10 +225,10 @@ test_that("Gamma2chi works", {
   expect_error(chi2Gamma(2))
   expect_equal(chi2Gamma(0), Inf)
   expect_equal(chi2Gamma(1), 0)
-  expect_equal(chi2Gamma(chi),  (2 * qnorm(1 - 0.5 * chi)) ^ 2)
+  expect_equal(chi2Gamma(chi),  (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2)
 
   theta <- 2 - chi
-  expect_equal(chi2Gamma(chi), (2*qnorm(theta/2))^2)
+  expect_equal(chi2Gamma(chi), (2*stats::qnorm(theta/2))^2)
 })
 
 test_that("Gamma2chi_3D works", {

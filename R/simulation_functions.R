@@ -179,7 +179,7 @@ rmpareto <- function(n,
           stop("The generated sample has wrong size.")
         }
 
-        proc <- proc / rowSums(proc) / (1 - runif(NROW(proc)))
+        proc <- proc / rowSums(proc) / (1 - stats::runif(NROW(proc)))
         idx.sim <- which(apply(proc, 1, max) > 1)
         res <- rbind(res, proc[idx.sim, ])
         n.total <- NROW(res)
@@ -220,7 +220,7 @@ rmpareto <- function(n,
 #' to the edges of the given \code{tree}, if \code{model = logistic}.
 #' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
 #' contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
-#' for each of the edges in \cote{trDee}, if \code{model = dirichlet}.
+#' for each of the edges in \code{tree}, if \code{model = dirichlet}.
 #' }
 #'
 #'
@@ -369,7 +369,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
           stop("The generated sample has wrong size.")
         }
 
-        proc <- proc / rowSums(proc) / (1 - runif(NROW(proc)))
+        proc <- proc / rowSums(proc) / (1 - stats::runif(NROW(proc)))
         idx.sim <- which(apply(proc, 1, max) > 1)
         res <- rbind(res, proc[idx.sim, ])
         n.total <- NROW(res)
@@ -538,7 +538,7 @@ rmstable <- function(n,
   counter <- rep(0, times = n)
   res <- matrix(0, nrow = n, ncol = d)
   for (k in 1:d) {
-    poisson <- rexp(n)
+    poisson <- stats::rexp(n)
 
     while (any(1 / poisson > res[, k])) {
       ind <- (1 / poisson > res[, k])
@@ -573,7 +573,7 @@ rmstable <- function(n,
         res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
                                  proc[ind.upd, ])
       }
-      poisson[ind] <- poisson[ind] + rexp(n.ind)
+      poisson[ind] <- poisson[ind] + stats::rexp(n.ind)
     }
   }
 
@@ -708,7 +708,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   counter <- rep(0, times = n)
   res <- matrix(0, nrow = n, ncol = d)
   for (k in 1:d) {
-    poisson <- rexp(n)
+    poisson <- stats::rexp(n)
 
     while (any(1 / poisson > res[, k])) {
       ind <- (1 / poisson > res[, k])
@@ -747,7 +747,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
         res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
                                 proc[ind.upd, ])
       }
-      poisson[ind] <- poisson[ind] + rexp(n.ind)
+      poisson[ind] <- poisson[ind] + stats::rexp(n.ind)
     }
   }
 
