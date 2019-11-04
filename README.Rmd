@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
 # graphicalExtremes
 
 <!-- badges: start -->
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis build
+status](https://api.travis-ci.org/sebastian-engelke/graphicalExtremes.svg?branch=master)](https://travis-ci.org/sebastian-engelke/graphicalExtremes)
+[![codecov](https://codecov.io/gh/sebastian-engelke/graphicalExtremes/branch/master/graph/badge.svg)](https://codecov.io/gh/sebastian-engelke/graphicalExtremes)
 <!-- badges: end -->
 
 The goal of graphicalExtremes is to provide an implementation of the statistical 

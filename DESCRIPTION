@@ -1,11 +1,17 @@
 Package: graphicalExtremes
 Title: Statistical Methodology for Graphical Extreme Value Models
 Version: 0.0.0.9000
+Maintainer: Sebastian Engelke <sebastian.engelke@unige.ch>
 Authors@R: 
     c(
-    person("Sebastian", "Engelke", email = "sebastian.engelke@unige.ch", role = c("aut", "cre")),
+    person("Sebastian", "Engelke", email = "sebastian.engelke@unige.ch", 
+    role = c("aut", "cre")),
     person("Adrien S.", "Hitz", role = "aut"),
     person("Nicola", "Gnecco", role = "aut"))
+Author:
+    Sebastian Engelke [aut, cre],
+    Adrien S. Hitz [aut],
+    Nicola Gnecco [aut],
 Description: The package provides an implementation of the statistical 
     methodology paper Engelke and Hitz (2019, JRSSB) for sparse multivariate 
     extreme value models. This includes exact simulation algorithms and 
