@@ -385,7 +385,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' my_data <- rmpareto(n, "HR", d = d, par = G)
 #' my_fit <- fmpareto_HR(my_data, p = NULL, cens = FALSE, init = c(1,1,1))
 #'
-# !!! check if graph has specific form??
+#' !!! check if graph has specific form??
 fmpareto_HR <- function(data,
                        p = NULL,
                        cens = FALSE,
@@ -510,7 +510,7 @@ fmpareto_HR <- function(data,
 #' then this is a list of the estimated variogram matrices in each step of the greedy search.
 #' \item \code{AIC}: (only if \code{edges_to_add} are provided) List of AIC values of the fitted models
 #' in each step of the greedy search.
-#' \item \code{added.edges}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
+#' \item \code{edges_added}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
 #' the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy search.
 #' }
 #'
@@ -650,7 +650,7 @@ fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add =
     stop.flag = FALSE
     AIC = 2*igraph::ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
                                                   Gamma = Ghat[[l]], cens=cens)
-    added.edges = c()
+    edges_added = c()
 
     while(length(edges_to_add)!=0 & stop.flag==FALSE){
       m = nrow(edges_to_add)
@@ -705,13 +705,13 @@ fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add =
         graph.cur[[l]] <- set_graph_parameters(graph.cur[[l]])
         Ghat[[l]] = Ghat.tmp[[add.idx]]
         AIC = c(AIC, AIC.tmp[add.idx])
-        added.edges = rbind(added.edges, t(as.matrix(edges_to_add[add.idx,])))
+        edges_added = rbind(edges_added, t(as.matrix(edges_to_add[add.idx,])))
         edges_to_add = edges_to_add[-add.idx,]
       }
       if(all(is.na(AIC.tmp))) stop.flag=TRUE
     }
     return(list(graph=graph.cur,
-                Gamma=Ghat, AIC=AIC, added.edges=added.edges))
+                Gamma=Ghat, AIC=AIC, edges_added=edges_added))
   }
 
   return(list(graph=set_graph_parameters(graph), Gamma=Ghat[[1]]))
@@ -792,5 +792,7 @@ mst_HR = function(data, p = NULL, cens = FALSE){
   mst.tree <- set_graph_parameters(mst.tree)
 
   # return tree
-  return(mst.tree)
+  return(list(
+    tree = mst.tree,
+    Gamma = G.emp))
 }

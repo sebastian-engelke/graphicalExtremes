@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# graphicalExtremes
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of graphicalExtremes is to provide an implementation of the statistical 
+methodology paper Engelke and Hitz (2019, JRSSB) for sparse multivariate extreme
+value models. This includes exact simulation algorithms and statistical 
+inference methods for multivariate Pareto distributions on graphical structures.
+
+## Installation
+
+<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
+
+<!-- ``` r -->
+<!-- install.packages("graphicalExtremes") -->
+<!-- ``` -->
+
+You can install the development version of graphicalExtremes from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("sebastian-engelke/graphicalExtremes")
+```

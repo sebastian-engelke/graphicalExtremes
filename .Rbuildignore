@@ -1,3 +1,5 @@
 ^graphicalExtremes\.Rproj$
 ^\.Rproj\.user$
 ^other_scripts$
+^\.travis\.yml$
+^README\.Rmd$

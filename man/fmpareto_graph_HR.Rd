@@ -36,7 +36,7 @@ If \code{edges_to_add} are provided,
 then this is a list of the estimated variogram matrices in each step of the greedy search.
 \item \code{AIC}: (only if \code{edges_to_add} are provided) List of AIC values of the fitted models
 in each step of the greedy search.
-\item \code{added.edges}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
+\item \code{edges_added}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
 the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy search.
 }
 }

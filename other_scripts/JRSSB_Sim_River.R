@@ -137,10 +137,10 @@ edges.tree = rbind(c(1,2),c(1,3),c(1,4),c(1,5),c(2,6),c(2,7),c(3,8),c(3,9),c(4,1
 d=max(edges.tree)
 star.tree = make_empty_graph(n = d, directed = FALSE)
 for(i in 1:nrow(edges.tree))  star.tree = add_edges(graph = star.tree, edges = edges.tree[i,])
-added.edges.true = rbind(c(2,3),c(15,16),c(6,7))
+edges_added.true = rbind(c(2,3),c(15,16),c(6,7))
 
 graph.true = star.tree
-for(i in 1:nrow(added.edges.true))  graph.true = add_edges(graph = graph.true, edges = added.edges.true[i,])
+for(i in 1:nrow(edges_added.true))  graph.true = add_edges(graph = graph.true, edges = edges_added.true[i,])
 
 set.seed(9119770)
 G.vec = runif(ecount(graph.true), min = 0.5, max = 1)
@@ -162,7 +162,7 @@ for(i in 1:nexp){
   sel.edges = select_edges(graph=tree.tmp)
   fit.tmp = estGraph_HR(graph=tree.tmp, data=data, cens=TRUE, edges_to_add =sel.edges)
   est.AIC[i,1:length(fit.tmp$AIC)] = fit.tmp$AIC
-  chosen.edges.tmp = (rbind(ends(tree.tmp,E(tree.tmp)),fit.tmp$added.edges))[1:vcount(graph.true),]
+  chosen.edges.tmp = (rbind(ends(tree.tmp,E(tree.tmp)),fit.tmp$edges_added))[1:vcount(graph.true),]
   nb.chosen.edges[chosen.edges.tmp] = nb.chosen.edges[chosen.edges.tmp] + 1
   nb.chosen.edges[chosen.edges.tmp[,c(2,1)]] = nb.chosen.edges[chosen.edges.tmp[,c(2,1)]] + 1
 }
@@ -290,7 +290,7 @@ nX = nrow(X)
 p.vec = ecount(FlowGraph)+0:(L-1)
 
 AIC.min.idx = which.min(Mfit_flow$AIC)
-Mfit_flow$added.edges[1:AIC.min.idx,]
+Mfit_flow$edges_added[1:AIC.min.idx,]
 
 plot(Mfit_mst$graph[[1]],  layout = coordinates_river)
 

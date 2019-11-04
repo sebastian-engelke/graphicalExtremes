@@ -242,7 +242,7 @@ test_that("fmpareto_graph_HR works", {
   expect_length(res, 4)
   expect_equal(class(res$graph[[1]]), "igraph")
   expect_equal(t(res$Gamma[[1]]), res$Gamma[[1]])
-  expect_equal(length(res$Gamma), NROW(res$added.edges) + 1)
+  expect_equal(length(res$Gamma), NROW(res$edges_added) + 1)
 
   small_graph <- igraph::make_empty_graph(n = 4, directed = FALSE)
   small_graph <- igraph::add_edges(small_graph, c(1, 2, 2, 3, 2, 4))
@@ -253,7 +253,7 @@ test_that("fmpareto_graph_HR works", {
   expect_length(res, 4)
   expect_equal(class(res$graph[[1]]), "igraph")
   expect_equal(t(res$Gamma[[1]]), res$Gamma[[1]])
-  expect_equal(length(res$Gamma), NROW(res$added.edges) + 1)
+  expect_equal(length(res$Gamma), NROW(res$edges_added) + 1)
 })
 
 test_that("fmpareto_HR works", {
@@ -296,12 +296,21 @@ test_that("mst_HR works", {
   data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
 
   res <- mst_HR(data = data, p = NULL, cens = FALSE)
-  expect_equal(class(res), "igraph")
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- mst_HR(data = data, p = 0.95, cens = FALSE)
-  expect_equal(class(res), "igraph")
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- mst_HR(data = data, p = NULL, cens = TRUE)
-  expect_equal(class(res), "igraph")
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
 })
