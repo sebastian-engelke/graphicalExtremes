@@ -221,7 +221,7 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
 #' @export
 data2mpareto <- function(data, p){
   xx <- 1/(1-apply(data, 2, unif))
-  q <- quantile(xx, p)
+  q <- stats::quantile(xx, p)
   idx <- which(apply(xx, 1, max) > q)
   return(xx[idx,] / q)
 }

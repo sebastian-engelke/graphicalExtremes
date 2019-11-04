@@ -133,21 +133,21 @@ test_that("Gamma2graph works", {
 test_that("data2rmpareto works", {
   p <- .999
   m <- 1 / (1 - apply(data, 2, unif))
-  q <- 1 / (1 - p)
+  q <- stats::quantile(m, p)
   idx <- which(apply(m, 1, max) > q)
   res <- m[idx, ] / q
   expect_equal(data2mpareto(data, p), res)
 
   p <- .95
   m <- 1 / (1 - apply(data, 2, unif))
-  q <- 1 / (1 - p)
+  q <- stats::quantile(m, p)
   idx <- which(apply(m, 1, max) > q)
   res <- m[idx, ] / q
   expect_equal(data2mpareto(data, p), res)
 
   p <- 0
   m <- 1 / (1 - apply(data, 2, unif))
-  q <- 1 / (1 - p)
+  q <- stats::quantile(m, p)
   idx <- which(apply(m, 1, max) > q)
   res <- m[idx, ] / q
   expect_equal(data2mpareto(data, p), res)
