@@ -7,9 +7,7 @@
 set_graph_parameters(graph)
 }
 \arguments{
-\item{graph}{Graph object from \code{igraph} package.
-The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
-graph with singleton separator sets.}
+\item{graph}{Graph object from \code{igraph} package.}
 }
 \value{
 Graph object from \code{igraph} package.

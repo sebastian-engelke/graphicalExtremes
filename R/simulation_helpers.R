@@ -1,6 +1,6 @@
 #' Simulate HR extremal functions
 #'
-#' Simulates the Huessler-Reiss extremal functions
+#' Simulates the Huessler--Reiss extremal functions
 #'
 #' @inheritParams rmpareto
 #' @param idx Integer. Index corresponding to the variable over which
@@ -107,7 +107,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 
 #' Simulate HR extremal functions on a tree
 #'
-#' Simulates the Huessler-Reiss extremal functions on a tree
+#' Simulates the Huessler--Reiss extremal functions on a tree
 #'
 #' @inheritParams rmpareto
 #' @param Gamma_vec Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
@@ -178,12 +178,8 @@ simu_px_tree_logistic <- function(n, theta, A) {
 #' @inheritParams rmpareto
 #' @param alpha.start Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
 #' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' These are the parameter of one "side" of the Dirichlet distribution
-#' ???Sebastian
 #' @param alpha.end Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
 #' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' These are the parameter of one "side" of the Dirichlet distribution
-#' ???Sebastian
 #' @param A Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
 #' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is

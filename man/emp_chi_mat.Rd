@@ -31,7 +31,6 @@ Gamma <- cbind(c(0, 1.5, 1.5, 2),
 
 set.seed(123)
 my_data = rmstable(n, "HR", d = d, par = Gamma)
-
 emp_chi_mat(my_data, p)
 
 }

@@ -11,7 +11,7 @@ mparetomargins(data, set_indices)
 observations following a multivariate Pareto distribution.}
 
 \item{set_indices}{Numeric vector with at most \eqn{d} different elements in
-1, ..., \eqn{d}. The variable with respect to which you want to marginalize
+1, ..., \eqn{d}. The variables with respect to which to marginalize
 the multivariate distribution.}
 }
 \value{

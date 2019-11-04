@@ -20,10 +20,6 @@ for the \code{data}.
 \description{
 Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
 }
-\details{
-The \eqn{\chi} coefficient is a scalar coefficient that represents
-the extremal correlation between two variables.
-}
 \examples{
 n <- 100
 d <- 2
@@ -33,7 +29,6 @@ G <-  cbind(c(0, 1.5),
 
 set.seed(123)
 my_data = rmstable(n, "HR", d = d, par = G)
-
 emp_chi(my_data, p)
 
 }

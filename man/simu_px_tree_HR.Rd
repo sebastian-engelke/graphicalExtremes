@@ -22,5 +22,5 @@ equal to 1 if the edge in position \eqn{j} is on the directed path from node
 Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 }
 \description{
-Simulates the Huessler-Reiss extremal functions on a tree
+Simulates the Huessler--Reiss extremal functions on a tree
 }

@@ -20,8 +20,7 @@ to standardize the \code{data}.}
 components below the threshold. By default, \code{cens = FALSE}.}
 
 \item{init}{Numeric vector. Initial parameter values in the optimization. If
-\code{graph} is given, then the entries should correspond to the initial values
-on the edges.}
+\code{graph} is given, then the entries should correspond to the edges of the \code{graph}.}
 
 \item{maxit}{Positive integer. The maximum number of iterations in the
 optimization.}
@@ -40,7 +39,7 @@ List consisting of:
 \item \code{par}: Numeric vector. Optimized parameters.
 \item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
 matrix.
-\item \code{nllik}: Numeric. Optimized value of the likelihood function.
+\item \code{nllik}: Numeric. Optimized value of the negative log-likelihood function.
 \item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
 estimated parameters.
 }

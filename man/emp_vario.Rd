@@ -2,25 +2,27 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{emp_vario}
 \alias{emp_vario}
-\title{Estimate \eqn{\Gamma}}
+\title{Estimation of the variogram matrix \eqn{\Gamma} of the Huesler--Reiss distribution}
 \usage{
 emp_vario(data, k = NULL, p = NULL)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. Data matrix of
-observations following a Huesler-Reiss distribution.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
 \item{k}{Integer between 1 and \eqn{d}. Component of the multivariate
-observations that is conditioned to be larger than the threshold \code{p}.}
+observations that is conditioned to be larger than the threshold \code{p}.
+If \code{NULL} (default), then an average over all \code{k} is returned.}
 
-\item{p}{Numeric between 0 and 1. Probability threshold for the
-the components \code{k}. If \code{NULL},
-it is assumed that \code{data} has already multivariate Pareto margins.}
+\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+to standardize the \code{data}.}
 }
 \value{
 Numeric matrix \eqn{d \times d}{d x d}. The estimated
-variogram of the Huesler-Reiss distribution.
+variogram of the Huesler--Reiss distribution.
 }
 \description{
-Estimates the variogram of the Huesler-Reiss distribution empirically.
+Estimates the variogram of the Huesler--Reiss distribution empirically.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{fmpareto_graph_HR}
 \alias{fmpareto_graph_HR}
-\title{Parameter fitting for multivariate Huesler--Reiss Pareto distribution on block graphs}
+\title{Parameter fitting for multivariate Huesler--Reiss Pareto distributions on block graphs}
 \usage{
 fmpareto_graph_HR(data, graph, p = NULL, cens = FALSE,
   edges_to_add = NULL)
@@ -23,7 +23,7 @@ to standardize the \code{data}.}
 components below the threshold. By default, \code{cens = FALSE}.}
 
 \item{edges_to_add}{Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
-the number of edges that are tried to be added in the forward selection.
+the number of edges that are tried to be added in the greedy search.
 By default, \code{edges_to_add = NULL}.}
 }
 \value{
@@ -42,8 +42,8 @@ the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy s
 }
 \description{
 Fits the parameters of a multivariate Huesler--Reiss Pareto distribution using (censored) likelihood estimation.
-Fitting is done separately on the cliques of a block graph. If  \code{edges_to_add}
-are provided, then these edges are added in a greedy way to the original \code{graph},
+Fitting is done separately on the cliques of the block graph. If  \code{edges_to_add}
+are provided, then these edges are added in a greedy search to the original \code{graph},
 such that in each step the likelihood is improved maximally and the new graph stays in the
 class of block graphs. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 }

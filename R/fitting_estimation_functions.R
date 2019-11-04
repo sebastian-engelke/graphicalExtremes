@@ -2,10 +2,6 @@
 #'
 #' Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
 #'
-#' @details
-#' The \eqn{\chi} coefficient is a scalar coefficient that represents
-#' the extremal correlation between two variables.
-#'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1. Probability used for the quantile to
@@ -22,7 +18,6 @@
 #'
 #' set.seed(123)
 #' my_data = rmstable(n, "HR", d = d, par = G)
-#'
 #' emp_chi(my_data, p)
 #'
 #' @export
@@ -63,7 +58,6 @@ emp_chi <- function(data, p){
 #'
 #' set.seed(123)
 #' my_data = rmstable(n, "HR", d = d, par = Gamma)
-#'
 #' emp_chi_mat(my_data, p)
 #'
 #' @export
@@ -84,21 +78,22 @@ emp_chi_mat <- function(data, p){
 
 
 
-#' Estimate \eqn{\Gamma}
+#' Estimation of the variogram matrix \eqn{\Gamma} of the Huesler--Reiss distribution
 #'
-#' Estimates the variogram of the Huesler-Reiss distribution empirically.
+#' Estimates the variogram of the Huesler--Reiss distribution empirically.
 #'
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. Data matrix of
-#' observations following a Huesler-Reiss distribution.
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
 #' @param k Integer between 1 and \eqn{d}. Component of the multivariate
 #' observations that is conditioned to be larger than the threshold \code{p}.
-#' @param p Numeric between 0 and 1. Probability threshold for the
-#' the components \code{k}. If \code{NULL},
-#' it is assumed that \code{data} has already multivariate Pareto margins.
+#' If \code{NULL} (default), then an average over all \code{k} is returned.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
-#' variogram of the Huesler-Reiss distribution.
-#'
+#' variogram of the Huesler--Reiss distribution.
 emp_vario <- function(data, k=NULL, p=NULL){
   # helper ####
   G.fun = function(i, data){
@@ -223,7 +218,7 @@ logdV_HR <- function(x,par){
 #' @param x Numeric vector with \eqn{d} positive elements
 #' where the censored exponent measure is to be evaluated.
 #' @param K Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}}.
-#' The index set that is \strong{not} censored.
+#' The index set that is not censored.
 #' @inheritParams V_HR
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
@@ -283,7 +278,7 @@ logdVK_HR <- function(x, K, par){
 #' observations following a multivariate HR Pareto distribution.
 #' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
 #' It represents a variogram matrix \eqn{\Gamma}.
-#' @param cens Boolean. If TRUE, then censored log-likelihood is computed.
+#' @param cens Boolean. If true, then censored log-likelihood is computed.
 #' By default, \code{cens = FALSE}.
 #'
 #' @return Numeric. The full censored log-likelihood of HR model.
@@ -355,8 +350,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, \code{cens = FALSE}.
 #' @param init Numeric vector. Initial parameter values in the optimization. If
-#' \code{graph} is given, then the entries should correspond to the initial values
-#' on the edges.
+#' \code{graph} is given, then the entries should correspond to the edges of the \code{graph}.
 #' @param maxit Positive integer. The maximum number of iterations in the
 #' optimization.
 #' @param graph Graph object from \code{igraph} package or \code{NULL}.
@@ -371,7 +365,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' \item \code{par}: Numeric vector. Optimized parameters.
 #' \item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
 #' matrix.
-#' \item \code{nllik}: Numeric. Optimized value of the likelihood function.
+#' \item \code{nllik}: Numeric. Optimized value of the negative log-likelihood function.
 #' \item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
 #' estimated parameters.
 #' }
@@ -469,11 +463,11 @@ fmpareto_HR <- function(data,
 
 
 
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distribution on block graphs
+#' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on block graphs
 #'
 #' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution using (censored) likelihood estimation.
-#' Fitting is done separately on the cliques of a block graph. If  \code{edges_to_add}
-#' are provided, then these edges are added in a greedy way to the original \code{graph},
+#' Fitting is done separately on the cliques of the block graph. If  \code{edges_to_add}
+#' are provided, then these edges are added in a greedy search to the original \code{graph},
 #' such that in each step the likelihood is improved maximally and the new graph stays in the
 #' class of block graphs. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #'
@@ -488,7 +482,7 @@ fmpareto_HR <- function(data,
 #' @param graph Graph object from \code{igraph} package. The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
 #' graph with singleton separator sets.
 #' @param edges_to_add Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
-#' the number of edges that are tried to be added in the forward selection.
+#' the number of edges that are tried to be added in the greedy search.
 #' By default, \code{edges_to_add = NULL}.
 #'
 #' @return List consisting of:

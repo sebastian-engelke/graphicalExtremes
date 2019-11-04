@@ -1,7 +1,7 @@
 #' Completion of Gamma matrix on block graphs
 #'
 #' Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
-#' edges within the cliques of the \code{graph}, it returns the full \eqn{\Gamma} matrix
+#' edges within the cliques of the \code{graph}, it returns the full \code{Gamma} matrix
 #' implied by the conditional independencies.
 #'
 #' @param graph Graph object from \code{igraph} package.
@@ -9,11 +9,11 @@
 #' graph with singleton separator sets.
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix
 #' with entries only specified within the cliques of the \code{graph}. Alternatively, can be a
-#' vector containing the \code{Gamma} entries for each edge in the same order as in
+#' vector containing the \code{Gamma} entries for each edge in the same order as in the
 #' \code{graph} object.
 #'
 #' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
-#'
+#'s
 #' @details
 #' For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
 #' distribution within the cliques of the \code{graph}, the remaining entries are implied
@@ -153,7 +153,7 @@ complete_Gamma = function(Gamma, graph){
 #' @details
 #' The variogram uniquely determines the extremal graph structure of the
 #' corresponding Huesler--Reiss distribution. The conditional independencies
-#' can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
+#' can be identified from the inverses of the matrices \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
@@ -214,8 +214,8 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
 #'             c(1.5, 2, 0, 1.5),
 #'             c(2, 1.5, 1.5, 0))
 #'
+#' set.seed(123)
 #' my_data = rmstable(n, "HR", d = d, par = G)
-#'
 #' data2mpareto(my_data, p)
 #'
 #' @export
@@ -227,33 +227,33 @@ data2mpareto <- function(data, p){
 }
 
 
-#' Transformation of \eqn{Sigma} matrix to \eqn{\Gamma} matrix
+#' Transformation of \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix to \eqn{\Gamma} matrix
 #'
-#' Transforms the \eqn{\Sigma^(k)} matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \code{Gamma} matrix.
+#' Transforms the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
 #'
-#' @param S Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^(k)}
+#' @param S Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' from the definition of a Huesler--Reiss distribution.
 #' Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
 #' parameter.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
-#' Indicates which matrix \eqn{\Sigma^(k)} is represented by \code{S}.
-#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+#' Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} is represented by \code{S}.
+#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' are included and the function returns a \eqn{d \times d}{d x d} matrix.
 #' By default, \code{full = FALSE}.
 #'
 #' @details
 #' For any \code{k} from \code{1} to \code{d},
-#' the \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)}
-#' matrix in the definition of a
+#' the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
+#' in the definition of a
 #' Huesler--Reiss distribution can be transformed into a the
-#' corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
-#' If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
+#' corresponding \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
+#' If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 #' matrix with \code{k}th row and column
 #' containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 #' This is the inverse of function of \code{\link{Gamma2Sigma}}.
 #'
-#' @return Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
+#' @return Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
 #'
 #' @examples
 #' Sigma1 <-  rbind(c(1.5, 0.5, 1),
@@ -291,32 +291,32 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 
 
 
-#' Transformation of \eqn{\Gamma} matrix to \eqn{Sigma} matrix
+#' Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
 #'
 #' Transforms the \code{Gamma} matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \eqn{\Sigma^(k)} matrix.
+#' Huesler--Reiss distribution to the corresponding \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
 #'
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
-#' Indicates which matrix \eqn{\Sigma^(k)} should be produced.
-#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+#' Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.
+#' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' are included and the function returns a \eqn{d \times d}{d x d} matrix.
 #' By default, \code{full = FALSE}.
 #'
 #' @details
 #' Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
 #' Huesler--Reiss distribution can be transformed into a
-#' \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix,
-#' for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^(k)}
+#' \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix,
+#' for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' contains the graph structure corresponding to the Huesler--Reiss distribution
-#' with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
+#' with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 #' that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 #' This is the inverse of function of \code{\link{Sigma2Gamma}}.
 #'
-#' @return Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
-#' \code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
+#' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
+#' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
 #'
 #' @examples
 #' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
@@ -371,10 +371,7 @@ par2Gamma = function(par){
 #' of the matrix \code{Gamma}. If \code{Gamma} is already a vector, it returns
 #' it as it is.
 #'
-#' @param Gamma Numeric matrix \eqn{d\times d}{d x d}.
-#' It represents a variogram matrix.
-#' Alternatively, it can be passed as a a numeric vector with
-#' \eqn{d} elements.
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #'
 #' @return Numeric vector with \eqn{d} elements.
 #' The upper triangular part of the given \code{Gamma} matrix.
@@ -423,7 +420,7 @@ chi2Gamma <- function(chi){
 #'
 #' @details
 #' The formula for transformation from \code{Gamma} to \eqn{\chi} that is applied element-wise is
-#' \deqn{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
+#' \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 #' where \eqn{\Phi} is the standard normal distribution function.
 #' This is the inverse of \code{\link{chi2Gamma}}.
 #'
@@ -475,7 +472,7 @@ Gamma2chi_3D = function(Gamma){
 #' @param data Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
 #' observations following a multivariate Pareto distribution.
 #' @param set_indices Numeric vector with at most \eqn{d} different elements in
-#' 1, ..., \eqn{d}. The variable with respect to which you want to marginalize
+#' 1, ..., \eqn{d}. The variables with respect to which to marginalize
 #' the multivariate distribution.
 #'
 #' @return Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length

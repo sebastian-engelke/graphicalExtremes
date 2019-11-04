@@ -11,7 +11,7 @@ logdVK_HR(x, K, par)
 where the censored exponent measure is to be evaluated.}
 
 \item{K}{Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}}.
-The index set that is \strong{not} censored.}
+The index set that is not censored.}
 
 \item{par}{Numeric vector with
 \eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements.

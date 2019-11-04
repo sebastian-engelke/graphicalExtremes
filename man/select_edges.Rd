@@ -15,6 +15,6 @@ graph with singleton separator sets.}
 Numeric vector.
 }
 \description{
-This function selects all possible edges that can be added to graph
+This function selects all possible edges that can be added to the \code{graph}
 while still remaining in the class of block graphs.
 }

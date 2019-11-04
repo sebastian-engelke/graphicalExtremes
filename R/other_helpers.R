@@ -1,6 +1,6 @@
 #' Uniform margin
 #'
-#' Rescale the vector \code{x} to uniform margin.
+#' Rescale the vector \code{x} empirically to uniform margin.
 #'
 #' @param x Numeric vector.
 #'
@@ -37,7 +37,7 @@ dim_Gamma <- function(Gamma){
 
 #' Select edges to add to a graph
 #'
-#' This function selects all possible edges that can be added to graph
+#' This function selects all possible edges that can be added to the \code{graph}
 #' while still remaining in the class of block graphs.
 #'
 #' @inheritParams complete_Gamma
@@ -90,7 +90,7 @@ select_edges = function(graph){
 #' Set graphical parameters to \code{graph} which is an object from the
 #' \code{igraph} package.
 #'
-#' @inheritParams complete_Gamma
+#' @param graph Graph object from \code{igraph} package.
 #'
 #' @return Graph object from \code{igraph} package.
 set_graph_parameters <- function(graph){

@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{Sigma} matrix}
+\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
 \usage{
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
 }
@@ -10,27 +10,27 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
-Indicates which matrix \eqn{\Sigma^(k)} should be produced.}
+Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.}
 
-\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 are included and the function returns a \eqn{d \times d}{d x d} matrix.
 By default, \code{full = FALSE}.}
 }
 \value{
-Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
-\code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
+Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
+\code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \eqn{\Sigma^(k)} matrix.
+Huesler--Reiss distribution to the corresponding \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
 }
 \details{
 Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
 Huesler--Reiss distribution can be transformed into a
-\eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix,
-for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^(k)}
+\eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix,
+for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 contains the graph structure corresponding to the Huesler--Reiss distribution
-with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
+with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 This is the inverse of function of \code{\link{Sigma2Gamma}}.

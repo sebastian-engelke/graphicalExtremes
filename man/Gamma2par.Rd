@@ -7,10 +7,7 @@
 Gamma2par(Gamma)
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{d\times d}{d x d}.
-It represents a variogram matrix.
-Alternatively, it can be passed as a a numeric vector with
-\eqn{d} elements.}
+\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 }
 \value{
 Numeric vector with \eqn{d} elements.

@@ -10,14 +10,10 @@ simu_px_tree_dirichlet(n, alpha.start, alpha.end, A)
 \item{n}{Number of simulations.}
 
 \item{alpha.start}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
-the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-These are the parameter of one "side" of the Dirichlet distribution
-???Sebastian}
+the number of nodes in the tree (and \eqn{d - 1} is the number of edges).}
 
 \item{alpha.end}{Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
-the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-These are the parameter of one "side" of the Dirichlet distribution
-???Sebastian}
+the number of nodes in the tree (and \eqn{d - 1} is the number of edges).}
 
 \item{A}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
 nodes in the tree, the columns represent the edges. For a fixed node

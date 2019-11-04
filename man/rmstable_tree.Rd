@@ -17,7 +17,7 @@ rmstable_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 }}
 
 \item{tree}{Graph object from \code{igraph} package.
-This object must be tree, i.e., an
+This object must be a tree, i.e., an
 undirected graph that is connected and has no cycles.}
 
 \item{par}{Respective parameter for the given \code{model}, that is,
@@ -31,7 +31,7 @@ to the edges of the given \code{tree}.
 containing the logistic parameters corresponding
 to the edges of the given \code{tree}, if \code{model = logistic}.
 \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+contain the parameter vectors \eqn{\alpha} of size 2 with positve entries
 for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }

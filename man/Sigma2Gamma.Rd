@@ -2,37 +2,37 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Sigma2Gamma}
 \alias{Sigma2Gamma}
-\title{Transformation of \eqn{Sigma} matrix to \eqn{\Gamma} matrix}
+\title{Transformation of \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix to \eqn{\Gamma} matrix}
 \usage{
 Sigma2Gamma(S, k = 1, full = FALSE)
 }
 \arguments{
-\item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^(k)}
+\item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 from the definition of a Huesler--Reiss distribution.
 Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
 parameter.}
 
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
-Indicates which matrix \eqn{\Sigma^(k)} is represented by \code{S}.}
+Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} is represented by \code{S}.}
 
-\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^(k)}
+\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 are included and the function returns a \eqn{d \times d}{d x d} matrix.
 By default, \code{full = FALSE}.}
 }
 \value{
-Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
+Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
 }
 \description{
-Transforms the \eqn{\Sigma^(k)} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \code{Gamma} matrix.
+Transforms the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix from the definition of a
+Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
 }
 \details{
 For any \code{k} from \code{1} to \code{d},
-the \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)}
-matrix in the definition of a
+the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
+in the definition of a
 Huesler--Reiss distribution can be transformed into a the
-corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
-If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
+corresponding \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
+If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 matrix with \code{k}th row and column
 containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 This is the inverse of function of \code{\link{Gamma2Sigma}}.

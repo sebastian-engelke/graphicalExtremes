@@ -13,5 +13,5 @@ unif(x)
 Numeric vector with entries rescaled to uniform margins
 }
 \description{
-Rescale the vector \code{x} to uniform margin.
+Rescale the vector \code{x} empirically to uniform margin.
 }

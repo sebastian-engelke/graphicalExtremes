@@ -9,7 +9,7 @@ complete_Gamma(Gamma, graph)
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix
 with entries only specified within the cliques of the \code{graph}. Alternatively, can be a
-vector containing the \code{Gamma} entries for each edge in the same order as in
+vector containing the \code{Gamma} entries for each edge in the same order as in the
 \code{graph} object.}
 
 \item{graph}{Graph object from \code{igraph} package.
@@ -18,10 +18,11 @@ graph with singleton separator sets.}
 }
 \value{
 Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
+s
 }
 \description{
 Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
-edges within the cliques of the \code{graph}, it returns the full \eqn{\Gamma} matrix
+edges within the cliques of the \code{graph}, it returns the full \code{Gamma} matrix
 implied by the conditional independencies.
 }
 \details{

@@ -17,7 +17,7 @@ rmpareto_tree(n, model = c("HR", "logistic", "dirichlet")[1], tree, par)
 }}
 
 \item{tree}{Graph object from \code{igraph} package.
-This object must be tree, i.e., an
+This object must be a tree, i.e., an
 undirected graph that is connected and has no cycles.}
 
 \item{par}{Respective parameter for the given \code{model}, that is,

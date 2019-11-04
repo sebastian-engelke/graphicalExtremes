@@ -24,5 +24,5 @@ Cholesky decomposition of the desired covariance matrix.}
 Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 }
 \description{
-Simulates the Huessler-Reiss extremal functions
+Simulates the Huessler--Reiss extremal functions
 }
