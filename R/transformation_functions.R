@@ -403,6 +403,12 @@ Gamma2par = function(Gamma){
 #' @return Numeric or matrix. The \eqn{\Gamma} parameters in the Huesler--Reiss
 #' distribution.
 #'
+#' @details
+#' The formula for transformation from \code{chi} to \eqn{\Gamma} that is applied element-wise is
+#' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
+#' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
+#' This is the inverse of \code{\link{Gamma2chi}}.
+#'
 #' @export
 chi2Gamma <- function(chi){
   if (any(chi < 0 | chi > 1)){
@@ -422,6 +428,7 @@ chi2Gamma <- function(chi){
 #' The formula for transformation from \code{Gamma} to \eqn{\chi} that is applied element-wise is
 #' \deqn{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 #' where \eqn{\Phi} is the standard normal distribution function.
+#' This is the inverse of \code{\link{chi2Gamma}}.
 #'
 #'
 #' @param Gamma Numeric or matrix, with positive entries.
