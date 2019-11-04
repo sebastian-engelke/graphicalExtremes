@@ -1,6 +1,6 @@
 ###################################################################
 #### Code for simulation study and application of
-#### Engelke & Hitz, Graphical Models for Extremes (2018, preprint)
+#### Engelke & Hitz, Graphical Models for Extremes (2019, JRSSB)
 ###################################################################
 setwd("other_scripts") # we will delete
 library("graphicalExtremes")
@@ -16,10 +16,9 @@ library("igraph")
 #p: probability threshold for emp_chi
 #Gtrue: if supplied then the estimated chi are plotted against the once implied
 #from this HR matrix
-#pot: if TRUE, then pot-type estimation of chi is used
-est.chi3D <- function(data, triplets, p, Gtrue=NULL, pot=FALSE, main=""){
+est.chi3D <- function(data, triplets, p, Gtrue=NULL, main=""){
   d <- ncol(data)
-  chi <- apply(triplets, 1, function(x) emp_chi(data[,x], p=p, pot=pot))
+  chi <- apply(triplets, 1, function(x) emp_chi(data[,x], p=p))
   if(!is.null(Gtrue)){
     chi.theo = apply(triplets, 1, function(x) Gamma2chi_3D(Gamma=Gtrue[x,x]))
 
@@ -67,14 +66,14 @@ edges = rbind(c(1,2),c(1,3),c(2,4), c(2,5))
 d = max(edges)
 graph0 = make_empty_graph(n = d, directed = FALSE)
 for(i in 1:nrow(edges))  graph0 = add_edges(graph = graph0, edges = edges[i,])
-graph0 <- set_graph_parameters(graph0)
+graph0 <- graphicalExtremes:::set_graph_parameters(graph0)
 plot.igraph(graph0)
 
 G.vec = c(1,2,1,2)
 G0 = complete_Gamma(graph = graph0, Gamma = G.vec)
 p = length(G.vec)
 
-nexp <- 2 # !!! 200
+nexp <- 200
 n.vec <- c(100)
 method.vec <- c("full", "graph")
 est.par <- array(NA, dim = c(nexp, p, length(method.vec),length(n.vec)))
@@ -86,10 +85,10 @@ for(i in 1:nexp){
     n <- n.vec[l]
     set.seed(i+10*l)
     data = rmpareto(n=n, model="HR", d=d,  par=G0)
-    G.est <- emp_vario(data=data)
-    est.par[i,,1,l] = (fmpareto_HR(data=data, init=G.est[edges], cens=TRUE,
+    G.est <- graphicalExtremes:::emp_vario(data=data)
+    est.par[i,,1,l] = (graphicalExtremes:::fmpareto_HR(data=data, init=G.est[edges], cens=TRUE,
                                   graph=graph0)$Gamma)[edges]
-    est.par[i,,2,l] = (estGraph_HR(graph=graph0, data=data,
+    est.par[i,,2,l] = (fmpareto_graph_HR(graph=graph0, data=data,
                                    cens=TRUE)$Gamma)[edges]
   }
 }
@@ -158,9 +157,9 @@ for(i in 1:nexp){
   cat("\r Simulation", i, " of ", nexp)
   set.seed(i)
   data = rmpareto(n=n, model="HR", d=d, par=Gamma)
-  tree.tmp = mst_HR(data = data, cens = TRUE)
-  sel.edges = select_edges(graph=tree.tmp)
-  fit.tmp = estGraph_HR(graph=tree.tmp, data=data, cens=TRUE, edges_to_add =sel.edges)
+  tree.tmp = mst_HR(data = data, cens = TRUE)$tree
+  sel.edges = graphicalExtremes:::select_edges(graph=tree.tmp)
+  fit.tmp = fmpareto_graph_HR(graph=tree.tmp, data=data, cens=TRUE, edges_to_add =sel.edges)
   est.AIC[i,1:length(fit.tmp$AIC)] = fit.tmp$AIC
   chosen.edges.tmp = (rbind(ends(tree.tmp,E(tree.tmp)),fit.tmp$edges_added))[1:vcount(graph.true),]
   nb.chosen.edges[chosen.edges.tmp] = nb.chosen.edges[chosen.edges.tmp] + 1
@@ -201,7 +200,7 @@ edges = rbind(c(12,11),c(11,10),c(10,9),c(9,8),c(8,7),c(7,6),c(6,5),c(5,4),c(4,3
 
 FlowGraphDirected = make_empty_graph(n = d, directed = TRUE)
 for(i in 1:nrow(edges)) FlowGraphDirected = add_edges(graph = FlowGraphDirected, edges = edges[i,])
-FlowGraph = set_graph_parameters(as.undirected(FlowGraphDirected))
+FlowGraph = graphicalExtremes:::set_graph_parameters(as.undirected(FlowGraphDirected))
 
 
 ##################################
@@ -218,18 +217,18 @@ mstFit = mst_HR(data = X, cens = TRUE)
 #### Figure 9 (left) in the paper
 ##################################
 
-plot(mstFit,  layout = coordinates_river)
+plot(mstFit$tree,  layout = coordinates_river)
 
 
 
 ##################################
-#### Figure 9 (right) in the paper
+#### Figure 9 (right) inr the paper
 #### Gaussian MST
 ##################################
 
 graph.full <- make_full_graph(d)
 logDataEvents = log(DataEvents)
-Gauss_mst = set_graph_parameters(igraph::mst(graph=graph.full, weights = log(1- (cor(logDataEvents)[ends(graph.full,E(graph.full))])^2), algorithm = "prim"))
+Gauss_mst = graphicalExtremes:::set_graph_parameters(igraph::mst(graph=graph.full, weights = log(1- (cor(logDataEvents)[ends(graph.full,E(graph.full))])^2), algorithm = "prim"))
 
 plot(Gauss_mst, layout = coordinates_river)
 
@@ -275,11 +274,11 @@ abline(sameEdgesGauss, 0, lty=2, col="orange", lwd=2)
 ########################################
 
 ### Do not run ####
-sel.edges = select_edges(FlowGraph)
-Mfit_flow = estGraph_HR(graph=FlowGraph, data=X, cens=TRUE, edges_to_add=sel.edges)
+sel.edges = graphicalExtremes:::select_edges(FlowGraph)
+Mfit_flow = fmpareto_graph_HR(graph=FlowGraph, data=X, cens=TRUE, edges_to_add=sel.edges)
 
-sel.edges = select_edges(mstFit)
-Mfit_mst = estGraph_HR(graph=mstFit, data=X, cens=TRUE, edges_to_add=sel.edges)
+sel.edges = graphicalExtremes:::select_edges(mstFit)
+Mfit_mst = fmpareto_graph_HR(graph=mstFit, data=X, cens=TRUE, edges_to_add=sel.edges)
 ###################
 
 load("data/Mfit_flow.Rdata")
@@ -302,10 +301,10 @@ results = matrix(NA, nrow=4, ncol=3)
 colnames(results) = c("twice neg logLH", "nb par", "AIC")
 rownames(results) = c("tree", "best graph", "largest graph", "Asadi et al.")
 
-results[,1] = -2*c(logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[1]],cens=TRUE),
-                   logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[AIC.min.idx]],cens=TRUE),
-                   logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[L]],cens=TRUE),
-                   logLH_HR(data=X,Gamma=GfitM4, cens=TRUE))
+results[,1] = -2*c(graphicalExtremes:::logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[1]],cens=TRUE),
+                   graphicalExtremes:::logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[AIC.min.idx]],cens=TRUE),
+                   graphicalExtremes:::logLH_HR(data=X,Gamma=Mfit_flow$Gamma[[L]],cens=TRUE),
+                   graphicalExtremes:::logLH_HR(data=X,Gamma=GfitM4, cens=TRUE))
 
 results[,2] = c(p.vec[1], p.vec[AIC.min.idx], p.vec[L], 6)
 results[,3] = 2*results[,2] + results[,1]
@@ -319,7 +318,7 @@ matplot(p.vec, cbind(Mfit_flow$AIC, c(Mfit_mst$AIC,NA)), type="b", ylab="AIC", m
 abline(results[4,3],0, lty=2, col="orange", lwd=2)
 
 
-chi.emp = emp_chi_mat(data=DataEvents, p=.9, pot=TRUE)
+chi.emp = graphicalExtremes:::emp_chi_mat(data=DataEvents, p=.9)
 plotChi(Chi.emp = chi.emp, Chi.theo = Gamma2chi(Mfit_flow$Gamma[[AIC.min.idx]]),
         main="Hüsler-Reiss graphical model",
         PDF = FALSE,
@@ -339,9 +338,9 @@ triplets <- as.matrix(expand.grid(1:d,1:d, 1:d))[sample(1:d^3, size = 400, repla
 triplets = triplets[which(apply(triplets,1, function(x) length(unique(x)))==3),,drop=FALSE]
 
 chi3D.spatial = est.chi3D(data=DataEvents, triplets=triplets, p=.9, Gtrue=GfitM4,
-                          pot=TRUE, main="Hüsler-Reiss model in Asadi et al. (2015)")
+                          main="Hüsler-Reiss model in Asadi et al. (2015)")
 chi3D.graph = est.chi3D(data=DataEvents, triplets=triplets, p=.9,
-                        Gtrue=Mfit_flow$Gamma[[AIC.min.idx]], pot=TRUE, main="Hüsler-Reiss graphical model")
+                        Gtrue=Mfit_flow$Gamma[[AIC.min.idx]], main="Hüsler-Reiss graphical model")
 
 
 
