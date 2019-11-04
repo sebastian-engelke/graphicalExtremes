@@ -38,7 +38,7 @@ List consisting of:
 \itemize{
 \item \code{convergence}: Logical. Indicates whether the optimization converged or not.
 \item \code{par}: Numeric vector. Optimized parameters.
-\item \code{Gamma}: Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
+\item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
 matrix.
 \item \code{nllik}: Numeric. Optimized value of the likelihood function.
 \item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
@@ -50,7 +50,7 @@ Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
 using (censored) likelihood estimation.
 }
 \details{
-If \code{graph = NULL}, then the parameters of a \eqn{d \time d}{d x d}
+If \code{graph = NULL}, then the parameters of a \eqn{d \times d}{d x d}
 parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
 If \code{graph} is provided, then the conditional independence
 structure of this graph is assumed and the parameters on the edges are fitted.
