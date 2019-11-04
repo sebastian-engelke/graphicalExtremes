@@ -33,6 +33,7 @@ contains the graph structure corresponding to the Huesler--Reiss distribution
 with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
 is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+This is the inverse of function of \code{\link{Sigma2Gamma}}.
 }
 \examples{
 Gamma <-  cbind(c(0, 1.5, 1.5, 2),
@@ -43,8 +44,5 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 
 }
 \references{
-\insertRef{asadi2015extremes}{graphicalExtremes}
-\insertRef{Rpack:bibtex}{Rdpack}
-
 \insertAllCited{}
 }

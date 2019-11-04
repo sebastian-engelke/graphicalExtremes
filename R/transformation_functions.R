@@ -154,7 +154,7 @@ complete_Gamma = function(Gamma, graph){
 #' The variogram uniquely determines the extremal graph structure of the
 #' corresponding Huesler--Reiss distribution. The conditional independencies
 #' can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
-#' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}. !!! Refere to function Gamma2Sigma !!!
+#' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
@@ -251,6 +251,7 @@ data2mpareto <- function(data, p){
 #' If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 #' matrix with \code{k}th row and column
 #' containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+#' This is the inverse of function of \code{\link{Gamma2Sigma}}.
 #'
 #' @return Numeric \eqn{d \times d}{d x d} \code{Gamma} matrix.
 #'
@@ -298,9 +299,6 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' Huesler--Reiss distribution to the corresponding \eqn{\Sigma^(k)} matrix.
 #'
 #'
-#' @references \insertRef{asadi2015extremes}{graphicalExtremes}
-#' \insertRef{Rpack:bibtex}{Rdpack}
-#'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param k Integer between \code{1} (the default value) and \code{d}.
 #' Indicates which matrix \eqn{\Sigma^(k)} should be produced.
@@ -317,6 +315,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 #' that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+#' This is the inverse of function of \code{\link{Sigma2Gamma}}.
 #'
 #' @return Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^(k)} matrix if
 #' \code{full = FALSE}, and a \eqn{d \times d}{d x d} matrix if \code{full = TRUE}.
@@ -418,6 +417,11 @@ chi2Gamma <- function(chi){
 #'
 #' Transforms the \code{Gamma} matrix from the definition of a Huesler--Reiss
 #' distribution into the corresponding extremal correlation \eqn{\chi}.
+#'
+#' @details
+#' The formula for transformation from \code{Gamma} to \eqn{\chi} that is applied element-wise is
+#' \deqn{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
+#' where \eqn{\Phi} is the standard normal distribution function.
 #'
 #'
 #' @param Gamma Numeric or matrix, with positive entries.

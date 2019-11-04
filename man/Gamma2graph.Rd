@@ -27,7 +27,7 @@ and plots it (optionally).
 The variogram uniquely determines the extremal graph structure of the
 corresponding Huesler--Reiss distribution. The conditional independencies
 can be identified from the inverses of the matrices \eqn{\Sigma^(k)}
-defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}. !!! Refere to function Gamma2Sigma !!!
+defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
 Gamma <-  cbind(c(0, 1.5, 1.5, 2),

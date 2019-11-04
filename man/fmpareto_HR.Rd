@@ -19,7 +19,9 @@ to standardize the \code{data}.}
 \item{cens}{Logical. If true, then censored likelihood contributions are used for
 components below the threshold. By default, \code{cens = FALSE}.}
 
-\item{init}{Numeric vector. Initial parameter values in the optimization.}
+\item{init}{Numeric vector. Initial parameter values in the optimization. If
+\code{graph} is given, then the entries should correspond to the initial values
+on the edges.}
 
 \item{maxit}{Positive integer. The maximum number of iterations in the
 optimization.}
@@ -55,16 +57,4 @@ structure of this graph is assumed and the parameters on the edges are fitted.
 In both cases the full likelihood is used and therefore this function should only
 be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
 fitting can be done separately on the cliques; see \code{\link{fmpareto_graph_HR}}.
-}
-\examples{
-## Fitting a 3-dimensional HR distribution
-n <- 50
-d <- 3
-G <-  cbind(c(0, 1.5, 1.5),
-            c(1.5, 0, 2),
-            c(1.5, 2, 0))
-set.seed(123)
-my_data <- rmpareto(n, "HR", d = d, par = G)
-my_fit <- fmpareto_HR(my_data, p = NULL, cens = FALSE, init = c(1,1,1))
-
 }

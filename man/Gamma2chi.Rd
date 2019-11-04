@@ -16,3 +16,8 @@ Numeric or matrix. The extremal correlation coefficient.
 Transforms the \code{Gamma} matrix from the definition of a Huesler--Reiss
 distribution into the corresponding extremal correlation \eqn{\chi}.
 }
+\details{
+The formula for transformation from \code{Gamma} to \eqn{\chi} that is applied element-wise is
+\deqn{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
+where \eqn{\Phi} is the standard normal distribution function.
+}

@@ -354,7 +354,9 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' to standardize the \code{data}.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, \code{cens = FALSE}.
-#' @param init Numeric vector. Initial parameter values in the optimization.
+#' @param init Numeric vector. Initial parameter values in the optimization. If
+#' \code{graph} is given, then the entries should correspond to the initial values
+#' on the edges.
 #' @param maxit Positive integer. The maximum number of iterations in the
 #' optimization.
 #' @param graph Graph object from \code{igraph} package or \code{NULL}.
@@ -374,18 +376,6 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 #' estimated parameters.
 #' }
 #'
-#' @examples
-#' ## Fitting a 3-dimensional HR distribution
-#' n <- 50
-#' d <- 3
-#' G <-  cbind(c(0, 1.5, 1.5),
-#'             c(1.5, 0, 2),
-#'             c(1.5, 2, 0))
-#' set.seed(123)
-#' my_data <- rmpareto(n, "HR", d = d, par = G)
-#' my_fit <- fmpareto_HR(my_data, p = NULL, cens = FALSE, init = c(1,1,1))
-#'
-#' !!! check if graph has specific form??
 fmpareto_HR <- function(data,
                        p = NULL,
                        cens = FALSE,

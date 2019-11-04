@@ -35,6 +35,7 @@ corresponding \eqn{d \times d}{d x d} \code{Gamma} matrix.
 If \code{full = TRUE}, then \eqn{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 matrix with \code{k}th row and column
 containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+This is the inverse of function of \code{\link{Gamma2Sigma}}.
 }
 \examples{
 Sigma1 <-  rbind(c(1.5, 0.5, 1),
