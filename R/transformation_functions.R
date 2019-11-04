@@ -261,8 +261,6 @@ data2mpareto <- function(data, p){
 #'                  c(1, 1, 2))
 #' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
 #'
-#' @importFrom Rdpack reprompt
-#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -327,7 +325,6 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #'                 c(2, 1.5, 1.5, 0))
 #' Gamma2Sigma(Gamma, k = 1, full = FALSE)
 #'
-#' @importFrom Rdpack reprompt
 #'
 #' @references
 #'  \insertAllCited{}

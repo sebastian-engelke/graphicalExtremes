@@ -42,6 +42,7 @@ Gamma <-  cbind(c(0, 1.5, 1.5, 2),
                 c(2, 1.5, 1.5, 0))
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
 
+
 }
 \references{
 \insertAllCited{}
