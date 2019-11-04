@@ -41,10 +41,10 @@ multivariate Pareto distribution.
 }
 \description{
 Simulates exact samples of a multivariate Pareto distribution that
-is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
+is an extremal graphical model on a tree as defined in \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \details{
-The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
+The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
 For details on the parameters of the Huesler--Reiss, logistic
 and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
@@ -60,6 +60,7 @@ c(0, 1, 0, 0)),
 mode = "undirected")
 n <- 10
 Gamma_vec <- c(.5,1.4,.8)
+set.seed(123)
 rmpareto_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 
 ## A 4-dimensional Dirichlet model with asymmetric edge distributions

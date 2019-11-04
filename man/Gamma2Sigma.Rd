@@ -32,7 +32,7 @@ for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^(k)}
 contains the graph structure corresponding to the Huesler--Reiss distribution
 with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^(k)}
 is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
-that contain zeros. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
+that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
 Gamma <-  cbind(c(0, 1.5, 1.5, 2),

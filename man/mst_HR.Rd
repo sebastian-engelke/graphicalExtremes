@@ -2,24 +2,53 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{mst_HR}
 \alias{mst_HR}
-\title{Estimate the HR minimum spanning tree}
+\title{Fitting of Huesler--Reiss minimum spanning tree}
 \usage{
 mst_HR(data, p = NULL, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
-observations following a multivariate HR Pareto distribution.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
-\item{p}{Numeric between 0 and 1. Threshold probability. If \code{NULL},
-it is assumed that \code{data} is already distributed as multivariate Pareto.}
+\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+to standardize the \code{data}.}
 
-\item{cens}{Boolean. If TRUE, then censored log-likelihood is computed.
-By default, \code{cens = FALSE}.}
+\item{cens}{Logical. If true, then censored likelihood contributions are used for
+components below the threshold. By default, \code{cens = FALSE}.}
 }
 \value{
-Graph object from \code{igraph} package. A tree.
+List consisting of:
+\itemize{
+\item \code{tree}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
+\item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+corresponding to the fitted minimum spanning tree.
+}
 }
 \description{
-Estimates the minimum spanning tree as the HR tree that maximizes
-the (censored) log-likelihood.
+Fits the Huesler--Reiss minimum spanning tree, where the edge weights are
+are the negative maximized log-likelihoods of the bivariate Huesler--Reiss
+distributions. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+}
+\examples{
+## Fitting a 4-dimensional HR MST tree
+
+my_graph <- igraph::graph_from_adjacency_matrix(
+  rbind(c(0, 1, 0, 0),
+        c(1, 0, 1, 1),
+        c(0, 1, 0, 0),
+        c(0, 1, 0, 0)),
+  mode = "undirected")
+n <- 100
+Gamma_vec <- c(.5,1.4,.8)
+complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
+
+set.seed(123)
+my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
+my_fit <- mst_HR(my_data, p = NULL, cens = FALSE)
+
+}
+\references{
+\insertAllCited{}
 }

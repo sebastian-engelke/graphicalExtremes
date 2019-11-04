@@ -27,7 +27,7 @@ implied by the conditional independencies.
 \details{
 For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
 distribution within the cliques of the \code{graph}, the remaining entries are implied
-by the conditional independence properties. For details see \insertCite{eng2018a;textual}{graphicalExtremes}.
+by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
 ## Complete a 4-dimensional HR distribution

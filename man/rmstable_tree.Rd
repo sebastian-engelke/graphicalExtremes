@@ -41,11 +41,11 @@ multivariate max-stable distribution.
 }
 \description{
 Simulates exact samples of a multivariate max-stable distribution that
-is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
+is an extremal graphical model on a tree as defined in \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \details{
 The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
-and the theory in \insertCite{eng2018a;textual}{graphicalExtremes} to sample from a single extremal function.
+and the theory in \insertCite{eng2019;textual}{graphicalExtremes} to sample from a single extremal function.
 For details on the parameters of the Huesler--Reiss, logistic
 and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.

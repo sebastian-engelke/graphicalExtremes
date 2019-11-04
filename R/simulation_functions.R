@@ -27,7 +27,7 @@
 #' multivariate Pareto distribution.
 #'
 #' @details
-  #' The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
+  #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
@@ -199,7 +199,7 @@ rmpareto <- function(n,
 #' Sampling of a multivariate Pareto distribution on a tree
 #'
 #' Simulates exact samples of a multivariate Pareto distribution that
-#' is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
+#' is an extremal graphical model on a tree as defined in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
@@ -231,7 +231,7 @@ rmpareto <- function(n,
 #' multivariate Pareto distribution.
 #'
 #' @details
-#' The simulation follows the algorithm in \insertCite{eng2018a;textual}{graphicalExtremes}.
+#' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
@@ -247,6 +247,7 @@ rmpareto <- function(n,
 #' mode = "undirected")
 #' n <- 10
 #' Gamma_vec <- c(.5,1.4,.8)
+#' set.seed(123)
 #' rmpareto_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 #'
 #' ## A 4-dimensional Dirichlet model with asymmetric edge distributions
@@ -617,7 +618,7 @@ rmstable <- function(n,
 #' Sampling of a multivariate max-stable distribution on a tree
 #'
 #' Simulates exact samples of a multivariate max-stable distribution that
-#' is an extremal graphical model on a tree as defined in \insertCite{eng2018a;textual}{graphicalExtremes}.
+#' is an extremal graphical model on a tree as defined in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
@@ -650,7 +651,7 @@ rmstable <- function(n,
 #'
 #' @details
 #' The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
-#' and the theory in \insertCite{eng2018a;textual}{graphicalExtremes} to sample from a single extremal function.
+#' and the theory in \insertCite{eng2019;textual}{graphicalExtremes} to sample from a single extremal function.
 #' For details on the parameters of the Huesler--Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.

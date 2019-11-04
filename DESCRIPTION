@@ -2,7 +2,7 @@ Package: graphicalExtremes
 Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: The package provides an implementation of the statistical methodology paper Engelke and Hitz (2019, JRSSB) for sparse multivariate extreme value models. This includes exact simulation algorithms and statistical inference methods for multivariate Pareto distributions on graphical structures. 
 Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8

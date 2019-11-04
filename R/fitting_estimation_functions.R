@@ -334,45 +334,57 @@ logLH_HR <- function(data, Gamma, cens = FALSE){
 
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
 #'
-#' Fits the parameters of a multivariate HR Pareto distribution
+#' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
 #' using (censored) likelihood estimation.
 #'
 #'
 #' If \code{graph = NULL}, then the parameters of a \eqn{d \time d}{d x d}
-#' parameter matrix \Gamma of a Huesler--Reiss Pareto distribution are fitted.
-#'  If \code{graph} is given, it assumes the conditional independence
-#'  structure of this graph and fits only the parameters on the edges.
-#'  In
-#'  but with the full likelihood. This should only be used for small dimensions.
-#'  If you give \code{data}, and not \code{graph}, then the function fits HR
-#'  with the whole matrix. This is computationally heavy and works only for
-#'  small dimensions, e.g., 3 or 4.
+#' parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
+#' If \code{graph} is provided, then the conditional independence
+#' structure of this graph is assumed and the parameters on the edges are fitted.
+#' In both cases the full likelihood is used and therefore this function should only
+#' be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
+#' fitting can be done separately on the cliques; see \code{\link{fmpareto_graph_HR}}.
 #'
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
-#' \eqn{n} observations following a \eqn{d}-variate HR Pareto distribution.
-#' @param p Numeric between 0 and 1. Threshold probability. If \code{NULL},
-#' it is assumed that \code{data} is already distributed as multivariate Pareto.
-#' @param cens Boolean. If TRUE, then censored log-likelihood is computed.
-#' By default, \code{cens = FALSE}.
-#' @param init Numeric vector. Initial parameter values.
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#' @param cens Logical. If true, then censored likelihood contributions are used for
+#' components below the threshold. By default, \code{cens = FALSE}.
+#' @param init Numeric vector. Initial parameter values in the optimization.
 #' @param maxit Positive integer. The maximum number of iterations in the
 #' optimization.
-#' @param graph Graph object from \code{igraph} package or
-#' \code{NULL}.
-#' If \code{graph} is not \code{NULL}, then only edge parameters are fit.
+#' @param graph Graph object from \code{igraph} package or \code{NULL}.
+#' If provided, the \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+#' graph with singleton separator sets.
 #' @param method String. A valid optimization method used by the function
 #' \code{\link[stats]{optim}}. By default, \code{method = "BFGS"}.
 #'
-#' @return List. The list made of:
+#' @return List consisting of:
 #' \itemize{
-#' \item \code{convergence} Boolean. Whether the optimization converged or not.
-#' \item \code{par} Numeric vector. Optimized parameters.
-#' \item \code{Gamma} Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
+#' \item \code{convergence}: Logical. Indicates whether the optimization converged or not.
+#' \item \code{par}: Numeric vector. Optimized parameters.
+#' \item \code{Gamma}: Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
 #' matrix.
-#' \item \code{nllik} Numeric. Optimum value of the likelihood function.
-#' \item \code{hessian} Numeric matrix. Estimated Hessian matrix of the
+#' \item \code{nllik}: Numeric. Optimized value of the likelihood function.
+#' \item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
 #' estimated parameters.
 #' }
+#'
+#' @examples
+#' ## Fitting a 3-dimensional HR distribution
+#' n <- 50
+#' d <- 3
+#' G <-  cbind(c(0, 1.5, 1.5),
+#'             c(1.5, 0, 2),
+#'             c(1.5, 2, 0))
+#' set.seed(123)
+#' my_data <- rmpareto(n, "HR", d = d, par = G)
+#' my_fit <- fmpareto_HR(my_data, p = NULL, cens = FALSE, init = c(1,1,1))
+#'
 # !!! check if graph has specific form??
 fmpareto_HR <- function(data,
                        p = NULL,
@@ -467,28 +479,64 @@ fmpareto_HR <- function(data,
 
 
 
-#' Maximum likelihood parameters of a HR block graph.
+#' Parameter fitting for multivariate Huesler--Reiss Pareto distribution on block graphs
 #'
-#' Estimates the parameters of a HR block graph by maximizing the
-#' (censored) log-likelihood.
+#' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution using (censored) likelihood estimation.
+#' Fitting is done separately on the cliques of a block graph. If  \code{edges_to_add}
+#' are provided, then these edges are added in a greedy way to the original \code{graph},
+#' such that in each step the likelihood is improved maximally and the new graph stays in the
+#' class of block graphs. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #'
-#' @inheritParams fmpareto_HR
-#' @param graph Graph object from \code{igraph} package.
-#' An undirected block graph, i.e., a decomposable, connected
-#' graph where the minimal separators of the cliques have size at most one.
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#' @param cens Logical. If true, then censored likelihood contributions are used for
+#' components below the threshold. By default, \code{cens = FALSE}.
+#' @param graph Graph object from \code{igraph} package. The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+#' graph with singleton separator sets.
 #' @param edges_to_add Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
 #' the number of edges that are tried to be added in the forward selection.
 #' By default, \code{edges_to_add = NULL}.
 #'
-#' @return List. The list is made of:
+#' @return List consisting of:
 #' \itemize{
-#' \item \code{graph} --- Graph object from \code{igraph} package. It represents
-#' the block graph passed to the function.
-#' \item \code{Gamma} --- Numeric matrix \eqn{d\times d}{d x d}. It represents
-#' the estimated variogram matrix \eqn{\Gamma}.
+#' \item \code{graph}: Graph object from \code{igraph} package. If \code{edges_to_add} are provided,
+#' then this is a list of the resulting graphs in each step of the greedy search.
+#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}.
+#' If \code{edges_to_add} are provided,
+#' then this is a list of the estimated variogram matrices in each step of the greedy search.
+#' \item \code{AIC}: (only if \code{edges_to_add} are provided) List of AIC values of the fitted models
+#' in each step of the greedy search.
+#' \item \code{added.edges}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
+#' the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy search.
 #' }
 #'
-fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add = NULL){
+#' @examples
+#' ## Fitting a 4-dimensional HR distribution
+#'
+#' my_graph <- igraph::graph_from_adjacency_matrix(
+#'   rbind(c(0, 1, 0, 0),
+#'         c(1, 0, 1, 1),
+#'         c(0, 1, 0, 0),
+#'         c(0, 1, 0, 0)),
+#'   mode = "undirected")
+#' n <- 100
+#' Gamma_vec <- c(.5,1.4,.8)
+#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
+#' edges_to_add <- rbind(c(1,3), c(1,4), c(3,4))
+#'
+#' set.seed(123)
+#' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
+#' my_fit <- fmpareto_graph_HR(my_data, graph = my_graph,
+#'   p = NULL, cens = FALSE, edges_to_add = edges_to_add)
+#'
+#' @references
+#'  \insertAllCited{}
+#' @export
+fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL){
 
   # set up main variables
   d <- igraph::vcount(graph)
@@ -670,17 +718,48 @@ fmpareto_graph_HR = function(graph, data, p = NULL, cens = FALSE, edges_to_add =
 }
 
 
-
-#' Estimate the HR minimum spanning tree
+#' Fitting of Huesler--Reiss minimum spanning tree
 #'
-#' Estimates the minimum spanning tree as the HR tree that maximizes
-#' the (censored) log-likelihood.
+#' Fits the Huesler--Reiss minimum spanning tree, where the edge weights are
+#' are the negative maximized log-likelihoods of the bivariate Huesler--Reiss
+#' distributions. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #'
-#' @inheritParams logLH_HR
-#' @inheritParams fmpareto_HR
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#' @param cens Logical. If true, then censored likelihood contributions are used for
+#' components below the threshold. By default, \code{cens = FALSE}.
 #'
-#' @return Graph object from \code{igraph} package. A tree.
+#' @return List consisting of:
+#' \itemize{
+#' \item \code{tree}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
+#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+#' corresponding to the fitted minimum spanning tree.
+#' }
 #'
+#' @examples
+#' ## Fitting a 4-dimensional HR MST tree
+#'
+#' my_graph <- igraph::graph_from_adjacency_matrix(
+#'   rbind(c(0, 1, 0, 0),
+#'         c(1, 0, 1, 1),
+#'         c(0, 1, 0, 0),
+#'         c(0, 1, 0, 0)),
+#'   mode = "undirected")
+#' n <- 100
+#' Gamma_vec <- c(.5,1.4,.8)
+#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
+#'
+#' set.seed(123)
+#' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
+#' my_fit <- mst_HR(my_data, p = NULL, cens = FALSE)
+#'
+#' @references
+#'  \insertAllCited{}
+#' @export
 mst_HR = function(data, p = NULL, cens = FALSE){
 
   # check if you need to rescale data or not

@@ -2,54 +2,69 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{fmpareto_HR}
 \alias{fmpareto_HR}
-\title{Fit parameters of multivariate HR Pareto distribution}
+\title{Parameter fitting for multivariate Huesler--Reiss Pareto distribution}
 \usage{
 fmpareto_HR(data, p = NULL, cens = FALSE, init, maxit = 100,
   graph = NULL, method = "BFGS")
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
-\eqn{n} observations following a \eqn{d}-variate HR Pareto distribution.}
+\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+number of observations and \eqn{d} is the dimension.}
 
-\item{p}{Numeric between 0 and 1. Threshold probability. If \code{NULL},
-it is assumed that \code{data} is already distributed as multivariate Pareto.}
+\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+to standardize the \code{data}.}
 
-\item{cens}{Boolean. If TRUE, then censored log-likelihood is computed.
-By default, \code{cens = FALSE}.}
+\item{cens}{Logical. If true, then censored likelihood contributions are used for
+components below the threshold. By default, \code{cens = FALSE}.}
 
-\item{init}{Numeric vector. Initial parameter values.}
+\item{init}{Numeric vector. Initial parameter values in the optimization.}
 
 \item{maxit}{Positive integer. The maximum number of iterations in the
 optimization.}
 
-\item{graph}{Graph object from \code{igraph} package or
-\code{NULL}.
-If \code{graph} is not \code{NULL}, then only edge parameters are fit.}
+\item{graph}{Graph object from \code{igraph} package or \code{NULL}.
+If provided, the \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+graph with singleton separator sets.}
 
 \item{method}{String. A valid optimization method used by the function
 \code{\link[stats]{optim}}. By default, \code{method = "BFGS"}.}
 }
 \value{
-List. The list made of:
+List consisting of:
 \itemize{
-\item \code{convergence} Boolean. Whether the optimization converged or not.
-\item \code{par} Numeric vector. Optimized parameters.
-\item \code{Gamma} Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
+\item \code{convergence}: Logical. Indicates whether the optimization converged or not.
+\item \code{par}: Numeric vector. Optimized parameters.
+\item \code{Gamma}: Numeric matrix \eqn{d \time d}{d x d}. Fitted variogram
 matrix.
-\item \code{nllik} Numeric. Optimum value of the likelihood function.
-\item \code{hessian} Numeric matrix. Estimated Hessian matrix of the
+\item \code{nllik}: Numeric. Optimized value of the likelihood function.
+\item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
 estimated parameters.
 }
 }
 \description{
-This function fits the parameters of a multivariate HR Pareto distribution
- using (censored) likelihood estimation.
+Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
+using (censored) likelihood estimation.
 }
 \details{
-If \code{graph} is given, it assumes the conditional independence
- structure of this graph and fits only the parameters on the edges,
- but with the full likelihood. This should only be used for small dimensions.
- If you give \code{data}, and not \code{graph}, then the function fits HR
- with the whole matrix. This is computationally heavy and works only for
- small dimensions, e.g., 3 or 4.
+If \code{graph = NULL}, then the parameters of a \eqn{d \time d}{d x d}
+parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
+If \code{graph} is provided, then the conditional independence
+structure of this graph is assumed and the parameters on the edges are fitted.
+In both cases the full likelihood is used and therefore this function should only
+be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
+fitting can be done separately on the cliques; see \code{\link{fmpareto_graph_HR}}.
+}
+\examples{
+## Fitting a 3-dimensional HR distribution
+n <- 50
+d <- 3
+G <-  cbind(c(0, 1.5, 1.5),
+            c(1.5, 0, 2),
+            c(1.5, 2, 0))
+set.seed(123)
+my_data <- rmpareto(n, "HR", d = d, par = G)
+my_fit <- fmpareto_HR(my_data, p = NULL, cens = FALSE, init = c(1,1,1))
+
 }
