@@ -3,3 +3,4 @@
 ^other_scripts$
 ^\.travis\.yml$
 ^README\.Rmd$
+^R/data_definitions\.R$

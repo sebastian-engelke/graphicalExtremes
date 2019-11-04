@@ -115,6 +115,7 @@ set_graph_parameters <- function(graph){
 #' @param p Numeric vector with \eqn{d} elements.
 #'
 #' @return Numeric matrix \eqn{n \times d}{n x d}.
+#'
 censor <- function(x,p){
   f2 <- function(x,p){
     x_is_less <- x <= p
