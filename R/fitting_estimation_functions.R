@@ -794,45 +794,5 @@ mst_HR = function(data, p = NULL, cens = FALSE){
   # return tree
   return(list(
     tree = mst.tree,
-    Gamma = complete_Gamma(graph = mst.tree, Gamma = est_Gamma),
-    temp = bivLLH.mat))
-}
-
-
-mst_HR2 = function(data, p = NULL, cens = FALSE){
-
-  # check if you need to rescale data or not
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
-  } else {
-    data.std <- data
-  }
-
-  n <- nrow(data)
-  d = ncol(data)
-  graph.full <- igraph::make_full_graph(d)
-  G.emp = emp_vario(data=data)
-  res <- as.matrix(expand.grid(1:d,1:d))
-  res <- res[res[,1]>res[,2],,drop=FALSE]
-  if(cens)
-    bivLLH <- apply(res[,1:2], 1, function(x) -(fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$nllik -
-                                                  2*(sum(log(data[which(data[,x[1]] > 1),x[1]])) + sum(log(data[which(data[,x[2]] > 1),x[2]])))))
-  if(!cens)
-    bivLLH <- apply(res[,1:2], 1, function(x) {par.est = fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$par;
-    logLH_HR(data=data[,x], Gamma=par2Gamma(par.est)) + 2*(sum(log(data[,x[1]])) + sum(log(data[,x[2]]))) })
-
-  bivLLH.mat <- matrix(NA, ncol=d, nrow=d)
-  bivLLH.mat[res] <- bivLLH
-  bivLLH.mat[res[,2:1]] <- bivLLH
-  diag(bivLLH.mat) <- 0
-  mst.tree = igraph::mst(graph=graph.full, weights = -bivLLH.mat[igraph::ends(graph.full,igraph::E(graph.full))], algorithm = "prim")
-
-  # set graphical parameters
-  mst.tree <- set_graph_parameters(mst.tree)
-
-  # return tree
-  return(list(
-    tree = mst.tree,
-    Gamma = G.emp,
-    temp = bivLLH.mat))
+    Gamma = complete_Gamma(graph = mst.tree, Gamma = est_Gamma)))
 }

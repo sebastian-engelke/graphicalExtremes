@@ -296,56 +296,31 @@ test_that("mst_HR works", {
   data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
 
   res <- mst_HR(data = data, p = NULL, cens = FALSE)
+  expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- mst_HR(data = data, p = 0.95, cens = FALSE)
+  expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- mst_HR(data = data, p = NULL, cens = TRUE)
+  expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
-})
-
-
-test_that("mst2=mst", {
-
-  d <- 7
-  v_idx <- 1:7
-  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
-  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
-
-  res <- mst_HR(data = data, p = NULL, cens = FALSE)
-  res2 <- mst_HR2(data = data, p = NULL, cens = FALSE)
-  expect_equal(igraph::as_adjacency_matrix(res$tree, sparse = FALSE),
-               igraph::as_adjacency_matrix(res2$tree, sparse = FALSE))
-  expect_equal(res$temp, res2$temp)
-
-  res <- mst_HR(data = data, p = 0.95, cens = FALSE)
-  res2 <- mst_HR2(data = data, p = 0.95, cens = FALSE)
-  expect_equal(igraph::as_adjacency_matrix(res$tree, sparse = FALSE),
-               igraph::as_adjacency_matrix(res2$tree, sparse = FALSE))
-  expect_equal(res$temp, res2$temp)
-
   res <- mst_HR(data = data, p = 0.95, cens = TRUE)
-  res2 <- mst_HR2(data = data, p = 0.95, cens = TRUE)
-  expect_equal(igraph::as_adjacency_matrix(res$tree, sparse = FALSE),
-               igraph::as_adjacency_matrix(res2$tree, sparse = FALSE))
-  expect_equal(res$temp, res2$temp)
-
-  res <- mst_HR(data = data, p = NULL, cens = FALSE)
-  res2 <- mst_HR2(data = data, p = NULL, cens = FALSE)
-  expect_equal(igraph::as_adjacency_matrix(res$tree, sparse = FALSE),
-               igraph::as_adjacency_matrix(res2$tree, sparse = FALSE))
-  expect_equal(res$temp, res2$temp)
-
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
 })
