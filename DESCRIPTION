@@ -12,10 +12,10 @@ Author:
     Sebastian Engelke [aut, cre],
     Adrien S. Hitz [aut],
     Nicola Gnecco [aut]
-Description: The package provides an R implementation of the statistical methodology of the
-             paper 'Graphical Models for Extremes' by Engelke and Hitz (2019, JRSSB) for sparse 
-             multivariate extreme value models. This includes exact simulation algorithms and statistical 
-             inference methods for multivariate Pareto distributions on graphical structures. 
+Description: Statistical methodology for sparse multivariate extreme value models. Methods are
+             provided for exact simulation and statistical inference for multivariate Pareto distributions
+             on graphical structures as described in the paper 'Graphical Models for Extremes' by
+             Engelke and Hitz (2018). 
 Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8
