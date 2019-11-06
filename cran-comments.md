@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added the arXiv reference to the paper mentioned in the DESCRIPTION text
+
 ## Test environments
 * local ubuntu 18.04, R 3.6.1
 * ubuntu 16.04 (on travis-ci), R 3.6.1

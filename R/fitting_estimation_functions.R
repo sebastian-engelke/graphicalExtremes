@@ -380,10 +380,10 @@ fmpareto_HR <- function(data,
 
   if(!is.null(p)){
     # if p provided -> data not Pareto -> to convert
-    data.std = data2mpareto(data, p)
+    data <- data2mpareto(data, p)
   } else {
     # if p not provided -> data already Pareto
-    data.std <- data
+    data <- data
   }
 
   # censoring at 1 since data already normalized

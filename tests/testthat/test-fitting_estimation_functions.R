@@ -269,6 +269,7 @@ test_that("fmpareto_HR works", {
   expect_type(res, "list")
   expect_length(res, 5)
   expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(t(res$hessian), res$hessian)
 
   init_param <- c(2, 2)
@@ -277,6 +278,7 @@ test_that("fmpareto_HR works", {
   expect_type(res, "list")
   expect_length(res, 5)
   expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(t(res$hessian), res$hessian)
 
 
@@ -285,6 +287,24 @@ test_that("fmpareto_HR works", {
   expect_type(res, "list")
   expect_length(res, 5)
   expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(t(res$hessian), res$hessian)
+
+  res <- fmpareto_HR(data = data, p = NULL, cens = FALSE,
+                     init = init_param, graph = small_block)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(t(res$hessian), res$hessian)
+
+
+  res <- fmpareto_HR(data = data, p = NULL, cens = TRUE,
+                     init = init_param, graph = small_block)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(t(res$hessian), res$hessian)
 
 })
