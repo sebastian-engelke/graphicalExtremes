@@ -15,7 +15,7 @@ Author:
 Description: Statistical methodology for sparse multivariate extreme value models. Methods are
              provided for exact simulation and statistical inference for multivariate Pareto distributions
              on graphical structures as described in the paper 'Graphical Models for Extremes' by
-             Engelke and Hitz (2018) <arXiv:https://arxiv.org/abs/1812.01734>. 
+             Engelke and Hitz (2018) <arXiv:1812.01734>. 
 Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8
