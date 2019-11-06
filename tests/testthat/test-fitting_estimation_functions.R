@@ -261,10 +261,19 @@ test_that("fmpareto_HR works", {
   v_idx <- c(2, 4, 1)
   Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
   small_block <- igraph::induced_subgraph(block, v_idx)
-  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
-  init_param <- Gamma_small_block[upper.tri(Gamma_small_block)]
+  data <- rmstable(1e3, "HR", d = d, Gamma_small_block)
 
+  # providing p
+  init_param <- Gamma_small_block[upper.tri(Gamma_small_block)]
   res <- fmpareto_HR(data = data, p = 0.95, cens = FALSE,
+                     init = init_param)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(t(res$hessian), res$hessian)
+
+  res <- fmpareto_HR(data = data, p = 0.95, cens = TRUE,
                      init = init_param)
   expect_type(res, "list")
   expect_length(res, 5)
@@ -290,6 +299,28 @@ test_that("fmpareto_HR works", {
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(t(res$hessian), res$hessian)
 
+
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+
+  # not providing p
+  init_param <- Gamma_small_block[upper.tri(Gamma_small_block)]
+  res <- fmpareto_HR(data = data, p = NULL, cens = FALSE,
+                     init = init_param)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(t(res$hessian), res$hessian)
+
+  res <- fmpareto_HR(data = data, p = NULL, cens = TRUE,
+                     init = init_param)
+  expect_type(res, "list")
+  expect_length(res, 5)
+  expect_equal(t(res$Gamma), res$Gamma)
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(t(res$hessian), res$hessian)
+
+  init_param <- c(2, 2)
   res <- fmpareto_HR(data = data, p = NULL, cens = FALSE,
                      init = init_param, graph = small_block)
   expect_type(res, "list")

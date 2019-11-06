@@ -398,6 +398,11 @@ fmpareto_HR <- function(data,
     r <- nrow(data.p)
 
     L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+
+    if (is.matrix(L)){
+      L <- split(t(L), 1:r)
+    }
+
     I <- which(lapply(L,length)>0 & lapply(L,length)<d)
     J <- which(lapply(L,length)==d)
 
@@ -425,8 +430,14 @@ fmpareto_HR <- function(data,
     }
   }
   else{
+
     r <- nrow(data)
     L <- apply(data>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+
+    if (is.matrix(L)){
+      L <- split(t(L), 1:r)
+    }
+
     I <- which(lapply(L,length)>0) #1:r
     nllik <- function(par){
       if(!is.null(graph)){
