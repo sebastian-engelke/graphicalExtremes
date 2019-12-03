@@ -27,7 +27,7 @@
 #' multivariate Pareto distribution.
 #'
 #' @details
-  #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
+#' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
 #' For details on the parameters of the Huesler--Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
@@ -82,7 +82,8 @@ rmpareto <- function(n,
   }
 
   if (!(model %in% model_nms)){
-    stop(paste("The model must be one of", model_nms))
+    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
+               ".", sep = ""))
   }
 
   if (model == "HR") {
@@ -297,7 +298,8 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   if (!(model %in% model_nms)){
-    stop(paste("The model must be one of", model_nms))
+    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
+               ".", sep = ""))
   }
 
   if (model == "HR") {
@@ -313,10 +315,21 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       }
     }
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
-      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)){
+      stop(paste("The elements of par must be",
+                 "between 1e-12 and 1 - 1e-12,",
                  "when model = logistic."))
-      # !!! if scalar transform it and give a warning
+    }
+
+    if (length(par) == 1){
+      par <- rep(par, d - 1)
+      warning(paste("The argument par was a scalar.",
+                    "Converted to a vector of size d - 1 with",
+                    "all same entries."))
+    }
+    if (length(par) != d - 1){
+      stop(paste("The argument par must have d - 1 elements,",
+                 "when model = logistic."))
     }
 
   } else if (model == "dirichlet") {
@@ -497,7 +510,8 @@ rmstable <- function(n,
   }
 
   if (!(model %in% model_nms)){
-    stop(paste("The model must be one of", model_nms))
+    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
+               ".", sep = ""))
   }
 
   if (model == "HR") {
@@ -717,7 +731,8 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   if (!(model %in% model_nms)){
-    stop(paste("The model must be one of", model_nms))
+    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
+               ".", sep = ""))
   }
 
   if (model == "HR") {
@@ -733,8 +748,20 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       }
     }
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
-      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)){
+      stop(paste("The elements of par must be",
+                 "between 1e-12 and 1 - 1e-12,",
+                 "when model = logistic."))
+    }
+
+    if (length(par) == 1){
+      par <- rep(par, d - 1)
+      warning(paste("The argument par was a scalar.",
+                    "Converted to a vector of size d - 1 with",
+                    "all same entries."))
+    }
+    if (length(par) != d - 1){
+      stop(paste("The argument par must have d - 1 elements,",
                  "when model = logistic."))
     }
 

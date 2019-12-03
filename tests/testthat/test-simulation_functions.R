@@ -23,7 +23,7 @@ G_wrong2 <- matrix(rep(0, d * d), nrow = d)
 G_wrong3 <- G[, -1]
 theta_1 <- 0.3
 theta_2 <- 1.5
-# !!! add test for theta of size d - 1
+theta_3 <- c(0.3, 0.2, 0.7)
 theta_wrong1 <- 10
 theta_wrong2 <- -3
 alpha <- runif(d)
@@ -56,8 +56,7 @@ graph_disconnected <- igraph::graph_from_adjacency_matrix(rbind(c(0, 1, 0, 0),
                                                                 c(0, 0, 0, 0)),
                                                           mode = "undirected")
 
-empty_graph <- igraph::as.undirected(igraph::graph(n = 0, edges = integer(0)))
-
+empty_graph <- igraph::make_empty_graph(n = 0, directed = FALSE)
 
 # Run tests
 test_that("rmpareto works", {
@@ -119,6 +118,14 @@ test_that("rmpareto_tree works", {
                              par = G_wrong3))
   expect_error(rmpareto_tree(n = n, model = "logistic", tree = my_tree,
                              par = theta_wrong1))
+  expect_error(rmpareto_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(-theta_wrong1, .2, .3)))
+  expect_error(rmpareto_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(-theta_wrong1, .2, .3, .2)))
+  expect_error(rmpareto_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(.1, .2, .3, .2)))
+  expect_warning(rmpareto_tree(n = n, model = "logistic", tree = my_tree,
+                               par = theta_1))
   expect_error(rmpareto_tree(n = n, model = "dirichlet", tree = my_tree,
                              par = alpha_wrong3))
   expect_error(rmpareto_tree(n = n, model = "dirichlet", tree = my_tree,
@@ -144,7 +151,7 @@ test_that("rmpareto_tree works", {
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 
-  res <- rmpareto_tree(n, model = "logistic", tree = my_tree, par = theta_1)
+  res <- rmpareto_tree(n, model = "logistic", tree = my_tree, par = theta_3)
   expect_equal(is.matrix(res), TRUE)
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
@@ -214,6 +221,14 @@ test_that("rmstable_tree works", {
                              par = G_wrong3))
   expect_error(rmstable_tree(n = n, model = "logistic", tree = my_tree,
                              par = theta_wrong1))
+  expect_error(rmstable_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(-theta_wrong1, .2, .4)))
+  expect_error(rmstable_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(-theta_wrong1, .2, .4, 2)))
+  expect_error(rmstable_tree(n = n, model = "logistic", tree = my_tree,
+                             par = c(.9, .2, .4, .2)))
+  expect_warning(rmstable_tree(n = n, model = "logistic", tree = my_tree,
+                             par = theta_1))
   expect_error(rmstable_tree(n = n, model = "dirichlet", tree = my_tree,
                              par = alpha_wrong3))
   expect_error(rmstable_tree(n = n, model = "dirichlet", tree = my_tree,
@@ -239,7 +254,7 @@ test_that("rmstable_tree works", {
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
 
-  res <- rmstable_tree(n, model = "logistic", tree = my_tree, par = theta_1)
+  res <- rmstable_tree(n, model = "logistic", tree = my_tree, par = theta_3)
   expect_equal(is.matrix(res), TRUE)
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))
