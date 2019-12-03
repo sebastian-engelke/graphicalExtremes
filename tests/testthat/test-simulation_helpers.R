@@ -105,7 +105,7 @@ test_that("simu_px_tree_HR works", {
 test_that("simu_px_tree_logistic works", {
   expect_error(simu_px_tree_logistic(n, theta = runif(4), A = A[[2]]))
 
-
+  # !!! add test for theta with size d - 1
   res <- simu_px_tree_logistic(n, theta = 0.3, A = A[[2]])
   expect_type(res, "double")
   expect_equal(dim(res), c(n, d))

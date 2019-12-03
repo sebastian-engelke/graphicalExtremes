@@ -23,6 +23,7 @@ G_wrong2 <- matrix(rep(0, d * d), nrow = d)
 G_wrong3 <- G[, -1]
 theta_1 <- 0.3
 theta_2 <- 1.5
+# !!! add test for theta of size d - 1
 theta_wrong1 <- 10
 theta_wrong2 <- -3
 alpha <- runif(d)

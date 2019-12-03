@@ -316,6 +316,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
       stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
                  "when model = logistic."))
+      # !!! if scalar transform it and give a warning
     }
 
   } else if (model == "dirichlet") {
