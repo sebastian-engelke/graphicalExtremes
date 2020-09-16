@@ -125,3 +125,26 @@ censor <- function(x,p){
   }
   return(t(apply(x,1,f2,p)))
 }
+
+
+is_eq <- function(a, b){
+  tol <- .Machine$double.eps^0.5
+  abs(a - b) < tol
+}
+
+is_greater <- function(a, b){
+  tol <- .Machine$double.eps^0.5
+  a - b > tol
+}
+
+is_less <- function(a, b){
+  is_greater(b, a)
+}
+
+is_leq <- function(a, b){
+  !(is_greater(a, b))
+}
+
+is_geq <- function(a, b){
+  !(is_less(a, b))
+}

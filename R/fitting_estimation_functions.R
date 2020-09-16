@@ -154,7 +154,7 @@ V_HR <- function(x, par){
   }
 
   # function body ####
-  if (any(x <= 0)) {
+  if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
 
@@ -181,7 +181,7 @@ V_HR <- function(x, par){
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
 logdV_HR <- function(x,par){
-  if (any(x <= 0)) {
+  if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
 
@@ -225,7 +225,7 @@ logdV_HR <- function(x,par){
 #'
 logdVK_HR <- function(x, K, par){
 
-  if (any(x <= 0)) {
+  if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
 

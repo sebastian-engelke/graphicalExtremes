@@ -405,7 +405,7 @@ Gamma2par = function(Gamma){
 #'
 #' @export
 chi2Gamma <- function(chi){
-  if (any(chi < 0 | chi > 1)){
+  if (any(is_less(chi, 0) | is_greater(chi, 1))){
     stop("The argument chi must be between 0 and 1.")
   }
   Gamma <- (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2
