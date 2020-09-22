@@ -1,6 +1,6 @@
 ###################################################################
 #### Code for simulation study and application of
-#### Engelke & Hitz, Graphical Models for Extremes (2019, JRSSB)
+#### Engelke & Hitz, Graphical Models for Extremes (2020, JRSSB)
 ###################################################################
 setwd("other_scripts") # we will delete
 library("graphicalExtremes")

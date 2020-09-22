@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: inst/REFERENCES.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -22,7 +23,7 @@ status](https://api.travis-ci.org/sebastian-engelke/graphicalExtremes.svg?branch
 <!-- badges: end -->
 
 The goal of graphicalExtremes is to provide an implementation of the statistical 
-methodology paper Engelke and Hitz (2019, JRSSB) for sparse multivariate extreme
+methodology paper @eng2019 for sparse multivariate extreme
 value models. This includes exact simulation algorithms and statistical 
 inference methods for multivariate Pareto distributions on graphical structures.
 
@@ -40,3 +41,5 @@ You can install the development version of graphicalExtremes from [GitHub](https
 # install.packages("devtools")
 devtools::install_github("sebastian-engelke/graphicalExtremes")
 ```
+
+# References
