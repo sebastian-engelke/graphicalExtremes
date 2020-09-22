@@ -4,8 +4,7 @@
 \alias{rmstable}
 \title{Sampling of a multivariate max-stable distribution}
 \usage{
-rmstable(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
-  d, par)
+rmstable(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1], d, par)
 }
 \arguments{
 \item{n}{Number of simulations.}

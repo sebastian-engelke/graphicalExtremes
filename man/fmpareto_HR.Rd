@@ -4,8 +4,15 @@
 \alias{fmpareto_HR}
 \title{Parameter fitting for multivariate Huesler--Reiss Pareto distribution}
 \usage{
-fmpareto_HR(data, p = NULL, cens = FALSE, init, maxit = 100,
-  graph = NULL, method = "BFGS")
+fmpareto_HR(
+  data,
+  p = NULL,
+  cens = FALSE,
+  init,
+  maxit = 100,
+  graph = NULL,
+  method = "BFGS"
+)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the

@@ -4,8 +4,7 @@
 \alias{fmpareto_graph_HR}
 \title{Parameter fitting for multivariate Huesler--Reiss Pareto distributions on block graphs}
 \usage{
-fmpareto_graph_HR(data, graph, p = NULL, cens = FALSE,
-  edges_to_add = NULL)
+fmpareto_graph_HR(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the

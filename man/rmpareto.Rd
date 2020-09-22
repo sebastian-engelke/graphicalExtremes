@@ -4,8 +4,7 @@
 \alias{rmpareto}
 \title{Sampling of a multivariate Pareto distribution}
 \usage{
-rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
-  d, par)
+rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet")[1], d, par)
 }
 \arguments{
 \item{n}{Number of simulations.}

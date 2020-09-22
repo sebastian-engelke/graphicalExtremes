@@ -4,8 +4,10 @@
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1. Probability used for the quantile to
-#' compute the \eqn{\chi} coefficient.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
 #'
 #' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
 #' for the \code{data}.
@@ -21,20 +23,78 @@
 #' emp_chi(my_data, p)
 #'
 #' @export
-#'
-emp_chi <- function(data, p){
-  if (!is.matrix(data)){
+emp_chi <- function (data, p=NULL){
+  if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
-
-  if (ncol(data) <= 1){
+  if (ncol(data) <= 1) {
     stop("The data should be a matrix with at least two columns.")
   }
 
   data <- stats::na.omit(data)
-  data <-  apply(data, 2, unif)
+  if(!is.null(p)){
+    data <- apply(data, 2, unif)
+    rowmin <- apply(data, 1, min)
+    chi <- sapply(1:length(p), FUN = function(i) mean(rowmin >
+                                                        p[i]))/(1 - p)
+  } else {
+    rowmin <- apply(data, 1, min)
+    chi <- mean(sapply(1:ncol(data), FUN = function(i){
+      mean(rowmin[which(data[,i]>1)]>1)
+    }))
+
+  }
+  return(chi)
+}
+
+#' Empirical estimation of extremal correlation \eqn{\chi}
+#'
+#' Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
+#'
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#'
+#' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
+#' for the \code{data}.
+#' @examples
+#' n <- 100
+#' d <- 2
+#' p <- .8
+#' G <-  cbind(c(0, 1.5),
+#'             c(1.5, 0))
+#'
+#' set.seed(123)
+#' my_data = rmstable(n, "HR", d = d, par = G)
+#' emp_chi(my_data, p)
+#'
+#' @export
+emp_chi2 <- function (data, p=NULL){
+  if (!is.matrix(data)) {
+    stop("The data should be a matrix")
+  }
+  if (ncol(data) <= 1) {
+    stop("The data should be a matrix with at least two columns.")
+  }
+
+  d <- ncol(data)
+  data <- stats::na.omit(data)
+
+  if(!is.null(p)){
+    data.std = data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+
+
   rowmin <- apply(data, 1, min)
-  chi <- sapply(1:length(p), FUN = function(i) mean(rowmin > p[i])) / (1-p)
+  chi <- mean(sapply(1:ncol(data), FUN = function(i){
+    mean(rowmin[which(data[,i]>1)]>1)
+  }))
   return(chi)
 }
 
@@ -94,19 +154,28 @@ emp_chi_mat <- function(data, p){
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
 #' variogram of the Huesler--Reiss distribution.
+#' @export
 emp_vario <- function(data, k=NULL, p=NULL){
+
   # helper ####
   G.fun = function(i, data){
     idx = which(data[,i]>1)
     if(length(idx) > 1)
       xx = Sigma2Gamma(stats::cov(log(data[idx,])), full=TRUE)
     else{
-      xx = matrix(0,d,d)
+      xx = matrix(NA,d,d)
     }
     return(xx)
   }
 
   # body ####
+  if (!is.matrix(data)) {
+    stop("The data should be a matrix")
+  }
+  if (ncol(data) <= 1) {
+    stop("The data should be a matrix with at least two columns.")
+  }
+
   d <- ncol(data)
   if(!is.null(p)){
     data.std = data2mpareto(data, p)
@@ -118,12 +187,17 @@ emp_vario <- function(data, k=NULL, p=NULL){
 
     G <- G.fun(k, data.std)
 
+    if (any(is.na(G))){
+    warning(paste("Produced NA matrix since there are no exceedances in the component k =",
+                  k))
+    }
+
   } else {
 
     # take the average
     row_averages <- rowMeans(sapply(1:d, FUN = function(i){
       G.fun(i, data.std)
-    }))
+    }), na.rm = TRUE)
     G <- matrix(row_averages, nrow = d, ncol = d)
   }
 

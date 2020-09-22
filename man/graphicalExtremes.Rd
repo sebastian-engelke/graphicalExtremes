@@ -3,7 +3,6 @@
 \docType{package}
 \name{graphicalExtremes}
 \alias{graphicalExtremes}
-\alias{graphicalExtremes-package}
 \title{graphicalExtremes: Statistical methodology for graphical extreme value models.}
 \description{
 The \code{graphicalExtremes} package provides three categories of functions:

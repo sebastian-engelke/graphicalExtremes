@@ -10,8 +10,10 @@ emp_chi_mat(data, p)
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 number of observations and \eqn{d} is the dimension.}
 
-\item{p}{Numeric between 0 and 1. Probability used for the quantile to
-compute the \eqn{\chi} coefficient.}
+\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+to standardize the \code{data}.}
 }
 \value{
 Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
