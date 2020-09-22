@@ -106,31 +106,31 @@ test_that("emp_vario works", {
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
-  expect_equal(all(res >= 0), T)
+  expect_equal(all(res >= 0 | is.na(res)), T)
 
   res <- emp_vario(data, k = sample(1:dd, 1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
-  expect_equal(all(res >= 0), T)
+  expect_equal(all(res >= 0 | is.na(res)), T)
 
   res <- emp_vario(data, p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
-  expect_equal(all(res >= 0), T)
+  expect_equal(all(res >= 0 | is.na(res)), T)
 
   res <- emp_vario(data, p = .99)
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
-  expect_equal(all(res >= 0), T)
+  expect_equal(all(res >= 0 | is.na(res)), T)
 
   res <- emp_vario(data, k = sample(1:dd, 1), p = runif(1))
   expect_equal(NROW(res), dd)
   expect_equal(NCOL(res), dd)
   expect_type(res, "double")
-  expect_equal(all(res >= 0), T)
+  expect_equal(all(res >= 0 | is.na(res)), T)
 
 })
 
