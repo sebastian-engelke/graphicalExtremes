@@ -42,9 +42,9 @@ emp_chi <- function (data, p=NULL){
 
 
 
-  rowmin <- apply(data, 1, min)
-  chi <- mean(sapply(1:ncol(data), FUN = function(i){
-    mean(rowmin[which(data[,i]>1)]>1)
+  rowmin <- apply(data.std, 1, min)
+  chi <- mean(sapply(1:ncol(data.std), FUN = function(i){
+    mean(rowmin[which(data.std[,i]>1)]>1)
   }), na.rm = TRUE)
   return(chi)
 }
