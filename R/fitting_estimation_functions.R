@@ -788,25 +788,25 @@ mst_HR = function(data, p = NULL, cens = FALSE){
   } else {
     data.std <- data
   }
-  n <- nrow(data)
-  d = ncol(data)
+  n <- nrow(data.std)
+  d = ncol(data.std)
   graph.full <- igraph::make_full_graph(d)
-  G.emp = emp_vario(data=data)
+  G.emp = emp_vario(data=data.std)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
   if(cens)
     bivLLH <- apply(res[,1:2], 1, function(x){
-      fmpareto_obj <- fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)
+      fmpareto_obj <- fmpareto_HR(data=data.std[,x], init=G.emp[x[1],x[2]], cens=cens)
       par.est <- fmpareto_obj$par
       llh_hr <- - (fmpareto_obj$nllik
-                   - 2*(sum(log(data[which(data[,x[1]] > 1),x[1]]))
-                        + sum(log(data[which(data[,x[2]] > 1),x[2]]))))
+                   - 2*(sum(log(data.std[which(data.std[,x[1]] > 1),x[1]]))
+                        + sum(log(data.std[which(data.std[,x[2]] > 1),x[2]]))))
       c(par = par.est, llh_hr = llh_hr)
     })
 
   if(!cens)
     bivLLH <- apply(res[,1:2], 1, function(x) {
-      par.est <-  fmpareto_HR(data=data[,x], init=G.emp[x[1],x[2]], cens=cens)$par
-      llh_hr <- logLH_HR(data=data[,x], Gamma=par2Gamma(par.est)) + 2*(sum(log(data[,x[1]])) + sum(log(data[,x[2]])))
+      par.est <-  fmpareto_HR(data=data.std[,x], init=G.emp[x[1],x[2]], cens=cens)$par
+      llh_hr <- logLH_HR(data=data.std[,x], Gamma=par2Gamma(par.est)) + 2*(sum(log(data.std[,x[1]])) + sum(log(data.std[,x[2]])))
       c(par = par.est, llh_hr = llh_hr)
     })
 
