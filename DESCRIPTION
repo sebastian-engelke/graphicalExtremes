@@ -29,5 +29,9 @@ Imports:
     matrixcalc (>= 1.0.3),
     Rdpack,
     stats (>= 3.6.0),
-    grDevices (>= 3.6.0)
+    grDevices (>= 3.6.0),
+    Rcpp
 RdMacros: Rdpack
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
