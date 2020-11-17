@@ -148,3 +148,14 @@ is_leq <- function(a, b){
 is_geq <- function(a, b){
   !(is_less(a, b))
 }
+
+fast_diag <- function(y, M){
+  ## numeric_matrix numeric_matrix -> numeric_vector
+  ## fast computation of diag(y %*% M %*% t(y))
+
+  n <- nrow(y)
+  sapply(1:n, function(i){
+    u <- y[i, , drop = FALSE]
+    u %*% M %*% t(u)
+  })
+}

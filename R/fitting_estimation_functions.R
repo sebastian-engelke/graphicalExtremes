@@ -226,11 +226,13 @@ logdV_HR <- function(x,par){
   logdetS <- 2*sum(log(diag(cholS)))
   if (is.vector(x)){
     y <- (log(x/x[i])+ G[,i]/2)[-i]
-    logdv <- - sum(log(x)) - log(x[i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * t(y)%*%Sm1%*%y
+    logdv <- - sum(log(x)) - log(x[i]) -((d-1)/2)*log(2*pi) -
+      1/2*logdetS  - 1/2 * t(y)%*%Sm1%*%y
   }
   if (is.matrix(x)){
     y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = FALSE]
-    logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * diag(y%*%Sm1%*%t(y))
+    logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -
+      1/2*logdetS  - 1/2 * fast_diag(y, Sm1)
   }
   return(logdv)
 }
