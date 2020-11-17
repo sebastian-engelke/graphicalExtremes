@@ -25,3 +25,11 @@ test_that("select_edges works", {
   expect_equal(select_edges(small_graph), rbind(c(1, 3), c(1, 4), c(3, 4)))
 
 })
+
+test_that("fast_diag works", {
+  n <- 2e3
+  d <- 1e2
+  y <- matrix(runif(n * d), nrow = n)
+  M <- matrix(runif(d * d), nrow = d)
+  expect_equal(fast_diag(y, M), diag(y %*% M %*% t(y)))
+})

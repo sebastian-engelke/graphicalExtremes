@@ -288,13 +288,19 @@ logdVK_HR <- function(x, K, par){
   }
   if(k==1){
     logdvK <- - 2*log(x[i])
-    logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),sigma=S[-K,-K])[1])
+    if (d == 2){
+      logdvnK <- log(stats::pnorm(q = c(log(x[-K]/x[i]) + G[-K,i]/2),
+                                  sd = sqrt(S[-K,-K])))
+      names(logdvnK) <- "upper"
+    } else {
+      logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),
+                                      sigma=S[-K,-K])[1])
+    }
     logdv <- logdvK + logdvnK
   }
 
   return(logdv)
 }
-
 
 
 #' Full censored log-likelihood of HR model

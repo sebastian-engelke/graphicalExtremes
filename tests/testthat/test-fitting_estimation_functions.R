@@ -162,8 +162,18 @@ test_that("logdVK_HR works", {
   expect_error(logdVK_HR(x = rep(1, d + 1),
                          K = sample(1:d, ceiling(runif(1) * d)),
                          par = par))
-  res <- logdVK_HR(x = rep(1, d), K = sample(1:d, ceiling(runif(1) * d)),
+  expect_error(logdVK_HR(x = rep(1, d), K = sample(1:d, size = d),
+                         par = par))
+  res <- logdVK_HR(x = rep(1, d), K = sample(1:d, ceiling(runif(1) * (d - 1))),
                    par = par)
+  expect_type(res, "double")
+  expect_length(res, 1)
+
+  d <- NROW(G2)
+  par <- G2[upper.tri(G2)]
+  res <- logdVK_HR(x = rep(1, d), K = sample(1:d, ceiling(runif(1) * (d-1))),
+                   par = par)
+
   expect_type(res, "double")
   expect_length(res, 1)
 })
