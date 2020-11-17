@@ -231,7 +231,6 @@ logdV_HR <- function(x,par){
   if (is.matrix(x)){
     y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = FALSE]
     logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -1/2*logdetS  - 1/2 * diag(y%*%Sm1%*%t(y))
-    # !!! avoid computing all n^2 elements in diag(%*%Sm1%*%t(y))
   }
   return(logdv)
 }
@@ -287,7 +286,6 @@ logdVK_HR <- function(x, K, par){
   }
   if(k==1){
     logdvK <- - 2*log(x[i])
-    # !!! if d == 2, sample with pnorm
     logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),sigma=S[-K,-K])[1])
     logdv <- logdvK + logdvnK
   }
