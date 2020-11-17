@@ -384,4 +384,10 @@ test_that("mst_HR works", {
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
+  # parallel execution
+  res <- mst_HR(data = data, p = NULL, cens = FALSE)
+  debug(mst_HR)
+  res2 <- res <- mst_HR(data = data, p = NULL, cens = FALSE, parallel = TRUE,
+                        n_workers = 2)
+
 })
