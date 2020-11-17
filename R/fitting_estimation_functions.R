@@ -814,17 +814,20 @@ mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
     if (parallel){
       doFuture::registerDoFuture()
       future::plan(future::multisession, workers = n_workers)
+
       bivLLH <- foreach(i=1:nrow(res), .combine=cbind,
                         .packages='graphicalExtremes') %dopar% {
-        x <- res[i, ]
-        fmpareto_obj <- fmpareto_HR(data = data.std[, x],
-                                    init = G.emp[x[1], x[2]], cens = cens)
-        par.est <- fmpareto_obj$par
-        llh_hr <- -(fmpareto_obj$nllik - 2 * (sum(log(data.std[which(data.std[,
-                                                                              x[1]] > 1), x[1]])) + sum(log(data.std[which(data.std[,
-                                                                                                                                    x[2]] > 1), x[2]]))))
-        return(c(par = par.est, llh_hr = llh_hr))
-      }
+                          x <- res[i, ]
+                          fmpareto_obj <- fmpareto_HR(data = data.std[, x],
+                                                      init = G.emp[x[1], x[2]],
+                                                      cens = cens)
+                          par.est <- fmpareto_obj$par
+                          llh_hr <- -(fmpareto_obj$nllik - 2 *
+                                        (sum(log(data.std[which(data.std[,x[1]] > 1), x[1]])) +
+                                           sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
+                          return(c(par = par.est, llh_hr = llh_hr))
+                        }
+      future::plan(future::sequential)
       colnames(bivLLH) <- NULL
 
     } else {
@@ -848,19 +851,19 @@ mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
       bivLLH <- foreach(i=1:nrow(res), .combine=cbind,
                         .packages='graphicalExtremes') %dopar% {
 
-        x <- res[i, ]
+                          x <- res[i, ]
 
-        par.est <-  fmpareto_HR(data=data.std[,x],
-                                init=G.emp[x[1],x[2]],
-                                cens=cens)$par
+                          par.est <-  fmpareto_HR(data=data.std[,x],
+                                                  init=G.emp[x[1],x[2]],
+                                                  cens=cens)$par
 
-        llh_hr <- logLH_HR(data=data.std[,x], Gamma=par2Gamma(par.est)) +
-          2*(sum(log(data.std[,x[1]])) + sum(log(data.std[,x[2]])))
+                          llh_hr <- logLH_HR(data=data.std[,x], Gamma=par2Gamma(par.est)) +
+                            2*(sum(log(data.std[,x[1]])) + sum(log(data.std[,x[2]])))
 
-        return(c(par = par.est, llh_hr = llh_hr))
+                          return(c(par = par.est, llh_hr = llh_hr))
 
-      }
-
+                        }
+      future::plan(future::sequential)
       colnames(bivLLH) <- NULL
 
     } else {
@@ -879,7 +882,10 @@ mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
   bivLLH.mat <- par2Gamma(bivLLH["llh_hr", ])
 
   # Estimated tree
-  mst.tree = igraph::mst(graph=graph.full, weights = -bivLLH.mat[igraph::ends(graph.full,igraph::E(graph.full))], algorithm = "prim")
+  mst.tree = igraph::mst(graph=graph.full, weights =
+                           -bivLLH.mat[igraph::ends(graph.full,
+                                                    igraph::E(graph.full))],
+                         algorithm = "prim")
 
   # set graphical parameters
   mst.tree <- set_graph_parameters(mst.tree)
