@@ -78,6 +78,9 @@ test_that("emp_chi works", {
 
 test_that("emp_chi_mat works", {
 
+  expect_error(emp_chi_mat(data = data1[, 1], p = .95))
+  expect_error(emp_chi_mat(data = as.matrix(data1[, 1]), p = .95))
+
   dat <- data1
   res <- emp_chi_mat(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
@@ -99,11 +102,6 @@ test_that("emp_chi_mat works", {
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
   expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
-
-  bench::mark(
-    emp_chi_mat(data = dat, p = .95),
-    emp_chi_mat_deprecated(data = dat, p = .95)
-  )
 
 })
 

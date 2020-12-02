@@ -74,11 +74,21 @@ emp_chi <- function (data, p=NULL){
 #' @export
 emp_chi_mat <- function(data, p){
 
+  if (!is.matrix(data)) {
+    stop("The data should be a matrix")
+  }
+  if (ncol(data) <= 1) {
+    stop("The data should be a matrix with at least two columns.")
+  }
+
+  n <- nrow(data)
+
   if(!is.null(p)){
     data.std = data2mpareto(data, p)
   } else {
     data.std <- data
   }
+
 
   ind <- data.std > 1
   crossprod(ind, ind) / (n * (1 - p))
