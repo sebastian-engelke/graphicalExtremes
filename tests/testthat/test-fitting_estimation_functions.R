@@ -83,12 +83,14 @@ test_that("emp_chi_mat works", {
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
+  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
 
   dat <- data2
   res <- emp_chi_mat(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
+  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
 
 
   dat <- data3
@@ -96,33 +98,14 @@ test_that("emp_chi_mat works", {
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
+  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+
+  bench::mark(
+    emp_chi_mat(data = dat, p = .95),
+    emp_chi_mat_deprecated(data = dat, p = .95)
+  )
+
 })
-
-test_that("emp_chi_mat_new works", {
-
-  dat <- data1
-  res <- emp_chi_mat_new(data = dat, p = .95)
-  res2 <- emp_chi_mat(data = dat, p = .95)
-  all.equal(res, res2)
-
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
-
-  dat <- data2
-  res <- emp_chi_mat(data = dat, p = .95)
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
-
-
-  dat <- data3
-  res <- emp_chi_mat(data = dat, p = .95)
-  expect_equal(NROW(res), NCOL(dat))
-  expect_equal(NCOL(res), NCOL(dat))
-  expect_equal(all(!is.na(res)), TRUE)
-})
-
 
 test_that("emp_vario works", {
   data <- rmpareto(1e1, "HR", d = 4, G1)
