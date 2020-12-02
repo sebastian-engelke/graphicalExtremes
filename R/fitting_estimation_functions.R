@@ -73,6 +73,19 @@ emp_chi <- function (data, p=NULL){
 #'
 #' @export
 emp_chi_mat <- function(data, p){
+
+  if(!is.null(p)){
+    data.std = data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  ind <- data.std > 1
+  crossprod(ind, ind) / (n * (1 - p))
+
+}
+
+emp_chi_mat_deprecated <- function(data, p){
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d,1:d))
   res <- res[res[,1]>res[,2],,drop=FALSE]
@@ -85,20 +98,6 @@ emp_chi_mat <- function(data, p){
   diag(chi.mat) <- 1
 
   return(chi.mat)
-}
-
-
-emp_chi_mat_new <- function(data, p){
-
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
-  } else {
-    data.std <- data
-  }
-
-  ind <- data.std > 1 # n * d
-  crossprod(ind, ind) / (n * (1 - p))
-
 }
 
 
