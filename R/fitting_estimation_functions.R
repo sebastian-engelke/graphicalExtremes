@@ -88,6 +88,20 @@ emp_chi_mat <- function(data, p){
 }
 
 
+emp_chi_mat_new <- function(data, p){
+
+  if(!is.null(p)){
+    data.std = data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  ind <- data.std > 1 # n * d
+  crossprod(ind, ind) / (n * (1 - p))
+
+}
+
+
 
 #' Estimation of the variogram matrix \eqn{\Gamma} of the Huesler--Reiss distribution
 #'
