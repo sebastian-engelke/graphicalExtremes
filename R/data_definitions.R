@@ -3,10 +3,12 @@
 # g is a square symmetric binary matrix
 # interp. an undirected graph (UG)
 
-g <- rbind(c(0, 1, 1, 0),
-           c(1, 0, 0, 1),
-           c(1, 0, 0, 0),
-           c(0, 1, 0, 0))
+g <- rbind(
+  c(0, 1, 1, 0),
+  c(1, 0, 0, 1),
+  c(1, 0, 0, 0),
+  c(0, 1, 0, 0)
+)
 
 
 # d is a positive integer
@@ -26,20 +28,24 @@ n <- 1e3
 # variogram is a numeric matrix with non-negative entries
 # interp. the variogram parametrizing the Huesler-Reiss distribution
 
-variogram <- rbind(c(0, 1, 1, 1),
-                   c(1, 0, 2, 2),
-                   c(1, 2, 0, 2),
-                   c(1, 2, 2, 0))
+variogram <- rbind(
+  c(0, 1, 1, 1),
+  c(1, 0, 2, 2),
+  c(1, 2, 0, 2),
+  c(1, 2, 2, 0)
+)
 
 
 
-arguments <- c("n", "model", "d", "par", "tree", "idx", "trend", "chol_mat",
-               "res", "counter", "theta", "alpha", "G.vec", "A_mat", "A",
-               "alpha.start", "alpha.end", "nb.edges", "Gamma", "to_plot",
-               "graph", "data", "p", "S", "full", "k", "gamma", "u", "pot",
-               "x", "K", "cens", "init", "maxit", "method", "convergence",
-               "nnlik", "hessian", "time", "q", "thr", "sel.edges",
-               "AIC", "added.edges")
+arguments <- c(
+  "n", "model", "d", "par", "tree", "idx", "trend", "chol_mat",
+  "res", "counter", "theta", "alpha", "G.vec", "A_mat", "A",
+  "alpha.start", "alpha.end", "nb.edges", "Gamma", "to_plot",
+  "graph", "data", "p", "S", "full", "k", "gamma", "u", "pot",
+  "x", "K", "cens", "init", "maxit", "method", "convergence",
+  "nnlik", "hessian", "time", "q", "thr", "sel.edges",
+  "AIC", "added.edges"
+)
 length(arguments)
 sort(arguments)
 
@@ -99,5 +105,3 @@ sort(arguments)
 # Theta2Gamma:  theta -> numeric
 # Gamma2Theta:  gamma -> numeric
 # chi.mpd.est:  data pot -> numeric
-
-

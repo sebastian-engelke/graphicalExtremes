@@ -36,10 +36,12 @@
 #' ## A 4-dimensional HR distribution
 #' n <- 10
 #' d <- 4
-#' G <-  cbind(c(0, 1.5, 1.5, 2),
-#'             c(1.5, 0, 2, 1.5),
-#'             c(1.5, 2, 0, 1.5),
-#'             c(2, 1.5, 1.5, 0))
+#' G <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #'
 #' rmpareto(n, "HR", d = d, par = G)
 #'
@@ -60,7 +62,6 @@
 #' d <- 4
 #' alpha <- c(.8, 1, .5, 2)
 #' rmpareto(n, "dirichlet", d, par = alpha)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -73,51 +74,57 @@ rmpareto <- function(n,
   model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 
   # check arguments ####
-  if (d != round(d) | d < 1){
+  if (d != round(d) | d < 1) {
     stop("The argument d must be a positive integer.")
   }
 
-  if (n != round(n) | n < 1){
+  if (n != round(n) | n < 1) {
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% model_nms)){
-    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
-               ".", sep = ""))
+  if (!(model %in% model_nms)) {
+    stop(paste("The model must be one of ", paste(model_nms, collapse = ", "),
+      ".",
+      sep = ""
+    ))
   }
 
   if (model == "HR") {
-    if (!is.matrix(par)){
+    if (!is.matrix(par)) {
       stop("The argument par must be a matrix, when model = HR.")
     }
 
-    if (NROW(par) != d | NCOL(par) != d){
+    if (NROW(par) != d | NCOL(par) != d) {
       stop("The argument par must be a d x d matrix, when model = HR.")
     }
-
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
-      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
-                 "when model = logistic."))
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12) {
+      stop(paste(
+        "The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+        "when model = logistic."
+      ))
     }
-
   } else if (model == "neglogistic") {
-    if (par <= 1e-12){
-      stop(paste("The argument par must be scalar greater than 1e-12,",
-                 "when model = neglogistic."))
+    if (par <= 1e-12) {
+      stop(paste(
+        "The argument par must be scalar greater than 1e-12,",
+        "when model = neglogistic."
+      ))
     }
-
   } else if (model == "dirichlet") {
-    if (length(par) != d){
-      stop(paste("The argument par must be a vector with d elements,",
-                 "when model = dirichlet."))
+    if (length(par) != d) {
+      stop(paste(
+        "The argument par must be a vector with d elements,",
+        "when model = dirichlet."
+      ))
     }
 
-    if (any(par <= 1e-12)){
-      stop(paste("The elements of par must be greater than 1e-12,",
-                 "when model = dirichlet."))
+    if (any(par <= 1e-12)) {
+      stop(paste(
+        "The elements of par must be greater than 1e-12,",
+        "when model = dirichlet."
+      ))
     }
-
   }
 
   # prepare arguments ####
@@ -128,55 +135,56 @@ rmpareto <- function(n,
     cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
     chol_mat <- matrix(0, d, d)
 
-    result <- tryCatch({
-      chol_mat[-1, -1] <- chol(cov.mat)
-    },
-    error = function(e) {
-      stop(paste("The covariance matrix associated to Gamma",
-                 "cannot be factorized with Cholesky."))
-    })
+    result <- tryCatch(
+      {
+        chol_mat[-1, -1] <- chol(cov.mat)
+      },
+      error = function(e) {
+        stop(paste(
+          "The covariance matrix associated to Gamma",
+          "cannot be factorized with Cholesky."
+        ))
+      }
+    )
 
     # compute trend (matrix where each row is one variable)
-    trend <- t(sapply(1:d, function(k){
-      sapply(1:d, function(j){
+    trend <- t(sapply(1:d, function(k) {
+      sapply(1:d, function(j) {
         Gamma[j, k] / 2
-      }
-      )}))
-
+      })
+    }))
   } else if (model == "logistic") {
     theta <- par
-
   } else if (model == "neglogistic") {
     theta <- par
-
   } else if (model == "dirichlet") {
     alpha <- par
-
   }
 
   # function body ####
   counter <- 0
   res <- numeric(0)
   n.total <- 0
-  while (n.total < n){
+  while (n.total < n) {
     counter <- counter + 1
     shift <- sample(1:d, n, replace = TRUE)
-    for (k in 1:d){
-
+    for (k in 1:d) {
       n.k <- sum(shift == k)
 
-      if (n.k > 0){
+      if (n.k > 0) {
         proc <-
           switch(model,
-                 "HR" =
-                   simu_px_HR(n = n.k, idx = k, d = d, trend = trend[k, ],
-                              chol_mat = chol_mat),
-                 "logistic" =
-                   simu_px_logistic(n = n.k, idx = k, d = d, theta = theta),
-                 "neglogistic" =
-                   simu_px_neglogistic(n = n.k, idx = k, d = d, theta = theta),
-                 "dirichlet" =
-                   simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha)
+            "HR" =
+              simu_px_HR(
+                n = n.k, idx = k, d = d, trend = trend[k, ],
+                chol_mat = chol_mat
+              ),
+            "logistic" =
+              simu_px_logistic(n = n.k, idx = k, d = d, theta = theta),
+            "neglogistic" =
+              simu_px_neglogistic(n = n.k, idx = k, d = d, theta = theta),
+            "dirichlet" =
+              simu_px_dirichlet(n = n.k, idx = k, d = d, alpha = alpha)
           )
 
         if (any(dim(proc) != c(n.k, d))) {
@@ -187,7 +195,6 @@ rmpareto <- function(n,
         idx.sim <- which(apply(proc, 1, max) > 1)
         res <- rbind(res, proc[idx.sim, ])
         n.total <- NROW(res)
-
       }
     }
   }
@@ -241,21 +248,22 @@ rmpareto <- function(n,
 #' ## A 4-dimensional HR tree model
 #'
 #' my_tree <- igraph::graph_from_adjacency_matrix(rbind(
-#' c(0, 1, 0, 0),
-#' c(1, 0, 1, 1),
-#' c(0, 1, 0, 0),
-#' c(0, 1, 0, 0)),
-#' mode = "undirected")
+#'   c(0, 1, 0, 0),
+#'   c(1, 0, 1, 1),
+#'   c(0, 1, 0, 0),
+#'   c(0, 1, 0, 0)
+#' ),
+#' mode = "undirected"
+#' )
 #' n <- 10
-#' Gamma_vec <- c(.5,1.4,.8)
+#' Gamma_vec <- c(.5, 1.4, .8)
 #' set.seed(123)
 #' rmpareto_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 #'
 #' ## A 4-dimensional Dirichlet model with asymmetric edge distributions
 #'
-#' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+#' alpha <- cbind(c(.2, 1, .5), c(1.5, .6, .8))
 #' rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -268,7 +276,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   # graph theory objects ####
   # check if it is directed
-  if (igraph::is_directed(tree)){
+  if (igraph::is_directed(tree)) {
     warning("The given tree is directed. Converted to undirected.")
     tree <- igraph::as.undirected(tree)
   }
@@ -283,76 +291,91 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   is_connected <- igraph::is_connected(tree)
   is_tree <- is_connected & (e == d - 1)
 
-  if (!is_tree){
+  if (!is_tree) {
     stop("The given graph is not a tree.")
   }
 
 
   # check arguments ####
-  if (d != round(d) | d < 1){
+  if (d != round(d) | d < 1) {
     stop("The argument d must be a positive integer.")
   }
 
-  if (n != round(n) | n < 1){
+  if (n != round(n) | n < 1) {
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% model_nms)){
-    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
-               ".", sep = ""))
+  if (!(model %in% model_nms)) {
+    stop(paste("The model must be one of ", paste(model_nms, collapse = ", "),
+      ".",
+      sep = ""
+    ))
   }
 
   if (model == "HR") {
-    if (!is.matrix(par)){
-      if (length(par) != (d - 1)){
-        stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d - 1 elements, when model = HR."))
+    if (!is.matrix(par)) {
+      if (length(par) != (d - 1)) {
+        stop(paste(
+          "The argument par must be a d x d matrix,",
+          "or a vector with d - 1 elements, when model = HR."
+        ))
       }
     } else {
-      if (NROW(par) != d | NCOL(par) != d){
-        stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d elements, when model = HR."))
+      if (NROW(par) != d | NCOL(par) != d) {
+        stop(paste(
+          "The argument par must be a d x d matrix,",
+          "or a vector with d elements, when model = HR."
+        ))
       }
     }
   } else if (model == "logistic") {
-    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)){
-      stop(paste("The elements of par must be",
-                 "between 1e-12 and 1 - 1e-12,",
-                 "when model = logistic."))
+    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)) {
+      stop(paste(
+        "The elements of par must be",
+        "between 1e-12 and 1 - 1e-12,",
+        "when model = logistic."
+      ))
     }
 
-    if (length(par) == 1){
+    if (length(par) == 1) {
       par <- rep(par, d - 1)
-      warning(paste("The argument par was a scalar.",
-                    "Converted to a vector of size d - 1 with",
-                    "all same entries."))
+      warning(paste(
+        "The argument par was a scalar.",
+        "Converted to a vector of size d - 1 with",
+        "all same entries."
+      ))
     }
-    if (length(par) != d - 1){
-      stop(paste("The argument par must have d - 1 elements,",
-                 "when model = logistic."))
+    if (length(par) != d - 1) {
+      stop(paste(
+        "The argument par must have d - 1 elements,",
+        "when model = logistic."
+      ))
     }
-
   } else if (model == "dirichlet") {
-    if (NROW(par) != d - 1 | NCOL(par) != 2){
-      stop(paste("The argument par must be a (d-1) x 2 ,",
-                 "when model = dirichlet."))
+    if (NROW(par) != d - 1 | NCOL(par) != 2) {
+      stop(paste(
+        "The argument par must be a (d-1) x 2 ,",
+        "when model = dirichlet."
+      ))
     }
-    if (any(par <= 1e-12)){
-      stop(paste("The elements of par must be greater than 1e-12,",
-                 "when model = dirichlet."))
+    if (any(par <= 1e-12)) {
+      stop(paste(
+        "The elements of par must be greater than 1e-12,",
+        "when model = dirichlet."
+      ))
     }
   }
 
   # prepare arguments ####
-  if (model == "HR"){
-    if (is.matrix(par)){
+  if (model == "HR") {
+    if (is.matrix(par)) {
       par.vec <- par[ends.mat]
     } else {
       par.vec <- par
     }
-  } else if (model == "logistic"){
+  } else if (model == "logistic") {
     theta <- par
-  } else if (model == "dirichlet"){
+  } else if (model == "dirichlet") {
     alpha.mat <- par
   }
 
@@ -369,18 +392,20 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     A[[k]] <- matrix(0, nrow = d, ncol = e)
     e.start[[k]] <- e.end[[k]] <- numeric(e)
     short.paths <- igraph::shortest_paths(tree, from = k, to = 1:d)
-    for (h in 1:d){
+    for (h in 1:d) {
       path <- short.paths$vpath[[h]]
       idx.tmp <- idx.e[cbind(path[-length(path)], path[-1])]
       A[[k]][h, idx.tmp] <- 1
       e.start[[k]][idx.tmp] <-
         apply(ends.mat[idx.tmp, ] ==
-                matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
-              MARGIN = 1, FUN = function(x) which(x == TRUE))
+          matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
+        MARGIN = 1, FUN = function(x) which(x == TRUE)
+        )
       e.end[[k]][idx.tmp] <-
         apply(ends.mat[idx.tmp, ] ==
-                matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
-              MARGIN = 1, FUN = function(x) which(x == TRUE))
+          matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
+        MARGIN = 1, FUN = function(x) which(x == TRUE)
+        )
     }
   }
 
@@ -390,24 +415,28 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   while (n.total < n) {
     counter <- counter + 1
     shift <- sample(1:d, n, replace = TRUE)
-    for (k in 1:d){
+    for (k in 1:d) {
       n.k <- sum(shift == k)
-      if (n.k > 0){
+      if (n.k > 0) {
         proc <-
           switch(model,
-                 "HR" =
-                   simu_px_tree_HR(n = n.k, Gamma_vec = par.vec, A = A[[k]]),
-                 "logistic" =
-                   simu_px_tree_logistic(n = n.k,
-                                         theta = theta, A = A[[k]]),
-                 "dirichlet" =
-                   simu_px_tree_dirichlet(n = n.k,
-                                          alpha.start =
-                                            alpha.mat[cbind(1:e, e.start[[k]])],
-                                          alpha.end =
-                                            alpha.mat[cbind(1:e, e.end[[k]])],
-                                              A = A[[k]])
-        )
+            "HR" =
+              simu_px_tree_HR(n = n.k, Gamma_vec = par.vec, A = A[[k]]),
+            "logistic" =
+              simu_px_tree_logistic(
+                n = n.k,
+                theta = theta, A = A[[k]]
+              ),
+            "dirichlet" =
+              simu_px_tree_dirichlet(
+                n = n.k,
+                alpha.start =
+                  alpha.mat[cbind(1:e, e.start[[k]])],
+                alpha.end =
+                  alpha.mat[cbind(1:e, e.end[[k]])],
+                A = A[[k]]
+              )
+          )
 
         if (any(dim(proc) != c(n.k, d))) {
           stop("The generated sample has wrong size.")
@@ -464,10 +493,12 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' ## A 4-dimensional HR distribution
 #' n <- 10
 #' d <- 4
-#' G <-  cbind(c(0, 1.5, 1.5, 2),
-#'             c(1.5, 0, 2, 1.5),
-#'             c(1.5, 2, 0, 1.5),
-#'             c(2, 1.5, 1.5, 0))
+#' G <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #'
 #' rmstable(n, "HR", d = d, par = G)
 #'
@@ -488,7 +519,6 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' d <- 4
 #' alpha <- c(.8, 1, .5, 2)
 #' rmstable(n, "dirichlet", d, par = alpha)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -501,51 +531,57 @@ rmstable <- function(n,
   model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 
   # check arguments ####
-  if (d != round(d) | d < 1){
+  if (d != round(d) | d < 1) {
     stop("The argument d must be a positive integer.")
   }
 
-  if (n != round(n) | n < 1){
+  if (n != round(n) | n < 1) {
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% model_nms)){
-    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
-               ".", sep = ""))
+  if (!(model %in% model_nms)) {
+    stop(paste("The model must be one of ", paste(model_nms, collapse = ", "),
+      ".",
+      sep = ""
+    ))
   }
 
   if (model == "HR") {
-    if (!is.matrix(par)){
+    if (!is.matrix(par)) {
       stop("The argument par must be a matrix, when model = HR.")
     }
 
-    if (NROW(par) != d | NCOL(par) != d){
+    if (NROW(par) != d | NCOL(par) != d) {
       stop("The argument par must be a d x d matrix, when model = HR.")
     }
-
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12){
-      stop(paste("The argument par must be scalar between 1e-12 and 1 - 1e-12,",
-                 "when model = logistic."))
+    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12) {
+      stop(paste(
+        "The argument par must be scalar between 1e-12 and 1 - 1e-12,",
+        "when model = logistic."
+      ))
     }
-
   } else if (model == "neglogistic") {
-    if (par <= 1e-12){
-      stop(paste("The argument par must be scalar greater than 1e-12,",
-                 "when model = neglogistic."))
+    if (par <= 1e-12) {
+      stop(paste(
+        "The argument par must be scalar greater than 1e-12,",
+        "when model = neglogistic."
+      ))
     }
-
   } else if (model == "dirichlet") {
-    if (length(par) != d){
-      stop(paste("The argument par must be a vector with d elements,",
-                 "when model = dirichlet."))
+    if (length(par) != d) {
+      stop(paste(
+        "The argument par must be a vector with d elements,",
+        "when model = dirichlet."
+      ))
     }
 
-    if (any(par <= 1e-12)){
-      stop(paste("The elements of par must be greater than 1e-12,",
-                 "when model = dirichlet."))
+    if (any(par <= 1e-12)) {
+      stop(paste(
+        "The elements of par must be greater than 1e-12,",
+        "when model = dirichlet."
+      ))
     }
-
   }
 
   # prepare arguments ####
@@ -556,30 +592,30 @@ rmstable <- function(n,
     cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
     chol_mat <- matrix(0, d, d)
 
-    result <- tryCatch({
-      chol_mat[-1, -1] <- chol(cov.mat)
-    },
-    error = function(e) {
-      stop(paste("The covariance matrix associated to Gamma",
-                 "cannot be factorized with Cholesky."))
-    })
+    result <- tryCatch(
+      {
+        chol_mat[-1, -1] <- chol(cov.mat)
+      },
+      error = function(e) {
+        stop(paste(
+          "The covariance matrix associated to Gamma",
+          "cannot be factorized with Cholesky."
+        ))
+      }
+    )
 
     # compute trend (matrix where each row is one variable)
-    trend <- t(sapply(1:d, function(k){
-      sapply(1:d, function(j){
+    trend <- t(sapply(1:d, function(k) {
+      sapply(1:d, function(j) {
         Gamma[j, k] / 2
-      }
-      )}))
-
+      })
+    }))
   } else if (model == "logistic") {
     theta <- par
-
   } else if (model == "neglogistic") {
     theta <- par
-
   } else if (model == "dirichlet") {
     alpha <- par
-
   }
 
   # function body ####
@@ -595,15 +631,18 @@ rmstable <- function(n,
       counter[ind] <- counter[ind] + 1
       proc <-
         switch(model,
-               "HR" =
-                 simu_px_HR(n = n.ind, idx = k, d = d, trend = trend[k, ],
-                            chol_mat = chol_mat),
-               "logistic" =
-                 simu_px_logistic(n = n.ind, idx = k, d = d, theta = theta),
-               "neglogistic" =
-                 simu_px_neglogistic(n = n.ind, idx = k, d = d, theta = theta),
-               "dirichlet" =
-                 simu_px_dirichlet(n = n.ind, idx = k, d = d, alpha = alpha))
+          "HR" =
+            simu_px_HR(
+              n = n.ind, idx = k, d = d, trend = trend[k, ],
+              chol_mat = chol_mat
+            ),
+          "logistic" =
+            simu_px_logistic(n = n.ind, idx = k, d = d, theta = theta),
+          "neglogistic" =
+            simu_px_neglogistic(n = n.ind, idx = k, d = d, theta = theta),
+          "dirichlet" =
+            simu_px_dirichlet(n = n.ind, idx = k, d = d, alpha = alpha)
+        )
 
       if (any(dim(proc) != c(n.ind, d))) {
         stop("The generated sample has wrong size.")
@@ -612,14 +651,15 @@ rmstable <- function(n,
       if (k == 1) {
         ind.upd <- rep(TRUE, times = n.ind)
       } else {
-        ind.upd <- sapply(1:n.ind, function(i)
+        ind.upd <- sapply(1:n.ind, function(i) {
           all(1 / poisson[idx[i]] * proc[i, 1:(k - 1)] <=
-                res[idx[i], 1:(k - 1)]))
+            res[idx[i], 1:(k - 1)])
+        })
       }
       if (any(ind.upd)) {
         idx.upd <- idx[ind.upd]
         res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
-                                 proc[ind.upd, ])
+          proc[ind.upd, ])
       }
       poisson[ind] <- poisson[ind] + stats::rexp(n.ind)
     }
@@ -675,20 +715,21 @@ rmstable <- function(n,
 #' ## A 4-dimensional HR tree model
 #'
 #' my_tree <- igraph::graph_from_adjacency_matrix(rbind(
-#' c(0, 1, 0, 0),
-#' c(1, 0, 1, 1),
-#' c(0, 1, 0, 0),
-#' c(0, 1, 0, 0)),
-#' mode = "undirected")
+#'   c(0, 1, 0, 0),
+#'   c(1, 0, 1, 1),
+#'   c(0, 1, 0, 0),
+#'   c(0, 1, 0, 0)
+#' ),
+#' mode = "undirected"
+#' )
 #' n <- 10
-#' Gamma_vec <- c(.5,1.4,.8)
+#' Gamma_vec <- c(.5, 1.4, .8)
 #' rmstable_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 #'
 #' ## A 4-dimensional Dirichlet model with asymmetric edge distributions
 #'
-#' alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+#' alpha <- cbind(c(.2, 1, .5), c(1.5, .6, .8))
 #' rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -701,7 +742,7 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 
   # graph theory objects ####
   # check if it is directed
-  if (igraph::is_directed(tree)){
+  if (igraph::is_directed(tree)) {
     warning("The given tree is directed. Converted to undirected.")
     tree <- igraph::as.undirected(tree)
   }
@@ -716,76 +757,91 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   is_connected <- igraph::is_connected(tree)
   is_tree <- is_connected & (e == d - 1)
 
-  if (!is_tree){
+  if (!is_tree) {
     stop("The given graph is not a tree.")
   }
 
 
   # check arguments ####
-  if (d != round(d) | d < 1){
+  if (d != round(d) | d < 1) {
     stop("The argument d must be a positive integer.")
   }
 
-  if (n != round(n) | n < 1){
+  if (n != round(n) | n < 1) {
     stop("The argument n must be a positive integer.")
   }
 
-  if (!(model %in% model_nms)){
-    stop(paste("The model must be one of ", paste(model_nms, collapse=", "),
-               ".", sep = ""))
+  if (!(model %in% model_nms)) {
+    stop(paste("The model must be one of ", paste(model_nms, collapse = ", "),
+      ".",
+      sep = ""
+    ))
   }
 
   if (model == "HR") {
-    if (!is.matrix(par)){
-      if (length(par) != (d - 1)){
-        stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d - 1 elements, when model = HR."))
+    if (!is.matrix(par)) {
+      if (length(par) != (d - 1)) {
+        stop(paste(
+          "The argument par must be a d x d matrix,",
+          "or a vector with d - 1 elements, when model = HR."
+        ))
       }
     } else {
-      if (NROW(par) != d | NCOL(par) != d){
-        stop(paste("The argument par must be a d x d matrix,",
-                   "or a vector with d elements, when model = HR."))
+      if (NROW(par) != d | NCOL(par) != d) {
+        stop(paste(
+          "The argument par must be a d x d matrix,",
+          "or a vector with d elements, when model = HR."
+        ))
       }
     }
   } else if (model == "logistic") {
-    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)){
-      stop(paste("The elements of par must be",
-                 "between 1e-12 and 1 - 1e-12,",
-                 "when model = logistic."))
+    if (any(par <= 1e-12) | any(par >= 1 - 1e-12)) {
+      stop(paste(
+        "The elements of par must be",
+        "between 1e-12 and 1 - 1e-12,",
+        "when model = logistic."
+      ))
     }
 
-    if (length(par) == 1){
+    if (length(par) == 1) {
       par <- rep(par, d - 1)
-      warning(paste("The argument par was a scalar.",
-                    "Converted to a vector of size d - 1 with",
-                    "all same entries."))
+      warning(paste(
+        "The argument par was a scalar.",
+        "Converted to a vector of size d - 1 with",
+        "all same entries."
+      ))
     }
-    if (length(par) != d - 1){
-      stop(paste("The argument par must have d - 1 elements,",
-                 "when model = logistic."))
+    if (length(par) != d - 1) {
+      stop(paste(
+        "The argument par must have d - 1 elements,",
+        "when model = logistic."
+      ))
     }
-
   } else if (model == "dirichlet") {
-    if (NROW(par) != d - 1 | NCOL(par) != 2){
-      stop(paste("The argument par must be a (d-1) x 2 ,",
-                 "when model = dirichlet."))
+    if (NROW(par) != d - 1 | NCOL(par) != 2) {
+      stop(paste(
+        "The argument par must be a (d-1) x 2 ,",
+        "when model = dirichlet."
+      ))
     }
-    if (any(par <= 1e-12)){
-      stop(paste("The elements of par must be greater than 1e-12,",
-                 "when model = dirichlet."))
+    if (any(par <= 1e-12)) {
+      stop(paste(
+        "The elements of par must be greater than 1e-12,",
+        "when model = dirichlet."
+      ))
     }
   }
 
   # prepare arguments ####
-  if (model == "HR"){
-    if (is.matrix(par)){
+  if (model == "HR") {
+    if (is.matrix(par)) {
       par.vec <- par[ends.mat]
     } else {
       par.vec <- par
     }
-  } else if (model == "logistic"){
+  } else if (model == "logistic") {
     theta <- par
-  } else if (model == "dirichlet"){
+  } else if (model == "dirichlet") {
     alpha.mat <- par
   }
 
@@ -802,18 +858,20 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
     A[[k]] <- matrix(0, nrow = d, ncol = e)
     e.start[[k]] <- e.end[[k]] <- numeric(e)
     short.paths <- igraph::shortest_paths(tree, from = k, to = 1:d)
-    for (h in 1:d){
-      path <-  short.paths$vpath[[h]]
+    for (h in 1:d) {
+      path <- short.paths$vpath[[h]]
       idx.tmp <- idx.e[cbind(path[-length(path)], path[-1])]
       A[[k]][h, idx.tmp] <- 1
       e.start[[k]][idx.tmp] <-
         apply(ends.mat[idx.tmp, ] ==
-                matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
-              MARGIN = 1, FUN = function(x) which(x == TRUE))
+          matrix(path[-length(path)], nrow = length(idx.tmp), ncol = 2),
+        MARGIN = 1, FUN = function(x) which(x == TRUE)
+        )
       e.end[[k]][idx.tmp] <-
         apply(ends.mat[idx.tmp, ] ==
-                matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
-              MARGIN = 1, FUN = function(x) which(x == TRUE))
+          matrix(path[-1], nrow = length(idx.tmp), ncol = 2),
+        MARGIN = 1, FUN = function(x) which(x == TRUE)
+        )
     }
   }
 
@@ -830,19 +888,23 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       counter[ind] <- counter[ind] + 1
       proc <-
         switch(model,
-               "HR" =
-                 simu_px_tree_HR(n = n.ind, Gamma_vec = par.vec, A = A[[k]]),
-               "logistic" =
-                 simu_px_tree_logistic(n = n.ind,
-                                       theta = theta, A = A[[k]]),
-               "dirichlet" =
-                 simu_px_tree_dirichlet(n = n.ind,
-                                        alpha.start =
-                                          alpha.mat[cbind(1:e, e.start[[k]])],
-                                        alpha.end =
-                                          alpha.mat[cbind(1:e, e.end[[k]])],
-                                        A = A[[k]])
-      )
+          "HR" =
+            simu_px_tree_HR(n = n.ind, Gamma_vec = par.vec, A = A[[k]]),
+          "logistic" =
+            simu_px_tree_logistic(
+              n = n.ind,
+              theta = theta, A = A[[k]]
+            ),
+          "dirichlet" =
+            simu_px_tree_dirichlet(
+              n = n.ind,
+              alpha.start =
+                alpha.mat[cbind(1:e, e.start[[k]])],
+              alpha.end =
+                alpha.mat[cbind(1:e, e.end[[k]])],
+              A = A[[k]]
+            )
+        )
 
       if (any(dim(proc) != c(n.ind, d))) {
         stop("The generated sample has wrong size.")
@@ -851,14 +913,15 @@ rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
       if (k == 1) {
         ind.upd <- rep(TRUE, times = n.ind)
       } else {
-        ind.upd <- sapply(1:n.ind, function(i)
+        ind.upd <- sapply(1:n.ind, function(i) {
           all(1 / poisson[idx[i]] * proc[i, 1:(k - 1)] <=
-                res[idx[i], 1:(k - 1)]))
+            res[idx[i], 1:(k - 1)])
+        })
       }
       if (any(ind.upd)) {
         idx.upd <- idx[ind.upd]
         res[idx.upd, ] <- pmax(res[idx.upd, ], 1 / poisson[idx.upd] *
-                                proc[ind.upd, ])
+          proc[ind.upd, ])
       }
       poisson[ind] <- poisson[ind] + stats::rexp(n.ind)
     }

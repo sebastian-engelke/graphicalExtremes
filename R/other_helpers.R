@@ -6,8 +6,8 @@
 #'
 #' @return Numeric vector with entries rescaled to uniform margins
 #'
-unif <- function(x){
-  rank(x)/(length(x)+1)
+unif <- function(x) {
+  rank(x) / (length(x) + 1)
 }
 
 
@@ -23,10 +23,10 @@ unif <- function(x){
 #' @return Numeric. The dimension of the matrix (number of rows and columns, if
 #' the matrix is symmetric). Else, raises an error.
 #'
-dim_Gamma <- function(Gamma){
+dim_Gamma <- function(Gamma) {
   dimension <- dim(Gamma)
 
-  if ((length(dimension) == 2) & (dimension[1] == dimension[2])){
+  if ((length(dimension) == 2) & (dimension[1] == dimension[2])) {
     dimension[1]
   } else {
     stop("Not a square matrix!")
@@ -44,16 +44,15 @@ dim_Gamma <- function(Gamma){
 #'
 #' @return Numeric vector.
 #'
-select_edges = function(graph){
-
-  d = igraph::vcount(graph)
+select_edges <- function(graph) {
+  d <- igraph::vcount(graph)
   adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
 
 
-  sel.edges = matrix(0, nrow=0, ncol=2)
+  sel.edges <- matrix(0, nrow = 0, ncol = 2)
 
-  for (i in 1:(d-1)){
-    for (j in (i+1):d){
+  for (i in 1:(d - 1)) {
+    for (j in (i + 1):d) {
 
       # set new_edge
       new_edge <- c(i, j)
@@ -63,18 +62,21 @@ select_edges = function(graph){
 
 
       # if not, add it to the graph; else skip to the next
-      if (!is_already_edge){
+      if (!is_already_edge) {
         extended_graph <- igraph::add_edges(graph = graph, edges = new_edge)
-      } else {next}
+      } else {
+        next
+      }
 
       # check if new graph is decomposable
       is_chordal <- igraph::is_chordal(extended_graph)$chordal
 
       # measure the length of the path from i to j in the old graph
       length_path <- length(as.vector(
-        igraph::shortest_paths(graph, from=i, to=j)$vpath[[1]]))
+        igraph::shortest_paths(graph, from = i, to = j)$vpath[[1]]
+      ))
 
-       if(is_chordal & length_path !=2){
+      if (is_chordal & length_path != 2) {
         sel.edges <- rbind(sel.edges, new_edge, deparse.level = 0)
       }
     }
@@ -93,7 +95,7 @@ select_edges = function(graph){
 #' @param graph Graph object from \code{igraph} package.
 #'
 #' @return Graph object from \code{igraph} package.
-set_graph_parameters <- function(graph){
+set_graph_parameters <- function(graph) {
   # set parameters
   igraph::V(graph)$color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 0.4)
   igraph::V(graph)$frame.color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 1)
@@ -116,45 +118,45 @@ set_graph_parameters <- function(graph){
 #'
 #' @return Numeric matrix \eqn{n \times d}{n x d}.
 #'
-censor <- function(x,p){
-  f2 <- function(x,p){
+censor <- function(x, p) {
+  f2 <- function(x, p) {
     x_is_less <- x <= p
     y <- x
     y[x_is_less] <- p[x_is_less]
     return(y)
   }
-  return(t(apply(x,1,f2,p)))
+  return(t(apply(x, 1, f2, p)))
 }
 
 
-is_eq <- function(a, b){
+is_eq <- function(a, b) {
   tol <- .Machine$double.eps^0.5
   abs(a - b) < tol
 }
 
-is_greater <- function(a, b){
+is_greater <- function(a, b) {
   tol <- .Machine$double.eps^0.5
   a - b > tol
 }
 
-is_less <- function(a, b){
+is_less <- function(a, b) {
   is_greater(b, a)
 }
 
-is_leq <- function(a, b){
+is_leq <- function(a, b) {
   !(is_greater(a, b))
 }
 
-is_geq <- function(a, b){
+is_geq <- function(a, b) {
   !(is_less(a, b))
 }
 
-fast_diag <- function(y, M){
+fast_diag <- function(y, M) {
   ## numeric_matrix numeric_matrix -> numeric_vector
   ## fast computation of diag(y %*% M %*% t(y))
 
   n <- nrow(y)
-  sapply(1:n, function(i){
+  sapply(1:n, function(i) {
     u <- y[i, , drop = FALSE]
     u %*% M %*% t(u)
   })

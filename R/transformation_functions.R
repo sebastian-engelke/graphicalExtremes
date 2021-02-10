@@ -13,7 +13,7 @@
 #' \code{graph} object.
 #'
 #' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
-#'s
+#' s
 #' @details
 #' For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
 #' distribution within the cliques of the \code{graph}, the remaining entries are implied
@@ -23,17 +23,20 @@
 #' ## Complete a 4-dimensional HR distribution
 #'
 #' my_graph <- igraph::graph_from_adjacency_matrix(rbind(
-#' c(0, 1, 0, 0),
-#' c(1, 0, 1, 1),
-#' c(0, 1, 0, 1),
-#' c(0, 1, 1, 0)),
-#' mode = "undirected")
+#'   c(0, 1, 0, 0),
+#'   c(1, 0, 1, 1),
+#'   c(0, 1, 0, 1),
+#'   c(0, 1, 1, 0)
+#' ),
+#' mode = "undirected"
+#' )
 #'
 #' Gamma <- rbind(
-#' c(0, .5, NA, NA),
-#' c(.5, 0, 1, 1.5),
-#' c(NA, 1, 0, .8),
-#' c(NA, 1.5, .8, 0))
+#'   c(0, .5, NA, NA),
+#'   c(.5, 0, 1, 1.5),
+#'   c(NA, 1, 0, .8),
+#'   c(NA, 1.5, .8, 0)
+#' )
 #'
 #' complete_Gamma(Gamma, my_graph)
 #'
@@ -41,20 +44,19 @@
 #'
 #' Gamma_vec <- c(.5, 1, 1.5, .8)
 #' complete_Gamma(Gamma_vec, my_graph)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
 #' @export
 #'
-complete_Gamma = function(Gamma, graph){
+complete_Gamma <- function(Gamma, graph) {
 
   # set up main variables
   d <- igraph::vcount(graph)
   e <- igraph::ecount(graph)
 
   # check if it is directed
-  if (igraph::is_directed(graph)){
+  if (igraph::is_directed(graph)) {
     warning("The given graph is directed. Converted to undirected.")
     graph <- igraph::as.undirected(graph)
   }
@@ -62,74 +64,80 @@ complete_Gamma = function(Gamma, graph){
   # check if it is connected
   is_connected <- igraph::is_connected(graph)
 
-  if (!is_connected){
+  if (!is_connected) {
     stop("The given graph is not connected.")
   }
 
   # check if graph is decomposable
   is_decomposable <- igraph::is_chordal(graph)$chordal
-  if (!is_decomposable){
+  if (!is_decomposable) {
     stop("The given graph is not decomposable (i.e., chordal).")
   }
 
   # transform Gamma if needed
-  if(is.vector(Gamma)){
-
-    if (length(Gamma) != e){
-      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
-                 "or a vector with as many entries as the number of edges",
-                 "in the graph."))
+  if (is.vector(Gamma)) {
+    if (length(Gamma) != e) {
+      stop(paste(
+        "The argument Gamma must be a symmetric d x d matrix,",
+        "or a vector with as many entries as the number of edges",
+        "in the graph."
+      ))
     }
-    G = matrix(0,d,d)
-    G[igraph::ends(graph,igraph::E(graph))] = Gamma
-    G = G + t(G)
-  }  else{
-    G = Gamma
+    G <- matrix(0, d, d)
+    G[igraph::ends(graph, igraph::E(graph))] <- Gamma
+    G <- G + t(G)
+  } else {
+    G <- Gamma
 
     # check that Gamma is d x d
 
-    if (NROW(G) != d | NCOL(G) != d){
-      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
-                 "or a vector with as many entries as the number of edges",
-                 "in the graph."))
+    if (NROW(G) != d | NCOL(G) != d) {
+      stop(paste(
+        "The argument Gamma must be a symmetric d x d matrix,",
+        "or a vector with as many entries as the number of edges",
+        "in the graph."
+      ))
     }
 
     # check that Gamma is symmetric
     if (any(G != t(G), na.rm = T)) {
-      stop(paste("The argument Gamma must be a symmetric d x d matrix,",
-                 "or a vector with as many entries as the number of edges",
-                 "in the graph."))
+      stop(paste(
+        "The argument Gamma must be a symmetric d x d matrix,",
+        "or a vector with as many entries as the number of edges",
+        "in the graph."
+      ))
     }
-
   }
 
   # computes cliques
-  cli = igraph::max_cliques(graph)
-  ncli = length(cli)
+  cli <- igraph::max_cliques(graph)
+  ncli <- length(cli)
 
   # if only one clique terminate
-  if (ncli == 1) {return(G)}
+  if (ncli == 1) {
+    return(G)
+  }
 
   # else, continue
-  cli.selected = 1
-  idx1 = cli[[1]]
-  V = 1:ncli
+  cli.selected <- 1
+  idx1 <- cli[[1]]
+  V <- 1:ncli
 
-  for(i in 1:(ncli-1)){
-    cli.idx = min(V[which(sapply(V, function(j) length(intersect(idx1, cli[[j]])) > 0) == 1 & !is.element(V, cli.selected))])
-    idx2 = cli[[cli.idx]]
-    l1 = length(idx1)
-    l2 = length(idx2)
-    k0 = intersect(idx1, idx2)
+  for (i in 1:(ncli - 1)) {
+    cli.idx <- min(V[which(sapply(V, function(j) length(intersect(idx1, cli[[j]])) > 0) == 1 & !is.element(V, cli.selected))])
+    idx2 <- cli[[cli.idx]]
+    l1 <- length(idx1)
+    l2 <- length(idx2)
+    k0 <- intersect(idx1, idx2)
 
-    if (length(k0) > 1){
+    if (length(k0) > 1) {
       stop("The given graph is not a block graph.")
     }
-    G[setdiff(idx1, k0), setdiff(idx2, k0)] = matrix(rep(G[setdiff(idx1, k0),k0], times=l2-1), l1-1, l2-1) +
-      t(matrix(rep(G[setdiff(idx2, k0),k0], times=l1-1), l2-1, l1-1))
-    G[setdiff(idx2, k0), setdiff(idx1, k0)] = t(G[setdiff(idx1, k0), setdiff(idx2, k0)])
-    cli.selected = c(cli.selected, cli.idx)
-    idx1 = union(idx1, idx2)
+    G[setdiff(idx1, k0), setdiff(idx2, k0)] <- matrix(rep(G[setdiff(idx1, k0), k0], times = l2 - 1), l1 - 1, l2 - 1) +
+      t(matrix(rep(G[setdiff(idx2, k0), k0], times = l1 - 1), l2 - 1, l1 - 1))
+    G[setdiff(idx2, k0), setdiff(idx1, k0)] <- t(G[setdiff(idx1, k0), setdiff(idx2, k0)])
+    cli.selected <- c(cli.selected, cli.idx)
+    idx1 <- union(idx1, idx2)
   }
   return(G)
 }
@@ -157,28 +165,31 @@ complete_Gamma = function(Gamma, graph){
 #' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
-#' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
-#'                 c(1.5, 0, 2, 1.5),
-#'                 c(1.5, 2, 0, 1.5),
-#'                 c(2, 1.5, 1.5, 0))
+#' Gamma <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #'
 #' Gamma2graph(Gamma, to_plot = TRUE)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
-  null.mat <- matrix(0, nrow=nrow(Gamma), ncol=ncol(Gamma))
-  for(i in 1:nrow(Gamma)){
-    null.mat[-i,-i] <- null.mat[-i,-i] +
+Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
+  null.mat <- matrix(0, nrow = nrow(Gamma), ncol = ncol(Gamma))
+  for (i in 1:nrow(Gamma)) {
+    null.mat[-i, -i] <- null.mat[-i, -i] +
       (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
   }
-  graph = igraph::graph_from_adjacency_matrix(null.mat==0, diag =FALSE,
-                                              mode="undirected")
+  graph <- igraph::graph_from_adjacency_matrix(null.mat == 0,
+    diag = FALSE,
+    mode = "undirected"
+  )
 
   graph <- set_graph_parameters(graph)
-  if (to_plot){
+  if (to_plot) {
     igraph::plot.igraph(graph, ...)
   }
   return(graph)
@@ -209,21 +220,22 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...){
 #' n <- 20
 #' d <- 4
 #' p <- .8
-#' G <-  cbind(c(0, 1.5, 1.5, 2),
-#'             c(1.5, 0, 2, 1.5),
-#'             c(1.5, 2, 0, 1.5),
-#'             c(2, 1.5, 1.5, 0))
+#' G <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #'
 #' set.seed(123)
-#' my_data = rmstable(n, "HR", d = d, par = G)
+#' my_data <- rmstable(n, "HR", d = d, par = G)
 #' data2mpareto(my_data, p)
-#'
 #' @export
-data2mpareto <- function(data, p){
-  xx <- 1/(1-apply(data, 2, unif))
+data2mpareto <- function(data, p) {
+  xx <- 1 / (1 - apply(data, 2, unif))
   q <- stats::quantile(xx, p)
   idx <- which(apply(xx, 1, max) > q)
-  return(xx[idx,] / q)
+  return(xx[idx, ] / q)
 }
 
 
@@ -256,18 +268,19 @@ data2mpareto <- function(data, p){
 #' @return Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
 #'
 #' @examples
-#' Sigma1 <-  rbind(c(1.5, 0.5, 1),
-#'                  c(0.5, 1.5, 1),
-#'                  c(1, 1, 2))
+#' Sigma1 <- rbind(
+#'   c(1.5, 0.5, 1),
+#'   c(0.5, 1.5, 1),
+#'   c(1, 1, 2)
+#' )
 #' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
 #' @export
-Sigma2Gamma <- function(S, k = 1, full = FALSE){
+Sigma2Gamma <- function(S, k = 1, full = FALSE) {
   # complete S
-  if (!full){
+  if (!full) {
     d <- NROW(S)
     S_full <- rbind(rep(0, d + 1), cbind(rep(0, d), S))
 
@@ -282,9 +295,9 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
   }
 
   # compute Gamma
-  One <- rep(1, times=ncol(S_full))
+  One <- rep(1, times = ncol(S_full))
   D <- diag(S_full)
-  Gamma <- One%*%t(D) + D%*%t(One) - 2*S_full
+  Gamma <- One %*% t(D) + D %*% t(One) - 2 * S_full
 
   return(Gamma)
 }
@@ -319,25 +332,26 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE){
 #' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
 #'
 #' @examples
-#' Gamma <-  cbind(c(0, 1.5, 1.5, 2),
-#'                 c(1.5, 0, 2, 1.5),
-#'                 c(1.5, 2, 0, 1.5),
-#'                 c(2, 1.5, 1.5, 0))
+#' Gamma <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #' Gamma2Sigma(Gamma, k = 1, full = FALSE)
-#'
-#'
 #' @references
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
+Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
   d <- ncol(Gamma)
-  if(full)
-    1/2 * (matrix(rep(Gamma[,k],d), ncol=d,nrow=d) +
-             t(matrix(rep(Gamma[,k],d), ncol=d,nrow=d)) - Gamma)
-  else
-    1/2 * (matrix(rep(Gamma[-k,k],d-1), ncol=d-1,nrow=d-1) +
-             t(matrix(rep(Gamma[-k,k],d-1), ncol=d-1,nrow=d-1)) - Gamma[-k,-k])
+  if (full) {
+    1 / 2 * (matrix(rep(Gamma[, k], d), ncol = d, nrow = d) +
+      t(matrix(rep(Gamma[, k], d), ncol = d, nrow = d)) - Gamma)
+  } else {
+    1 / 2 * (matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1) +
+      t(matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1)) - Gamma[-k, -k])
+  }
 }
 
 
@@ -353,13 +367,13 @@ Gamma2Sigma <- function(Gamma,k=1,full=FALSE){
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma matrix.
 #'
-par2Gamma = function(par){
-  d = 1/2 + sqrt(1/4 + 2*length(par))
-  if (round(d)!=d) {
+par2Gamma <- function(par) {
+  d <- 1 / 2 + sqrt(1 / 4 + 2 * length(par))
+  if (round(d) != d) {
     stop("The length of par does not agree with any square matrix.")
   }
-  G = matrix(0, nrow=d, ncol=d)
-  G[upper.tri(G)] = par
+  G <- matrix(0, nrow = d, ncol = d)
+  G[upper.tri(G)] <- par
   return(G + t(G))
 }
 
@@ -376,11 +390,12 @@ par2Gamma = function(par){
 #' @return Numeric vector with \eqn{d} elements.
 #' The upper triangular part of the given \code{Gamma} matrix.
 #'
-Gamma2par = function(Gamma){
-  if(is.matrix(Gamma))
+Gamma2par <- function(Gamma) {
+  if (is.matrix(Gamma)) {
     return(Gamma[upper.tri(Gamma)])
-  else
+  } else {
     return(Gamma)
+  }
 }
 
 
@@ -404,11 +419,11 @@ Gamma2par = function(Gamma){
 #' This is the inverse of \code{\link{Gamma2chi}}.
 #'
 #' @export
-chi2Gamma <- function(chi){
-  if (any(is_less(chi, 0) | is_greater(chi, 1))){
+chi2Gamma <- function(chi) {
+  if (any(is_less(chi, 0) | is_greater(chi, 1))) {
     stop("The argument chi must be between 0 and 1.")
   }
-  Gamma <- (2 * stats::qnorm(1 - 0.5 * chi)) ^ 2
+  Gamma <- (2 * stats::qnorm(1 - 0.5 * chi))^2
   return(Gamma)
 }
 
@@ -430,8 +445,7 @@ chi2Gamma <- function(chi){
 #' @return Numeric or matrix. The extremal correlation coefficient.
 #'
 #' @export
-Gamma2chi <- function(Gamma){
-
+Gamma2chi <- function(Gamma) {
   chi <- 2 - 2 * stats::pnorm(sqrt(Gamma) / 2)
   return(chi)
 }
@@ -449,16 +463,16 @@ Gamma2chi <- function(Gamma){
 #' the extremal correlation coefficient for the HR distribution. Note that
 #' \eqn{0 \leq \chi \leq 1}.
 #'
-Gamma2chi_3D = function(Gamma){
+Gamma2chi_3D <- function(Gamma) {
   d <- dim_Gamma(Gamma)
 
-  if (d != 3){
+  if (d != 3) {
     stop("Gamma must be a 3 x 3 matrix.")
   }
-  res = 3 - V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,2),c(1,2)])) -
-    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(1,3),c(1,3)])) -
-    V_HR(x=rep(1, times=2),par= Gamma2par(Gamma[c(2,3),c(2,3)])) +
-    V_HR(x=rep(1, times=3),par= Gamma2par(Gamma))
+  res <- 3 - V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(1, 2), c(1, 2)])) -
+    V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(1, 3), c(1, 3)])) -
+    V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(2, 3), c(2, 3)])) +
+    V_HR(x = rep(1, times = 3), par = Gamma2par(Gamma))
   return(res)
 }
 
@@ -477,7 +491,7 @@ Gamma2chi_3D = function(Gamma){
 #'
 #' @return Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length
 #' of \code{set_indices}. Marginalized multivariate Pareto data.
-mparetomargins <- function(data, set_indices){
+mparetomargins <- function(data, set_indices) {
   data_sub <- data[, set_indices]
   idx <- which(apply(data_sub, 1, max) > 1)
   return(data[idx, set_indices])
