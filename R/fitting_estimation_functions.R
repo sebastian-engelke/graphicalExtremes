@@ -15,15 +15,16 @@
 #' n <- 100
 #' d <- 2
 #' p <- .8
-#' G <-  cbind(c(0, 1.5),
-#'             c(1.5, 0))
+#' G <- cbind(
+#'   c(0, 1.5),
+#'   c(1.5, 0)
+#' )
 #'
 #' set.seed(123)
-#' my_data = rmstable(n, "HR", d = d, par = G)
+#' my_data <- rmstable(n, "HR", d = d, par = G)
 #' emp_chi(my_data, p)
-#'
 #' @export
-emp_chi <- function (data, p=NULL){
+emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -34,8 +35,8 @@ emp_chi <- function (data, p=NULL){
   d <- ncol(data)
   data <- stats::na.omit(data)
 
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
@@ -43,8 +44,8 @@ emp_chi <- function (data, p=NULL){
 
 
   rowmin <- apply(data.std, 1, min)
-  chi <- mean(sapply(1:ncol(data.std), FUN = function(i){
-    mean(rowmin[which(data.std[,i]>1)]>1)
+  chi <- mean(sapply(1:ncol(data.std), FUN = function(i) {
+    mean(rowmin[which(data.std[, i] > 1)] > 1)
   }), na.rm = TRUE)
   return(chi)
 }
@@ -62,18 +63,18 @@ emp_chi <- function (data, p=NULL){
 #' n <- 100
 #' d <- 4
 #' p <- .8
-#' Gamma <- cbind(c(0, 1.5, 1.5, 2),
-#'                c(1.5, 0, 2, 1.5),
-#'                c(1.5, 2, 0, 1.5),
-#'                c(2, 1.5, 1.5, 0))
+#' Gamma <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
 #'
 #' set.seed(123)
-#' my_data = rmstable(n, "HR", d = d, par = Gamma)
+#' my_data <- rmstable(n, "HR", d = d, par = Gamma)
 #' emp_chi_mat(my_data, p)
-#'
 #' @export
-emp_chi_mat <- function(data, p){
-
+emp_chi_mat <- function(data, p) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -83,8 +84,8 @@ emp_chi_mat <- function(data, p){
 
   n <- nrow(data)
 
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
@@ -92,25 +93,25 @@ emp_chi_mat <- function(data, p){
 
   ind <- data.std > 1
 
-  if(!is.null(p)){
+  if (!is.null(p)) {
     crossprod(ind, ind) / (n * (1 - p))
   } else {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol=d, nrow=d)
-    crossprod(ind, ind)/ (1 / 2 * (ind_mat + t(ind_mat)))
+    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
+    crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
   }
 }
 
 
-emp_chi_mat_deprecated <- function(data, p){
+emp_chi_mat_deprecated <- function(data, p) {
   d <- ncol(data)
-  res <- as.matrix(expand.grid(1:d,1:d))
-  res <- res[res[,1]>res[,2],,drop=FALSE]
-  chi <- apply(res, 1, function(x){
-    emp_chi(cbind(data[,x[1]], data[,x[2]]), p=p)
+  res <- as.matrix(expand.grid(1:d, 1:d))
+  res <- res[res[, 1] > res[, 2], , drop = FALSE]
+  chi <- apply(res, 1, function(x) {
+    emp_chi(cbind(data[, x[1]], data[, x[2]]), p = p)
   })
-  chi.mat <- matrix(NA, ncol=d, nrow=d)
+  chi.mat <- matrix(NA, ncol = d, nrow = d)
   chi.mat[res] <- chi
-  chi.mat[res[,2:1, drop=FALSE]] <- chi
+  chi.mat[res[, 2:1, drop = FALSE]] <- chi
   diag(chi.mat) <- 1
 
   return(chi.mat)
@@ -135,15 +136,15 @@ emp_chi_mat_deprecated <- function(data, p){
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
 #' variogram of the Huesler--Reiss distribution.
 #' @export
-emp_vario <- function(data, k=NULL, p=NULL){
+emp_vario <- function(data, k = NULL, p = NULL) {
 
   # helper ####
-  G.fun = function(i, data){
-    idx = which(data[,i]>1)
-    if(length(idx) > 1)
-      xx = Sigma2Gamma(stats::cov(log(data[idx,])), full=TRUE)
-    else{
-      xx = matrix(NA,d,d)
+  G.fun <- function(i, data) {
+    idx <- which(data[, i] > 1)
+    if (length(idx) > 1) {
+      xx <- Sigma2Gamma(stats::cov(log(data[idx, ])), full = TRUE)
+    } else {
+      xx <- matrix(NA, d, d)
     }
     return(xx)
   }
@@ -157,25 +158,25 @@ emp_vario <- function(data, k=NULL, p=NULL){
   }
 
   d <- ncol(data)
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
 
-  if(!is.null(k)){
-
+  if (!is.null(k)) {
     G <- G.fun(k, data.std)
 
-    if (any(is.na(G))){
-      warning(paste("Produced NA matrix since there are no exceedances in the component k =",
-                    k))
+    if (any(is.na(G))) {
+      warning(paste(
+        "Produced NA matrix since there are no exceedances in the component k =",
+        k
+      ))
     }
-
   } else {
 
     # take the average
-    row_averages <- rowMeans(sapply(1:d, FUN = function(i){
+    row_averages <- rowMeans(sapply(1:d, FUN = function(i) {
       G.fun(i, data.std)
     }), na.rm = TRUE)
     G <- matrix(row_averages, nrow = d, ncol = d)
@@ -199,12 +200,14 @@ emp_vario <- function(data, k=NULL, p=NULL){
 #'
 #' @return Numeric. The exponent measure of the HR distribution.
 #'
-V_HR <- function(x, par){
+V_HR <- function(x, par) {
   # helper function ####
-  f1 <- function(i,x){
-    S <- Gamma2Sigma(G, k=i)
-    return(1/x[i]*mvtnorm::pmvnorm(upper=(log(x/x[i])+G[,i]/2)[-i],
-                                   mean=rep(0,d-1),sigma= S)[1])
+  f1 <- function(i, x) {
+    S <- Gamma2Sigma(G, k = i)
+    return(1 / x[i] * mvtnorm::pmvnorm(
+      upper = (log(x / x[i]) + G[, i] / 2)[-i],
+      mean = rep(0, d - 1), sigma = S
+    )[1])
   }
 
   # function body ####
@@ -213,13 +216,13 @@ V_HR <- function(x, par){
   }
 
   d <- length(x)
-  G = par2Gamma(par)
+  G <- par2Gamma(par)
 
-  if (NROW(G) != d){
+  if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
 
-  return(sum(apply(cbind(1:d),1,f1,x=x)))
+  return(sum(apply(cbind(1:d), 1, f1, x = x)))
 }
 
 
@@ -234,34 +237,38 @@ V_HR <- function(x, par){
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
-logdV_HR <- function(x,par){
+logdV_HR <- function(x, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
 
-  if (is.vector(x)){d <- length(x)}
-  if (is.matrix(x)){d <- ncol(x)}
+  if (is.vector(x)) {
+    d <- length(x)
+  }
+  if (is.matrix(x)) {
+    d <- ncol(x)
+  }
 
   i <- 1
-  G = par2Gamma(par)
+  G <- par2Gamma(par)
 
-  if (NROW(G) != d){
+  if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
 
-  S <- Gamma2Sigma(G, k=i)
+  S <- Gamma2Sigma(G, k = i)
   cholS <- chol(S)
   Sm1 <- chol2inv(cholS)
-  logdetS <- 2*sum(log(diag(cholS)))
-  if (is.vector(x)){
-    y <- (log(x/x[i])+ G[,i]/2)[-i]
-    logdv <- - sum(log(x)) - log(x[i]) -((d-1)/2)*log(2*pi) -
-      1/2*logdetS  - 1/2 * t(y)%*%Sm1%*%y
+  logdetS <- 2 * sum(log(diag(cholS)))
+  if (is.vector(x)) {
+    y <- (log(x / x[i]) + G[, i] / 2)[-i]
+    logdv <- -sum(log(x)) - log(x[i]) - ((d - 1) / 2) * log(2 * pi) -
+      1 / 2 * logdetS - 1 / 2 * t(y) %*% Sm1 %*% y
   }
-  if (is.matrix(x)){
-    y <- (t(t(log(x/x[,i])) + G[,i]/2))[,-i, drop = FALSE]
-    logdv <- - apply(log(x),1,sum) - log(x[,i]) -((d-1)/2)*log(2*pi) -
-      1/2*logdetS  - 1/2 * fast_diag(y, Sm1)
+  if (is.matrix(x)) {
+    y <- (t(t(log(x / x[, i])) + G[, i] / 2))[, -i, drop = FALSE]
+    logdv <- -apply(log(x), 1, sum) - log(x[, i]) - ((d - 1) / 2) * log(2 * pi) -
+      1 / 2 * logdetS - 1 / 2 * fast_diag(y, Sm1)
   }
   return(logdv)
 }
@@ -279,8 +286,7 @@ logdV_HR <- function(x,par){
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
-logdVK_HR <- function(x, K, par){
-
+logdVK_HR <- function(x, K, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
@@ -289,41 +295,47 @@ logdVK_HR <- function(x, K, par){
   k <- length(K)
   i <- min(K)
   idxK <- which(K == i)
-  G = par2Gamma(par)
+  G <- par2Gamma(par)
 
-  if (NROW(G) != d){
+  if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
 
-  S <- Gamma2Sigma(G, k=i, full=TRUE)
-  if(k>1){
-    SK <- S[K[-idxK],K[-idxK]]
+  S <- Gamma2Sigma(G, k = i, full = TRUE)
+  if (k > 1) {
+    SK <- S[K[-idxK], K[-idxK]]
     cholSK <- chol(SK)
     SKm1 <- chol2inv(cholSK)
-    logdetSK <- 2*sum(log(diag(cholSK)))
+    logdetSK <- 2 * sum(log(diag(cholSK)))
     idxK <- which(K == i)
-    yK <- (log(x[K]/x[i])+ G[K,i]/2)[-idxK]
-    logdvK <- - sum(log(x[K])) - log(x[i]) -((k-1)/2)*log(2 *pi) - 1/2*logdetSK - 1/2 * t(yK)%*%SKm1%*%yK
-    SnK <- S[-K,-K]
-    SnKK <- S[-K,K[-idxK]]
+    yK <- (log(x[K] / x[i]) + G[K, i] / 2)[-idxK]
+    logdvK <- -sum(log(x[K])) - log(x[i]) - ((k - 1) / 2) * log(2 * pi) - 1 / 2 * logdetSK - 1 / 2 * t(yK) %*% SKm1 %*% yK
+    SnK <- S[-K, -K]
+    SnKK <- S[-K, K[-idxK]]
     SKnK <- t(SnKK)
-    muCondK <- -G[-K,i]/2 + SnKK %*% SKm1 %*% yK
-    if(k < d-1)
+    muCondK <- -G[-K, i] / 2 + SnKK %*% SKm1 %*% yK
+    if (k < d - 1) {
       SCondK <- SnK - SnKK %*% SKm1 %*% SKnK
-    if(k == d-1)
+    }
+    if (k == d - 1) {
       SCondK <- SnK - t(SnKK) %*% SKm1 %*% t(SKnK)
-    logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i])-muCondK),sigma=SCondK)[1])
+    }
+    logdvnK <- log(mvtnorm::pmvnorm(upper = c(log(x[-K] / x[i]) - muCondK), sigma = SCondK)[1])
     logdv <- logdvK + logdvnK
   }
-  if(k==1){
-    logdvK <- - 2*log(x[i])
-    if (d == 2){
-      logdvnK <- log(stats::pnorm(q = c(log(x[-K]/x[i]) + G[-K,i]/2),
-                                  sd = sqrt(S[-K,-K])))
+  if (k == 1) {
+    logdvK <- -2 * log(x[i])
+    if (d == 2) {
+      logdvnK <- log(stats::pnorm(
+        q = c(log(x[-K] / x[i]) + G[-K, i] / 2),
+        sd = sqrt(S[-K, -K])
+      ))
       names(logdvnK) <- "upper"
     } else {
-      logdvnK <- log(mvtnorm::pmvnorm(upper=c(log(x[-K]/x[i]) + G[-K,i]/2),
-                                      sigma=S[-K,-K])[1])
+      logdvnK <- log(mvtnorm::pmvnorm(
+        upper = c(log(x[-K] / x[i]) + G[-K, i] / 2),
+        sigma = S[-K, -K]
+      )[1])
     }
     logdv <- logdvK + logdvnK
   }
@@ -345,46 +357,48 @@ logdVK_HR <- function(x, K, par){
 #'
 #' @return Numeric. The full censored log-likelihood of HR model.
 #'
-logLH_HR <- function(data, Gamma, cens = FALSE){
-  if (is.vector(data)){
+logLH_HR <- function(data, Gamma, cens = FALSE) {
+  if (is.vector(data)) {
     d <- length(data)
-    n = 1
+    n <- 1
     data <- t(as.matrix(data))
   }
-  if (is.matrix(data)){
+  if (is.matrix(data)) {
     d <- NCOL(data)
-    n = NROW(data)
+    n <- NROW(data)
   }
-  par = Gamma2par(Gamma)
+  par <- Gamma2par(Gamma)
 
   # if cens = FALSE (default)
-  if(!cens){
-    return(-n*log(V_HR(x=rep(1, times=d),par=par))
-           + sum(logdV_HR(x=data,par=par)))
+  if (!cens) {
+    return(-n * log(V_HR(x = rep(1, times = d), par = par))
+      + sum(logdV_HR(x = data, par = par)))
   }
 
   # if cens = TRUE
-  p <- rep(1,d)
-  data.p <- censor(data,p)
+  p <- rep(1, d)
+  data.p <- censor(data, p)
   r <- nrow(data.p)
 
-  L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
-  I <- which(lapply(L,length)>0 & lapply(L,length)<d)
-  J <- which(lapply(L,length)==d)
+  L <- apply(data.p > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
+  I <- which(lapply(L, length) > 0 & lapply(L, length) < d)
+  J <- which(lapply(L, length) == d)
 
-  if (length(I)>0){
-    y1 <- mapply(logdVK_HR,x=as.list(data.frame(t(data.p)))[I],K=L[I],
-                 MoreArgs=list(par=par))
+  if (length(I) > 0) {
+    y1 <- mapply(logdVK_HR,
+      x = as.list(data.frame(t(data.p)))[I], K = L[I],
+      MoreArgs = list(par = par)
+    )
   } else {
     y1 <- 0
   }
 
-  if (length(J)>0){
-    y2 <- logdV_HR(x=data.p[J,],par=par)
+  if (length(J) > 0) {
+    y2 <- logdV_HR(x = data.p[J, ], par = par)
   } else {
     y2 <- 0
   }
-  return(sum(y1)+sum(y2) - (length(I)+length(J))*log(V_HR(p,par=par)))
+  return(sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, par = par)))
 }
 
 
@@ -438,9 +452,8 @@ fmpareto_HR <- function(data,
                         init,
                         maxit = 100,
                         graph = NULL,
-                        method = "BFGS"){
-
-  if(!is.null(p)){
+                        method = "BFGS") {
+  if (!is.null(p)) {
     # if p provided -> data not Pareto -> to convert
     data <- data2mpareto(data, p)
   } else {
@@ -449,86 +462,109 @@ fmpareto_HR <- function(data,
   }
 
   # censoring at 1 since data already normalized
-  p = 1
+  p <- 1
   d <- ncol(data)
-  if (length(p)==1){p <- rep(p,d)}
+  if (length(p) == 1) {
+    p <- rep(p, d)
+  }
 
   # negative log likelihood function
-  if(cens){
+  if (cens) {
     # censor below the (multivariate) threshold
-    data.p <- censor(data,p)
+    data.p <- censor(data, p)
     r <- nrow(data.p)
 
-    L <- apply(data.p>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+    L <- apply(data.p > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
 
-    if (is.matrix(L)){
+    if (is.matrix(L)) {
       L <- split(t(L), 1:r)
     }
 
-    I <- which(lapply(L,length)>0 & lapply(L,length)<d)
-    J <- which(lapply(L,length)==d)
+    I <- which(lapply(L, length) > 0 & lapply(L, length) < d)
+    J <- which(lapply(L, length) == d)
 
-    nllik <- function(par){
-      if(!is.null(graph)){
-        Gtmp = complete_Gamma(graph = graph, Gamma = par)
-        par = Gtmp[upper.tri(Gtmp)]
+    nllik <- function(par) {
+      if (!is.null(graph)) {
+        Gtmp <- complete_Gamma(graph = graph, Gamma = par)
+        par <- Gtmp[upper.tri(Gtmp)]
       }
 
-      G = par2Gamma(par)
-      S <- Gamma2Sigma(G, k=1)
+      G <- par2Gamma(par)
+      S <- Gamma2Sigma(G, k = 1)
 
-      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)){return(10^50)}
+      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)) {
+        return(10^50)
+      }
 
       else {
-        if (length(I)>0){y1 <- mapply(logdVK_HR,
-                                      x=as.list(data.frame(t(data.p)))[I],
-                                      K=L[I],MoreArgs=list(par=par))}
-        else {y1 <- 0}
-        if (length(J)>0){y2 <- logdV_HR(x=data.p[J,],par=par)}
-        else {y2 <- 0}
-        y <- sum(y1)+sum(y2) - (length(I)+length(J))*log(V_HR(p,par=par))
+        if (length(I) > 0) {
+          y1 <- mapply(logdVK_HR,
+            x = as.list(data.frame(t(data.p)))[I],
+            K = L[I], MoreArgs = list(par = par)
+          )
+        }
+        else {
+          y1 <- 0
+        }
+        if (length(J) > 0) {
+          y2 <- logdV_HR(x = data.p[J, ], par = par)
+        }
+        else {
+          y2 <- 0
+        }
+        y <- sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, par = par))
         return(-y)
       }
     }
   }
-  else{
-
+  else {
     r <- nrow(data)
-    L <- apply(data>matrix(p,ncol=d,nrow=r,byrow=TRUE),1,which)
+    L <- apply(data > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
 
-    if (is.matrix(L)){
+    if (is.matrix(L)) {
       L <- split(t(L), 1:r)
     }
 
-    I <- which(lapply(L,length)>0) #1:r
-    nllik <- function(par){
-      if(!is.null(graph)){
-        Gtmp = complete_Gamma(graph = graph, Gamma = par)
-        par = Gamma2par(Gtmp)
+    I <- which(lapply(L, length) > 0) # 1:r
+    nllik <- function(par) {
+      if (!is.null(graph)) {
+        Gtmp <- complete_Gamma(graph = graph, Gamma = par)
+        par <- Gamma2par(Gtmp)
       }
 
-      G = par2Gamma(par)
-      S <- Gamma2Sigma(G, k=1)
+      G <- par2Gamma(par)
+      S <- Gamma2Sigma(G, k = 1)
 
-      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)){return(10^50)}
+      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)) {
+        return(10^50)
+      }
       else {
-        if (length(I)>0){y1 <- logdV_HR(x=data[I,],par=par)}
-        else {y1 <- 0}
-        y <- sum(y1) - length(I)*log(V_HR(p,par=par))
+        if (length(I) > 0) {
+          y1 <- logdV_HR(x = data[I, ], par = par)
+        }
+        else {
+          y1 <- 0
+        }
+        y <- sum(y1) - length(I) * log(V_HR(p, par = par))
         return(-y)
       }
     }
   }
 
   # optimize likelihood
-  opt <- stats::optim(init, nllik, hessian = TRUE,
-                      control = list(maxit = maxit), method = method)
+  opt <- stats::optim(init, nllik,
+    hessian = TRUE,
+    control = list(maxit = maxit), method = method
+  )
 
   z <- list()
   z$convergence <- opt$convergence
   z$par <- opt$par
-  if(is.null(graph)) z$Gamma <- par2Gamma(z$par)
-  else z$Gamma <- complete_Gamma(graph = graph, Gamma = z$par)
+  if (is.null(graph)) {
+    z$Gamma <- par2Gamma(z$par)
+  } else {
+    z$Gamma <- complete_Gamma(graph = graph, Gamma = z$par)
+  }
   z$nllik <- opt$value
   z$hessian <- opt$hessian
   return(z)
@@ -575,32 +611,36 @@ fmpareto_HR <- function(data,
 #' ## Fitting a 4-dimensional HR distribution
 #'
 #' my_graph <- igraph::graph_from_adjacency_matrix(
-#'   rbind(c(0, 1, 0, 0),
-#'         c(1, 0, 1, 1),
-#'         c(0, 1, 0, 0),
-#'         c(0, 1, 0, 0)),
-#'   mode = "undirected")
+#'   rbind(
+#'     c(0, 1, 0, 0),
+#'     c(1, 0, 1, 1),
+#'     c(0, 1, 0, 0),
+#'     c(0, 1, 0, 0)
+#'   ),
+#'   mode = "undirected"
+#' )
 #' n <- 100
-#' Gamma_vec <- c(.5,1.4,.8)
-#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
-#' edges_to_add <- rbind(c(1,3), c(1,4), c(3,4))
+#' Gamma_vec <- c(.5, 1.4, .8)
+#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
+#' edges_to_add <- rbind(c(1, 3), c(1, 4), c(3, 4))
 #'
 #' set.seed(123)
 #' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
-#' my_fit <- fmpareto_graph_HR(my_data, graph = my_graph,
-#'   p = NULL, cens = FALSE, edges_to_add = edges_to_add)
-#'
+#' my_fit <- fmpareto_graph_HR(my_data,
+#'   graph = my_graph,
+#'   p = NULL, cens = FALSE, edges_to_add = edges_to_add
+#' )
 #' @references
 #'  \insertAllCited{}
 #' @export
-fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL){
+fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL) {
 
   # set up main variables
   d <- igraph::vcount(graph)
   e <- igraph::ecount(graph)
 
   # check if it is directed
-  if (igraph::is_directed(graph)){
+  if (igraph::is_directed(graph)) {
     warning("The given graph is directed. Converted to undirected.")
     graph <- igraph::as.undirected(graph)
   }
@@ -608,170 +648,190 @@ fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add =
   # check if it is connected
   is_connected <- igraph::is_connected(graph)
 
-  if (!is_connected){
+  if (!is_connected) {
     stop("The given graph is not connected.")
   }
 
   # check if graph is decomposable
   is_decomposable <- igraph::is_chordal(graph)$chordal
-  if (!is_decomposable){
+  if (!is_decomposable) {
     stop("The given graph is not decomposable (i.e., chordal).")
   }
 
   # check if it is block graph
-  cli = igraph::max_cliques(graph)
-  ncli = length(cli)
+  cli <- igraph::max_cliques(graph)
+  ncli <- length(cli)
   min_sep <- 0
 
-  for (i in 1:ncli){
+  for (i in 1:ncli) {
     cli1 <- cli[[i]]
-    for (j in 1:ncli){
-      if (j <= i) {next}
+    for (j in 1:ncli) {
+      if (j <= i) {
+        next
+      }
       cli2 <- cli[[j]]
 
       min_sep <- max(min_sep, length(intersect(cli1, cli2)))
 
-      if (min_sep > 1) {break}
+      if (min_sep > 1) {
+        break
+      }
     }
   }
 
-  if (min_sep > 1){
+  if (min_sep > 1) {
     stop("The given graph is not a block graph.")
   }
 
   # check if the number of nodes in the graph matches the number
   # of variables in the data matrix
-  nnodes = igraph::vcount(graph)
-  if (nnodes != NCOL(data)){
-    stop(paste("The number of nodes in the graph doesn't match with the number",
-               "of variables (i.e., columns) in the data matrix."))
+  nnodes <- igraph::vcount(graph)
+  if (nnodes != NCOL(data)) {
+    stop(paste(
+      "The number of nodes in the graph doesn't match with the number",
+      "of variables (i.e., columns) in the data matrix."
+    ))
   }
 
   # check if you need to rescale data or not
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
 
-  l = 1
+  l <- 1
 
-  graph.cur = list()
-  graph.cur[[l]] = graph
-  Ghat = list()
-  Ghat[[l]] = matrix(NA, nrow=nnodes, ncol=nnodes)
+  graph.cur <- list()
+  graph.cur[[l]] <- graph
+  Ghat <- list()
+  Ghat[[l]] <- matrix(NA, nrow = nnodes, ncol = nnodes)
 
   # loop through all cliques
-  for(i in 1:ncli){
+  for (i in 1:ncli) {
     # pick the curren cliques
-    cli.idx = cli[[i]]
+    cli.idx <- cli[[i]]
     # how many nodes in the current cliques?
-    cli.len = length(cli.idx)
+    cli.len <- length(cli.idx)
     # compute marginal pareto, on the nodes of the current clique
     data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
 
     G.est <- emp_vario(data = data.cli)
-    init = Gamma2par(G.est)
-    Ghat[[l]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
-                                              init=init, cens=cens)$Gamma
-
+    init <- Gamma2par(G.est)
+    Ghat[[l]][cli.idx, cli.idx] <- fmpareto_HR(
+      data = data.cli,
+      init = init, cens = cens
+    )$Gamma
   }
 
-  Ghat[[l]] = complete_Gamma(graph=graph.cur[[l]], Gamma=Ghat[[l]])
+  Ghat[[l]] <- complete_Gamma(graph = graph.cur[[l]], Gamma = Ghat[[l]])
 
   # if you want to add some edges
-  if(!is.null(edges_to_add)){
+  if (!is.null(edges_to_add)) {
     # check if edges_to_add is vector
-    if(is.vector(edges_to_add)) edges_to_add = t(as.matrix(edges_to_add))
+    if (is.vector(edges_to_add)) edges_to_add <- t(as.matrix(edges_to_add))
 
     # check if any proposed edge is already in the given graph
     adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
 
-    m <-  nrow(edges_to_add)
+    m <- nrow(edges_to_add)
     check_new_edges <- 0
-    for (k in 1:m){
+    for (k in 1:m) {
       current_edge <- edges_to_add[k, ]
 
       is_already_edge <- adj_mat[current_edge[1], current_edge[2]] |
         adj_mat[current_edge[2], current_edge[1]]
 
-      if (is_already_edge) {break}
+      if (is_already_edge) {
+        break
+      }
     }
 
-    if (is_already_edge){
-      stop(paste("The argument edges_to_add cannot contain edges already",
-                 "present in the given graph."))
+    if (is_already_edge) {
+      stop(paste(
+        "The argument edges_to_add cannot contain edges already",
+        "present in the given graph."
+      ))
     }
 
 
-    stop.flag = FALSE
-    AIC = 2*igraph::ecount(graph.cur[[l]]) - 2 * logLH_HR(data=data.std,
-                                                          Gamma = Ghat[[l]], cens=cens)
-    edges_added = c()
+    stop.flag <- FALSE
+    AIC <- 2 * igraph::ecount(graph.cur[[l]]) - 2 * logLH_HR(
+      data = data.std,
+      Gamma = Ghat[[l]], cens = cens
+    )
+    edges_added <- c()
 
-    while(length(edges_to_add)!=0 & stop.flag==FALSE){
-      m = nrow(edges_to_add)
-      AIC.tmp = rep(NA,times=m)
-      Ghat.tmp = list()
+    while (length(edges_to_add) != 0 & stop.flag == FALSE) {
+      m <- nrow(edges_to_add)
+      AIC.tmp <- rep(NA, times = m)
+      Ghat.tmp <- list()
 
       # go through proposed edges one after the other while retaining a block
       # graph
       # m number of proposed edges
-      for(k in 1:m){
+      for (k in 1:m) {
         # current temporary graph
-        Ghat.tmp[[k]] = Ghat[[l]]
+        Ghat.tmp[[k]] <- Ghat[[l]]
         # add the current proposed edge to the graph
-        graph.tmp = igraph::add_edges(graph = graph.cur[[l]],
-                                      edges = edges_to_add[k,])
+        graph.tmp <- igraph::add_edges(
+          graph = graph.cur[[l]],
+          edges = edges_to_add[k, ]
+        )
 
         # if the obtained graph is decomposable
-        if(igraph::is_chordal(graph.tmp)$chordal){
+        if (igraph::is_chordal(graph.tmp)$chordal) {
           # find list of max cliques
-          cli = igraph::max_cliques(graph.tmp)
+          cli <- igraph::max_cliques(graph.tmp)
           # find in which clique the new proposed edge is. It can be in at most
           # one clique, otherwise, the original graph were not decomposable.
           intersections <-
-            sapply(cli, FUN=function(x) length(intersect(x, edges_to_add[k,]))==2)
-          ii <-  which(intersections == TRUE)
+            sapply(cli, FUN = function(x) length(intersect(x, edges_to_add[k, ])) == 2)
+          ii <- which(intersections == TRUE)
 
 
           # only in the clique itself the separator can be of size > 1
-          if(sum(sapply(cli, FUN=function(x)
-            length(intersect(x, cli[[ii]])) > 1))==1){
-            cat("\nTry edge", edges_to_add[k,])
-            cli.idx = cli[[ii]]
-            cli.len = length(cli.idx)
+          if (sum(sapply(cli, FUN = function(x) {
+            length(intersect(x, cli[[ii]])) > 1
+          })) == 1) {
+            cat("\nTry edge", edges_to_add[k, ])
+            cli.idx <- cli[[ii]]
+            cli.len <- length(cli.idx)
             data.cli <- mparetomargins(data = data.std, set_indices = cli.idx)
 
             G.est <- emp_vario(data = data.cli)
-            init = Gamma2par(G.est)
-            Ghat.tmp[[k]][cli.idx, cli.idx] = fmpareto_HR(data=data.cli,
-                                                          init=init, cens=cens)$Gamma
-            Ghat.tmp[[k]] = complete_Gamma(graph=graph.tmp, Gamma=Ghat.tmp[[k]])
-            AIC.tmp[k] = 2*igraph::ecount(graph.tmp) -
-              2 * logLH_HR(data = data.std, Gamma = Ghat.tmp[[k]], cens=cens)
+            init <- Gamma2par(G.est)
+            Ghat.tmp[[k]][cli.idx, cli.idx] <- fmpareto_HR(
+              data = data.cli,
+              init = init, cens = cens
+            )$Gamma
+            Ghat.tmp[[k]] <- complete_Gamma(graph = graph.tmp, Gamma = Ghat.tmp[[k]])
+            AIC.tmp[k] <- 2 * igraph::ecount(graph.tmp) -
+              2 * logLH_HR(data = data.std, Gamma = Ghat.tmp[[k]], cens = cens)
           }
         }
       }
-      if(!all(is.na(AIC.tmp))){
-        add.idx = which(AIC.tmp == min(AIC.tmp, na.rm = TRUE))
-        cat("\nAdded edge ", edges_to_add[add.idx,])
-        l = l+1
-        graph.cur[[l]] =
-          igraph::add_edges(graph = graph.cur[[l-1]], edges = edges_to_add[add.idx,])
+      if (!all(is.na(AIC.tmp))) {
+        add.idx <- which(AIC.tmp == min(AIC.tmp, na.rm = TRUE))
+        cat("\nAdded edge ", edges_to_add[add.idx, ])
+        l <- l + 1
+        graph.cur[[l]] <-
+          igraph::add_edges(graph = graph.cur[[l - 1]], edges = edges_to_add[add.idx, ])
         graph.cur[[l]] <- set_graph_parameters(graph.cur[[l]])
-        Ghat[[l]] = Ghat.tmp[[add.idx]]
-        AIC = c(AIC, AIC.tmp[add.idx])
-        edges_added = rbind(edges_added, t(as.matrix(edges_to_add[add.idx,])))
-        edges_to_add = edges_to_add[-add.idx,]
+        Ghat[[l]] <- Ghat.tmp[[add.idx]]
+        AIC <- c(AIC, AIC.tmp[add.idx])
+        edges_added <- rbind(edges_added, t(as.matrix(edges_to_add[add.idx, ])))
+        edges_to_add <- edges_to_add[-add.idx, ]
       }
-      if(all(is.na(AIC.tmp))) stop.flag=TRUE
+      if (all(is.na(AIC.tmp))) stop.flag <- TRUE
     }
-    return(list(graph=graph.cur,
-                Gamma=Ghat, AIC=AIC, edges_added=edges_added))
+    return(list(
+      graph = graph.cur,
+      Gamma = Ghat, AIC = AIC, edges_added = edges_added
+    ))
   }
 
-  return(list(graph=set_graph_parameters(graph), Gamma=Ghat[[1]]))
+  return(list(graph = set_graph_parameters(graph), Gamma = Ghat[[1]]))
 }
 
 
@@ -806,102 +866,110 @@ fmpareto_graph_HR = function(data, graph, p = NULL, cens = FALSE, edges_to_add =
 #' ## Fitting a 4-dimensional HR MST tree
 #'
 #' my_graph <- igraph::graph_from_adjacency_matrix(
-#'   rbind(c(0, 1, 0, 0),
-#'         c(1, 0, 1, 1),
-#'         c(0, 1, 0, 0),
-#'         c(0, 1, 0, 0)),
-#'   mode = "undirected")
+#'   rbind(
+#'     c(0, 1, 0, 0),
+#'     c(1, 0, 1, 1),
+#'     c(0, 1, 0, 0),
+#'     c(0, 1, 0, 0)
+#'   ),
+#'   mode = "undirected"
+#' )
 #' n <- 100
-#' Gamma_vec <- c(.5,1.4,.8)
-#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
+#' Gamma_vec <- c(.5, 1.4, .8)
+#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
 #'
 #' set.seed(123)
 #' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
 #' my_fit <- mst_HR(my_data, p = NULL, cens = FALSE)
-#'
 #' @references
 #'  \insertAllCited{}
 #'
 #' @export
 #'
 #' @importFrom foreach foreach %dopar%
-mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
-                  n_workers = 1){
+mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
+                   n_workers = 1) {
 
   # check if you need to rescale data or not
-  if(!is.null(p)){
-    data.std = data2mpareto(data, p)
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
   n <- nrow(data.std)
-  d = ncol(data.std)
+  d <- ncol(data.std)
   graph.full <- igraph::make_full_graph(d)
-  G.emp = emp_vario(data=data.std)
+  G.emp <- emp_vario(data = data.std)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
-  if(cens){
-    if (parallel){
+  if (cens) {
+    if (parallel) {
       doFuture::registerDoFuture()
       future::plan(future::multisession, workers = n_workers)
 
-      bivLLH <- foreach(i=1:nrow(res), .combine=cbind,
-                        .packages='graphicalExtremes') %dopar% {
-                          x <- res[i, ]
-                          fmpareto_obj <- fmpareto_HR(data = data.std[, x],
-                                                      init = G.emp[x[1], x[2]],
-                                                      cens = cens)
-                          par.est <- fmpareto_obj$par
-                          llh_hr <- -(fmpareto_obj$nllik - 2 *
-                                        (sum(log(data.std[which(data.std[,x[1]] > 1), x[1]])) +
-                                           sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
-                          return(c(par = par.est, llh_hr = llh_hr))
-                        }
+      bivLLH <- foreach(
+        i = 1:nrow(res), .combine = cbind,
+        .packages = "graphicalExtremes"
+      ) %dopar% {
+        x <- res[i, ]
+        fmpareto_obj <- fmpareto_HR(
+          data = data.std[, x],
+          init = G.emp[x[1], x[2]],
+          cens = cens
+        )
+        par.est <- fmpareto_obj$par
+        llh_hr <- -(fmpareto_obj$nllik - 2 *
+          (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]])) +
+            sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
+        return(c(par = par.est, llh_hr = llh_hr))
+      }
       future::plan(future::sequential)
       colnames(bivLLH) <- NULL
-
     } else {
-      bivLLH <- apply(res[,1:2], 1, function(x){
-        fmpareto_obj <- fmpareto_HR(data=data.std[,x], init=G.emp[x[1],x[2]], cens=cens)
+      bivLLH <- apply(res[, 1:2], 1, function(x) {
+        fmpareto_obj <- fmpareto_HR(data = data.std[, x], init = G.emp[x[1], x[2]], cens = cens)
         par.est <- fmpareto_obj$par
-        llh_hr <- - (fmpareto_obj$nllik
-                     - 2*(sum(log(data.std[which(data.std[,x[1]] > 1),x[1]]))
-                          + sum(log(data.std[which(data.std[,x[2]] > 1),x[2]]))))
+        llh_hr <- -(fmpareto_obj$nllik
+          - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
+          + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
         c(par = par.est, llh_hr = llh_hr)
       })
     }
   }
 
 
-  if(!cens){
-    if (parallel){
+  if (!cens) {
+    if (parallel) {
       doFuture::registerDoFuture()
       future::plan(future::multisession, workers = n_workers)
 
-      bivLLH <- foreach(i=1:nrow(res), .combine=cbind,
-                        .packages='graphicalExtremes') %dopar% {
+      bivLLH <- foreach(
+        i = 1:nrow(res), .combine = cbind,
+        .packages = "graphicalExtremes"
+      ) %dopar% {
+        x <- res[i, ]
 
-                          x <- res[i, ]
+        par.est <- fmpareto_HR(
+          data = data.std[, x],
+          init = G.emp[x[1], x[2]],
+          cens = cens
+        )$par
 
-                          par.est <-  fmpareto_HR(data=data.std[,x],
-                                                  init=G.emp[x[1],x[2]],
-                                                  cens=cens)$par
+        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
+          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
 
-                          llh_hr <- logLH_HR(data=data.std[,x], Gamma=par2Gamma(par.est)) +
-                            2*(sum(log(data.std[,x[1]])) + sum(log(data.std[,x[2]])))
-
-                          return(c(par = par.est, llh_hr = llh_hr))
-
-                        }
+        return(c(par = par.est, llh_hr = llh_hr))
+      }
       future::plan(future::sequential)
       colnames(bivLLH) <- NULL
-
     } else {
-      bivLLH <- apply(res[,1:2], 1, function(x) {
-        par.est <-  fmpareto_HR(data=data.std[,x], init=G.emp[x[1],x[2]],
-                                cens=cens)$par
+      bivLLH <- apply(res[, 1:2], 1, function(x) {
+        par.est <- fmpareto_HR(
+          data = data.std[, x], init = G.emp[x[1], x[2]],
+          cens = cens
+        )$par
 
-        llh_hr <- logLH_HR(data=data.std[,x], Gamma=par2Gamma(par.est)) +
-          2*(sum(log(data.std[,x[1]])) + sum(log(data.std[,x[2]])))
+        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
+          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
 
         c(par = par.est, llh_hr = llh_hr)
       })
@@ -911,10 +979,14 @@ mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
   bivLLH.mat <- par2Gamma(bivLLH["llh_hr", ])
 
   # Estimated tree
-  mst.tree = igraph::mst(graph=graph.full, weights =
-                           -bivLLH.mat[igraph::ends(graph.full,
-                                                    igraph::E(graph.full))],
-                         algorithm = "prim")
+  mst.tree <- igraph::mst(
+    graph = graph.full, weights =
+      -bivLLH.mat[igraph::ends(
+        graph.full,
+        igraph::E(graph.full)
+      )],
+    algorithm = "prim"
+  )
 
   # set graphical parameters
   mst.tree <- set_graph_parameters(mst.tree)
@@ -925,5 +997,6 @@ mst_HR = function(data, p = NULL, cens = FALSE, parallel = FALSE,
   # return tree
   return(list(
     tree = mst.tree,
-    Gamma = complete_Gamma(graph = mst.tree, Gamma = est_Gamma)))
+    Gamma = complete_Gamma(graph = mst.tree, Gamma = est_Gamma)
+  ))
 }
