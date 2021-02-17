@@ -96,7 +96,7 @@ emp_chi_mat <- function(data, p) {
   if (!is.null(p)) {
     crossprod(ind, ind) / (n * (1 - p))
   } else {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
+    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = p, nrow = p)
     crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
   }
 }
