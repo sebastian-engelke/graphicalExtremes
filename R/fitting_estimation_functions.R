@@ -74,7 +74,7 @@ emp_chi <- function(data, p = NULL) {
 #' my_data <- rmstable(n, "HR", d = d, par = Gamma)
 #' emp_chi_mat(my_data, p)
 #' @export
-emp_chi_mat <- function(data, p) {
+emp_chi_mat <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -83,6 +83,7 @@ emp_chi_mat <- function(data, p) {
   }
 
   n <- nrow(data)
+  d <- ncol(data)
 
   if (!is.null(p)) {
     data.std <- data2mpareto(data, p)
@@ -96,7 +97,7 @@ emp_chi_mat <- function(data, p) {
   if (!is.null(p)) {
     crossprod(ind, ind) / (n * (1 - p))
   } else {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = p, nrow = p)
+    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
     crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
   }
 }

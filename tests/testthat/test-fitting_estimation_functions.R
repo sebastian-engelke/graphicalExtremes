@@ -111,6 +111,9 @@ test_that("emp_chi_mat works", {
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
   expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+
+  dat <- data2mpareto(data1, p = 0.95)
+  expect_equal(emp_chi_mat(data = dat), emp_chi_mat(data1, p = 0.95))
 })
 
 test_that("emp_vario works", {
