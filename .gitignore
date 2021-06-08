@@ -3,3 +3,4 @@
 *.pdf
 *data/
 .DS_store
+docs
