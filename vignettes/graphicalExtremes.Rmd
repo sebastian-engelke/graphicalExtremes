@@ -19,13 +19,44 @@ library(graphicalExtremes)
 ```
 
 ## 1. Data
+
+```{r}
+load("../other_scripts/data/DataEvents.RData")
+load("../other_scripts/data/StsInfo.RData")
+StsChos <- c(1:47)[-c(16,30,31,34,42,43,44,45,46,47, 3,1,2,29,18,19)]
+StsInfoShort <- StsInfo[StsChos,]
+rownames(StsInfoShort) <- 1:31
+
+load("../other_scripts/data/StsArea.RData")
+load("../other_scripts/data/StsCenter.RData")
+load("../other_scripts/data/StsAlt.RData")
+load("../other_scripts/data/StsDensity.RData")
+load("../other_scripts/data/StsSlope.RData")
+
+
+plot(DataEvents[,c(1,2)])
+
+```
+
+
+
 ## 2. Multivariate Pareto Distribution
+
+A MPD is defined as $Y=...$
+
+```{r}
+Y <- data2mpareto(data=DataEvents[,c(1,2)], p = .8)
+plot(Y)
+
+```
+
+
 ## 3. Extremal Graphical Models
 ## 4. Trees
 ### 4.1 Structure learning
 ### 4.2 Estimation
 ### 4.3 Empirical variogram
-## 5. Huesler-Reiss distribution
+## 5. Huesler--Reiss distribution
 ### 5.1 $\Gamma$ transformation
 ### 5.2 $\Gamma$ completion
 ### 5.3 Estimation
