@@ -377,7 +377,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
   # if cens = FALSE (default)
   if (!cens) {
     return(-n * log(V_HR(x = rep(1, times = d), par = par))
-           + sum(logdV_HR(x = data, par = par)))
+      + sum(logdV_HR(x = data, par = par)))
   }
 
   # if cens = TRUE
@@ -391,8 +391,8 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 
   if (length(I) > 0) {
     y1 <- mapply(logdVK_HR,
-                 x = as.list(data.frame(t(data.p)))[I], K = L[I],
-                 MoreArgs = list(par = par)
+      x = as.list(data.frame(t(data.p)))[I], K = L[I],
+      MoreArgs = list(par = par)
     )
   } else {
     y1 <- 0
@@ -505,8 +505,8 @@ fmpareto_HR <- function(data,
       else {
         if (length(I) > 0) {
           y1 <- mapply(logdVK_HR,
-                       x = as.list(data.frame(t(data.p)))[I],
-                       K = L[I], MoreArgs = list(par = par)
+            x = as.list(data.frame(t(data.p)))[I],
+            K = L[I], MoreArgs = list(par = par)
           )
         }
         else {
@@ -559,8 +559,8 @@ fmpareto_HR <- function(data,
 
   # optimize likelihood
   opt <- stats::optim(init, nllik,
-                      hessian = TRUE,
-                      control = list(maxit = maxit), method = method
+    hessian = TRUE,
+    control = list(maxit = maxit), method = method
   )
 
   z <- list()
@@ -905,8 +905,8 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
       fmpareto_obj <- fmpareto_HR(data = data.std[, x], init = G.emp[x[1], x[2]], cens = cens)
       par.est <- fmpareto_obj$par
       llh_hr <- -(fmpareto_obj$nllik
-                  - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
-                         + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
+        - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
+        + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
       c(par = par.est, llh_hr = llh_hr)
     })
   }
