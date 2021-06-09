@@ -185,10 +185,12 @@ distribution see Coles and Tawn (1991)
     <pre class="examples"><div class='input'><span class='co'>## A 4-dimensional HR distribution</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
 <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fl'>4</span>
-<span class='va'>G</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
-            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>G</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='fu'>rmstable</span><span class='op'>(</span><span class='va'>n</span>, <span class='st'>"HR"</span>, d <span class='op'>=</span> <span class='va'>d</span>, par <span class='op'>=</span> <span class='va'>G</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             [,1]       [,2]       [,3]       [,4]
@@ -249,8 +251,7 @@ distribution see Coles and Tawn (1991)
 #&gt;  [7,] 1.5847216 6.1903019 3.3346973 1.8198441
 #&gt;  [8,] 0.2975653 1.2948784 1.5564330 2.1926874
 #&gt;  [9,] 1.3155831 0.5673063 0.4437899 1.0480459
-#&gt; [10,] 1.7603035 5.4723088 1.5448006 4.8258270</div><div class='input'>
-</div></pre>
+#&gt; [10,] 1.7603035 5.4723088 1.5448006 4.8258270</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -196,13 +196,15 @@ distribution see Coles and Tawn (1991)
     <pre class="examples"><div class='input'><span class='co'>## A 4-dimensional HR tree model</span>
 
 <span class='va'>my_tree</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html'>graph_from_adjacency_matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>,
-mode <span class='op'>=</span> <span class='st'>"undirected"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>,
+mode <span class='op'>=</span> <span class='st'>"undirected"</span>
+<span class='op'>)</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
-<span class='va'>Gamma_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>,<span class='fl'>1.4</span>,<span class='fl'>.8</span><span class='op'>)</span>
+<span class='va'>Gamma_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>1.4</span>, <span class='fl'>.8</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
 <span class='fu'>rmpareto_tree</span><span class='op'>(</span><span class='va'>n</span>, <span class='st'>"HR"</span>, tree <span class='op'>=</span> <span class='va'>my_tree</span>, par <span class='op'>=</span> <span class='va'>Gamma_vec</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;             [,1]      [,2]      [,3]      [,4]
@@ -218,7 +220,7 @@ mode <span class='op'>=</span> <span class='st'>"undirected"</span><span class='
 #&gt; [10,] 0.60313584 0.4771446 1.4032066 0.0989642</div><div class='input'>
 <span class='co'>## A 4-dimensional Dirichlet model with asymmetric edge distributions</span>
 
-<span class='va'>alpha</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>1</span>, <span class='fl'>.5</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>alpha</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>1</span>, <span class='fl'>.5</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>rmpareto_tree</span><span class='op'>(</span><span class='va'>n</span>, model <span class='op'>=</span> <span class='st'>"dirichlet"</span>, tree <span class='op'>=</span> <span class='va'>my_tree</span>, par <span class='op'>=</span> <span class='va'>alpha</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;               [,1]        [,2]         [,3]        [,4]
 #&gt;  [1,] 5.762897e-04  7.58402408 12.509319036 0.157712818
@@ -230,8 +232,7 @@ mode <span class='op'>=</span> <span class='st'>"undirected"</span><span class='
 #&gt;  [7,] 1.534824e+00  0.09823805  0.034636347 1.393518517
 #&gt;  [8,] 3.906524e+00  0.30175547  0.770171700 0.045366892
 #&gt;  [9,] 5.232992e+00  0.81597984  0.509299749 0.590041154
-#&gt; [10,] 1.029222e-01  1.07372668  2.867594928 0.584238945</div><div class='input'>
-</div></pre>
+#&gt; [10,] 1.029222e-01  1.07372668  2.867594928 0.584238945</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
