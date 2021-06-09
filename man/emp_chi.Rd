@@ -26,11 +26,12 @@ Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} em
 n <- 100
 d <- 2
 p <- .8
-G <-  cbind(c(0, 1.5),
-            c(1.5, 0))
+G <- cbind(
+  c(0, 1.5),
+  c(1.5, 0)
+)
 
 set.seed(123)
-my_data = rmstable(n, "HR", d = d, par = G)
+my_data <- rmstable(n, "HR", d = d, par = G)
 emp_chi(my_data, p)
-
 }

@@ -38,11 +38,12 @@ containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes
 This is the inverse of function of \code{\link{Gamma2Sigma}}.
 }
 \examples{
-Sigma1 <-  rbind(c(1.5, 0.5, 1),
-                 c(0.5, 1.5, 1),
-                 c(1, 1, 2))
+Sigma1 <- rbind(
+  c(1.5, 0.5, 1),
+  c(0.5, 1.5, 1),
+  c(1, 1, 2)
+)
 Sigma2Gamma(Sigma1, k = 1, full = FALSE)
-
 }
 \references{
 \insertAllCited{}

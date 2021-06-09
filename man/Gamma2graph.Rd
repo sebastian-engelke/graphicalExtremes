@@ -30,13 +30,14 @@ can be identified from the inverses of the matrices \eqn{\Sigma^{(k)}}{\Sigma^(k
 defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
-Gamma <-  cbind(c(0, 1.5, 1.5, 2),
-                c(1.5, 0, 2, 1.5),
-                c(1.5, 2, 0, 1.5),
-                c(2, 1.5, 1.5, 0))
+Gamma <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
 
 Gamma2graph(Gamma, to_plot = TRUE)
-
 }
 \references{
 \insertAllCited{}

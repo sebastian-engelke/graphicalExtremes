@@ -50,21 +50,25 @@ class of block graphs. See \insertCite{eng2019;textual}{graphicalExtremes} for d
 ## Fitting a 4-dimensional HR distribution
 
 my_graph <- igraph::graph_from_adjacency_matrix(
-  rbind(c(0, 1, 0, 0),
-        c(1, 0, 1, 1),
-        c(0, 1, 0, 0),
-        c(0, 1, 0, 0)),
-  mode = "undirected")
+  rbind(
+    c(0, 1, 0, 0),
+    c(1, 0, 1, 1),
+    c(0, 1, 0, 0),
+    c(0, 1, 0, 0)
+  ),
+  mode = "undirected"
+)
 n <- 100
-Gamma_vec <- c(.5,1.4,.8)
-complete_Gamma(Gamma = Gamma_vec, graph = my_graph)  ## full Gamma matrix
-edges_to_add <- rbind(c(1,3), c(1,4), c(3,4))
+Gamma_vec <- c(.5, 1.4, .8)
+complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
+edges_to_add <- rbind(c(1, 3), c(1, 4), c(3, 4))
 
 set.seed(123)
 my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
-my_fit <- fmpareto_graph_HR(my_data, graph = my_graph,
-  p = NULL, cens = FALSE, edges_to_add = edges_to_add)
-
+my_fit <- fmpareto_graph_HR(my_data,
+  graph = my_graph,
+  p = NULL, cens = FALSE, edges_to_add = edges_to_add
+)
 }
 \references{
 \insertAllCited{}

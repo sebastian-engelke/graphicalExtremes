@@ -36,13 +36,13 @@ that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtrem
 This is the inverse of function of \code{\link{Sigma2Gamma}}.
 }
 \examples{
-Gamma <-  cbind(c(0, 1.5, 1.5, 2),
-                c(1.5, 0, 2, 1.5),
-                c(1.5, 2, 0, 1.5),
-                c(2, 1.5, 1.5, 0))
+Gamma <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
-
-
 }
 \references{
 \insertAllCited{}
