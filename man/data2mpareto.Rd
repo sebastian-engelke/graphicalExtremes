@@ -31,13 +31,14 @@ of the standard Pareto distribution to standardize them to the multivariate Pare
 n <- 20
 d <- 4
 p <- .8
-G <-  cbind(c(0, 1.5, 1.5, 2),
-            c(1.5, 0, 2, 1.5),
-            c(1.5, 2, 0, 1.5),
-            c(2, 1.5, 1.5, 0))
+G <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
 
 set.seed(123)
-my_data = rmstable(n, "HR", d = d, par = G)
+my_data <- rmstable(n, "HR", d = d, par = G)
 data2mpareto(my_data, p)
-
 }

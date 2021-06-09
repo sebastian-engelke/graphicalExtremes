@@ -4,7 +4,7 @@
 \alias{emp_chi_mat}
 \title{Empirical estimation of extremal correlation matrix \eqn{\chi}}
 \usage{
-emp_chi_mat(data, p)
+emp_chi_mat(data, p = NULL)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
@@ -26,13 +26,14 @@ Estimates empirically the matrix of bivariate extremal correlation coefficients 
 n <- 100
 d <- 4
 p <- .8
-Gamma <- cbind(c(0, 1.5, 1.5, 2),
-               c(1.5, 0, 2, 1.5),
-               c(1.5, 2, 0, 1.5),
-               c(2, 1.5, 1.5, 0))
+Gamma <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
 
 set.seed(123)
-my_data = rmstable(n, "HR", d = d, par = Gamma)
+my_data <- rmstable(n, "HR", d = d, par = Gamma)
 emp_chi_mat(my_data, p)
-
 }

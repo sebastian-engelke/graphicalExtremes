@@ -47,10 +47,12 @@ distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 ## A 4-dimensional HR distribution
 n <- 10
 d <- 4
-G <-  cbind(c(0, 1.5, 1.5, 2),
-            c(1.5, 0, 2, 1.5),
-            c(1.5, 2, 0, 1.5),
-            c(2, 1.5, 1.5, 0))
+G <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
 
 rmstable(n, "HR", d = d, par = G)
 
@@ -71,7 +73,6 @@ n <- 10
 d <- 4
 alpha <- c(.8, 1, .5, 2)
 rmstable(n, "dirichlet", d, par = alpha)
-
 }
 \references{
 \insertAllCited{}

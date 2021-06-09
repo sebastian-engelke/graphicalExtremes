@@ -201,6 +201,7 @@ emp_vario <- function(data, k = NULL, p = NULL) {
 #'
 #' @return Numeric. The exponent measure of the HR distribution.
 #'
+#' @noRd
 V_HR <- function(x, par) {
   # helper function ####
   f1 <- function(i, x) {
@@ -238,6 +239,7 @@ V_HR <- function(x, par) {
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
+#' @noRd
 logdV_HR <- function(x, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -287,6 +289,7 @@ logdV_HR <- function(x, par) {
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
+#' @noRd
 logdVK_HR <- function(x, K, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -358,6 +361,7 @@ logdVK_HR <- function(x, K, par) {
 #'
 #' @return Numeric. The full censored log-likelihood of HR model.
 #'
+#' @noRd
 logLH_HR <- function(data, Gamma, cens = FALSE) {
   if (is.vector(data)) {
     d <- length(data)
@@ -447,6 +451,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' estimated parameters.
 #' }
 #'
+#' @noRd
 fmpareto_HR <- function(data,
                         p = NULL,
                         cens = FALSE,

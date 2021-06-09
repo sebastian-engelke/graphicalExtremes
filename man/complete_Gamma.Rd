@@ -34,17 +34,20 @@ by the conditional independence properties. For details see \insertCite{eng2019;
 ## Complete a 4-dimensional HR distribution
 
 my_graph <- igraph::graph_from_adjacency_matrix(rbind(
-c(0, 1, 0, 0),
-c(1, 0, 1, 1),
-c(0, 1, 0, 1),
-c(0, 1, 1, 0)),
-mode = "undirected")
+  c(0, 1, 0, 0),
+  c(1, 0, 1, 1),
+  c(0, 1, 0, 1),
+  c(0, 1, 1, 0)
+),
+mode = "undirected"
+)
 
 Gamma <- rbind(
-c(0, .5, NA, NA),
-c(.5, 0, 1, 1.5),
-c(NA, 1, 0, .8),
-c(NA, 1.5, .8, 0))
+  c(0, .5, NA, NA),
+  c(.5, 0, 1, 1.5),
+  c(NA, 1, 0, .8),
+  c(NA, 1.5, .8, 0)
+)
 
 complete_Gamma(Gamma, my_graph)
 
@@ -52,7 +55,6 @@ complete_Gamma(Gamma, my_graph)
 
 Gamma_vec <- c(.5, 1, 1.5, .8)
 complete_Gamma(Gamma_vec, my_graph)
-
 }
 \references{
 \insertAllCited{}

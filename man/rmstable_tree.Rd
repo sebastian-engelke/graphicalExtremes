@@ -54,20 +54,21 @@ distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 ## A 4-dimensional HR tree model
 
 my_tree <- igraph::graph_from_adjacency_matrix(rbind(
-c(0, 1, 0, 0),
-c(1, 0, 1, 1),
-c(0, 1, 0, 0),
-c(0, 1, 0, 0)),
-mode = "undirected")
+  c(0, 1, 0, 0),
+  c(1, 0, 1, 1),
+  c(0, 1, 0, 0),
+  c(0, 1, 0, 0)
+),
+mode = "undirected"
+)
 n <- 10
-Gamma_vec <- c(.5,1.4,.8)
+Gamma_vec <- c(.5, 1.4, .8)
 rmstable_tree(n, "HR", tree = my_tree, par = Gamma_vec)
 
 ## A 4-dimensional Dirichlet model with asymmetric edge distributions
 
-alpha = cbind(c(.2, 1, .5), c(1.5, .6, .8))
+alpha <- cbind(c(.2, 1, .5), c(1.5, .6, .8))
 rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
-
 }
 \references{
 \insertAllCited{}
