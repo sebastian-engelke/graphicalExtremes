@@ -130,7 +130,7 @@ distributions. See Engelke and Hitz (2020)
  for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mst_HR</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span>, cens <span class='op'>=</span> <span class='cn'>FALSE</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span>, n_workers <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mst_HR</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span>, cens <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,17 +151,6 @@ to standardize the <code>data</code>.</p></td>
       <th>cens</th>
       <td><p>Logical. If true, then censored likelihood contributions are used for
 components below the threshold. By default, <code>cens = FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>parallel</th>
-      <td><p>Logical. If true, the code is run in parallel.
-By default, <code>parallel = FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>n_workers</th>
-      <td><p>Positive integer. If <code>parallel = TRUE</code>, <code>n_workers</code>
-represents the number of parallel R processes. By default,
-<code>n_workers = 1</code>.</p></td>
     </tr>
     </table>
 
