@@ -6,6 +6,7 @@
 #'
 #' @return Numeric vector with entries rescaled to uniform margins
 #'
+#' @noRd
 unif <- function(x) {
   rank(x) / (length(x) + 1)
 }
@@ -23,6 +24,7 @@ unif <- function(x) {
 #' @return Numeric. The dimension of the matrix (number of rows and columns, if
 #' the matrix is symmetric). Else, raises an error.
 #'
+#' @noRd
 dim_Gamma <- function(Gamma) {
   dimension <- dim(Gamma)
 
@@ -44,6 +46,7 @@ dim_Gamma <- function(Gamma) {
 #'
 #' @return Numeric vector.
 #'
+#' @noRd
 select_edges <- function(graph) {
   d <- igraph::vcount(graph)
   adj_mat <- igraph::as_adjacency_matrix(graph, sparse = FALSE) > 0
@@ -95,6 +98,8 @@ select_edges <- function(graph) {
 #' @param graph Graph object from \code{igraph} package.
 #'
 #' @return Graph object from \code{igraph} package.
+#'
+#' @noRd
 set_graph_parameters <- function(graph) {
   # set parameters
   igraph::V(graph)$color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 0.4)
@@ -118,6 +123,7 @@ set_graph_parameters <- function(graph) {
 #'
 #' @return Numeric matrix \eqn{n \times d}{n x d}.
 #'
+#' @noRd
 censor <- function(x, p) {
   f2 <- function(x, p) {
     x_is_less <- x <= p

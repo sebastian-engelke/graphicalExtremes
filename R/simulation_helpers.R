@@ -10,6 +10,7 @@
 #' Cholesky decomposition of the desired covariance matrix.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_HR <- function(n, d, idx, trend, chol_mat) {
   # check arguments
   if (length(idx) != 1) stop("Argument idx must be a scalar.")
@@ -33,6 +34,7 @@ simu_px_HR <- function(n, d, idx, trend, chol_mat) {
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_logistic <- function(n, d, idx, theta) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n) {
@@ -62,6 +64,7 @@ simu_px_logistic <- function(n, d, idx, theta) {
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_neglogistic <- function(n, d, idx, theta) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n) {
@@ -88,6 +91,7 @@ simu_px_neglogistic <- function(n, d, idx, theta) {
 #' @param alpha Numeric vector of size \code{d}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_dirichlet <- function(n, d, idx, alpha) {
   # check arguments
   if (length(idx) != 1 & length(idx) != n) {
@@ -122,6 +126,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 #'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_tree_HR <- function(n, Gamma_vec, A) {
   res <- exp(A %*%
     matrix(stats::rnorm(length(Gamma_vec) * n,
@@ -150,6 +155,7 @@ simu_px_tree_HR <- function(n, Gamma_vec, A) {
 #'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_tree_logistic <- function(n, theta, A) {
   # define number of edges
   d <- nrow(A)
@@ -192,6 +198,7 @@ simu_px_tree_logistic <- function(n, theta, A) {
 #'
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
+#' @noRd
 simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {
   e <- length(alpha.start)
   shape.start <- matrix(alpha.start + 1, nrow = e, ncol = n)
