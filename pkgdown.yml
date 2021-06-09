@@ -1,6 +1,7 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2021-06-08T14:33Z
+articles:
+  intro_graphical_extremes: intro_graphical_extremes.html
+last_built: 2021-06-09T12:05Z
 
