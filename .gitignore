@@ -4,3 +4,6 @@
 *data/
 .DS_store
 docs
+
+.vscode
+build.R
