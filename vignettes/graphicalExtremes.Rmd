@@ -2,7 +2,7 @@
 title: "Introduction to Extremal Graphical Models"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Extremal Graphical Modles}
+  %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
