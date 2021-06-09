@@ -1,0 +1,32 @@
+---
+title: "Introduction to Extremal Graphical Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Extremal Graphical Modles}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(graphicalExtremes)
+```
+
+## 1. Data
+## 2. Multivariate Pareto Distribution
+## 3. Extremal Graphical Models
+## 4. Trees
+### 4.1 Structure learning
+### 4.2 Estimation
+### 4.3 Empirical variogram
+## 5. Huesler-Reiss distribution
+### 5.1 $\Gamma$ transformation
+### 5.2 $\Gamma$ completion
+### 5.3 Estimation
+### 5.4 Eglasso
