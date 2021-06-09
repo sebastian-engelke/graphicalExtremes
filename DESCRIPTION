@@ -32,9 +32,6 @@ Imports:
     Rdpack,
     stats (>= 3.6.0),
     grDevices (>= 3.6.0),
-    doFuture,
-    future,
-    foreach,
     utils
 RdMacros: Rdpack
 VignetteBuilder: knitr

@@ -377,7 +377,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
   # if cens = FALSE (default)
   if (!cens) {
     return(-n * log(V_HR(x = rep(1, times = d), par = par))
-      + sum(logdV_HR(x = data, par = par)))
+           + sum(logdV_HR(x = data, par = par)))
   }
 
   # if cens = TRUE
@@ -391,8 +391,8 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 
   if (length(I) > 0) {
     y1 <- mapply(logdVK_HR,
-      x = as.list(data.frame(t(data.p)))[I], K = L[I],
-      MoreArgs = list(par = par)
+                 x = as.list(data.frame(t(data.p)))[I], K = L[I],
+                 MoreArgs = list(par = par)
     )
   } else {
     y1 <- 0
@@ -505,8 +505,8 @@ fmpareto_HR <- function(data,
       else {
         if (length(I) > 0) {
           y1 <- mapply(logdVK_HR,
-            x = as.list(data.frame(t(data.p)))[I],
-            K = L[I], MoreArgs = list(par = par)
+                       x = as.list(data.frame(t(data.p)))[I],
+                       K = L[I], MoreArgs = list(par = par)
           )
         }
         else {
@@ -559,8 +559,8 @@ fmpareto_HR <- function(data,
 
   # optimize likelihood
   opt <- stats::optim(init, nllik,
-    hessian = TRUE,
-    control = list(maxit = maxit), method = method
+                      hessian = TRUE,
+                      control = list(maxit = maxit), method = method
   )
 
   z <- list()
@@ -855,11 +855,6 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #' to standardize the \code{data}.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, \code{cens = FALSE}.
-#' @param parallel Logical. If true, the code is run in parallel.
-#' By default, \code{parallel = FALSE}.
-#' @param n_workers Positive integer. If \code{parallel = TRUE}, \code{n_workers}
-#' represents the number of parallel R processes. By default,
-#' \code{n_workers = 1}.
 #'
 #' @return List consisting of:
 #' \itemize{
@@ -892,9 +887,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #'
 #' @export
 #'
-#' @importFrom foreach foreach %dopar%
-mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
-                   n_workers = 1) {
+mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   # check if you need to rescale data or not
   if (!is.null(p)) {
@@ -908,78 +901,29 @@ mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
   G.emp <- emp_vario(data = data.std)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
   if (cens) {
-    if (parallel) {
-      doFuture::registerDoFuture()
-      future::plan(future::multisession, workers = n_workers)
-
-      bivLLH <- foreach(
-        i = 1:nrow(res), .combine = cbind,
-        .packages = "graphicalExtremes"
-      ) %dopar% {
-        x <- res[i, ]
-        fmpareto_obj <- fmpareto_HR(
-          data = data.std[, x],
-          init = G.emp[x[1], x[2]],
-          cens = cens
-        )
-        par.est <- fmpareto_obj$par
-        llh_hr <- -(fmpareto_obj$nllik - 2 *
-          (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]])) +
-            sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
-        return(c(par = par.est, llh_hr = llh_hr))
-      }
-      future::plan(future::sequential)
-      colnames(bivLLH) <- NULL
-    } else {
-      bivLLH <- apply(res[, 1:2], 1, function(x) {
-        fmpareto_obj <- fmpareto_HR(data = data.std[, x], init = G.emp[x[1], x[2]], cens = cens)
-        par.est <- fmpareto_obj$par
-        llh_hr <- -(fmpareto_obj$nllik
-          - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
-          + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
-        c(par = par.est, llh_hr = llh_hr)
-      })
-    }
+    bivLLH <- apply(res[, 1:2], 1, function(x) {
+      fmpareto_obj <- fmpareto_HR(data = data.std[, x], init = G.emp[x[1], x[2]], cens = cens)
+      par.est <- fmpareto_obj$par
+      llh_hr <- -(fmpareto_obj$nllik
+                  - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
+                         + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
+      c(par = par.est, llh_hr = llh_hr)
+    })
   }
 
 
   if (!cens) {
-    if (parallel) {
-      doFuture::registerDoFuture()
-      future::plan(future::multisession, workers = n_workers)
+    bivLLH <- apply(res[, 1:2], 1, function(x) {
+      par.est <- fmpareto_HR(
+        data = data.std[, x], init = G.emp[x[1], x[2]],
+        cens = cens
+      )$par
 
-      bivLLH <- foreach(
-        i = 1:nrow(res), .combine = cbind,
-        .packages = "graphicalExtremes"
-      ) %dopar% {
-        x <- res[i, ]
+      llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
+        2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
 
-        par.est <- fmpareto_HR(
-          data = data.std[, x],
-          init = G.emp[x[1], x[2]],
-          cens = cens
-        )$par
-
-        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
-          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
-
-        return(c(par = par.est, llh_hr = llh_hr))
-      }
-      future::plan(future::sequential)
-      colnames(bivLLH) <- NULL
-    } else {
-      bivLLH <- apply(res[, 1:2], 1, function(x) {
-        par.est <- fmpareto_HR(
-          data = data.std[, x], init = G.emp[x[1], x[2]],
-          cens = cens
-        )$par
-
-        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
-          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
-
-        c(par = par.est, llh_hr = llh_hr)
-      })
-    }
+      c(par = par.est, llh_hr = llh_hr)
+    })
   }
 
   bivLLH.mat <- par2Gamma(bivLLH["llh_hr", ])
