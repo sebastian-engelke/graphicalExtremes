@@ -33,5 +33,6 @@ Imports:
     doFuture,
     future,
     foreach,
-    utils
+    utils,
+    corpcor
 RdMacros: Rdpack

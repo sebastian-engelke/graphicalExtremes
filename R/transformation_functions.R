@@ -355,6 +355,43 @@ Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
 }
 
 
+#' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+#'
+#' Transforms the \code{Gamma} matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
+#'
+#'
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#'
+#' @details
+#' Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+#' Huesler--Reiss distribution can be transformed into a
+#' \eqn{d \times d}{d x d} \eqn{\Theta} matrix, which
+#' contains the graph structure corresponding to the Huesler--Reiss distribution
+#' with parameter matrix \code{Gamma}.
+#'
+#' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
+#' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+#'
+#' @examples
+#' Gamma <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
+#' Gamma2Sigma(Gamma, k = 1, full = FALSE)
+#' @references
+#'  \insertAllCited{}
+#'
+#' @export
+Gamma2Theta <- function(Gamma) {
+  d <- ncol(Gamma)
+  ID <- diag(d) - matrix(1/d, d, d)
+  S <- ID %*% (-1/2 * Gamma) %*% ID
+  Theta <- corpcor::pseudoinverse(S)
+  return(Theta)
+}
 
 
 #' Create \eqn{\Gamma} from vector
