@@ -15,7 +15,7 @@ Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
+Huesler--Reiss distribution to the corresponding \eqn{\Theta} matrix.
 }
 \details{
 Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
