@@ -66,10 +66,9 @@ complete_Gamma <- function(Gamma, graph = NULL, N = 1000) {
 
 
 
-#' @export 
 complete_Gamma_general <- function(Gamma, graph, N = 1000) {
 
-  gList <- makeGList(graph)
+  gList <- make_graph_list(graph)
   m <- length(gList)
 
   for (n in 1:N) {
@@ -81,7 +80,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000) {
   return(Gamma)
 }
 
-makeGList <- function(graph){
+make_graph_list <- function(graph){
   d <- igraph::vcount(graph)
   gTilde <- igraph::complementer(graph)
   edgeMat <- igraph::as_edgelist(gTilde)
@@ -132,34 +131,11 @@ makeGList <- function(graph){
   return(gList)
 }
 
-makeGList_naive <- function(graph){
 
-  d <- igraph::vcount(graph)
-
-  gTilde <- igraph::complementer(graph)
-
-  edgeMat <- igraph::as_edgelist(gTilde)
-
-  gList <- lapply(seq_len(NROW(edgeMat)), function(i) {
-    edge <- edgeMat[i, ]
-    g <- igraph::graph(
-      edges = edge,
-      n = d,
-      directed = FALSE
-    )
-    igraph::complementer(g)
-  })
-  
-  return(gList)
-}
-
-
-
-#' @export
 complete_Gamma_decomposable <- function(Gamma, graph) {
   # computes cliques
   cliques <- igraph::max_cliques(graph)
-  cliques <- orderCliques(cliques)
+  cliques <- order_cliques(cliques)
 
   # else, continue
   oldVertices <- cliques[[1]]
@@ -174,7 +150,7 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
     vACB <- c(vA, vC, vB)
 
     GammaACB <- Gamma[vACB, vACB]
-    GammaACB <- completeGammaOneStep(GammaACB, length(vA), length(vC), length(vB))
+    GammaACB <- complete_Gamma_one_step(GammaACB, length(vA), length(vC), length(vB))
     Gamma[vACB, vACB] <- GammaACB
 
     oldVertices <- union(oldVertices, newVertices)
@@ -184,7 +160,7 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
 
 
 
-completeGammaOneStep <- function(Gamma, nA, nC, nB) {
+complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   n <- nA + nB + nC
   if (nrow(Gamma) != n || ncol(Gamma) != n) {
     stop("Make sure that nrow(Gamma) == ncol(Gamma) == nA+nB+nC")
@@ -283,7 +259,7 @@ check_Gamma <- function(Gamma, graph = NULL, check_decomposable = TRUE) {
 #' Order Cliques
 #'
 #' Orders the cliques in a graph so that they fulfill the running intersection property.
-orderCliques <- function(cliques) {
+order_cliques <- function(cliques) {
   n <- length(cliques)
   ret <- list()
   includedVertices <- numeric(0)
