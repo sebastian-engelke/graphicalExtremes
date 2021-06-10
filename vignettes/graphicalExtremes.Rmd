@@ -10,31 +10,25 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = ">"
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
 library(graphicalExtremes)
+library(tidyverse)
 ```
 
 ## 1. Data
 
-```{r}
-load("../other_scripts/data/DataEvents.RData")
-load("../other_scripts/data/StsInfo.RData")
-StsChos <- c(1:47)[-c(16,30,31,34,42,43,44,45,46,47, 3,1,2,29,18,19)]
-StsInfoShort <- StsInfo[StsChos,]
-rownames(StsInfoShort) <- 1:31
+```{r, fig.align='center'}
+danube = graphicalExtremes::danube
 
-load("../other_scripts/data/StsArea.RData")
-load("../other_scripts/data/StsCenter.RData")
-load("../other_scripts/data/StsAlt.RData")
-load("../other_scripts/data/StsDensity.RData")
-load("../other_scripts/data/StsSlope.RData")
-
-
-plot(DataEvents[,c(1,2)])
+DataEvents = danube$DataEvents %>% 
+  as_tibble()
+  
+ggplot2::ggplot(DataEvents) +
+  geom_point(aes(x = X1, y = X2))
 
 ```
 
@@ -44,8 +38,8 @@ plot(DataEvents[,c(1,2)])
 
 A MPD is defined as $Y=...$
 
-```{r}
-Y <- data2mpareto(data=DataEvents[,c(1,2)], p = .8)
+```{r, fig.align='center'}
+Y <- data2mpareto(data=danube$DataEvents[,c(1,2)], p = .8)
 plot(Y)
 
 ```
