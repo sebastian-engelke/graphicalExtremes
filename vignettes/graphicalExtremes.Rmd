@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 library(graphicalExtremes)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 ## 1. Data
