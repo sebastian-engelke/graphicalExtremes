@@ -1,15 +1,22 @@
 
 
 
-
+#' Generate random Hüsler--Reiss Models
+#' 
+#' Generates a random connected graph and Gamma matrix with conditional independence
+#' structure corresponding to that graph.
+#' 
+#' @param d Number of vertices in the graph 
+#' @param graph_type `"tree"`, `"decomposable"`, or `"general"`
 generate_random_model <- function(d, graph_type='tree', ...){
-  graph <- 0
-  if(graph_type == 'tree'){
-    graph <- generate_random_tree(d)
+  graph <- if(graph_type == 'tree'){
+    generate_random_tree(d)
   } else if(graph_type == 'decomposable'){
-    graph <- generate_random_chordal_graph(d, ...)
-  } else {
-    graph <- generate_random_connected_graph(d, ...)
+    generate_random_chordal_graph(d, ...)
+  } else if(graph_type == 'general'){
+    generate_random_connected_graph(d, ...)
+  } else{
+    stop('Invalid graph_type!')
   }
   
   Gamma <- generate_random_graphical_Gamma(graph)
@@ -36,7 +43,7 @@ generate_random_graphical_Gamma <- function(graph){
 }
 
 
-generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, tol=1e-6){
+generate_random_spd_matrix <- function(d, bMin=-10, bMax=10){
   B <- bMin + runif(d**2) * (bMax-bMin)
   B <- matrix(B, d, d)
   M <- B %*% t(B)
@@ -90,8 +97,8 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4){
 
 
 generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000){
-  # Try producing a Erdoesz-Renyi graph
-  # Usually works for small d / large m
+  # Try producing an Erdoesz-Renyi graph
+  # Usually works for small d / large m:
   if(is.null(p)){
     if(m < d-1){
       stop('m must be at least d-1!')
@@ -114,11 +121,11 @@ generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000){
     }
   }
 
+  # Fall back to making a tree and adding m-(d-1) edges:
   if(is.null(m)){
     m <- p*d
   }
-  m <- max(m, d-1)
-  m <- min(m, d * (d-1) / 2)
+  m <- fitInInterval(m, d-1, d*(d-1) / 2)
   g <- generate_random_tree(d)
   
   for(i in seq_len(m - (d-1))){
@@ -127,9 +134,6 @@ generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000){
     g <- igraph::add_edges(g, edges[r,])
   }
 
-  if(!igraph::is.connected(g)){
-    stop('Failed to generate a connected graph!')
-  }
   return(g)
 }
 

@@ -23,6 +23,7 @@ LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
 Imports: 
     igraph (>= 1.2.4.1),
     mvtnorm (>= 1.0.10),
