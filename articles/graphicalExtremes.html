@@ -73,15 +73,27 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">graphicalExtremes</span><span class="op">)</span></code></pre></div>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>1. Data</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">danube</span> <span class="op">=</span> <span class="fu">graphicalExtremes</span><span class="fu">::</span><span class="va"><a href="../reference/danube.html">danube</a></span>
+
+<span class="va">DataEvents</span> <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">DataEvents</span> <span class="op">%&gt;%</span> 
+  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span>
+  
+<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">DataEvents</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-2-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="multivariate-pareto-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#multivariate-pareto-distribution" class="anchor"></a>2. Multivariate Pareto Distribution</h2>
+<p>A MPD is defined as <span class="math inline">\(Y=...\)</span></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">danube</span><span class="op">$</span><span class="va">DataEvents</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></code></pre></div>
+<p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-3-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div id="extremal-graphical-models" class="section level2">
 <h2 class="hasAnchor">
@@ -103,9 +115,9 @@
 <a href="#empirical-variogram" class="anchor"></a>4.3 Empirical variogram</h3>
 </div>
 </div>
-<div id="huesler-reiss-distribution" class="section level2">
+<div id="hueslerreiss-distribution" class="section level2">
 <h2 class="hasAnchor">
-<a href="#huesler-reiss-distribution" class="anchor"></a>5. Huesler-Reiss distribution</h2>
+<a href="#hueslerreiss-distribution" class="anchor"></a>5. Huesler–Reiss distribution</h2>
 <div id="gamma-transformation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gamma-transformation" class="anchor"></a>5.1 <span class="math inline">\(\Gamma\)</span> transformation</h3>
