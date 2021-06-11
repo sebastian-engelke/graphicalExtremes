@@ -1,11 +1,15 @@
 ---
 title: "Introduction to Extremal Graphical Models"
-output: rmarkdown::html_vignette
+output:
+  bookdown::html_document2:
+    base_format: rmarkdown::html_vignette 
 vignette: >
   %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+\newcommand{\var}{\mathrm{Var}} 
+\newcommand{\g}{\boldsymbol}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -25,28 +29,73 @@ library(ggplot2)
 ```{r, fig.align='center'}
 danube = graphicalExtremes::danube
 
-DataEvents = danube$DataEvents %>% 
+X = danube$DataEvents %>% 
   as_tibble()
   
-ggplot2::ggplot(DataEvents) +
+ggplot2::ggplot(X) +
   geom_point(aes(x = X1, y = X2))
 
 ```
 
 
 
-## 2. Multivariate Pareto Distribution
+## 2. Multivariate Pareto distributions
+$\var \g X$
+The goal is to study the extremal tail of a multivariate random vector $\g{X} = (X_1,\dots, X_d)$. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions $F_j$ of $X_j$ to standard Pareto distributions by
+\begin{equation}
+1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d. (\#eq:pareto)
+\end{equation}
+We assume in the sequel that the vector $X$ has been normalized to standard Pareto margins.
 
-A MPD is defined as $Y=...$
+A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of $X$ over a high threshold, where the multivariate threshold is chosen in terms of the $l_\infty$-norm. For any $u>0$, we define exceedance distribution as
+\begin{equation}\label{exc}
+X_u = X \mid \| X \|_\infty > u
+\end{equation}
+By sending $u\to \infty$ and normalizing properly, the random vector $X_u$ converges to a limiting distribution $Y$ called the MPD:
+$$ Y = \lim_{u\to \infty} X_u /u,$$
+where the limit is in terms of convergence in distribution. In practice, we use the approximation $Y \approx X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|X\|_\infty$. Given $n$ oberservations $X_1, \dots, X_n$ of $X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $X_u$ according to \eqref{exc}. 
+
 
 ```{r, fig.align='center'}
-Y <- data2mpareto(data=danube$DataEvents[,c(1,2)], p = .8)
+Y <- data2mpareto(data=X[,c(1,2)], p = .8)
 plot(Y)
 
 ```
 
 
-## 3. Extremal Graphical Models
+
+```{theorem}
+asads
+```
+
+The H\"usler--Reiss distribution \citep{Husler1989} is parameterized by a symmetric,
+strictly conditionally negative definite matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$ with $\diag(\Gamma) = \g 0$ and non-negative entries, that is, $\g a^\top \Gamma \g a < 0$ for all non-zero vectors $\g a \in \mathbb R^d$ with $\sum_{i=1}^d a_i = 0$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
+\begin{align}\label{eq:fYHR}
+  \lambda(\g y)
+  %&= \frac{y_k^{-2}\prod_{i\neq k} y_i^{-1}}{\sqrt{(2\pi)^{(d-1)}|\det \Sigma^{(k)}|}} \exp\left( -\frac12 \g{\tilde y}^\top_{\setminus k} (\Sigma^{(k)})^{-1}\g{\tilde y}_{\setminus k} \right)\\
+  &= y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal E,
+\end{align}
+where $\phi_p(\cdot; \Sigma)$ is the density of a centred $p$-dimensional normal distribution with covariance matrix $\Sigma$, $\g{\tilde y} = \{\log(y_i/y_k) + \Gamma_{ik}/2\}_{i=1,\dots, d}$ and 
+\begin{align}\label{sigma_k}
+  \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}.
+\end{align}
+The matrix $\Sigma^{(k)}$ is strictly positive definite; see Appendix \ref{link_vario} for details.
+The representation of the density in~\eqref{eq:fYHR} seems to 
+depend on the choice of $k$, but, in fact, the value of the right-hand side of this equation is independent of $k$. The H\"usler--Reiss multivariate Pareto distribution has density 
+$f_{\g Y}(\g y) = \lambda(\g y) / \Lambda(\mathbf 1)$ and the
+strength of dependence between the $i$th and $j$th component is parameterized by $\Gamma_{ij}$, ranging from complete dependence for $\Gamma_{ij}=0$ and independence for $\Gamma_{ij}=+\infty$. 
+
+The extension of H\"usler--Reiss distributions to random fields are
+Brown--Resnick processes \citep{bro1977, kab2009}, which are widely used models for spatial
+extremes.   
+
+
+\begin{}
+
+## 3. Extremal graphical models
+
+\cite{enghtiz} introduce a notion of conditional independence for MTPs. It is based on transformed variables $Y
+
 ## 4. Trees
 ### 4.1 Structure learning
 ### 4.2 Estimation
