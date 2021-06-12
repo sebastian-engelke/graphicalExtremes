@@ -3,13 +3,16 @@ title: "Introduction to Extremal Graphical Models"
 output:
   bookdown::html_document2:
     base_format: rmarkdown::html_vignette 
+pkgdown:
+  as_is: true 
 vignette: >
   %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-\newcommand{\var}{\mathrm{Var}} 
-\newcommand{\g}{\boldsymbol}
+
+\newcommand{\var}{\mathrm{var}}
+\newcommand{\g}[1]{\mathbf{#1}}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -24,52 +27,49 @@ library(dplyr)
 library(ggplot2)
 ```
 
-## 1. Data
+# Data
 
 ```{r, fig.align='center'}
 danube = graphicalExtremes::danube
 
-X = danube$DataEvents %>% 
-  as_tibble()
+X = danube$DataEvents
   
-ggplot2::ggplot(X) +
+ggplot2::ggplot(X %>% 
+  as_tibble()) +
   geom_point(aes(x = X1, y = X2))
 
 ```
 
 
 
-## 2. Multivariate Pareto distributions
-$\var \g X$
+# Multivariate Pareto distributions
+
+## Definition
+
 The goal is to study the extremal tail of a multivariate random vector $\g{X} = (X_1,\dots, X_d)$. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions $F_j$ of $X_j$ to standard Pareto distributions by
 \begin{equation}
 1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d. (\#eq:pareto)
 \end{equation}
 We assume in the sequel that the vector $X$ has been normalized to standard Pareto margins.
 
-A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of $X$ over a high threshold, where the multivariate threshold is chosen in terms of the $l_\infty$-norm. For any $u>0$, we define exceedance distribution as
+A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of $\g{X}$ over a high threshold, where the multivariate threshold is chosen in terms of the $l_\infty$-norm. For any $u>0$, we define exceedance distribution as
 \begin{equation}\label{exc}
-X_u = X \mid \| X \|_\infty > u
+\g{X}_u = \g{X} \mid \| \g{X} \|_\infty > u
 \end{equation}
 By sending $u\to \infty$ and normalizing properly, the random vector $X_u$ converges to a limiting distribution $Y$ called the MPD:
-$$ Y = \lim_{u\to \infty} X_u /u,$$
-where the limit is in terms of convergence in distribution. In practice, we use the approximation $Y \approx X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|X\|_\infty$. Given $n$ oberservations $X_1, \dots, X_n$ of $X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $X_u$ according to \eqref{exc}. 
+$$ \g{Y} = \lim_{u\to \infty} \g{X}_u /u,$$
+where the limit is in terms of convergence in distribution. In practice, we use the approximation $Y \approx X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|\g{X}\|_\infty$. Given $n$ oberservations $X_1, \dots, X_n$ of $X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $X_u$ according to \eqref{exc}. 
 
 
 ```{r, fig.align='center'}
 Y <- data2mpareto(data=X[,c(1,2)], p = .8)
-plot(Y)
-
 ```
 
 
+## Examples
 
-```{theorem}
-asads
-```
-
-The H\"usler--Reiss distribution \citep{Husler1989} is parameterized by a symmetric,
-strictly conditionally negative definite matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$ with $\diag(\Gamma) = \g 0$ and non-negative entries, that is, $\g a^\top \Gamma \g a < 0$ for all non-zero vectors $\g a \in \mathbb R^d$ with $\sum_{i=1}^d a_i = 0$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
+```{example}
+The Huesler--Reiss distribution \citep{Husler1989} is parameterized variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
 \begin{align}\label{eq:fYHR}
   \lambda(\g y)
   %&= \frac{y_k^{-2}\prod_{i\neq k} y_i^{-1}}{\sqrt{(2\pi)^{(d-1)}|\det \Sigma^{(k)}|}} \exp\left( -\frac12 \g{\tilde y}^\top_{\setminus k} (\Sigma^{(k)})^{-1}\g{\tilde y}_{\setminus k} \right)\\
@@ -90,18 +90,92 @@ Brown--Resnick processes \citep{bro1977, kab2009}, which are widely used models 
 extremes.   
 
 
-\begin{}
 
-## 3. Extremal graphical models
+```
 
-\cite{enghtiz} introduce a notion of conditional independence for MTPs. It is based on transformed variables $Y
+We can simulate from MPDs and the corresponding max-stable distribution in the following way.
 
-## 4. Trees
-### 4.1 Structure learning
-### 4.2 Estimation
-### 4.3 Empirical variogram
-## 5. Huesler--Reiss distribution
-### 5.1 $\Gamma$ transformation
-### 5.2 $\Gamma$ completion
-### 5.3 Estimation
-### 5.4 Eglasso
+```{r, fig.align='center'}
+G = cbind(c(0,1.5), c(1.5,0))
+Ysim <- rmpareto(n = 100, model = "HR", d = 2, par = G)
+Zsim <- rmstable(n = 100, model = "HR", d = 2, par = G)
+
+
+```
+
+## Measures of extremal dependence
+
+### Extremal correlation
+
+The extremal correlation $\chi_{ij}\in [0,1]$ measures the dependence between the largest values of the random variables $X_i$ and $X_j$. It is defined as
+\begin{align}\label{EC}
+  \chi_{ij} := \lim_{p\to 1} \chi_{ij}(p) := \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
+\end{align}
+where the boundary cases $0$ and $1$ correspond to asymptotic independence and complete dependence, respectively. 
+
+For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can empirically estimate the $d\times d$ matrix of all pairwise extremal correlations for a fixed threshold $p$ close to 1. 
+
+```{r}
+chi_hat = emp_chi_mat(data = X, p = 0.8)
+```
+
+(?? There seems to be a problem with emp_chi_mat since the diagonal is not 1!!)
+
+```{example}
+For the Huesler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
+$$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
+  where $\Phi$ is the standard normal distribution function.
+
+  Function: Gamma2chi
+```
+
+
+### Extremal variogram
+
+There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in \cite{engvolg} and turns out to be particularly useful for inference of extremal graphical models discussed below. 
+
+It is defined ... function: emp_vario
+
+
+# Extremal graphical models
+
+Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. (??Here give examples of graph: tree, block, deomposable, non-decomposable) \cite{enghitz} introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
+$$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
+that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
+
+## Trees
+
+A tree $T = (V,E)$ is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly $|E| = d-1$ edges. For instance, the river data can be visualised as a tree with and edges between two stations if water is flowing from one station to the other without passing through another station (?? include igraph plot, we should add the coordinates and flow-connections of the stations so that they can be plotted easily).
+
+### Simulation
+rmpareto_tree
+
+### Estimation
+
+function: fmpareto_graph_HR
+
+### Structure learning
+
+function: emst (extremal MST)
+
+## Huesler--Reiss distribution
+
+Theory on graph properties of HR distributions
+
+### $\Gamma$ transformation
+
+Function: Gamma2graph, Gamma2Theta (to program), Gamma2Sigma, Sigma2Gamma, 
+
+### $\Gamma$ completion
+function: complete_Gamma
+
+### Simulation
+rmpareto
+
+
+### Estimation
+For decomposable graphs...
+
+### Eglasso
+
+function: eglasso
