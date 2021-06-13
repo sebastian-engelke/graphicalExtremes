@@ -9,6 +9,7 @@ fmpareto_HR(
   p = NULL,
   cens = FALSE,
   init,
+  fixParams = integer(0),
   maxit = 100,
   graph = NULL,
   method = "BFGS"

@@ -4,7 +4,7 @@
 \alias{complete_Gamma}
 \title{Completion of Gamma matrices}
 \usage{
-complete_Gamma(Gamma, graph = NULL, N = 1000)
+complete_Gamma(Gamma, graph = NULL, N = 1000, allowed_graph_type = "general")
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}

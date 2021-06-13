@@ -52,12 +52,12 @@
 #'
 #' @export
 #'
-complete_Gamma <- function(Gamma, graph = NULL, N = 1000) {
-  tmp <- check_Gamma(Gamma, graph, check_decomposable = FALSE)
+complete_Gamma <- function(Gamma, graph = NULL, N = 1000, allowed_graph_type = 'general'){
+  tmp <- check_Gamma_and_graph(Gamma, graph, graph_type = allowed_graph_type)
   Gamma <- tmp$Gamma
   graph <- tmp$graph
   
-  if(igraph::is_chordal(graph)){
+  if(igraph::is_chordal(graph)$chordal){
     complete_Gamma_decomposable(Gamma, graph)
   } else{
     complete_Gamma_general(Gamma, graph, N)
@@ -66,7 +66,7 @@ complete_Gamma <- function(Gamma, graph = NULL, N = 1000) {
 
 
 
-complete_Gamma_general <- function(Gamma, graph, N = 1000) {
+complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100) {
 
   gList <- make_graph_list(graph)
   m <- length(gList)
@@ -74,7 +74,18 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000) {
   for (n in 1:N) {
     t <- (n - 1) %% m + 1
     g <- gList[[t]]
-    K <- complete_Gamma_decomposable(Gamma, g)
+    Gamma <- complete_Gamma_decomposable(Gamma, g)
+    
+    # Check if tolerance has been reached
+    if(check_tol > 0 && n %% check_tol == 0){
+      P <- Gamma2Theta(Gamma)
+      A <- igraph::as_adjacency_matrix(graph)
+      diag(A) <- 1
+      err <- max(abs(P[A == 0]))
+      if(err <= tol){
+        return(Gamma)
+      }
+    }
   }
 
   return(Gamma)
@@ -188,69 +199,6 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   Gamma <- Sigma2Gamma(Sigma, k = k0)
 
   return(Gamma)
-}
-
-
-check_Gamma <- function(Gamma, graph = NULL, check_decomposable = TRUE) {
-  if (is.null(graph) && is.matrix(Gamma)) {
-    graph <- igraph::graph_from_adjacency_matrix(
-      1 * !is.na(Gamma),
-      mode = "undirected"
-    )
-  } else if (is.null(graph)) {
-    stop("Supply a graph or a valid Gamma matrix")
-  }
-
-  # set up main variables
-  d <- igraph::vcount(graph)
-  e <- igraph::ecount(graph)
-
-  # check if it is directed
-  if (igraph::is_directed(graph)) {
-    warning("The given graph is directed. Converted to undirected.")
-    graph <- igraph::as.undirected(graph)
-  }
-
-  # check if it is connected
-  is_connected <- igraph::is_connected(graph)
-
-  if (!is_connected) {
-    stop("The given graph is not connected.")
-  }
-
-  # check if graph is decomposable
-  is_decomposable <- igraph::is_chordal(graph)$chordal
-  if (check_decomposable && !is_decomposable) {
-    stop("The given graph is not decomposable (i.e., chordal).")
-  }
-
-  # transform Gamma if needed
-  if (is.vector(Gamma)) {
-    if (length(Gamma) != e) {
-      stop(paste(
-        "The argument Gamma must be a symmetric d x d matrix,",
-        "or a vector with as many entries as the number of edges",
-        "in the graph."
-      ))
-    }
-    G <- matrix(0, d, d)
-    G[igraph::as_edgelist(graph)] <- Gamma
-    Gamma <- G + t(G)
-  }
-
-  # check that Gamma is d x d:
-  if (NROW(Gamma) != d || NCOL(Gamma) != d || any(abs(Gamma - t(Gamma)) > 1e-9, na.rm = T)) {
-    stop(paste(
-      "The argument Gamma must be a symmetric d x d matrix,",
-      "or a vector with as many entries as the number of edges",
-      "in the graph."
-    ))
-  }
-
-  return(list(
-    Gamma = Gamma,
-    graph = graph
-  ))
 }
 
 

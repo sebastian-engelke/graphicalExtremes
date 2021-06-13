@@ -7,10 +7,15 @@
 #' structure corresponding to that graph.
 #' 
 #' @param d Number of vertices in the graph 
-#' @param graph_type `"tree"`, `"decomposable"`, or `"general"`
+#' @param graph_type `"tree"`, `"block"`, `"decomposable"`, or `"general"`
+#' @param ... Further arguments passed to functions generating the graph and Gamma matrix
+#' 
+#' @family Example generations
 generate_random_model <- function(d, graph_type='tree', ...){
   graph <- if(graph_type == 'tree'){
     generate_random_tree(d)
+  } else if(graph_type == 'block'){
+    generate_random_chordal_graph(d, ..., block_graph = TRUE)
   } else if(graph_type == 'decomposable'){
     generate_random_chordal_graph(d, ...)
   } else if(graph_type == 'general'){
@@ -19,7 +24,7 @@ generate_random_model <- function(d, graph_type='tree', ...){
     stop('Invalid graph_type!')
   }
   
-  Gamma <- generate_random_graphical_Gamma(graph)
+  Gamma <- generate_random_graphical_Gamma(graph, ...)
   
   return(list(
     graph = graph,
@@ -27,13 +32,21 @@ generate_random_model <- function(d, graph_type='tree', ...){
   ))
 }
 
-generate_random_graphical_Gamma <- function(graph){
+#' Generate a random Gamma matrix for a given graph
+#' 
+#' Generates a valid Gamma matrix with conditional independence structure
+#' specified by a graph
+#' 
+#' @param graph An [igraph::graph] object
+#' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
+#' @family Example generations
+generate_random_graphical_Gamma <- function(graph, ...){
   d <- igraph::vcount(graph)
   cliques <- igraph::maximal.cliques(graph)
   P <- matrix(0, d, d)
   for(cli in cliques){
     d_cli <- length(cli)
-    P_cli <- generate_random_spd_matrix(d_cli)
+    P_cli <- generate_random_spd_matrix(d_cli, ...)
     ID <- diag(d_cli) - matrix(1/d_cli, d_cli, d_cli)
     P_cli <- ID %*% P_cli %*% ID
     P[cli, cli] <- P[cli, cli] + P_cli
@@ -43,7 +56,19 @@ generate_random_graphical_Gamma <- function(graph){
 }
 
 
-generate_random_spd_matrix <- function(d, bMin=-10, bMax=10){
+#' Generate a random symmetric positive definite matrix
+#' 
+#' Generates a random \eqn{d \times d}{dxd} symmetric positive definite matrix.
+#' This is done by generating a random \eqn{d \times d}{dxd} matrix `B`,
+#' then computing `B %*% t(B)`,
+#' and then normalizing the matrix to approximately single digit entries.
+#' 
+#' @param d Number of rows/columns
+#' @param bMin Minimum value of entries in `B`
+#' @param bMax Maximum value of entries in `B`
+#' @param ... Ignored, only allowed for compatibility
+#' @family Example generations
+generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- bMin + runif(d**2) * (bMax-bMin)
   B <- matrix(B, d, d)
   M <- B %*% t(B)
@@ -55,7 +80,27 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10){
   return(M)
 }
 
-generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4){
+#' Generate a random chordal graph
+#' 
+#' Generates a random chordal graph by starting with a (small) complete graph
+#' and then adding new cliques until the specified size is reached.
+#' The sizes of cliques and separators can be specified.
+#' 
+#' @param d Number of vertices in the graph
+#' @param cMin Minimal size of cliques (last clique might be smaller if necessary)
+#' @param cMax Maximal size of cliques
+#' @param sMin Minimal size of separators
+#' @param sMax Maximal size of separators
+#' @param block_graph Force `sMin == sMax == 1` to produce a block graph
+#' @param ... Ignored, only allowed for compatibility
+#' 
+#' @return An [igraph::graph] object
+#' @family Example generations
+generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
+  if(block_graph){
+    sMin <- 1
+    sMax <- 1
+  }
   if(cMax < cMin || sMax < sMin || cMin < sMin || cMax <= sMin || cMin > d){
     stop('Inconsistent parameters')
   }
@@ -96,7 +141,22 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4){
 }
 
 
-generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000){
+#' Generate a random connected graph
+#' 
+#' Generates a random connected graph.
+#' First tries to generate an Erdoes-Renyi graph, if that fails, falls back
+#' to producing a tree and adding random edges to that tree.
+#' 
+#' @param d Number of vertices in the graph
+#' @param m Number of edges in the graph (specify this or `p`)
+#' @param p Probability of each edge being in the graph (specify this or `m`)
+#' @param maxTries Maximum number of tries to produce a connected Eroes-Renyi graph
+#' @param ... Ignored, only allowed for compatibility
+#' 
+#' @return An [igraph::graph] object
+#' 
+#' @family Example generations
+generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
   # Usually works for small d / large m:
   if(is.null(p)){
@@ -137,11 +197,20 @@ generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000){
   return(g)
 }
 
+#' Generate a random tree
+#' 
+#' Generates a random tree from a random Pruefer sequence
+#' 
+#' @param d Number of vertices in the graph
+#' 
+#' @return An [igraph::graph] object
+#' @family Example generations
 generate_random_tree <- function(d){
   pruefer <- floor(runif(d-2, 1, d-1))
   pruefer_to_graph(pruefer)
 }
 
+#' Convert a Pruefer sequence to a graph
 pruefer_to_graph <- function(pruefer){
   d <- length(pruefer) + 2
   adj <- matrix(0, d, d)

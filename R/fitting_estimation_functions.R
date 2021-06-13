@@ -451,6 +451,7 @@ fmpareto_HR <- function(data,
                         p = NULL,
                         cens = FALSE,
                         init,
+                        fixParams = integer(0),
                         maxit = 100,
                         graph = NULL,
                         method = "BFGS") {
@@ -467,6 +468,11 @@ fmpareto_HR <- function(data,
   d <- ncol(data)
   if (length(p) == 1) {
     p <- rep(p, d)
+  }
+  
+  # convert vector of fixed parameters to logical if necessary
+  if(!is.logical(fixParams)){
+    fixParams <- (1:d) %in% fixParams
   }
 
   # negative log likelihood function
@@ -485,8 +491,15 @@ fmpareto_HR <- function(data,
     J <- which(lapply(L, length) == d)
 
     nllik <- function(par) {
+      # combine par with fixed parameters
+      if(any(fixParams)){
+        par_full <- init
+        par_full[!fixParams] <- par
+        par <- par_full
+      }
+
       if (!is.null(graph)) {
-        Gtmp <- complete_Gamma(graph = graph, Gamma = par)
+        Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
         par <- Gtmp[upper.tri(Gtmp)]
       }
 
@@ -495,9 +508,7 @@ fmpareto_HR <- function(data,
 
       if (any(par <= 0) | !matrixcalc::is.positive.definite(S)) {
         return(10^50)
-      }
-
-      else {
+      } else {
         if (length(I) > 0) {
           y1 <- mapply(logdVK_HR,
             x = as.list(data.frame(t(data.p)))[I],
@@ -528,18 +539,24 @@ fmpareto_HR <- function(data,
 
     I <- which(lapply(L, length) > 0) # 1:r
     nllik <- function(par) {
+      # combine par with fixed parameters
+      if(any(fixParams)){
+        par_full <- init
+        par_full[!fixParams] <- par
+        par <- par_full
+      }
+
       if (!is.null(graph)) {
-        Gtmp <- complete_Gamma(graph = graph, Gamma = par)
+        Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
         par <- Gamma2par(Gtmp)
       }
 
       G <- par2Gamma(par)
       S <- Gamma2Sigma(G, k = 1)
 
-      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)) {
+      if (any(par <= 0) || !matrixcalc::is.positive.definite(S)) {
         return(10^50)
-      }
-      else {
+      } else {
         if (length(I) > 0) {
           y1 <- logdV_HR(x = data[I, ], par = par)
         }
@@ -551,16 +568,25 @@ fmpareto_HR <- function(data,
       }
     }
   }
+  
+  init_opt <- init[!fixParams]
 
   # optimize likelihood
-  opt <- stats::optim(init, nllik,
+  opt <- stats::optim(
+    init_opt,
+    nllik,
     hessian = TRUE,
-    control = list(maxit = maxit), method = method
+    control = list(maxit = maxit),
+    method = method
   )
+  
+  par <- init
+  par[!fixParams] <- opt$par
 
   z <- list()
   z$convergence <- opt$convergence
-  z$par <- opt$par
+  z$par <- par
+  z$par_opt <- opt$par
   if (is.null(graph)) {
     z$Gamma <- par2Gamma(z$par)
   } else {
