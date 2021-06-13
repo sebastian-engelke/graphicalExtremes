@@ -95,3 +95,37 @@ get_cliques_and_separators <- function(graph){
 }
 
 
+#' Experimental: Fit graph using empirical Theta matrix
+fit_graph <- function(data, m){
+  Gamma_emp <- emp_vario(data)
+  
+  d <- nrow(Gamma_emp)
+  
+  if(m < d-1){
+    stop('m must be at least d-1!')
+  }
+  
+  Theta_emp <- Gamma2Theta(Gamma_emp)
+  
+  g_c <- igraph::make_full_graph(d)
+  weights <- Theta_emp[igraph::as_edgelist(g_c)]
+  g <- igraph::mst(g_c, weights)
+  
+  missing_edges <- igraph::as_edgelist(igraph::complementer(g))
+  missing_weights <- Theta_emp[missing_edges]
+  
+  ord <- order(abs(missing_weights), decreasing = TRUE)
+  
+  new_edges <- missing_edges[ord[seq_len(m - (d-1))],]
+  
+  g <- igraph::add_edges(g, t(new_edges))
+  
+  Gamma_g <- complete_Gamma(Gamma_emp, g, N=100000, tol=1e-6, check_tol=100)
+  
+  return(list(
+    graph = g,
+    Gamma = Gamma_g
+  ))
+}
+
+

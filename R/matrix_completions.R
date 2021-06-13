@@ -13,7 +13,8 @@
 #' @param graph Graph object from \code{igraph} package.
 #' The \code{graph} must be a connected, undirected graph.
 #' Can also be implied by \code{NA} entries in \{Gamma} if decomposable.
-#' @param N Number of iterations if \code{graph} is not decomposable.
+#' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
+#' is not decomposable
 #'
 #' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
 #'
@@ -52,7 +53,7 @@
 #'
 #' @export
 #'
-complete_Gamma <- function(Gamma, graph = NULL, N = 1000, allowed_graph_type = 'general'){
+complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', ...){
   tmp <- check_Gamma_and_graph(Gamma, graph, graph_type = allowed_graph_type)
   Gamma <- tmp$Gamma
   graph <- tmp$graph
@@ -60,7 +61,7 @@ complete_Gamma <- function(Gamma, graph = NULL, N = 1000, allowed_graph_type = '
   if(igraph::is_chordal(graph)$chordal){
     complete_Gamma_decomposable(Gamma, graph)
   } else{
-    complete_Gamma_general(Gamma, graph, N)
+    complete_Gamma_general(Gamma, graph, ...)
   }
 }
 
@@ -79,7 +80,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
     # Check if tolerance has been reached
     if(check_tol > 0 && n %% check_tol == 0){
       P <- Gamma2Theta(Gamma)
-      A <- igraph::as_adjacency_matrix(graph)
+      A <- igraph::as_adjacency_matrix(graph, sparse=FALSE)
       diag(A) <- 1
       err <- max(abs(P[A == 0]))
       if(err <= tol){

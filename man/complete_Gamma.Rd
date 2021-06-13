@@ -4,12 +4,13 @@
 \alias{complete_Gamma}
 \title{Completion of Gamma matrices}
 \usage{
-complete_Gamma(Gamma, graph = NULL, N = 1000, allowed_graph_type = "general")
+complete_Gamma(Gamma, graph = NULL, allowed_graph_type = "general", ...)
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
-\item{N}{Number of iterations if \code{graph} is not decomposable.}
+\item{...}{Further arguments passed to \code{\link[=complete_gamma_general]{complete_gamma_general()}} if \code{graph}
+is not decomposable}
 }
 \value{
 Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.

@@ -9,3 +9,8 @@ docs
 build.R
 .Rprofile
 debug
+
+*.tmp
+*.temp
+tmp.*
+temp.*
