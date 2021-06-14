@@ -11,6 +11,18 @@
 #' @param ... Further arguments passed to functions generating the graph and Gamma matrix
 #' 
 #' @family Example generations
+#' 
+#' @examples
+#' set.seed(1)
+#' d <- 12
+#' 
+#' models <- list()
+#' models[['tree']] <- generate_random_model(d, 'tree')
+#' models[['block']] <- generate_random_model(d, 'block')
+#' models[['decomposable']] <- generate_random_model(d, 'decomposable')
+#' models[['general']] <- generate_random_model(d, 'general')
+#' 
+#' @export
 generate_random_model <- function(d, graph_type='tree', ...){
   graph <- if(graph_type == 'tree'){
     generate_random_tree(d)

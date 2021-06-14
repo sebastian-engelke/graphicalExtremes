@@ -19,9 +19,14 @@ Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
 Given a \code{graph} and \code{Gamma} matrix specified (at least) on the
 edges of \code{graph}, returns the full \code{Gamma} matrix implied
 by the conditional independencies.
+If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
+the edges of the graph, otherwise it needs to be fully specified and a
+valid \code{Gamma} matrix (without any graphical structure, though).
 }
 \details{
-
+For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
+distribution within the cliques of the \code{graph}, the remaining entries are implied
+by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
 ## Complete a 4-dimensional HR distribution
@@ -52,3 +57,12 @@ complete_Gamma(Gamma_vec, my_graph)
 \references{
 \insertAllCited{}
 }
+\seealso{
+\code{\link[=Gamma2Theta]{Gamma2Theta()}}
+
+Other Matrix completions: 
+\code{\link{complete_Gamma_decomposable}()},
+\code{\link{complete_Gamma_general}()},
+\code{\link{complete_Gamma_one_step}()}
+}
+\concept{Matrix completions}

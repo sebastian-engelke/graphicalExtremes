@@ -17,6 +17,17 @@ generate_random_model(d, graph_type = "tree", ...)
 Generates a random connected graph and Gamma matrix with conditional independence
 structure corresponding to that graph.
 }
+\examples{
+set.seed(1)
+d <- 12
+
+models <- list()
+models[['tree']] <- generate_random_model(d, 'tree')
+models[['block']] <- generate_random_model(d, 'block')
+models[['decomposable']] <- generate_random_model(d, 'decomposable')
+models[['general']] <- generate_random_model(d, 'general')
+
+}
 \seealso{
 Other Example generations: 
 \code{\link{generate_random_chordal_graph}()},

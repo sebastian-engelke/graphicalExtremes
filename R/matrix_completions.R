@@ -1,13 +1,12 @@
 
 #' Completion of Gamma matrices
 #'
-#' Given a \code{graph} and \code{Gamma} matrix specified (at least) on the
-#' edges of \code{graph}, returns the full \code{Gamma} matrix implied
+#' Given a `graph` and `Gamma` matrix specified (at least) on the
+#' edges of `graph`, returns the full `Gamma` matrix implied
 #' by the conditional independencies.
-#' 
-#' If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
+#' If `graph` is decomposable, `Gamma` only needs to be specified on
 #' the edges of the graph, otherwise it needs to be fully specified and a 
-#' valid \{Gamma} matrix (without any graphical structure, though).
+#' valid `Gamma` matrix (without any graphical structure, though).
 #' 
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param graph Graph object from \code{igraph} package.
@@ -51,6 +50,8 @@
 #' @references
 #'  \insertAllCited{}
 #'
+#' @seealso [Gamma2Theta()]
+#' @family Matrix completions
 #' @export
 #'
 complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', ...){
@@ -66,7 +67,25 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
 }
 
 
-
+#' Completion of non-decomposable Gamma matrices
+#' 
+#' Given a \code{graph} and variogram matrix `Gamma`, returns the full \code{Gamma}
+#' matrix implied by the conditional independencies.
+#' This function uses a convergent iterative algorithm.
+#' 
+#' @param Gamma A complete variogram matrix (without any graphical structure)
+#' @param graph An [igraph::graph] object
+#' @param N The maximal number of iterations of the algorithm
+#' @param tol The tolerance to use when checking for zero entries in `Theta`
+#' @param check_tol After how many iterations to check the tolerance in `Theta`
+#' 
+#' @return A matrix that agrees with `Gamma` on the entries corresponding to 
+#' edges in `graph` and the diagonals.
+#' The corresponding \eqn{\Theta} matrix produced by [Gamma2Theta] has values
+#' close to zero in the remaining entries (how close depends on the input 
+#' and the number of iterations).
+#' 
+#' @family Matrix completions
 complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100) {
 
   gList <- make_graph_list(graph)
@@ -143,7 +162,21 @@ make_graph_list <- function(graph){
   return(gList)
 }
 
-
+#' Completion of decomposable Gamma matrices
+#' 
+#' Given a decomposable `graph` and incomplete variogram matrix `Gamma`,
+#' returns the full `Gamma` matrix implied by the conditional independencies.
+#' 
+#' @param Gamma A variogram matrix that is specified on the edges of `graph`
+#' and the diagonals. All other entries are ignored.
+#' @param graph A decomposable [igraph::graph] object
+#' 
+#' @return A complete variogram matrix that agrees with `Gamma` on the entries
+#' corresponding to edges in `graph` and the diagonals.
+#' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
+#' in the remaining entries.
+#' 
+#' @family Matrix completions
 complete_Gamma_decomposable <- function(Gamma, graph) {
   # computes cliques
   cliques <- igraph::max_cliques(graph)
@@ -172,6 +205,23 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
 
 
 
+#' Completion of two-clique decomposable Gamma matrices
+#' 
+#' Given a decomposable `graph` consisting of two cliques and incomplete
+#' variogram matrix `Gamma`,
+#' returns the full `Gamma` matrix implied by the conditional independencies.
+#' 
+#' @param Gamma A variogram matrix that is specified on the edges of `graph`
+#' and the diagonals. All other entries are ignored.
+#' @param graph A decomposable [igraph::graph] object with two cliques and
+#' non-empty separator set
+#' 
+#' @return A complete variogram matrix that agrees with `Gamma` on the entries
+#' corresponding to edges in `graph` and the diagonals.
+#' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
+#' in the remaining entries.
+#' 
+#' @family Matrix completions
 complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   n <- nA + nB + nC
   if (nrow(Gamma) != n || ncol(Gamma) != n) {

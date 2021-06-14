@@ -118,7 +118,10 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
   }
   
   # check graph
-  graph <- graph <- check_graph(graph, graph_type)
+  graph <- check_graph(graph, graph_type)
+  
+  d <- igraph::vcount(graph)
+  e <- igraph::ecount(graph)
 
   # transform Gamma if needed
   if (is.vector(Gamma)) {
