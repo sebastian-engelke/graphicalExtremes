@@ -1,11 +1,58 @@
 
 
+#' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on non-decomposable graphs
+#' 
+#' Works by computing an empirical Gamma matrix and then fitting this to the given `graph`.
+#' 
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#' @param graph Connected graph object from \code{igraph} package.
+#' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
+#' is not decomposable
+#' 
+#' 
+#' @export
+fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
+  # number of data columns (and expected vertices in graph)
+  d <- NCOL(data)
+
+  # make sure graph is valid
+  graph <- check_graph(graph, graph_type = 'general', nVertices = d)
+
+  # compute the empirical variogram
+  Gamma_emp <- emp_vario(data, p = p)
+  
+  # fit the empirical variogram to the graph
+  Gamma_graph <- complete_Gamma(Gamma_emp, graph, allowed_graph_type = 'general', ...)
+  
+  return(list(
+    Gamma = Gamma_graph,
+    graph = graph
+  ))
+}
+
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on decomposable graphs
 #' 
 #' Similar to [fmpareto_graph_HR()]. Differences are:
 #' * Works with any decomposable graph, not just block graphs
 #' * Does not support `edges_to_add`
-fmpareto_graph_HR_2 <- function(data, graph, p = NULL, cens = FALSE) {
+#' 
+#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
+#' number of observations and \eqn{d} is the dimension.
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#' @param cens Logical. If true, then censored likelihood contributions are used for
+#' components below the threshold. By default, \code{cens = FALSE}.
+#' @param graph Decomposable graph object from \code{igraph} package.
+#' 
+#' @export
+fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) {
   # number of data columns (and expected vertices in graph)
   d <- NCOL(data)
 
@@ -96,16 +143,32 @@ get_cliques_and_separators <- function(graph){
 
 
 #' Experimental: Fit graph using empirical Theta matrix
-fit_graph <- function(data, m){
-  Gamma_emp <- emp_vario(data)
+#' 
+#' Fits a graph to an empirical Gamma matrix by computing the corresponding
+#' Theta matrix using [Gamma2Theta()] and greedily chooses `m` edges that
+#' correspond to high absolute values in Theta.
+#' 
+#' @param data The (standardized) data from which to compute Gamma
+#' @param m The number of edges to add, defaults to the number of edges in a tree
+#' @param Gamma_emp The empirical Gamma matrix
+#' (can be `NULL` if `data` is given)
+#' 
+#' @return A list containing an [igraph::graph] object and a fitted `Gamma` matrix
+fit_graph <- function(data, m=NULL, Gamma_emp=NULL){
+  
+  if(is.null(Gamma_emp)){
+    Gamma_emp <- emp_vario(data)
+  }
+
+  Theta_emp <- Gamma2Theta(Gamma_emp)
   
   d <- nrow(Gamma_emp)
   
-  if(m < d-1){
+  if(is.null(m)){
+    m <- d-1
+  } else if(m < d-1){
     stop('m must be at least d-1!')
   }
-  
-  Theta_emp <- Gamma2Theta(Gamma_emp)
   
   g_c <- igraph::make_full_graph(d)
   weights <- Theta_emp[igraph::as_edgelist(g_c)]

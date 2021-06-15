@@ -4,8 +4,21 @@
 \alias{fit_graph}
 \title{Experimental: Fit graph using empirical Theta matrix}
 \usage{
-fit_graph(data, m)
+fit_graph(data, m = NULL, Gamma_emp = NULL)
+}
+\arguments{
+\item{data}{The (standardized) data from which to compute Gamma}
+
+\item{m}{The number of edges to add, defaults to the number of edges in a tree}
+
+\item{Gamma_emp}{The empirical Gamma matrix
+(can be \code{NULL} if \code{data} is given)}
+}
+\value{
+A list containing an \link[igraph:make_graph]{igraph::graph} object and a fitted \code{Gamma} matrix
 }
 \description{
-Experimental: Fit graph using empirical Theta matrix
+Fits a graph to an empirical Gamma matrix by computing the corresponding
+Theta matrix using \code{\link[=Gamma2Theta]{Gamma2Theta()}} and greedily chooses \code{m} edges that
+correspond to high absolute values in Theta.
 }

@@ -21,11 +21,10 @@ structure corresponding to that graph.
 set.seed(1)
 d <- 12
 
-models <- list()
-models[['tree']] <- generate_random_model(d, 'tree')
-models[['block']] <- generate_random_model(d, 'block')
-models[['decomposable']] <- generate_random_model(d, 'decomposable')
-models[['general']] <- generate_random_model(d, 'general')
+generate_random_model(d, 'tree')
+generate_random_model(d, 'block')
+generate_random_model(d, 'decomposable')
+generate_random_model(d, 'general')
 
 }
 \seealso{
