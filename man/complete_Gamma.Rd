@@ -76,6 +76,7 @@ g <- igraph::make_ring(5)
 
 complete_Gamma(G, g)
 
+
 }
 \references{
 \insertAllCited{}
