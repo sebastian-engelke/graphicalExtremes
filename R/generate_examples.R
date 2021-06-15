@@ -68,6 +68,46 @@ generate_random_graphical_Gamma <- function(graph, ...){
 }
 
 
+#' Generate a random Gamma matrix containing only integers
+#' 
+#' Generates a random variogram Matrix by producing a
+#' \eqn{(d-1) \times (d-1)}{(d-1)x(d-1)} matrix `B` with random 
+#' integer entries between `-b` and `b`, computing `S = B %*% t(B)`,
+#' and passing this `S` to [Sigma2Gamma()].
+#' This process is repeated with an increasing `b` until a valid Gamma matrix
+#' is produced.
+#' 
+#' @param d Number of rows/columns in the output matrix
+#' @param b Initial `b` used in the algorithm described above
+#' @param b_step By how much `b` is increased in each iteration
+#' 
+#' @return A \eqn{d \times d}{d x d} variogram matrix with integer entries
+#' 
+#' @family Example generations
+#' 
+#' @examples 
+#' 
+#' generate_random_integer_Gamma(5, 2, 0.1)
+#' 
+#' @export
+generate_random_integer_Gamma <- function(d, b=2, b_step=1){
+  d1 <- d - 1
+  if(b_step <= 0){
+    stop('Make sure that b_step > 0!')
+  }
+  repeat {
+    B <- floor(b * (runif(d1**2)*2 - 1))
+    B <- matrix(B, d1, d1)
+    S <- B %*% t(B)
+    if(matrixcalc::is.positive.definite(S)){
+      break
+    }
+    b <- b+b_step
+  }
+  G <- Sigma2Gamma(S)
+  return(G)
+}
+
 #' Generate a random symmetric positive definite matrix
 #' 
 #' Generates a random \eqn{d \times d}{dxd} symmetric positive definite matrix.

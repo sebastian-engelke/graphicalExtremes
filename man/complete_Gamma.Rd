@@ -29,17 +29,7 @@ distribution within the cliques of the \code{graph}, the remaining entries are i
 by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{
-## Complete a 4-dimensional HR distribution
-
-my_graph <- igraph::graph_from_adjacency_matrix(rbind(
-  c(0, 1, 0, 0),
-  c(1, 0, 1, 1),
-  c(0, 1, 0, 1),
-  c(0, 1, 1, 0)
-),
-mode = "undirected"
-)
-
+## Block graph:
 Gamma <- rbind(
   c(0, .5, NA, NA),
   c(.5, 0, 1, 1.5),
@@ -47,12 +37,42 @@ Gamma <- rbind(
   c(NA, 1.5, .8, 0)
 )
 
-complete_Gamma(Gamma, my_graph)
+complete_Gamma(Gamma)
 
-## Alternative
-
+## Alternative representation of the same completion problem:
+my_graph <- igraph::graph_from_adjacency_matrix(rbind(
+  c(0, 1, 0, 0),
+  c(1, 0, 1, 1),
+  c(0, 1, 0, 1),
+  c(0, 1, 1, 0)
+), mode = "undirected")
 Gamma_vec <- c(.5, 1, 1.5, .8)
 complete_Gamma(Gamma_vec, my_graph)
+
+## Decomposable graph:
+G <- rbind(
+c(0, 5, 7, 6, NA),
+c(5, 0, 14, 15, NA),
+c(7, 14, 0, 5, 5),
+c(6, 15, 5, 0, 6),
+c(NA, NA, 5, 6, 0)
+)
+
+complete_Gamma(G)
+
+## Non-decomposable graph:
+G <- rbind(
+c(0, 5, 7, 6, 6),
+c(5, 0, 14, 15, 13),
+c(7, 14, 0, 5, 5),
+c(6, 15, 5, 0, 6),
+c(6, 13, 5, 6, 0)
+)
+g <- igraph::make_ring(5)
+
+complete_Gamma(G, g)
+
+
 }
 \references{
 \insertAllCited{}
