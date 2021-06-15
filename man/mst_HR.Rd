@@ -4,7 +4,7 @@
 \alias{mst_HR}
 \title{Fitting of Huesler--Reiss minimum spanning tree}
 \usage{
-mst_HR(data, p = NULL, cens = FALSE, parallel = FALSE, n_workers = 1)
+mst_HR(data, p = NULL, cens = FALSE)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
@@ -17,13 +17,6 @@ to standardize the \code{data}.}
 
 \item{cens}{Logical. If true, then censored likelihood contributions are used for
 components below the threshold. By default, \code{cens = FALSE}.}
-
-\item{parallel}{Logical. If true, the code is run in parallel.
-By default, \code{parallel = FALSE}.}
-
-\item{n_workers}{Positive integer. If \code{parallel = TRUE}, \code{n_workers}
-represents the number of parallel R processes. By default,
-\code{n_workers = 1}.}
 }
 \value{
 List consisting of:

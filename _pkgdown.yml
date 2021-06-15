@@ -1,0 +1,34 @@
+template:
+  bootstrap: 4
+
+articles:
+- title: Get started
+  navbar: ~
+  contents:
+  - graphicalExtremes
+
+reference:
+- title: Fitting
+  desc: Description for these functions
+  contents:
+  - emp_chi
+  - emp_chi_mat
+  - emp_vario
+  - fmpareto_graph_HR
+  - mst_HR
+
+- title: Completion
+  contents:
+  - complete_Gamma
+
+- title: Simulation
+  contents:
+  - contains("rm")
+
+- title: Transformation
+  contents:
+  - contains("2")
+
+- title: Datasets
+  contents:
+  - danube

@@ -201,6 +201,7 @@ emp_vario <- function(data, k = NULL, p = NULL) {
 #'
 #' @return Numeric. The exponent measure of the HR distribution.
 #'
+#' @noRd
 V_HR <- function(x, par) {
   # helper function ####
   f1 <- function(i, x) {
@@ -238,6 +239,7 @@ V_HR <- function(x, par) {
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
+#' @noRd
 logdV_HR <- function(x, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -287,6 +289,7 @@ logdV_HR <- function(x, par) {
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
+#' @noRd
 logdVK_HR <- function(x, K, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -358,6 +361,7 @@ logdVK_HR <- function(x, K, par) {
 #'
 #' @return Numeric. The full censored log-likelihood of HR model.
 #'
+#' @noRd
 logLH_HR <- function(data, Gamma, cens = FALSE) {
   if (is.vector(data)) {
     d <- length(data)
@@ -447,6 +451,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' estimated parameters.
 #' }
 #'
+#' @noRd
 fmpareto_HR <- function(data,
                         p = NULL,
                         cens = FALSE,
@@ -876,11 +881,6 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #' to standardize the \code{data}.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, \code{cens = FALSE}.
-#' @param parallel Logical. If true, the code is run in parallel.
-#' By default, \code{parallel = FALSE}.
-#' @param n_workers Positive integer. If \code{parallel = TRUE}, \code{n_workers}
-#' represents the number of parallel R processes. By default,
-#' \code{n_workers = 1}.
 #'
 #' @return List consisting of:
 #' \itemize{
@@ -913,9 +913,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #'
 #' @export
 #'
-#' @importFrom foreach foreach %dopar%
-mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
-                   n_workers = 1) {
+mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   # check if you need to rescale data or not
   if (!is.null(p)) {
@@ -923,84 +921,41 @@ mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
   } else {
     data.std <- data
   }
+
+  # set some params
   n <- nrow(data.std)
   d <- ncol(data.std)
   graph.full <- igraph::make_full_graph(d)
+
+  # compute weight matrix
   G.emp <- emp_vario(data = data.std)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
   if (cens) {
-    if (parallel) {
-      doFuture::registerDoFuture()
-      future::plan(future::multisession, workers = n_workers)
-
-      bivLLH <- foreach(
-        i = 1:nrow(res), .combine = cbind,
-        .packages = "graphicalExtremes"
-      ) %dopar% {
-        x <- res[i, ]
-        fmpareto_obj <- fmpareto_HR(
-          data = data.std[, x],
-          init = G.emp[x[1], x[2]],
-          cens = cens
-        )
-        par.est <- fmpareto_obj$par
-        llh_hr <- -(fmpareto_obj$nllik - 2 *
-          (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]])) +
-            sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
-        return(c(par = par.est, llh_hr = llh_hr))
-      }
-      future::plan(future::sequential)
-      colnames(bivLLH) <- NULL
-    } else {
-      bivLLH <- apply(res[, 1:2], 1, function(x) {
-        fmpareto_obj <- fmpareto_HR(data = data.std[, x], init = G.emp[x[1], x[2]], cens = cens)
-        par.est <- fmpareto_obj$par
-        llh_hr <- -(fmpareto_obj$nllik
-          - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
-          + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
-        c(par = par.est, llh_hr = llh_hr)
-      })
-    }
+    bivLLH <- apply(res[, 1:2], 1, function(x) {
+      fmpareto_obj <- fmpareto_HR(data = data.std[, x],
+                                  init = G.emp[x[1], x[2]],
+                                  cens = cens)
+      par.est <- fmpareto_obj$par
+      llh_hr <- -(fmpareto_obj$nllik
+        - 2 * (sum(log(data.std[which(data.std[, x[1]] > 1), x[1]]))
+        + sum(log(data.std[which(data.std[, x[2]] > 1), x[2]]))))
+      c(par = par.est, llh_hr = llh_hr)
+    })
   }
 
 
   if (!cens) {
-    if (parallel) {
-      doFuture::registerDoFuture()
-      future::plan(future::multisession, workers = n_workers)
+    bivLLH <- apply(res[, 1:2], 1, function(x) {
+      par.est <- fmpareto_HR(
+        data = data.std[, x], init = G.emp[x[1], x[2]],
+        cens = cens
+      )$par
 
-      bivLLH <- foreach(
-        i = 1:nrow(res), .combine = cbind,
-        .packages = "graphicalExtremes"
-      ) %dopar% {
-        x <- res[i, ]
+      llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
+        2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
 
-        par.est <- fmpareto_HR(
-          data = data.std[, x],
-          init = G.emp[x[1], x[2]],
-          cens = cens
-        )$par
-
-        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
-          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
-
-        return(c(par = par.est, llh_hr = llh_hr))
-      }
-      future::plan(future::sequential)
-      colnames(bivLLH) <- NULL
-    } else {
-      bivLLH <- apply(res[, 1:2], 1, function(x) {
-        par.est <- fmpareto_HR(
-          data = data.std[, x], init = G.emp[x[1], x[2]],
-          cens = cens
-        )$par
-
-        llh_hr <- logLH_HR(data = data.std[, x], Gamma = par2Gamma(par.est)) +
-          2 * (sum(log(data.std[, x[1]])) + sum(log(data.std[, x[2]])))
-
-        c(par = par.est, llh_hr = llh_hr)
-      })
-    }
+      c(par = par.est, llh_hr = llh_hr)
+    })
   }
 
   bivLLH.mat <- par2Gamma(bivLLH["llh_hr", ])
@@ -1025,5 +980,171 @@ mst_HR <- function(data, p = NULL, cens = FALSE, parallel = FALSE,
   return(list(
     tree = mst.tree,
     Gamma = complete_Gamma(graph = mst.tree, Gamma = est_Gamma)
+  ))
+}
+
+mst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
+                cens = FALSE) {
+
+  # Validate arguments
+  method <- match.arg(method)
+
+  # Check if you need to rescale data or not
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  # Estimate weight matrix
+  if (method == "ML") {
+    res <- ml_weight_matrix(data = data.std, cens = cens)
+    weight_matrix <- res$llh_hr
+    estimated_gamma <- res$est_gamma
+
+  } else if (method == "vario") {
+    weight_matrix <- emp_vario(data = data.std)
+    estimated_gamma <- weight_matrix
+
+  } else if (method == "chi") {
+    weight_matrix <- - emp_chi_mat(data = data.std)
+    estimated_gamma <- - weight_matrix
+
+  }
+
+  # Estimate tree
+  graph.full <- igraph::make_full_graph(ncol(data.std))
+  mst.tree <- igraph::mst(
+    graph = graph.full,
+    weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
+    algorithm = "prim"
+  )
+
+  # Set graphical parameters
+  mst.tree <- set_graph_parameters(mst.tree)
+
+  # Return tree and completed Gamma
+  return(list(
+    tree = mst.tree,
+    Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
+  ))
+}
+
+ml_weight_matrix <- function(data, cens){
+  ## numeric_matrix boolean -> list
+  ## produce a named list made of
+  ## - llh_hr: loglikelihood values
+  ## - est_gamma: estimated parameters
+
+  # Helpers
+  llh_cens <- function(x, data, G_emp) {
+    ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
+    ## produce parameter estimates and loglikelihood value for censored HR
+
+    fmpareto_obj <- fmpareto_HR(data = data[, x],
+                                init = G_emp[x[1], x[2]],
+                                cens = cens)
+    par.est <- fmpareto_obj$par
+    llh_hr <- -(fmpareto_obj$nllik
+                - 2 * (sum(log(data[which(data[, x[1]] > 1), x[1]]))
+                       + sum(log(data[which(data[, x[2]] > 1), x[2]]))))
+    c(par = par.est, llh_hr = llh_hr)
+
+  }
+
+  llh_uncens <- function(x, data, G_emp) {
+    ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
+    ## produce parameter estimates and loglikelihood value for uncensored HR
+
+    par.est <- fmpareto_HR(
+      data = data[, x], init = G_emp[x[1], x[2]],
+      cens = cens
+    )$par
+
+    llh_hr <- logLH_HR(data = data[, x], Gamma = par2Gamma(par.est)) +
+      2 * (sum(log(data[, x[1]])) + sum(log(data[, x[2]])))
+
+    c(par = par.est, llh_hr = llh_hr)
+
+  }
+
+  # Set up some variables
+  d <- ncol(data)
+  G_emp <- emp_vario(data = data)
+  res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
+
+  # Fig loglikelihood
+  if (cens) {
+    bivLLH <- apply(res[, 1:2], 1, llh_cens, data, G_emp)
+  } else {
+    bivLLH <- apply(res[, 1:2], 1, llh_uncens, data, G_emp)
+  }
+
+  bivLLH.mat <- -par2Gamma(bivLLH["llh_hr", ])
+  est_gamma <- par2Gamma(bivLLH["par", ])
+
+  return(list(
+    llh_hr = bivLLH.mat,
+    est_gamma = est_gamma
+  ))
+}
+
+ml_weight_matrix_devel <- function(data, cens){
+  ## numeric_matrix boolean -> list
+  ## produce a named list made of
+  ## version with purrr
+  ## - llh_hr: loglikelihood values
+  ## - est_gamma: estimated parameters
+
+  # Helpers
+  llh_cens <- function(i, j, data, G_emp) {
+    ## bnumeric (2x) numeric_matrix numeric_matrix -> numeric_vector
+    ## produce parameter estimates and loglikelihood value for censored HR
+
+    fmpareto_obj <- fmpareto_HR(data = data[, c(i, j)],
+                                init = G_emp[i, j],
+                                cens = cens)
+    par.est <- fmpareto_obj$par
+    llh_hr <- -(fmpareto_obj$nllik
+                - 2 * (sum(log(data[which(data[, i] > 1), i]))
+                       + sum(log(data[which(data[, j] > 1), j]))))
+    c(par = par.est, llh_hr = llh_hr)
+
+  }
+
+  llh_uncens <- function(i, j, data, G_emp) {
+    ## numeric (2x) numeric_matrix numeric_matrix -> numeric_vector
+    ## produce parameter estimates and loglikelihood value for uncensored HR
+
+    par.est <- fmpareto_HR(
+      data = data[, c(i, j)], init = G_emp[i, j],
+      cens = cens
+    )$par
+
+    llh_hr <- logLH_HR(data = data[, c(i, j)], Gamma = par2Gamma(par.est)) +
+      2 * (sum(log(data[, i])) + sum(log(data[, j])))
+
+    c(par = par.est, llh_hr = llh_hr)
+
+  }
+
+  # Set up some variables
+  d <- ncol(data)
+  G_emp <- emp_vario(data = data)
+  res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
+
+  # Fig loglikelihood
+  if (cens) {
+    bivLLH <- purrr::map2_dfr(res[, 1], res[, 2], llh_cens, data, G_emp)
+  } else {
+    bivLLH <- purrr::map2_dfr(res[, 1], res[, 2], llh_uncens, data, G_emp)
+  }
+
+  bivLLH.mat <- -par2Gamma(bivLLH[["llh_hr"]])
+  est_gamma <- par2Gamma(bivLLH[["par"]])
+
+  return(list(
+    llh_hr = bivLLH.mat,
+    est_gamma = est_gamma
   ))
 }

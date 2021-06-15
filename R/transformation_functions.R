@@ -270,6 +270,7 @@ Theta2Gamma <- function(Theta) {
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma matrix.
 #'
+#' @noRd
 par2Gamma <- function(par) {
   d <- 1 / 2 + sqrt(1 / 4 + 2 * length(par))
   if (round(d) != d) {
@@ -293,6 +294,7 @@ par2Gamma <- function(par) {
 #' @return Numeric vector with \eqn{d} elements.
 #' The upper triangular part of the given \code{Gamma} matrix.
 #'
+#' @noRd
 Gamma2par <- function(Gamma) {
   if (is.matrix(Gamma)) {
     return(Gamma[upper.tri(Gamma)])
@@ -366,6 +368,7 @@ Gamma2chi <- function(Gamma) {
 #' the extremal correlation coefficient for the HR distribution. Note that
 #' \eqn{0 \leq \chi \leq 1}.
 #'
+#' @noRd
 Gamma2chi_3D <- function(Gamma) {
   d <- dim_Gamma(Gamma)
 
@@ -394,6 +397,8 @@ Gamma2chi_3D <- function(Gamma) {
 #'
 #' @return Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length
 #' of \code{set_indices}. Marginalized multivariate Pareto data.
+#'
+#' @noRd
 mparetomargins <- function(data, set_indices) {
   data_sub <- data[, set_indices]
   idx <- which(apply(data_sub, 1, max) > 1)

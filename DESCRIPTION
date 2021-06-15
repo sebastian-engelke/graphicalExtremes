@@ -21,7 +21,11 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown,
+    dplyr,
+    ggplot2
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Imports: 
@@ -37,3 +41,4 @@ Imports:
     utils,
     corpcor
 RdMacros: Rdpack
+VignetteBuilder: knitr

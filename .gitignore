@@ -1,9 +1,12 @@
 .Rproj.user
 .Rhistory
 *.pdf
-*data/
+other_scripts/data
 .DS_store
 docs
+
+inst/doc
+*.log
 
 .vscode
 build.R

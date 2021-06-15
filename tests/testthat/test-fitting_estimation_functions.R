@@ -446,3 +446,38 @@ test_that("mst_HR works", {
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 })
+
+test_that("mst works", {
+  d <- 3
+  v_idx <- c(2, 4, 1)
+  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+
+  res <- mst(data = data, p = NULL, cens = FALSE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- mst(data = data, p = 0.95, cens = FALSE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- mst(data = data, p = NULL, cens = TRUE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- mst(data = data, p = 0.95, cens = TRUE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+})
