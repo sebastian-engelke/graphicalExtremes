@@ -37,6 +37,11 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
     warning("The given graph is directed. Converted to undirected.")
     graph <- igraph::as.undirected(graph)
   }
+  
+  if(!is.null(igraph::vertex_attr(graph)[['name']])){
+    warning("The vertex labels were removed.")
+    igraph::vertex_attr(graph)[['name']] <- NULL
+  }
 
   # check if it is connected
   is_connected <- igraph::is_connected(graph)

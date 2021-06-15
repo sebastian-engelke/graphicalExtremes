@@ -9,6 +9,10 @@ complete_Gamma(Gamma, graph = NULL, allowed_graph_type = "general", ...)
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
+\item{graph}{Graph object from \code{igraph} package.
+The \code{graph} must be a connected, undirected graph.
+Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.}
+
 \item{...}{Further arguments passed to \code{\link[=complete_gamma_general]{complete_gamma_general()}} if \code{graph}
 is not decomposable}
 }

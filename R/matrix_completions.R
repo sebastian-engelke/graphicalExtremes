@@ -11,7 +11,7 @@
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param graph Graph object from \code{igraph} package.
 #' The \code{graph} must be a connected, undirected graph.
-#' Can also be implied by \code{NA} entries in \{Gamma} if decomposable.
+#' Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'

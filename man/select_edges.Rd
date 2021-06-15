@@ -6,6 +6,11 @@
 \usage{
 select_edges(graph)
 }
+\arguments{
+\item{graph}{Graph object from \code{igraph} package.
+The \code{graph} must be a connected, undirected graph.
+Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.}
+}
 \value{
 Numeric vector.
 }
