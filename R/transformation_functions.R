@@ -240,23 +240,34 @@ Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2Theta <- function(Gamma) {
-  d <- ncol(Gamma)
-  ID <- diag(d) - matrix(1/d, d, d)
-  S <- ID %*% (-1/2 * Gamma) %*% ID
-  Theta <- corpcor::pseudoinverse(S)
-  return(Theta)
+Gamma2Theta <- function(Gamma, k=NULL) {
+  if(is.null(k)){
+    d <- ncol(Gamma)
+    ID <- diag(d) - matrix(1/d, d, d)
+    S <- ID %*% (-1/2 * Gamma) %*% ID
+    Theta <- corpcor::pseudoinverse(S)
+    return(Theta)
+  } else{
+    Sigma_k <- Gamma2Sigma(Gamma, k)
+    Theta_k <- chol2inv(chol(Sigma_k))
+    return(Theta_k)
+  }
 }
 
 #' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
 #' 
 #' @export
-Theta2Gamma <- function(Theta) {
-  d <- nrow(Theta)
-  id <- matrix(1, d)
-  S <- corpcor::pseudoinverse(Theta)
-  dS <- diag(S)
-  return(id %*% t(dS) + dS %*% t(id) - 2*S)
+Theta2Gamma <- function(Theta, k=NULL) {
+  if(is.null(k)){
+    d <- nrow(Theta)
+    id <- matrix(1, d)
+    S <- corpcor::pseudoinverse(Theta)
+    dS <- diag(S)
+    return(id %*% t(dS) + dS %*% t(id) - 2*S)
+  } else{
+    Sigma_k <- chol2inv(chol(Theta))
+    return(Sigma2Gamma(Sigma_k, k))
+  }
 }
 
 
