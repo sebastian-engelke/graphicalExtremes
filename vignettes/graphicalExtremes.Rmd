@@ -74,19 +74,19 @@ Y <- data2mpareto(data=X, p = .8)
 
 ## Examples
 
-```{example}
+::: {.example}
 The extremal logistic distribution with parameter $\theta\in(0,1)$ induces a multivariate
 Pareto distribution with density
 \begin{equation}
 f_{\g Y}(\g y) = \frac{1}{d^{\theta}} \left(y_1^{-1/\theta}+\dots+y_d^{-1/\theta}\right)^{\theta-d}\prod_{i=1}^{d-1}\left(\frac{i}{\theta}-1\right) \prod_{i=1}^{d} y_i^{-1/\theta-1}, \quad \g y \in \mathcal L.
 \end{equation}
 The parameter $\theta$ governs the extremal dependence, ranging from complete dependence for $\theta\to 0$ and independence for $\theta \to 1$. 
-```
+:::
 
 
 
 
-```{example}
+::: {.example}
 The $d$-dimensional Huesler--Reiss distribution [@hue1989] is parameterized by the variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
 \begin{equation}
   \lambda(\g y) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal L,  (\#eq:fYHR)
@@ -103,10 +103,8 @@ strength of dependence between the $i$th and $j$th component is parameterized by
 The extension of H\"usler--Reiss distributions to random fields are
 Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
+:::
 
-
-
-```
 
 We can simulate from MPDs and the corresponding max-stable distribution using the function `rmpareto()` and `rmstable()`, respectively.
 
@@ -135,23 +133,23 @@ where the boundary cases $0$ and $1$ correspond to asymptotic independence and c
 For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can empirically estimate the $d\times d$ matrix of all pairwise extremal correlations for a fixed threshold $p$ close to 1. 
 
 ```{r}
-chi_hat <- emp_chi_mat(data = X, p = .8)
+chi_hat <- emp_chi(data = X, p = .8)
 ```
 
 In this function, and in all subsequent functions, if the variable `p = NULL` (?? is this correct or other syntax) then the data is already expected to be on MPD scale, and no thresholding is performed. For the Danube date, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
-chi_hat <- emp_chi_mat(data = Y) 
+chi_hat <- emp_chi(data = Y) 
 ```
 
 
-```{example}
+::: {.example}
 For the Huesler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
   where $\Phi$ is the standard normal distribution function.
 
   Function: `Gamma2chi()`
-```
+:::
 
 
 ### Extremal variogram
@@ -160,13 +158,13 @@ There exist several other summary statistics for extremal dependence. The extrem
 
 For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as the matrix $\Gamma^{(k)}$ with entries
 \begin{equation*}
-	\Gamma_{ij}^{(k)}(p) = \var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
+	\Gamma_{ij}^{(k)}(p) = \Var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
 	\end{equation*}  
 whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, condtioned on the $k$th variable being large. 
 
 The limit as $p\to 1$ is called the extremal variogram and can be expressed in terms of the MPD $\g Y$:
 \begin{equation*}
- \Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \var \left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k > 1 \right\}, \quad i,j\in V.
+ \Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \Var \left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k > 1 \right\}, \quad i,j\in V.
 \end{equation*}  
 Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function `emp_vario()` estimates the (pre-asymptotic) extremal variogram, for instance for $k=1$.
 
@@ -177,10 +175,10 @@ Gamma_1_hat = emp_vario(data = X, k = 1, p = 0.8)
 In general, the matrices $\Gamma^{(k)}$ can be different for $k \in V$, but for example for the H\"usler--Reiss distribution, they all coincide.
 
 
-```{example}
+::: {.example}
 For the Huesler--Reiss distribution with parameter matrix $\Gamma$, the extremal variogram matrices satisfy
 $$ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.$$
-```
+:::
 
 In this case it makes sense to estimate the extremal variogram $\hat \Gamma$ as the average of the estimators $\hat \Gamma^{(k)}$:
 ```{r}
