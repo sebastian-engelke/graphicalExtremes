@@ -7,7 +7,8 @@ Authors@R:
     person("Sebastian", "Engelke", email = "sebastian.engelke@unige.ch", 
     role = c("aut", "cre")),
     person("Adrien S.", "Hitz", role = "aut"),
-    person("Nicola", "Gnecco", role = "aut"))
+    person("Nicola", "Gnecco", role = "aut"),
+    person("Manuel", "Hentschel", role = "aut"))
 Author:
     Sebastian Engelke [aut, cre],
     Adrien S. Hitz [aut],
@@ -25,7 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     dplyr,
-    ggplot2
+    ggplot2,
+    bookdown
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Imports: 
@@ -40,5 +42,7 @@ Imports:
     foreach,
     utils,
     corpcor
+URL: https://github.com/sebastian-engelke/graphicalExtremes
+BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack
 VignetteBuilder: knitr

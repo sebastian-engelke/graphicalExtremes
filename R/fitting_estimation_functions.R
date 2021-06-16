@@ -22,9 +22,9 @@
 #'
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = G)
-#' emp_chi(my_data, p)
+#' emp_chi_multdim(my_data, p)
 #' @export
-emp_chi <- function(data, p = NULL) {
+emp_chi_multdim <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -55,7 +55,7 @@ emp_chi <- function(data, p = NULL) {
 #'
 #' Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
 #'
-#' @inheritParams emp_chi
+#' @inheritParams emp_chi_multdim
 #'
 #' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
 #' bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
@@ -72,9 +72,9 @@ emp_chi <- function(data, p = NULL) {
 #'
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = Gamma)
-#' emp_chi_mat(my_data, p)
+#' emp_chi(my_data, p)
 #' @export
-emp_chi_mat <- function(data, p = NULL) {
+emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -93,23 +93,17 @@ emp_chi_mat <- function(data, p = NULL) {
 
 
   ind <- data.std > 1
-
-  if (!is.null(p)) {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
-    crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
-  } else {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
-    crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
-  }
+  ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
+  crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
 }
 
 
-emp_chi_mat_deprecated <- function(data, p) {
+emp_chi_deprecated <- function(data, p) {
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d, 1:d))
   res <- res[res[, 1] > res[, 2], , drop = FALSE]
   chi <- apply(res, 1, function(x) {
-    emp_chi(cbind(data[, x[1]], data[, x[2]]), p = p)
+    emp_chi_multdim(cbind(data[, x[1]], data[, x[2]]), p = p)
   })
   chi.mat <- matrix(NA, ncol = d, nrow = d)
   chi.mat[res] <- chi
@@ -475,7 +469,7 @@ fmpareto_HR <- function(data,
   if (length(p) == 1) {
     p <- rep(p, d)
   }
-  
+
   # convert vector of fixed parameters to logical if necessary
   if(!is.logical(fixParams)){
     fixParams <- (1:d) %in% fixParams
@@ -574,7 +568,7 @@ fmpareto_HR <- function(data,
       }
     }
   }
-  
+
   init_opt <- init[!fixParams]
 
   # optimize likelihood
@@ -585,7 +579,7 @@ fmpareto_HR <- function(data,
     control = list(maxit = maxit),
     method = method
   )
-  
+
   par <- init
   par[!fixParams] <- opt$par
 
@@ -868,11 +862,15 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 }
 
 
-#' Fitting of Huesler--Reiss minimum spanning tree
+#' Fitting extremal minimum spanning tree
 #'
-#' Fits the Huesler--Reiss minimum spanning tree, where the edge weights are
-#' are the negative maximized log-likelihoods of the bivariate Huesler--Reiss
-#' distributions. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+#' Fits an extremal minimum spanning tree, where the edge weights are:
+#' \itemize{
+#' \item negative maximized log-likelihoods of the bivariate Huesler--Reiss
+#' distributions, if `method = "ML"`. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+#' \item empirical extremal variogram, if `method = "vario"`.
+#' \item empirical extremal correlation, if `method = "chi"`.
+#' }
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
@@ -880,8 +878,10 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 #' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 #' to standardize the \code{data}.
-#' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, \code{cens = FALSE}.
+#' @param method One of `"ML", "vario", "chi"`.
+#' @param cens Logical. This argument is considered only if `method = "ML"`.
+#' If `TRUE`, then censored likelihood contributions are used for
+#' components below the threshold. By default, `cens = FALSE`.
 #'
 #' @return List consisting of:
 #' \itemize{
@@ -914,6 +914,53 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #'
 #' @export
 #'
+emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
+                 cens = FALSE) {
+
+  # Validate arguments
+  method <- match.arg(method)
+
+  # Check if you need to rescale data or not
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  # Estimate weight matrix
+  if (method == "ML") {
+    res <- ml_weight_matrix(data = data.std, cens = cens)
+    weight_matrix <- res$llh_hr
+    estimated_gamma <- res$est_gamma
+
+  } else if (method == "vario") {
+    weight_matrix <- emp_vario(data = data.std)
+    estimated_gamma <- weight_matrix
+
+  } else if (method == "chi") {
+    weight_matrix <- - emp_chi(data = data.std)
+    estimated_gamma <- chi2Gamma(- weight_matrix)
+
+  }
+
+  # Estimate tree
+  graph.full <- igraph::make_full_graph(ncol(data.std))
+  mst.tree <- igraph::mst(
+    graph = graph.full,
+    weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
+    algorithm = "prim"
+  )
+
+  # Set graphical parameters
+  mst.tree <- set_graph_parameters(mst.tree)
+
+  # Return tree and completed Gamma
+  return(list(
+    tree = mst.tree,
+    Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
+  ))
+}
+
 mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   # check if you need to rescale data or not
@@ -984,52 +1031,7 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
   ))
 }
 
-mst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
-                cens = FALSE) {
 
-  # Validate arguments
-  method <- match.arg(method)
-
-  # Check if you need to rescale data or not
-  if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
-  }
-
-  # Estimate weight matrix
-  if (method == "ML") {
-    res <- ml_weight_matrix(data = data.std, cens = cens)
-    weight_matrix <- res$llh_hr
-    estimated_gamma <- res$est_gamma
-
-  } else if (method == "vario") {
-    weight_matrix <- emp_vario(data = data.std)
-    estimated_gamma <- weight_matrix
-
-  } else if (method == "chi") {
-    weight_matrix <- - emp_chi_mat(data = data.std)
-    estimated_gamma <- - weight_matrix
-
-  }
-
-  # Estimate tree
-  graph.full <- igraph::make_full_graph(ncol(data.std))
-  mst.tree <- igraph::mst(
-    graph = graph.full,
-    weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
-    algorithm = "prim"
-  )
-
-  # Set graphical parameters
-  mst.tree <- set_graph_parameters(mst.tree)
-
-  # Return tree and completed Gamma
-  return(list(
-    tree = mst.tree,
-    Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
-  ))
-}
 
 ml_weight_matrix <- function(data, cens){
   ## numeric_matrix boolean -> list
@@ -1083,66 +1085,6 @@ ml_weight_matrix <- function(data, cens){
 
   bivLLH.mat <- -par2Gamma(bivLLH["llh_hr", ])
   est_gamma <- par2Gamma(bivLLH["par", ])
-
-  return(list(
-    llh_hr = bivLLH.mat,
-    est_gamma = est_gamma
-  ))
-}
-
-ml_weight_matrix_devel <- function(data, cens){
-  ## numeric_matrix boolean -> list
-  ## produce a named list made of
-  ## version with purrr
-  ## - llh_hr: loglikelihood values
-  ## - est_gamma: estimated parameters
-
-  # Helpers
-  llh_cens <- function(i, j, data, G_emp) {
-    ## bnumeric (2x) numeric_matrix numeric_matrix -> numeric_vector
-    ## produce parameter estimates and loglikelihood value for censored HR
-
-    fmpareto_obj <- fmpareto_HR(data = data[, c(i, j)],
-                                init = G_emp[i, j],
-                                cens = cens)
-    par.est <- fmpareto_obj$par
-    llh_hr <- -(fmpareto_obj$nllik
-                - 2 * (sum(log(data[which(data[, i] > 1), i]))
-                       + sum(log(data[which(data[, j] > 1), j]))))
-    c(par = par.est, llh_hr = llh_hr)
-
-  }
-
-  llh_uncens <- function(i, j, data, G_emp) {
-    ## numeric (2x) numeric_matrix numeric_matrix -> numeric_vector
-    ## produce parameter estimates and loglikelihood value for uncensored HR
-
-    par.est <- fmpareto_HR(
-      data = data[, c(i, j)], init = G_emp[i, j],
-      cens = cens
-    )$par
-
-    llh_hr <- logLH_HR(data = data[, c(i, j)], Gamma = par2Gamma(par.est)) +
-      2 * (sum(log(data[, i])) + sum(log(data[, j])))
-
-    c(par = par.est, llh_hr = llh_hr)
-
-  }
-
-  # Set up some variables
-  d <- ncol(data)
-  G_emp <- emp_vario(data = data)
-  res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
-
-  # Fig loglikelihood
-  if (cens) {
-    bivLLH <- purrr::map2_dfr(res[, 1], res[, 2], llh_cens, data, G_emp)
-  } else {
-    bivLLH <- purrr::map2_dfr(res[, 1], res[, 2], llh_uncens, data, G_emp)
-  }
-
-  bivLLH.mat <- -par2Gamma(bivLLH[["llh_hr"]])
-  est_gamma <- par2Gamma(bivLLH[["par"]])
 
   return(list(
     llh_hr = bivLLH.mat,

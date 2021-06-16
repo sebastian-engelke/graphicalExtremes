@@ -79,41 +79,41 @@ Gamma3_completed <- rbind(
 
 
 # Run tests
-test_that("emp_chi works", {
-  expect_error(emp_chi(data = data1[, 1], p = .95))
-  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95))
-  expect_length(emp_chi(data = data2, p = .95), 1)
+test_that("emp_chi_multdim works", {
+  expect_error(emp_chi_multdim(data = data1[, 1], p = .95))
+  expect_error(emp_chi_multdim(data = as.matrix(data1[, 1]), p = .95))
+  expect_length(emp_chi_multdim(data = data2, p = .95), 1)
 })
 
 
-test_that("emp_chi_mat works", {
-  expect_error(emp_chi_mat(data = data1[, 1], p = .95))
-  expect_error(emp_chi_mat(data = as.matrix(data1[, 1]), p = .95))
+test_that("emp_chi works", {
+  expect_error(emp_chi(data = data1[, 1], p = .95))
+  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95))
 
   dat <- data1
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .9301)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .9301))
 
   dat <- data2
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .95))
 
 
   dat <- data3
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .95))
 
   dat <- data2mpareto(data1, p = 0.95)
-  expect_equal(emp_chi_mat(data = dat), emp_chi_mat(data1, p = 0.95))
+  expect_equal(emp_chi(data = dat), emp_chi(data1, p = 0.95))
 })
 
 test_that("emp_vario works", {
@@ -447,34 +447,34 @@ test_that("mst_HR works", {
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 })
 
-test_that("mst works", {
+test_that("emst works", {
   d <- 3
   v_idx <- c(2, 4, 1)
   Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
   data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
 
-  res <- mst(data = data, p = NULL, cens = FALSE)
+  res <- emst(data = data, p = NULL, cens = FALSE)
   expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
-  res <- mst(data = data, p = 0.95, cens = FALSE)
+  res <- emst(data = data, p = 0.95, cens = FALSE)
   expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
-  res <- mst(data = data, p = NULL, cens = TRUE)
+  res <- emst(data = data, p = NULL, cens = TRUE)
   expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
-  res <- mst(data = data, p = 0.95, cens = TRUE)
+  res <- emst(data = data, p = 0.95, cens = TRUE)
   expect_length(res, 2)
   expect_equal(class(res$tree), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{emp_chi}
 \alias{emp_chi}
-\title{Empirical estimation of extremal correlation \eqn{\chi}}
+\title{Empirical estimation of extremal correlation matrix \eqn{\chi}}
 \usage{
 emp_chi(data, p = NULL)
 }
@@ -16,22 +16,24 @@ it is assumed that the \code{data} are already on multivariate Pareto scale. Els
 to standardize the \code{data}.}
 }
 \value{
-Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
-for the \code{data}.
+Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
+bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 }
 \description{
-Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
+Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
 }
 \examples{
 n <- 100
-d <- 2
+d <- 4
 p <- .8
-G <- cbind(
-  c(0, 1.5),
-  c(1.5, 0)
+Gamma <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
 )
 
 set.seed(123)
-my_data <- rmstable(n, "HR", d = d, par = G)
+my_data <- rmstable(n, "HR", d = d, par = Gamma)
 emp_chi(my_data, p)
 }

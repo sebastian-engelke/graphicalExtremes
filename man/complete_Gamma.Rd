@@ -13,6 +13,10 @@ complete_Gamma(Gamma, graph = NULL, allowed_graph_type = "general", ...)
 The \code{graph} must be a connected, undirected graph.
 Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.}
 
+\item{allowed_graph_type}{Is passed as \code{graph_type} to \code{\link[=check_graph]{check_graph()}}.
+Can be used to throw an error if \code{graph} is not of the specified type,
+but does not have any influence on the completion algorithm.}
+
 \item{...}{Further arguments passed to \code{\link[=complete_gamma_general]{complete_gamma_general()}} if \code{graph}
 is not decomposable}
 }
@@ -23,11 +27,16 @@ Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
 Given a \code{graph} and \code{Gamma} matrix specified (at least) on the
 edges of \code{graph}, returns the full \code{Gamma} matrix implied
 by the conditional independencies.
-If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
-the edges of the graph, otherwise it needs to be fully specified and a
-valid \code{Gamma} matrix (without any graphical structure, though).
 }
 \details{
+If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
+the edges of the graph and the graph structure can be implied by setting
+the remaining entries to \code{NA}.
+
+If \code{graph} is not decomposable, the algorithm requires a fully specified
+variogram matrix \code{Gamma} and the graph structure needs to be explicitly
+provided in \code{graph}.
+
 For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
 distribution within the cliques of the \code{graph}, the remaining entries are implied
 by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.

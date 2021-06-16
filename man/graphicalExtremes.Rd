@@ -24,8 +24,8 @@ simulation, estimation and transformation.
 \itemize{
 \item \code{\link{fmpareto_graph_HR}}
 \item \code{\link{mst_HR}}
+\item \code{\link{emp_chi_multdim}}
 \item \code{\link{emp_chi}}
-\item \code{\link{emp_chi_mat}}
 }
 }
 

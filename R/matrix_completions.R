@@ -4,14 +4,22 @@
 #' Given a `graph` and `Gamma` matrix specified (at least) on the
 #' edges of `graph`, returns the full `Gamma` matrix implied
 #' by the conditional independencies.
+#' 
 #' If `graph` is decomposable, `Gamma` only needs to be specified on
-#' the edges of the graph, otherwise it needs to be fully specified and a 
-#' valid `Gamma` matrix (without any graphical structure, though).
+#' the edges of the graph and the graph structure can be implied by setting
+#' the remaining entries to `NA`.
+#' 
+#' If `graph` is not decomposable, the algorithm requires a fully specified
+#' variogram matrix `Gamma` and the graph structure needs to be explicitly
+#' provided in `graph`.
 #' 
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param graph Graph object from \code{igraph} package.
 #' The \code{graph} must be a connected, undirected graph.
 #' Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.
+#' @param allowed_graph_type Is passed as `graph_type` to [check_graph()].
+#' Can be used to throw an error if `graph` is not of the specified type,
+#' but does not have any influence on the completion algorithm.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
