@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Upper Danube basin dataset. — danube • graphicalExtremes</title>
+<title>Empirical estimation of extremal correlation \(\chi\) — emp_chi_multdim • graphicalExtremes</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Upper Danube basin dataset. — danube" />
-<meta property="og:description" content="A dataset containing river discharge data for tributaries of Danube in the ..." />
+<meta property="og:title" content="Empirical estimation of extremal correlation \(\chi\) — emp_chi_multdim" />
+<meta property="og:description" content="Estimates the \(d\)-dimensional extremal correlation coefficient \(\chi\) empirically." />
 
 
 
@@ -111,31 +111,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Upper Danube basin dataset.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>danube.Rd</code></div>
+    <h1>Empirical estimation of extremal correlation \(\chi\)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/fitting_estimation_functions.R'><code>R/fitting_estimation_functions.R</code></a></small>
+    <div class="hidden name"><code>emp_chi_multdim.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset containing river discharge data for tributaries of Danube in the ...</p>
+    <p>Estimates the \(d\)-dimensional extremal correlation coefficient \(\chi\) empirically.</p>
     </div>
 
-    <pre class="usage"><span class='va'>danube</span></pre>
+    <pre class="usage"><span class='fu'>emp_chi_multdim</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>Numeric matrix of size \(n\times d\), where \(n\) is the
+number of observations and \(d\) is the dimension.</p></td>
+    </tr>
+    <tr>
+      <th>p</th>
+      <td><p>Numeric between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
+it is assumed that the <code>data</code> are already on multivariate Pareto scale. Else,
+<code>p</code> is used as the probability in the function <code><a href='data2mpareto.html'>data2mpareto</a></code>
+to standardize the <code>data</code>.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing:</p><dl>
-<dt>DataEvents</dt><dd><p>a dataframe with the declustered timeseries for the 31
-stations.</p></dd>
-...
+    <p>Numeric. The empirical \(d\)-dimensional extremal correlation coefficient \(\chi\)
+for the <code>data</code>.</p>
 
-</dl>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fl'>.8</span>
+<span class='va'>G</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p>???</p>
-
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
+<span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmstable.html'>rmstable</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='st'>"HR"</span>, d <span class='op'>=</span> <span class='va'>d</span>, par <span class='op'>=</span> <span class='va'>G</span><span class='op'>)</span>
+<span class='fu'>emp_chi_multdim</span><span class='op'>(</span><span class='va'>my_data</span>, <span class='va'>p</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.55</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
