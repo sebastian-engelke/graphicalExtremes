@@ -1,13 +1,12 @@
-#' Prices of 50,000 round cut diamonds.
+#' Upper Danube basin dataset.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' A dataset containing river discharge data for tributaries of Danube in the ...
 #'
-#' @format A data frame with 53940 rows and 10 variables:
+#' @format A list containing:
 #' \describe{
-#'   \item{price}{price, in US dollars}
-#'   \item{carat}{weight of the diamond, in carats}
+#'   \item{DataEvents}{a dataframe with the declustered timeseries for the 31
+#'   stations.}
 #'   ...
 #' }
-#' @source \url{http://www.diamondse.info/}
+#' @source ???
 "danube"
