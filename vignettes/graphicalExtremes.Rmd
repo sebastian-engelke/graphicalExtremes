@@ -12,8 +12,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-\newcommand{\var}{\mathrm{var}}
+\DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
+\DeclareMathOperator{\MST}{mst}
+\DeclareMathOperator{\argmin}{arg\,min}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -59,47 +61,63 @@ A multivariate Pareto distribution (MPD) is defined as the limiting distribution
 \end{equation}
 By sending $u\to \infty$ and normalizing properly, the random vector $X_u$ converges to a limiting distribution $Y$ called the MPD:
 $$ \g{Y} = \lim_{u\to \infty} \g{X}_u /u,$$
-where the limit is in terms of convergence in distribution. In practice, we use the approximation $Y \approx X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|\g{X}\|_\infty$. Given $n$ oberservations $X_1, \dots, X_n$ of $X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $X_u$ according to \eqref{exc}. 
+where the limit is in terms of convergence in distribution. By construction, the distribution of the MPD $\g Y$ is defined on the space $\mathcal L = \{\g x \in [0,\infty)^d : \| \g x \|_\infty > 1\}$, and if $\g Y$ possesses a density $f_{\g Y}$, then it is proportional to the so-called exponent measure density $\lambda$; for details see @eng2019.
+
+In practice, we use the approximation $\g Y \approx \g X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|\g{X}\|_\infty$.
+Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $X_u$ according to \eqref{exc}. 
 
 
 ```{r, fig.align='center'}
-Y <- data2mpareto(data=X[,c(1,2)], p = .8)
+Y <- data2mpareto(data=X, p = .8)
 ```
 
 
 ## Examples
 
 ```{example}
-The Huesler--Reiss distribution \citep{Husler1989} is parameterized variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
-\begin{align}\label{eq:fYHR}
-  \lambda(\g y)
-  %&= \frac{y_k^{-2}\prod_{i\neq k} y_i^{-1}}{\sqrt{(2\pi)^{(d-1)}|\det \Sigma^{(k)}|}} \exp\left( -\frac12 \g{\tilde y}^\top_{\setminus k} (\Sigma^{(k)})^{-1}\g{\tilde y}_{\setminus k} \right)\\
-  &= y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal E,
-\end{align}
+The extremal logistic distribution with parameter $\theta\in(0,1)$ induces a multivariate
+Pareto distribution with density
+\begin{equation}
+f_{\g Y}(\g y) = \frac{1}{d^{\theta}} \left(y_1^{-1/\theta}+\dots+y_d^{-1/\theta}\right)^{\theta-d}\prod_{i=1}^{d-1}\left(\frac{i}{\theta}-1\right) \prod_{i=1}^{d} y_i^{-1/\theta-1}, \quad \g y \in \mathcal L.
+\end{equation}
+The parameter $\theta$ governs the extremal dependence, ranging from complete dependence for $\theta\to 0$ and independence for $\theta \to 1$. 
+```
+
+
+
+
+```{example}
+The $d$-dimensional Huesler--Reiss distribution [@hue1989] is parameterized by the variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
+\begin{equation}
+  \lambda(\g y) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal L,  (\#eq:fYHR)
+\end{equation}
 where $\phi_p(\cdot; \Sigma)$ is the density of a centred $p$-dimensional normal distribution with covariance matrix $\Sigma$, $\g{\tilde y} = \{\log(y_i/y_k) + \Gamma_{ik}/2\}_{i=1,\dots, d}$ and 
-\begin{align}\label{sigma_k}
-  \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}.
-\end{align}
-The matrix $\Sigma^{(k)}$ is strictly positive definite; see Appendix \ref{link_vario} for details.
-The representation of the density in~\eqref{eq:fYHR} seems to 
-depend on the choice of $k$, but, in fact, the value of the right-hand side of this equation is independent of $k$. The H\"usler--Reiss multivariate Pareto distribution has density 
-$f_{\g Y}(\g y) = \lambda(\g y) / \Lambda(\mathbf 1)$ and the
-strength of dependence between the $i$th and $j$th component is parameterized by $\Gamma_{ij}$, ranging from complete dependence for $\Gamma_{ij}=0$ and independence for $\Gamma_{ij}=+\infty$. 
+\begin{equation}\label{sigma_k}
+  \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}. (\#eq:Sigmak)
+\end{equation}
+The matrix $\Sigma^{(k)}$ is positive definite and will play an important role in the theory of extremal graphical models. The representation of the density in \@ref(eq:fYHR) seems to depend on the choice of $k$, but, in fact, the value of the right-hand side of this equation is independent of $k$. 
+The H\"usler--Reiss multivariate Pareto distribution has density 
+$f_{\g Y}(\g y) \propto \lambda(\g y)$ and the
+strength of dependence between the $i$th and $j$th component is parameterized by $\Gamma_{ij}$, ranging from complete dependence for $\Gamma_{ij} \to 0$ and independence for $\Gamma_{ij} \to \infty$. 
 
 The extension of H\"usler--Reiss distributions to random fields are
-Brown--Resnick processes \citep{bro1977, kab2009}, which are widely used models for spatial
+Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
 
 
 
 ```
 
-We can simulate from MPDs and the corresponding max-stable distribution in the following way.
+We can simulate from MPDs and the corresponding max-stable distribution using the function `rmpareto()` and `rmstable()`, respectively.
 
 ```{r, fig.align='center'}
-G = cbind(c(0,1.5), c(1.5,0))
+G <-  cbind(c(0,1.5), c(1.5,0))
 Ysim <- rmpareto(n = 100, model = "HR", d = 2, par = G)
 Zsim <- rmstable(n = 100, model = "HR", d = 2, par = G)
+
+theta <- .5
+Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
+Zsim <- rmstable(n = 100, model = "logistic", d = 2, par = theta)
 
 
 ```
@@ -109,18 +127,23 @@ Zsim <- rmstable(n = 100, model = "HR", d = 2, par = G)
 ### Extremal correlation
 
 The extremal correlation $\chi_{ij}\in [0,1]$ measures the dependence between the largest values of the random variables $X_i$ and $X_j$. It is defined as
-\begin{align}\label{EC}
+\begin{equation}\label{EC}
   \chi_{ij} := \lim_{p\to 1} \chi_{ij}(p) := \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
-\end{align}
+\end{equation}
 where the boundary cases $0$ and $1$ correspond to asymptotic independence and complete dependence, respectively. 
 
 For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can empirically estimate the $d\times d$ matrix of all pairwise extremal correlations for a fixed threshold $p$ close to 1. 
 
 ```{r}
-chi_hat = emp_chi_mat(data = X, p = 0.8)
+chi_hat <- emp_chi_mat(data = X, p = .8)
 ```
 
-(?? There seems to be a problem with emp_chi_mat since the diagonal is not 1!!)
+In this function, and in all subsequent functions, if the variable `p = NULL` (?? is this correct or other syntax) then the data is already expected to be on MPD scale, and no thresholding is performed. For the Danube date, we may therefore directly use $\g Y$ instead of $\g X$:
+
+```{r}
+chi_hat <- emp_chi_mat(data = Y) 
+```
+
 
 ```{example}
 For the Huesler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
@@ -135,7 +158,36 @@ $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
 
 There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in \cite{engvolg} and turns out to be particularly useful for inference of extremal graphical models discussed below. 
 
-It is defined ... function: emp_vario
+For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as the matrix $\Gamma^{(k)}$ with entries
+\begin{equation*}
+	\Gamma_{ij}^{(k)}(p) = \var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
+	\end{equation*}  
+whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, condtioned on the $k$th variable being large. 
+
+The limit as $p\to 1$ is called the extremal variogram and can be expressed in terms of the MPD $\g Y$:
+\begin{equation*}
+ \Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \var \left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k > 1 \right\}, \quad i,j\in V.
+\end{equation*}  
+Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function `emp_vario()` estimates the (pre-asymptotic) extremal variogram, for instance for $k=1$.
+
+```{r}
+Gamma_1_hat = emp_vario(data = X, k = 1, p = 0.8)
+```
+
+In general, the matrices $\Gamma^{(k)}$ can be different for $k \in V$, but for example for the H\"usler--Reiss distribution, they all coincide.
+
+
+```{example}
+For the Huesler--Reiss distribution with parameter matrix $\Gamma$, the extremal variogram matrices satisfy
+$$ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.$$
+```
+
+In this case it makes sense to estimate the extremal variogram $\hat \Gamma$ as the average of the estimators $\hat \Gamma^{(k)}$:
+```{r}
+Gamma_hat = emp_vario(data = X, p = 0.8)
+```
+
+
 
 
 # Extremal graphical models
@@ -148,42 +200,173 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 A tree $T = (V,E)$ is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly $|E| = d-1$ edges. For instance, the river data can be visualised as a tree with and edges between two stations if water is flowing from one station to the other without passing through another station (?? include igraph plot, we should add the coordinates and flow-connections of the stations so that they can be plotted easily).
 
+The Hammersley--Clifford theorem shown in @eng2019 yields that the density of an extremal tree model $\g Y$ on the tree $T= (V,E)$ factorizes into 
+\begin{equation}
+  f_{\g Y}(\g y) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  (\#eq:treedens)
+\end{equation}
+where $\lambda_{ij}$ are the bivariate marginals of the exponent measure density $\lambda$ corresponding to $\g Y$. The $d$-dimensional density of the MPD is therefore reduced to bivariate interactions only. 
+
+For extremal graphical models on trees, the extremal variograms $\Gamma^{(k)}$, $k \in V$, are very natural since they define a so-called additive tree metric, that is,  
+\begin{equation}
+\Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(m)}_{st}. (\#eq:treemetric)
+\end{equation}
+
 ### Simulation
-rmpareto_tree
+
+By reprensetation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Huesler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Huesler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
+
+The functions `rmpareto_tree()` and `rmstable_tree()` generate samples from extremal tree models and the corresponding max-stable distributions.
+
+```{r, fig.align='center'}
+my_tree <- igraph::graph_from_adjacency_matrix(rbind(
+  c(0, 1, 0, 0),
+  c(1, 0, 1, 1),
+  c(0, 1, 0, 0),
+  c(0, 1, 0, 0)
+),
+mode = "undirected"
+)
+Gamma_vec <- c(.5, 1.4, .8)
+Ysim <- rmpareto_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
+Zsim <- rmstable_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
+
+theta_vec <- c(.2, .8, .3)
+Ysim <- rmpareto_tree(n=100, "logistic", tree = my_tree, par = theta_vec)
+Zsim <- rmstable_tree(n=100, "logistic", tree = my_tree, par = theta_vec)
+
+```
+
 
 ### Estimation
 
-function: fmpareto_graph_HR
+For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
+
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Huesler--Reiss model on that tree. (??mention vario or ML estimation) (?? put example of Danube)
+
+```{r, fig.align='center'}
+my_tree <- igraph::graph_from_adjacency_matrix(
+  rbind(
+    c(0, 1, 0, 0),
+    c(1, 0, 1, 1),
+    c(0, 1, 0, 0),
+    c(0, 1, 0, 0)
+  ),
+  mode = "undirected"
+)
+Gamma_vec <- c(.5, 1.4, .8)
+
+my_data <- rmpareto_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
+#my_fit <- fmpareto_graph_HR(my_data,
+#  graph = my_graph,
+#  p = NULL
+#)
+
+
+```
+
+
 
 ### Structure learning
 
-function: emst (extremal MST)
+In practice, the underlying conditonal independence tree $T = (V,E)$ is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see @eng2020 for details.
+
+The method is based on the notion of a minimum spanning tree. For a set of symmetric weights $\rho_{ij} > 0$ associated with any pair of nodes $i,j\in V$, $i\neq j$, the latter is defined as the tree structure
+\begin{align}\label{Tmin}
+  T_{\MST} = \argmin_{T = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
+\end{align}
+that minimizes the sum of distances on that tree.
+
+@eng2020 showed that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
+
+In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation. @eng2020 further show that $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, however the performance is typically inferior to extremal variogram based algorithms.
+
+
+The function `emst()` estimates the extremal tree structure by a minimum spannign tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
+
+
+```{r, fig.align='center'}
+#mst_HR(data = X, p = .8)
+```
+
+
 
 ## Huesler--Reiss graphical models
 
-In Example ?? we introduced the H\"usler--Reiss Pareto distribution $\g Y$
-as a family parametrized by the variogram matri $\Gamma$. Using the linear transformation ??, we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. ?? showed that for any $k\in V$ this precision matrix contain the conditional independence structure of $Y$, since for $i,j\in V$ with $i\neq j$,
-  \begin{align*}
+The H\"usler--Reiss Pareto distribution $\g Y$
+is parametrized by the variogram matrix $\Gamma$. Using the linear transformation \@ref(eq:Sigmak), we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. @eng2019 showed that for any $k\in V$ this precision matrix contains the conditional independence structure of $\g Y$, since for $i,j\in V$ with $i\neq j$,
+  \begin{equation*}
     Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
     \begin{cases}
        \Theta^{(k)}_{ij}= 0,  &\text{ if } i,j \neq k,\\
        \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, & \text{ if } i = k,j \neq k.
     \end{cases} 
-  \end{align*}
-This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros 
+  \end{equation*}
+This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros on the off-diagonal and zero row sums. 
 
 
 
-### $\Gamma$ transformation
+### Transformations
 
-Function: Gamma2graph, Gamma2Theta (to program), Gamma2Sigma, Sigma2Gamma, 
+While the Huesler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$ and $\Theta^{(k)}$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` (to program) are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an igraph object (?? be more precise) and plots it.
 
-### $\Gamma$ completion
-function: complete_Gamma
+```{r, fig.align='center'}
+Gamma <- cbind(
+  c(0, 1.5, 1.5, 2),
+  c(1.5, 0, 2, 1.5),
+  c(1.5, 2, 0, 1.5),
+  c(2, 1.5, 1.5, 0)
+)
+round(Gamma2Sigma(Gamma, k = 1),3)
+round(Gamma2Theta(Gamma),3)
+my_graph <- Gamma2graph(Gamma)
+
+```
+
+
+
+### Completion of $\Gamma$
+
+For Huesler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ and all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implicitely implied by the graph structure. 
+
+The function `complete_Gamma()` takes as an input the partially specified $\Gamma$ matrix and the corresponding graph structure $G$, and completes the $\Gamma$ matrix. The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
+
+The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
+from the additive tree metric property \@ref(eq:treemetric).
+
+```{r, fig.align='center'}
+my_tree <- igraph::graph_from_adjacency_matrix(
+  rbind(
+    c(0, 1, 0, 0),
+    c(1, 0, 1, 1),
+    c(0, 1, 0, 0),
+    c(0, 1, 0, 0)
+  ),
+  mode = "undirected"
+)
+Gamma_vec <- c(.5, 1.4, .8)
+complete_Gamma(Gamma = Gamma_vec, graph = my_tree)
+```
+
+This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. The graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
+
+```{r, fig.align='center'}
+G <- rbind(
+c(0, 5, 7, 6, NA),
+c(5, 0, 14, 15, NA),
+c(7, 14, 0, 5, 5),
+c(6, 15, 5, 0, 6),
+c(NA, NA, 5, 6, 0)
+)
+
+complete_Gamma(G)
+```
+
 
 ### Simulation
 rmpareto
 
+
+Obsolete since discussed in the Section 2.2??
 
 ### Estimation
 function: fmpareto_graph_HR
