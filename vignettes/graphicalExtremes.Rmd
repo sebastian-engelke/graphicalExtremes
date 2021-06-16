@@ -159,7 +159,7 @@ function: fmpareto_graph_HR
 
 function: emst (extremal MST)
 
-## Huesler--Reiss distribution
+## Huesler--Reiss graphical models
 
 In Example ?? we introduced the H\"usler--Reiss Pareto distribution $\g Y$
 as a family parametrized by the variogram matri $\Gamma$. Using the linear transformation ??, we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. ?? showed that for any $k\in V$ this precision matrix contain the conditional independence structure of $Y$, since for $i,j\in V$ with $i\neq j$,
@@ -186,7 +186,7 @@ rmpareto
 
 
 ### Estimation
-For decomposable graphs...
+function: fmpareto_graph_HR
 
 ### Eglasso
 
