@@ -79,41 +79,41 @@ Gamma3_completed <- rbind(
 
 
 # Run tests
-test_that("emp_chi works", {
-  expect_error(emp_chi(data = data1[, 1], p = .95))
-  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95))
-  expect_length(emp_chi(data = data2, p = .95), 1)
+test_that("emp_chi_multdim works", {
+  expect_error(emp_chi_multdim(data = data1[, 1], p = .95))
+  expect_error(emp_chi_multdim(data = as.matrix(data1[, 1]), p = .95))
+  expect_length(emp_chi_multdim(data = data2, p = .95), 1)
 })
 
 
-test_that("emp_chi_mat works", {
-  expect_error(emp_chi_mat(data = data1[, 1], p = .95))
-  expect_error(emp_chi_mat(data = as.matrix(data1[, 1]), p = .95))
+test_that("emp_chi works", {
+  expect_error(emp_chi(data = data1[, 1], p = .95))
+  expect_error(emp_chi(data = as.matrix(data1[, 1]), p = .95))
 
   dat <- data1
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .9301)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .9301))
 
   dat <- data2
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .95))
 
 
   dat <- data3
-  res <- emp_chi_mat(data = dat, p = .95)
+  res <- emp_chi(data = dat, p = .95)
   expect_equal(NROW(res), NCOL(dat))
   expect_equal(NCOL(res), NCOL(dat))
   expect_equal(all(!is.na(res)), TRUE)
-  expect_equal(res, emp_chi_mat_deprecated(data = dat, p = .95))
+  expect_equal(res, emp_chi_deprecated(data = dat, p = .95))
 
   dat <- data2mpareto(data1, p = 0.95)
-  expect_equal(emp_chi_mat(data = dat), emp_chi_mat(data1, p = 0.95))
+  expect_equal(emp_chi(data = dat), emp_chi(data1, p = 0.95))
 })
 
 test_that("emp_vario works", {

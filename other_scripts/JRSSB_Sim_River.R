@@ -13,12 +13,12 @@ library("igraph")
 ### Estimates empirically the chi coefficient in 3 dimensions
 #data: nxd data matrix
 #triplets: mx3 matrix with locations out of 1:d to be evaluated
-#p: probability threshold for emp_chi
+#p: probability threshold for emp_chi_multdim
 #Gtrue: if supplied then the estimated chi are plotted against the once implied
 #from this HR matrix
 est.chi3D <- function(data, triplets, p, Gtrue=NULL, main=""){
   d <- ncol(data)
-  chi <- apply(triplets, 1, function(x) emp_chi(data[,x], p=p))
+  chi <- apply(triplets, 1, function(x) emp_chi_multdim(data[,x], p=p))
   if(!is.null(Gtrue)){
     chi.theo = apply(triplets, 1, function(x) Gamma2chi_3D(Gamma=Gtrue[x,x]))
 
@@ -318,7 +318,7 @@ matplot(p.vec, cbind(Mfit_flow$AIC, c(Mfit_mst$AIC,NA)), type="b", ylab="AIC", m
 abline(results[4,3],0, lty=2, col="orange", lwd=2)
 
 
-chi.emp = graphicalExtremes:::emp_chi_mat(data=DataEvents, p=.9)
+chi.emp = graphicalExtremes:::emp_chi(data=DataEvents, p=.9)
 plotChi(Chi.emp = chi.emp, Chi.theo = Gamma2chi(Mfit_flow$Gamma[[AIC.min.idx]]),
         main="Hüsler-Reiss graphical model",
         PDF = FALSE,

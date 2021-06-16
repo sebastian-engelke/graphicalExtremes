@@ -22,9 +22,9 @@
 #'
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = G)
-#' emp_chi(my_data, p)
+#' emp_chi_multdim(my_data, p)
 #' @export
-emp_chi <- function(data, p = NULL) {
+emp_chi_multdim <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -55,7 +55,7 @@ emp_chi <- function(data, p = NULL) {
 #'
 #' Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
 #'
-#' @inheritParams emp_chi
+#' @inheritParams emp_chi_multdim
 #'
 #' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
 #' bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
@@ -72,9 +72,9 @@ emp_chi <- function(data, p = NULL) {
 #'
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = Gamma)
-#' emp_chi_mat(my_data, p)
+#' emp_chi(my_data, p)
 #' @export
-emp_chi_mat <- function(data, p = NULL) {
+emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
     stop("The data should be a matrix")
   }
@@ -93,23 +93,17 @@ emp_chi_mat <- function(data, p = NULL) {
 
 
   ind <- data.std > 1
-
-  if (!is.null(p)) {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
-    crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
-  } else {
-    ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
-    crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
-  }
+  ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
+  crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
 }
 
 
-emp_chi_mat_deprecated <- function(data, p) {
+emp_chi_deprecated <- function(data, p) {
   d <- ncol(data)
   res <- as.matrix(expand.grid(1:d, 1:d))
   res <- res[res[, 1] > res[, 2], , drop = FALSE]
   chi <- apply(res, 1, function(x) {
-    emp_chi(cbind(data[, x[1]], data[, x[2]]), p = p)
+    emp_chi_multdim(cbind(data[, x[1]], data[, x[2]]), p = p)
   })
   chi.mat <- matrix(NA, ncol = d, nrow = d)
   chi.mat[res] <- chi
@@ -475,7 +469,7 @@ fmpareto_HR <- function(data,
   if (length(p) == 1) {
     p <- rep(p, d)
   }
-  
+
   # convert vector of fixed parameters to logical if necessary
   if(!is.logical(fixParams)){
     fixParams <- (1:d) %in% fixParams
@@ -574,7 +568,7 @@ fmpareto_HR <- function(data,
       }
     }
   }
-  
+
   init_opt <- init[!fixParams]
 
   # optimize likelihood
@@ -585,7 +579,7 @@ fmpareto_HR <- function(data,
     control = list(maxit = maxit),
     method = method
   )
-  
+
   par <- init
   par[!fixParams] <- opt$par
 
@@ -1008,7 +1002,7 @@ mst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
     estimated_gamma <- weight_matrix
 
   } else if (method == "chi") {
-    weight_matrix <- - emp_chi_mat(data = data.std)
+    weight_matrix <- - emp_chi(data = data.std)
     estimated_gamma <- - weight_matrix
 
   }
