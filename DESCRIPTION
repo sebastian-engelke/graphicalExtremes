@@ -27,6 +27,7 @@ Suggests:
     dplyr,
     ggplot2
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
 Imports: 
     igraph (>= 1.2.4.1),
     mvtnorm (>= 1.0.10),
@@ -34,6 +35,10 @@ Imports:
     Rdpack,
     stats (>= 3.6.0),
     grDevices (>= 3.6.0),
-    utils
+    doFuture,
+    future,
+    foreach,
+    utils,
+    corpcor
 RdMacros: Rdpack
 VignetteBuilder: knitr

@@ -4,5 +4,16 @@
 other_scripts/data
 .DS_store
 docs
+
 inst/doc
 *.log
+
+.vscode
+build.R
+.Rprofile
+debug
+
+*.tmp
+*.temp
+tmp.*
+temp.*

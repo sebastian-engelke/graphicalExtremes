@@ -1,147 +1,3 @@
-#' Completion of Gamma matrix on block graphs
-#'
-#' Given a block \code{graph} and \code{Gamma} matrix with entries only specified on
-#' edges within the cliques of the \code{graph}, it returns the full \code{Gamma} matrix
-#' implied by the conditional independencies.
-#'
-#' @param graph Graph object from \code{igraph} package.
-#' The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
-#' graph with singleton separator sets.
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix
-#' with entries only specified within the cliques of the \code{graph}. Alternatively, can be a
-#' vector containing the \code{Gamma} entries for each edge in the same order as in the
-#' \code{graph} object.
-#'
-#' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
-#' s
-#' @details
-#' For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
-#' distribution within the cliques of the \code{graph}, the remaining entries are implied
-#' by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-#'
-#' @examples
-#' ## Complete a 4-dimensional HR distribution
-#'
-#' my_graph <- igraph::graph_from_adjacency_matrix(rbind(
-#'   c(0, 1, 0, 0),
-#'   c(1, 0, 1, 1),
-#'   c(0, 1, 0, 1),
-#'   c(0, 1, 1, 0)
-#' ),
-#' mode = "undirected"
-#' )
-#'
-#' Gamma <- rbind(
-#'   c(0, .5, NA, NA),
-#'   c(.5, 0, 1, 1.5),
-#'   c(NA, 1, 0, .8),
-#'   c(NA, 1.5, .8, 0)
-#' )
-#'
-#' complete_Gamma(Gamma, my_graph)
-#'
-#' ## Alternative
-#'
-#' Gamma_vec <- c(.5, 1, 1.5, .8)
-#' complete_Gamma(Gamma_vec, my_graph)
-#' @references
-#'  \insertAllCited{}
-#'
-#' @export
-complete_Gamma <- function(Gamma, graph) {
-
-  # set up main variables
-  d <- igraph::vcount(graph)
-  e <- igraph::ecount(graph)
-
-  # check if it is directed
-  if (igraph::is_directed(graph)) {
-    warning("The given graph is directed. Converted to undirected.")
-    graph <- igraph::as.undirected(graph)
-  }
-
-  # check if it is connected
-  is_connected <- igraph::is_connected(graph)
-
-  if (!is_connected) {
-    stop("The given graph is not connected.")
-  }
-
-  # check if graph is decomposable
-  is_decomposable <- igraph::is_chordal(graph)$chordal
-  if (!is_decomposable) {
-    stop("The given graph is not decomposable (i.e., chordal).")
-  }
-
-  # transform Gamma if needed
-  if (is.vector(Gamma)) {
-    if (length(Gamma) != e) {
-      stop(paste(
-        "The argument Gamma must be a symmetric d x d matrix,",
-        "or a vector with as many entries as the number of edges",
-        "in the graph."
-      ))
-    }
-    G <- matrix(0, d, d)
-    G[igraph::ends(graph, igraph::E(graph))] <- Gamma
-    G <- G + t(G)
-  } else {
-    G <- Gamma
-
-    # check that Gamma is d x d
-
-    if (NROW(G) != d | NCOL(G) != d) {
-      stop(paste(
-        "The argument Gamma must be a symmetric d x d matrix,",
-        "or a vector with as many entries as the number of edges",
-        "in the graph."
-      ))
-    }
-
-    # check that Gamma is symmetric
-    if (any(G != t(G), na.rm = T)) {
-      stop(paste(
-        "The argument Gamma must be a symmetric d x d matrix,",
-        "or a vector with as many entries as the number of edges",
-        "in the graph."
-      ))
-    }
-  }
-
-  # computes cliques
-  cli <- igraph::max_cliques(graph)
-  ncli <- length(cli)
-
-  # if only one clique terminate
-  if (ncli == 1) {
-    return(G)
-  }
-
-  # else, continue
-  cli.selected <- 1
-  idx1 <- cli[[1]]
-  V <- 1:ncli
-
-  for (i in 1:(ncli - 1)) {
-    cli.idx <- min(V[which(sapply(V, function(j) length(intersect(idx1, cli[[j]])) > 0) == 1 & !is.element(V, cli.selected))])
-    idx2 <- cli[[cli.idx]]
-    l1 <- length(idx1)
-    l2 <- length(idx2)
-    k0 <- intersect(idx1, idx2)
-
-    if (length(k0) > 1) {
-      stop("The given graph is not a block graph.")
-    }
-    G[setdiff(idx1, k0), setdiff(idx2, k0)] <- matrix(rep(G[setdiff(idx1, k0), k0], times = l2 - 1), l1 - 1, l2 - 1) +
-      t(matrix(rep(G[setdiff(idx2, k0), k0], times = l1 - 1), l2 - 1, l1 - 1))
-    G[setdiff(idx2, k0), setdiff(idx1, k0)] <- t(G[setdiff(idx1, k0), setdiff(idx2, k0)])
-    cli.selected <- c(cli.selected, cli.idx)
-    idx1 <- union(idx1, idx2)
-  }
-  return(G)
-}
-
-
 
 #' Transformation of \eqn{\Gamma} matrix to graph object
 #'
@@ -354,6 +210,54 @@ Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
 }
 
 
+#' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+#'
+#' Transforms the \code{Gamma} matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \eqn{\Theta} matrix.
+#'
+#'
+#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#'
+#' @details
+#' Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+#' Huesler--Reiss distribution can be transformed into a
+#' \eqn{d \times d}{d x d} \eqn{\Theta} matrix, which
+#' contains the graph structure corresponding to the Huesler--Reiss distribution
+#' with parameter matrix \code{Gamma}.
+#'
+#' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
+#' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+#'
+#' @examples
+#' Gamma <- cbind(
+#'   c(0, 1.5, 1.5, 2),
+#'   c(1.5, 0, 2, 1.5),
+#'   c(1.5, 2, 0, 1.5),
+#'   c(2, 1.5, 1.5, 0)
+#' )
+#' Gamma2Sigma(Gamma, k = 1, full = FALSE)
+#' @references
+#'  \insertAllCited{}
+#'
+#' @export
+Gamma2Theta <- function(Gamma) {
+  d <- ncol(Gamma)
+  ID <- diag(d) - matrix(1/d, d, d)
+  S <- ID %*% (-1/2 * Gamma) %*% ID
+  Theta <- corpcor::pseudoinverse(S)
+  return(Theta)
+}
+
+#' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+#' 
+#' @export
+Theta2Gamma <- function(Theta) {
+  d <- nrow(Theta)
+  id <- matrix(1, d)
+  S <- corpcor::pseudoinverse(Theta)
+  dS <- diag(S)
+  return(id %*% t(dS) + dS %*% t(id) - 2*S)
+}
 
 
 #' Create \eqn{\Gamma} from vector

@@ -38,5 +38,6 @@
 #' @importFrom Rdpack reprompt
 #'
 #' @references \insertRef{eng2019}{graphicalExtremes}
+#' @aliases graphicalExtremes-package
 #'
 NULL
