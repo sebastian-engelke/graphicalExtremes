@@ -862,11 +862,15 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 }
 
 
-#' Fitting of Huesler--Reiss minimum spanning tree
+#' Fitting extremal minimum spanning tree
 #'
-#' Fits the Huesler--Reiss minimum spanning tree, where the edge weights are
-#' are the negative maximized log-likelihoods of the bivariate Huesler--Reiss
-#' distributions. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+#' Fits an extremal minimum spanning tree, where the edge weights are:
+#' \itemize{
+#' \item negative maximized log-likelihoods of the bivariate Huesler--Reiss
+#' distributions, if `method = "ML"`. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+#' \item empirical extremal variogram, if `method = "vario"`.
+#' \item empirical extremal correlation, if `method = "chi"`.
+#' }
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
@@ -874,8 +878,10 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 #' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 #' to standardize the \code{data}.
-#' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, \code{cens = FALSE}.
+#' @param method One of `"ML", "vario", "chi"`.
+#' @param cens Logical. This argument is considered only if `method = "ML"`.
+#' If `TRUE`, then censored likelihood contributions are used for
+#' components below the threshold. By default, `cens = FALSE`.
 #'
 #' @return List consisting of:
 #' \itemize{
@@ -908,6 +914,53 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 #'
 #' @export
 #'
+emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
+                 cens = FALSE) {
+
+  # Validate arguments
+  method <- match.arg(method)
+
+  # Check if you need to rescale data or not
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  # Estimate weight matrix
+  if (method == "ML") {
+    res <- ml_weight_matrix(data = data.std, cens = cens)
+    weight_matrix <- res$llh_hr
+    estimated_gamma <- res$est_gamma
+
+  } else if (method == "vario") {
+    weight_matrix <- emp_vario(data = data.std)
+    estimated_gamma <- weight_matrix
+
+  } else if (method == "chi") {
+    weight_matrix <- - emp_chi(data = data.std)
+    estimated_gamma <- chi2Gamma(- weight_matrix)
+
+  }
+
+  # Estimate tree
+  graph.full <- igraph::make_full_graph(ncol(data.std))
+  mst.tree <- igraph::mst(
+    graph = graph.full,
+    weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
+    algorithm = "prim"
+  )
+
+  # Set graphical parameters
+  mst.tree <- set_graph_parameters(mst.tree)
+
+  # Return tree and completed Gamma
+  return(list(
+    tree = mst.tree,
+    Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
+  ))
+}
+
 mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   # check if you need to rescale data or not
@@ -978,52 +1031,7 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
   ))
 }
 
-mst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
-                cens = FALSE) {
 
-  # Validate arguments
-  method <- match.arg(method)
-
-  # Check if you need to rescale data or not
-  if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
-  }
-
-  # Estimate weight matrix
-  if (method == "ML") {
-    res <- ml_weight_matrix(data = data.std, cens = cens)
-    weight_matrix <- res$llh_hr
-    estimated_gamma <- res$est_gamma
-
-  } else if (method == "vario") {
-    weight_matrix <- emp_vario(data = data.std)
-    estimated_gamma <- weight_matrix
-
-  } else if (method == "chi") {
-    weight_matrix <- - emp_chi(data = data.std)
-    estimated_gamma <- - weight_matrix
-
-  }
-
-  # Estimate tree
-  graph.full <- igraph::make_full_graph(ncol(data.std))
-  mst.tree <- igraph::mst(
-    graph = graph.full,
-    weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
-    algorithm = "prim"
-  )
-
-  # Set graphical parameters
-  mst.tree <- set_graph_parameters(mst.tree)
-
-  # Return tree and completed Gamma
-  return(list(
-    tree = mst.tree,
-    Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
-  ))
-}
 
 ml_weight_matrix <- function(data, cens){
   ## numeric_matrix boolean -> list
