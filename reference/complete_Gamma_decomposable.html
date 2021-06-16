@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transformation of \(\Gamma\) matrix to graph object — Gamma2graph • graphicalExtremes</title>
+<title>Completion of decomposable Gamma matrices — complete_Gamma_decomposable • graphicalExtremes</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Transformation of \(\Gamma\) matrix to graph object — Gamma2graph" />
-<meta property="og:description" content="Transforms Gamma matrix to an igraph object for
-the corresponding Huesler--Reiss extremal graphical model,
-and plots it (optionally)." />
+<meta property="og:title" content="Completion of decomposable Gamma matrices — complete_Gamma_decomposable" />
+<meta property="og:description" content="Given a decomposable graph and incomplete variogram matrix Gamma,
+returns the full Gamma matrix implied by the conditional independencies." />
 
 
 
@@ -108,68 +107,45 @@ and plots it (optionally)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transformation of \(\Gamma\) matrix to graph object</h1>
+    <h1>Completion of decomposable Gamma matrices</h1>
     
-    <div class="hidden name"><code>Gamma2graph.Rd</code></div>
+    <div class="hidden name"><code>complete_Gamma_decomposable.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Transforms <code>Gamma</code> matrix to an <code>igraph</code> object for
-the corresponding Huesler--Reiss extremal graphical model,
-and plots it (optionally).</p>
+    <p>Given a decomposable <code>graph</code> and incomplete variogram matrix <code>Gamma</code>,
+returns the full <code>Gamma</code> matrix implied by the conditional independencies.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Gamma2graph</span><span class='op'>(</span><span class='va'>Gamma</span>, to_plot <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>complete_Gamma_decomposable</span><span class='op'>(</span><span class='va'>Gamma</span>, <span class='va'>graph</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Gamma</th>
-      <td><p>Numeric \(d \times d\) variogram matrix.</p></td>
+      <td><p>A variogram matrix that is specified on the edges of <code>graph</code>
+and the diagonals. All other entries are ignored.</p></td>
     </tr>
     <tr>
-      <th>to_plot</th>
-      <td><p>Logical. If <code>TRUE</code> (default), it plots the resulting
-graph.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Graphical parameters for the <code><a href='https://rdrr.io/pkg/igraph/man/plot.igraph.html'>plot.igraph</a></code>
-function of the package <code>igraph</code>.</p></td>
+      <th>graph</th>
+      <td><p>A decomposable <a href='https://rdrr.io/pkg/igraph/man/make_graph.html'>igraph::graph</a> object</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Graph object from <code>igraph</code> package. An undirected graph.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A complete variogram matrix that agrees with <code>Gamma</code> on the entries
+corresponding to edges in <code>graph</code> and the diagonals.
+The corresponding \(\Theta\) matrix pdocued by <a href='Gamma2Theta.html'>Gamma2Theta</a> has zeros
+in the remaining entries.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>The variogram uniquely determines the extremal graph structure of the
-corresponding Huesler--Reiss distribution. The conditional independencies
-can be identified from the inverses of the matrices \(\Sigma^{(k)}\)
-defined in equation (10) in Engelke and Hitz (2020)
-.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <div class='dont-index'><p>Other Matrix completions: 
+<code><a href='complete_Gamma_general.html'>complete_Gamma_general</a>()</code>,
+<code><a href='complete_Gamma_one_step.html'>complete_Gamma_one_step</a>()</code>,
+<code><a href='complete_Gamma.html'>complete_Gamma</a>()</code></p></div>
 
-    <p>Engelke S, Hitz AS (2020).
-&#8220;Graphical models for extremes (with discussion).&#8221;
-<em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>, <b>82</b>, 871--932.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>Gamma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='fu'>Gamma2graph</span><span class='op'>(</span><span class='va'>Gamma</span>, to_plot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='Gamma2graph-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; IGRAPH ffd878c U--- 4 4 -- 
-#&gt; + attr: color (v/c), frame.color (v/c), label.color (v/c), size (v/n),
-#&gt; | width (e/n), color (e/c)
-#&gt; + edges from ffd878c:
-#&gt; [1] 1--2 1--3 2--4 3--4</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

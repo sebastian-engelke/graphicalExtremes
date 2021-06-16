@@ -73,75 +73,184 @@
 
     
     
-<div id="data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data" class="anchor"></a>1. Data</h2>
+
+<div id="data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data" class="anchor"></a><span class="header-section-number">1</span> Data</h1>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">danube</span> <span class="op">=</span> <span class="fu">graphicalExtremes</span><span class="fu">::</span><span class="va"><a href="../reference/danube.html">danube</a></span>
 
-<span class="va">DataEvents</span> <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">DataEvents</span> <span class="op">%&gt;%</span> 
-  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span>
+<span class="va">X</span> <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">DataEvents</span>
   
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">DataEvents</span><span class="op">)</span> <span class="op">+</span>
+<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">X</span> <span class="op">%&gt;%</span> 
+  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-2-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;"></p>
 </div>
-<div id="multivariate-pareto-distribution" class="section level2">
+<div id="multivariate-pareto-distributions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#multivariate-pareto-distributions" class="anchor"></a><span class="header-section-number">2</span> Multivariate Pareto distributions</h1>
+<div id="definition" class="section level2">
 <h2 class="hasAnchor">
-<a href="#multivariate-pareto-distribution" class="anchor"></a>2. Multivariate Pareto Distribution</h2>
-<p>A MPD is defined as <span class="math inline">\(Y=...\)</span></p>
+<a href="#definition" class="anchor"></a><span class="header-section-number">2.1</span> Definition</h2>
+<p>The goal is to study the extremal tail of a multivariate random vector <span class="math inline">\(\mathbf{X} = (X_1,\dots, X_d)\)</span>. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
+<span class="math display" id="eq:pareto">\[\begin{equation}
+1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d. \tag{2.1}
+\end{equation}\]</span>
+We assume in the sequel that the vector <span class="math inline">\(X\)</span> has been normalized to standard Pareto margins.</p>
+<p>A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of <span class="math inline">\(\mathbf{X}\)</span> over a high threshold, where the multivariate threshold is chosen in terms of the <span class="math inline">\(l_\infty\)</span>-norm. For any <span class="math inline">\(u&gt;0\)</span>, we define exceedance distribution as
+<span class="math display">\[\begin{equation}\label{exc}
+\mathbf{X}_u = \mathbf{X} \mid \| \mathbf{X} \|_\infty &gt; u
+\end{equation}\]</span>
+By sending <span class="math inline">\(u\to \infty\)</span> and normalizing properly, the random vector <span class="math inline">\(X_u\)</span> converges to a limiting distribution <span class="math inline">\(Y\)</span> called the MPD:
+<span class="math display">\[ \mathbf{Y} = \lim_{u\to \infty} \mathbf{X}_u /u,\]</span>
+where the limit is in terms of convergence in distribution. In practice, we use the approximation <span class="math inline">\(Y \approx X_u\)</span> for some large value <span class="math inline">\(u\)</span>, where <span class="math inline">\(u\)</span> can be chosen as the <span class="math inline">\(p\)</span>th quantile of the distribution of <span class="math inline">\(\|\mathbf{X}\|_\infty\)</span>. Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(X_1, \dots, X_n\)</span> of <span class="math inline">\(X\)</span>, the function  first computes the standardization in <a href="#eq:pareto">(2.1)</a> based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances <span class="math inline">\(X_u\)</span> according to .</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">danube</span><span class="op">$</span><span class="va">DataEvents</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span></code></pre></div>
-<p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-3-1.png" width="700" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="extremal-graphical-models" class="section level2">
+<div id="examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#extremal-graphical-models" class="anchor"></a>3. Extremal Graphical Models</h2>
+<a href="#examples" class="anchor"></a><span class="header-section-number">2.2</span> Examples</h2>
+
+<div class="example">
+<p><span id="exm:unnamed-chunk-4" class="example"><strong>Example 2.1  </strong></span>The Huesler–Reiss distribution  is parameterized variogram matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>. The corresponding density of the exponent measure can be written for any <span class="math inline">\(k\in\{1,\dots, d\}\)</span> as 
+<span class="math display">\[\begin{align}\label{eq:fYHR}
+  \lambda(\mathbf{y})
+  %&amp;= \frac{y_k^{-2}\prod_{i\neq k} y_i^{-1}}{\sqrt{(2\pi)^{(d-1)}|\det \Sigma^{(k)}|}} \exp\left( -\frac12 \g{\tilde y}^\top_{\setminus k} (\Sigma^{(k)})^{-1}\g{\tilde y}_{\setminus k} \right)\\
+  &amp;= y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\mathbf{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \mathbf{y} \in \mathcal E,
+\end{align}\]</span>
+where <span class="math inline">\(\phi_p(\cdot; \Sigma)\)</span> is the density of a centred <span class="math inline">\(p\)</span>-dimensional normal distribution with covariance matrix <span class="math inline">\(\Sigma\)</span>, <span class="math inline">\(\mathbf{\tilde y} = \{\log(y_i/y_k) + \Gamma_{ik}/2\}_{i=1,\dots, d}\)</span> and
+<span class="math display">\[\begin{align}\label{sigma_k}
+  \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}.
+\end{align}\]</span>
+The matrix <span class="math inline">\(\Sigma^{(k)}\)</span> is strictly positive definite; see Appendix  for details.
+The representation of the density in~ seems to
+depend on the choice of <span class="math inline">\(k\)</span>, but, in fact, the value of the right-hand side of this equation is independent of <span class="math inline">\(k\)</span>. The H"usler–Reiss multivariate Pareto distribution has density
+<span class="math inline">\(f_{\mathbf{Y}}(\mathbf{y}) = \lambda(\mathbf{y}) / \Lambda(\mathbf 1)\)</span> and the
+strength of dependence between the <span class="math inline">\(i\)</span>th and <span class="math inline">\(j\)</span>th component is parameterized by <span class="math inline">\(\Gamma_{ij}\)</span>, ranging from complete dependence for <span class="math inline">\(\Gamma_{ij}=0\)</span> and independence for <span class="math inline">\(\Gamma_{ij}=+\infty\)</span>.</p>
+<p>The extension of H"usler–Reiss distributions to random fields are
+Brown–Resnick processes , which are widely used models for spatial
+extremes.</p>
 </div>
+
+<p>We can simulate from MPDs and the corresponding max-stable distribution in the following way.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">G</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span>
+<span class="va">Zsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmstable.html">rmstable</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="measures-of-extremal-dependence" class="section level2">
+<h2 class="hasAnchor">
+<a href="#measures-of-extremal-dependence" class="anchor"></a><span class="header-section-number">2.3</span> Measures of extremal dependence</h2>
+<div id="extremal-correlation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#extremal-correlation" class="anchor"></a><span class="header-section-number">2.3.1</span> Extremal correlation</h3>
+<p>The extremal correlation <span class="math inline">\(\chi_{ij}\in [0,1]\)</span> measures the dependence between the largest values of the random variables <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>. It is defined as
+<span class="math display">\[\begin{align}\label{EC}
+  \chi_{ij} := \lim_{p\to 1} \chi_{ij}(p) := \lim_{p\to 1} \mathbb P\left\{F_i(X_i) &gt; p\mid  F_j(X_j) &gt; p \right\},
+\end{align}\]</span>
+where the boundary cases <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> correspond to asymptotic independence and complete dependence, respectively.</p>
+<p>For <span class="math inline">\(n\)</span> observations <span class="math inline">\(X_1,\dots, X_n\)</span> of the <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(X\)</span>, we can empirically estimate the <span class="math inline">\(d\times d\)</span> matrix of all pairwise extremal correlations for a fixed threshold <span class="math inline">\(p\)</span> close to 1.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">chi_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_chi_mat.html">emp_chi_mat</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></code></pre></div>
+<p>(?? There seems to be a problem with emp_chi_mat since the diagonal is not 1!!)</p>
+
+<div class="example">
+<p><span id="exm:unnamed-chunk-7" class="example"><strong>Example 2.2  </strong></span>For the Huesler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>, the extremal correlation is given by
+<span class="math display">\[ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),\]</span>
+where <span class="math inline">\(\Phi\)</span> is the standard normal distribution function.</p>
+Function: <code><a href="../reference/Gamma2chi.html">Gamma2chi()</a></code>
+</div>
+
+</div>
+<div id="extremal-variogram" class="section level3">
+<h3 class="hasAnchor">
+<a href="#extremal-variogram" class="anchor"></a><span class="header-section-number">2.3.2</span> Extremal variogram</h3>
+<p>There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in  and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
+<p>It is defined … function: emp_vario</p>
+</div>
+</div>
+</div>
+<div id="extremal-graphical-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#extremal-graphical-models" class="anchor"></a><span class="header-section-number">3</span> Extremal graphical models</h1>
+<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. (??Here give examples of graph: tree, block, deomposable, non-decomposable) <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MTPs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
+<span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.\]</span>
+that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
 <div id="trees" class="section level2">
 <h2 class="hasAnchor">
-<a href="#trees" class="anchor"></a>4. Trees</h2>
-<div id="structure-learning" class="section level3">
+<a href="#trees" class="anchor"></a><span class="header-section-number">3.1</span> Trees</h2>
+<p>A tree <span class="math inline">\(T = (V,E)\)</span> is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly <span class="math inline">\(|E| = d-1\)</span> edges. For instance, the river data can be visualised as a tree with and edges between two stations if water is flowing from one station to the other without passing through another station (?? include igraph plot, we should add the coordinates and flow-connections of the stations so that they can be plotted easily).</p>
+<div id="simulation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#structure-learning" class="anchor"></a>4.1 Structure learning</h3>
+<a href="#simulation" class="anchor"></a><span class="header-section-number">3.1.1</span> Simulation</h3>
+<p>rmpareto_tree</p>
 </div>
 <div id="estimation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#estimation" class="anchor"></a>4.2 Estimation</h3>
+<a href="#estimation" class="anchor"></a><span class="header-section-number">3.1.2</span> Estimation</h3>
+<p>function: fmpareto_graph_HR</p>
 </div>
-<div id="empirical-variogram" class="section level3">
+<div id="structure-learning" class="section level3">
 <h3 class="hasAnchor">
-<a href="#empirical-variogram" class="anchor"></a>4.3 Empirical variogram</h3>
+<a href="#structure-learning" class="anchor"></a><span class="header-section-number">3.1.3</span> Structure learning</h3>
+<p>function: emst (extremal MST)</p>
 </div>
 </div>
-<div id="hueslerreiss-distribution" class="section level2">
+<div id="hueslerreiss-graphical-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hueslerreiss-distribution" class="anchor"></a>5. Huesler–Reiss distribution</h2>
+<a href="#hueslerreiss-graphical-models" class="anchor"></a><span class="header-section-number">3.2</span> Huesler–Reiss graphical models</h2>
+<p>In Example ?? we introduced the H"usler–Reiss Pareto distribution <span class="math inline">\(\mathbf{Y}\)</span>
+as a family parametrized by the variogram matri <span class="math inline">\(\Gamma\)</span>. Using the linear transformation ??, we obtain the covariance matrix <span class="math inline">\(\Sigma^{(k)}\)</span> for <span class="math inline">\(k\in V\)</span>. The inverse, called a precision matrix, is denoted by <span class="math inline">\(\Theta^{(k)}\)</span>. ?? showed that for any <span class="math inline">\(k\in V\)</span> this precision matrix contain the conditional independence structure of <span class="math inline">\(Y\)</span>, since for <span class="math inline">\(i,j\in V\)</span> with <span class="math inline">\(i\neq j\)</span>,
+<span class="math display">\[\begin{align*}
+    Y_i\perp_e Y_j\mid \mathbf{Y}_{V\setminus \{i,j\}} \quad \iff \quad
+    \begin{cases}
+       \Theta^{(k)}_{ij}= 0,  &amp;\text{ if } i,j \neq k,\\
+       \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, &amp; \text{ if } i = k,j \neq k.
+    \end{cases} 
+  \end{align*}\]</span>
+This means, if <span class="math inline">\(Y\)</span> is an extremal graphical on the graph <span class="math inline">\(G = (V,E)\)</span>, the missing edges can be read off from the matrix <span class="math inline">\(\Theta^{(k)}\)</span> as zeros</p>
 <div id="gamma-transformation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#gamma-transformation" class="anchor"></a>5.1 <span class="math inline">\(\Gamma\)</span> transformation</h3>
+<a href="#gamma-transformation" class="anchor"></a><span class="header-section-number">3.2.1</span> <span class="math inline">\(\Gamma\)</span> transformation</h3>
+<p>Function: Gamma2graph, Gamma2Theta (to program), Gamma2Sigma, Sigma2Gamma,</p>
 </div>
 <div id="gamma-completion" class="section level3">
 <h3 class="hasAnchor">
-<a href="#gamma-completion" class="anchor"></a>5.2 <span class="math inline">\(\Gamma\)</span> completion</h3>
+<a href="#gamma-completion" class="anchor"></a><span class="header-section-number">3.2.2</span> <span class="math inline">\(\Gamma\)</span> completion</h3>
+<p>function: complete_Gamma</p>
+</div>
+<div id="simulation-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulation-1" class="anchor"></a><span class="header-section-number">3.2.3</span> Simulation</h3>
+<p>rmpareto</p>
 </div>
 <div id="estimation-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#estimation-1" class="anchor"></a>5.3 Estimation</h3>
+<a href="#estimation-1" class="anchor"></a><span class="header-section-number">3.2.4</span> Estimation</h3>
+<p>function: fmpareto_graph_HR</p>
 </div>
 <div id="eglasso" class="section level3">
 <h3 class="hasAnchor">
-<a href="#eglasso" class="anchor"></a>5.4 Eglasso</h3>
+<a href="#eglasso" class="anchor"></a><span class="header-section-number">3.2.5</span> Eglasso</h3>
+<p>function: eglasso</p>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<div id="refs" class="references">
+<div id="ref-eng2019">
+<p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p>
+</div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 

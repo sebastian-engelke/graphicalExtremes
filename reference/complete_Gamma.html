@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Completion of Gamma matrix on block graphs — complete_Gamma • graphicalExtremes</title>
+<title>Completion of Gamma matrices — complete_Gamma • graphicalExtremes</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,13 @@
 
 
 
-<meta property="og:title" content="Completion of Gamma matrix on block graphs — complete_Gamma" />
-<meta property="og:description" content="Given a block graph and Gamma matrix with entries only specified on
-edges within the cliques of the graph, it returns the full Gamma matrix
-implied by the conditional independencies." />
+<meta property="og:title" content="Completion of Gamma matrices — complete_Gamma" />
+<meta property="og:description" content="Given a graph and Gamma matrix specified (at least) on the
+edges of graph, returns the full Gamma matrix implied
+by the conditional independencies.
+If graph is decomposable, Gamma only needs to be specified on
+the edges of the graph, otherwise it needs to be fully specified and a
+valid Gamma matrix (without any graphical structure, though)." />
 
 
 
@@ -108,44 +111,48 @@ implied by the conditional independencies." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Completion of Gamma matrix on block graphs</h1>
+    <h1>Completion of Gamma matrices</h1>
     
     <div class="hidden name"><code>complete_Gamma.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given a block <code>graph</code> and <code>Gamma</code> matrix with entries only specified on
-edges within the cliques of the <code>graph</code>, it returns the full <code>Gamma</code> matrix
-implied by the conditional independencies.</p>
+    <p>Given a <code>graph</code> and <code>Gamma</code> matrix specified (at least) on the
+edges of <code>graph</code>, returns the full <code>Gamma</code> matrix implied
+by the conditional independencies.
+If <code>graph</code> is decomposable, <code>Gamma</code> only needs to be specified on
+the edges of the graph, otherwise it needs to be fully specified and a
+valid <code>Gamma</code> matrix (without any graphical structure, though).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma</span>, <span class='va'>graph</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma</span>, graph <span class='op'>=</span> <span class='cn'>NULL</span>, allowed_graph_type <span class='op'>=</span> <span class='st'>"general"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Gamma</th>
-      <td><p>Numeric \(d \times d\) variogram matrix
-with entries only specified within the cliques of the <code>graph</code>. Alternatively, can be a
-vector containing the <code>Gamma</code> entries for each edge in the same order as in the
-<code>graph</code> object.</p></td>
+      <td><p>Numeric \(d \times d\) variogram matrix.</p></td>
     </tr>
     <tr>
       <th>graph</th>
       <td><p>Graph object from <code>igraph</code> package.
-The <code>graph</code> must be an undirected block graph, i.e., a decomposable, connected
-graph with singleton separator sets.</p></td>
+The <code>graph</code> must be a connected, undirected graph.
+Can also be implied by <code>NA</code> entries in <code>Gamma</code> if decomposable.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to <code>complete_gamma_general()</code> if <code>graph</code>
+is not decomposable</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Completed \(d \times d\) <code>Gamma</code> matrix.
-s</p>
+    <p>Completed \(d \times d\) <code>Gamma</code> matrix.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For a block graph it suffices to specify the dependence parameters of the Huesler--Reiss
+    <p>For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
 distribution within the cliques of the <code>graph</code>, the remaining entries are implied
 by the conditional independence properties. For details see Engelke and Hitz (2020)
 .</p>
@@ -154,19 +161,16 @@ by the conditional independence properties. For details see Engelke and Hitz (20
     <p>Engelke S, Hitz AS (2020).
 &#8220;Graphical models for extremes (with discussion).&#8221;
 <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>, <b>82</b>, 871--932.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='Gamma2Theta.html'>Gamma2Theta()</a></code></p>
+<p>Other Matrix completions: 
+<code><a href='complete_Gamma_decomposable.html'>complete_Gamma_decomposable</a>()</code>,
+<code><a href='complete_Gamma_general.html'>complete_Gamma_general</a>()</code>,
+<code><a href='complete_Gamma_one_step.html'>complete_Gamma_one_step</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Complete a 4-dimensional HR distribution</span>
-
-<span class='va'>my_graph</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html'>graph_from_adjacency_matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>,
-mode <span class='op'>=</span> <span class='st'>"undirected"</span>
-<span class='op'>)</span>
-
+    <pre class="examples"><div class='input'><span class='co'>## Block graph:</span>
 <span class='va'>Gamma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.5</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>,
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
@@ -174,21 +178,61 @@ mode <span class='op'>=</span> <span class='st'>"undirected"</span>
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>1.5</span>, <span class='fl'>.8</span>, <span class='fl'>0</span><span class='op'>)</span>
 <span class='op'>)</span>
 
-<span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma</span>, <span class='va'>my_graph</span><span class='op'>)</span>
+<span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4]
 #&gt; [1,]  0.0  0.5  1.5  2.0
 #&gt; [2,]  0.5  0.0  1.0  1.5
 #&gt; [3,]  1.5  1.0  0.0  0.8
 #&gt; [4,]  2.0  1.5  0.8  0.0</div><div class='input'>
-<span class='co'>## Alternative</span>
-
+<span class='co'>## Alternative representation of the same completion problem:</span>
+<span class='va'>my_graph</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html'>graph_from_adjacency_matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>, mode <span class='op'>=</span> <span class='st'>"undirected"</span><span class='op'>)</span>
 <span class='va'>Gamma_vec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>.8</span><span class='op'>)</span>
 <span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma_vec</span>, <span class='va'>my_graph</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4]
 #&gt; [1,]  0.0  0.5  1.5  2.0
 #&gt; [2,]  0.5  0.0  1.0  1.5
 #&gt; [3,]  1.5  1.0  0.0  0.8
-#&gt; [4,]  2.0  1.5  0.8  0.0</div></pre>
+#&gt; [4,]  2.0  1.5  0.8  0.0</div><div class='input'>
+<span class='co'>## Decomposable graph:</span>
+<span class='va'>G</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>7</span>, <span class='fl'>6</span>, <span class='cn'>NA</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>0</span>, <span class='fl'>14</span>, <span class='fl'>15</span>, <span class='cn'>NA</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>14</span>, <span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>5</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>15</span>, <span class='fl'>5</span>, <span class='fl'>0</span>, <span class='fl'>6</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>G</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5]
+#&gt; [1,]  0.0  5.0    7    6  9.6
+#&gt; [2,]  5.0  0.0   14   15 17.4
+#&gt; [3,]  7.0 14.0    0    5  5.0
+#&gt; [4,]  6.0 15.0    5    0  6.0
+#&gt; [5,]  9.6 17.4    5    6  0.0</div><div class='input'>
+<span class='co'>## Non-decomposable graph:</span>
+<span class='va'>G</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>7</span>, <span class='fl'>6</span>, <span class='fl'>6</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>0</span>, <span class='fl'>14</span>, <span class='fl'>15</span>, <span class='fl'>13</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>14</span>, <span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>5</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>15</span>, <span class='fl'>5</span>, <span class='fl'>0</span>, <span class='fl'>6</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>13</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/make_ring.html'>make_ring</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
+
+<span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>G</span>, <span class='va'>g</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          [,1]      [,2]      [,3]     [,4]     [,5]
+#&gt; [1,]  0.00000  5.000000 12.723425 10.37104 6.000000
+#&gt; [2,]  5.00000  0.000000 14.000000 12.72342 9.676194
+#&gt; [3,] 12.72342 14.000000  0.000000  5.00000 9.676194
+#&gt; [4,] 10.37104 12.723425  5.000000  0.00000 6.000000
+#&gt; [5,]  6.00000  9.676194  9.676194  6.00000 0.000000</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
