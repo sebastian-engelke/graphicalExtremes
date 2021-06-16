@@ -3,6 +3,7 @@ title: "Introduction to Extremal Graphical Models"
 output:
   bookdown::html_document2:
     base_format: rmarkdown::html_vignette 
+bibliography: ../inst/REFERENCES.bib
 pkgdown:
   as_is: true 
 vignette: >
@@ -126,7 +127,7 @@ For the Huesler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
   where $\Phi$ is the standard normal distribution function.
 
-  Function: Gamma2chi
+  Function: `Gamma2chi()`
 ```
 
 
@@ -139,7 +140,7 @@ It is defined ... function: emp_vario
 
 # Extremal graphical models
 
-Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. (??Here give examples of graph: tree, block, deomposable, non-decomposable) \cite{enghitz} introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
+Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. (??Here give examples of graph: tree, block, deomposable, non-decomposable) @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
 $$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
 
@@ -160,7 +161,18 @@ function: emst (extremal MST)
 
 ## Huesler--Reiss distribution
 
-Theory on graph properties of HR distributions
+In Example ?? we introduced the H\"usler--Reiss Pareto distribution $\g Y$
+as a family parametrized by the variogram matri $\Gamma$. Using the linear transformation ??, we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. ?? showed that for any $k\in V$ this precision matrix contain the conditional independence structure of $Y$, since for $i,j\in V$ with $i\neq j$,
+  \begin{align*}
+    Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
+    \begin{cases}
+       \Theta^{(k)}_{ij}= 0,  &\text{ if } i,j \neq k,\\
+       \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, & \text{ if } i = k,j \neq k.
+    \end{cases} 
+  \end{align*}
+This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros 
+
+
 
 ### $\Gamma$ transformation
 
@@ -179,3 +191,5 @@ For decomposable graphs...
 ### Eglasso
 
 function: eglasso
+
+# References
