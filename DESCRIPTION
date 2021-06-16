@@ -25,7 +25,8 @@ Suggests:
     knitr,
     rmarkdown,
     dplyr,
-    ggplot2
+    ggplot2,
+    bookdown
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Imports: 
