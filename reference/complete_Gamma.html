@@ -42,10 +42,7 @@
 <meta property="og:title" content="Completion of Gamma matrices — complete_Gamma" />
 <meta property="og:description" content="Given a graph and Gamma matrix specified (at least) on the
 edges of graph, returns the full Gamma matrix implied
-by the conditional independencies.
-If graph is decomposable, Gamma only needs to be specified on
-the edges of the graph, otherwise it needs to be fully specified and a
-valid Gamma matrix (without any graphical structure, though)." />
+by the conditional independencies." />
 
 
 
@@ -119,10 +116,7 @@ valid Gamma matrix (without any graphical structure, though)." />
     <div class="ref-description">
     <p>Given a <code>graph</code> and <code>Gamma</code> matrix specified (at least) on the
 edges of <code>graph</code>, returns the full <code>Gamma</code> matrix implied
-by the conditional independencies.
-If <code>graph</code> is decomposable, <code>Gamma</code> only needs to be specified on
-the edges of the graph, otherwise it needs to be fully specified and a
-valid <code>Gamma</code> matrix (without any graphical structure, though).</p>
+by the conditional independencies.</p>
     </div>
 
     <pre class="usage"><span class='fu'>complete_Gamma</span><span class='op'>(</span><span class='va'>Gamma</span>, graph <span class='op'>=</span> <span class='cn'>NULL</span>, allowed_graph_type <span class='op'>=</span> <span class='st'>"general"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -141,6 +135,12 @@ The <code>graph</code> must be a connected, undirected graph.
 Can also be implied by <code>NA</code> entries in <code>Gamma</code> if decomposable.</p></td>
     </tr>
     <tr>
+      <th>allowed_graph_type</th>
+      <td><p>Is passed as <code>graph_type</code> to <code><a href='check_graph.html'>check_graph()</a></code>.
+Can be used to throw an error if <code>graph</code> is not of the specified type,
+but does not have any influence on the completion algorithm.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Further arguments passed to <code>complete_gamma_general()</code> if <code>graph</code>
 is not decomposable</p></td>
@@ -152,7 +152,13 @@ is not decomposable</p></td>
     <p>Completed \(d \times d\) <code>Gamma</code> matrix.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
+    <p>If <code>graph</code> is decomposable, <code>Gamma</code> only needs to be specified on
+the edges of the graph and the graph structure can be implied by setting
+the remaining entries to <code>NA</code>.</p>
+<p>If <code>graph</code> is not decomposable, the algorithm requires a fully specified
+variogram matrix <code>Gamma</code> and the graph structure needs to be explicitly
+provided in <code>graph</code>.</p>
+<p>For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
 distribution within the cliques of the <code>graph</code>, the remaining entries are implied
 by the conditional independence properties. For details see Engelke and Hitz (2020)
 .</p>
