@@ -12,10 +12,10 @@ reference:
   desc: Description for these functions
   contents:
   - emp_chi
-  - emp_chi_mat
   - emp_vario
   - fmpareto_graph_HR
-  - mst_HR
+  - emp_chi_multdim
+  - emst
 
 - title: Completion
   contents:

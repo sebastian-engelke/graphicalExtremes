@@ -122,8 +122,6 @@ for (i in 1:7) {
 
 # Run tests
 test_that("complete_Gamma works", {
-  expect_error(complete_Gamma(Gamma1, non_decomposable))
-  expect_error(complete_Gamma(Gamma2, non_block))
   expect_warning(complete_Gamma(Gamma3, igraph::as.directed(block)))
   expect_error(complete_Gamma(Gamma3, empty_graph))
   expect_error(complete_Gamma(Gamma3_wrong, block))
