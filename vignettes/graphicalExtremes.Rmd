@@ -126,7 +126,7 @@ Zsim <- rmstable(n = 100, model = "logistic", d = 2, par = theta)
 
 The extremal correlation $\chi_{ij}\in [0,1]$ measures the dependence between the largest values of the random variables $X_i$ and $X_j$. It is defined as
 \begin{equation}\label{EC}
-  \chi_{ij} := \lim_{p\to 1} \chi_{ij}(p) := \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
+  \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
 \end{equation}
 where the boundary cases $0$ and $1$ correspond to asymptotic independence and complete dependence, respectively. 
 
@@ -146,9 +146,7 @@ chi_hat <- emp_chi(data = Y)
 ::: {.example}
 For the Huesler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
-  where $\Phi$ is the standard normal distribution function.
-
-  Function: `Gamma2chi()`
+  where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
 :::
 
 
@@ -193,6 +191,8 @@ Gamma_hat = emp_vario(data = X, p = 0.8)
 Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. (??Here give examples of graph: tree, block, deomposable, non-decomposable) @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
 $$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
+
+If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
 ## Trees
 
@@ -254,10 +254,20 @@ my_tree <- igraph::graph_from_adjacency_matrix(
 Gamma_vec <- c(.5, 1.4, .8)
 
 my_data <- rmpareto_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
-#my_fit <- fmpareto_graph_HR(my_data,
-#  graph = my_graph,
-#  p = NULL
-#)
+my_fit <- fmpareto_graph_HR(my_data,
+  graph = my_tree,
+  p = NULL
+)
+
+
+danube_mst <- emst(data = X, p = .8, method = "vario")
+danube_fit <- fmpareto_graph_HR(data = X,
+  graph = danube_mst$tree,
+  p = .8
+)
+
+plot(Gamma2chi(danube_fit$Gamma), Gamma2chi(Gamma_hat), xlab = "Fitted", ylab = "Empirical")
+abline(a = 0, b = 1)
 
 
 ```
@@ -359,6 +369,21 @@ c(NA, NA, 5, 6, 0)
 complete_Gamma(G)
 ```
 
+For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
+
+
+```{r, fig.align='center'}
+G <- rbind(
+c(0, 5, 7, 6, 6),
+c(5, 0, 14, 15, 13),
+c(7, 14, 0, 5, 5),
+c(6, 15, 5, 0, 6),
+c(6, 13, 5, 6, 0)
+)
+g <- igraph::make_ring(5)
+
+complete_Gamma(G, g)
+```
 
 ### Simulation
 rmpareto
@@ -367,7 +392,17 @@ rmpareto
 Obsolete since discussed in the Section 2.2??
 
 ### Estimation
-function: fmpareto_graph_HR
+
+Let us first suppose that a connected graph $G$ is given. For some data set, the function `fmpareto_graph_HR()` fits a Huesler--Reiss graphical model on the graph $G$.
+
+If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full $\Gamma$ matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
+Combining the clique estimates relies on the same principle as in the `complete_Gamma()` function, but with some care required to ensure that the $\Gamma_{ij}$ estimates are consistent if $(i,j)$ belongs to a separator set between two or more cliques. 
+
+?? Example of river?
+
+If the graph $G$ is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of $G$ using the function `complete_Gamma()`.
+
+
 
 ### Eglasso
 
