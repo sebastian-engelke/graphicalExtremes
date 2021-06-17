@@ -4,6 +4,8 @@ output:
   bookdown::html_document2:
     base_format: rmarkdown::html_vignette 
 bibliography: ../inst/REFERENCES.bib
+toc:
+  depth: 2
 pkgdown:
   as_is: true 
 vignette: >
@@ -107,15 +109,14 @@ extremes.
 
 
 We can simulate from MPDs and the corresponding max-stable distribution using the function `rmpareto()` and `rmstable()`, respectively.
+!!!
 
 ```{r, fig.align='center'}
 G <-  cbind(c(0,1.5), c(1.5,0))
 Ysim <- rmpareto(n = 100, model = "HR", d = 2, par = G)
-Zsim <- rmstable(n = 100, model = "HR", d = 2, par = G)
 
 theta <- .5
 Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
-Zsim <- rmstable(n = 100, model = "logistic", d = 2, par = theta)
 
 
 ```
@@ -206,31 +207,30 @@ where $\lambda_{ij}$ are the bivariate marginals of the exponent measure density
 
 For extremal graphical models on trees, the extremal variograms $\Gamma^{(k)}$, $k \in V$, are very natural since they define a so-called additive tree metric, that is,  
 \begin{equation}
-\Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(m)}_{st}. (\#eq:treemetric)
+\Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(k)}_{st}, (\#eq:treemetric)
 \end{equation}
+where $\text{ph}(ij)$ denotes the path between node $i$ and $j$ on the tree $T$. 
+
 
 ### Simulation
 
 By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Huesler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Huesler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
 
 The functions `rmpareto_tree()` and `rmstable_tree()` generate samples from extremal tree models and the corresponding max-stable distributions.
+!!!
 
-```{r, fig.align='center'}
-my_tree <- igraph::graph_from_adjacency_matrix(rbind(
-  c(0, 1, 0, 0),
-  c(1, 0, 1, 1),
-  c(0, 1, 0, 0),
-  c(0, 1, 0, 0)
-),
-mode = "undirected"
-)
-Gamma_vec <- c(.5, 1.4, .8)
-Ysim <- rmpareto_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
-Zsim <- rmstable_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
+```{r}
+set.seed(42)
+
+my_model <- generate_random_model(d = 4, graph_type = "tree")
+Ysim <- rmpareto_tree(n=100, model = "HR", 
+                      tree = my_model$graph,
+                      par = my_model$Gamma)
 
 theta_vec <- c(.2, .8, .3)
-Ysim <- rmpareto_tree(n=100, "logistic", tree = my_tree, par = theta_vec)
-Zsim <- rmstable_tree(n=100, "logistic", tree = my_tree, par = theta_vec)
+Ysim <- rmpareto_tree(n=100, model = "logistic", 
+                      tree = my_model$graph, 
+                      par = theta_vec)
 
 ```
 
@@ -241,33 +241,19 @@ For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \t
 
 If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Huesler--Reiss model on that tree. (??mention vario or ML estimation) (?? put example of Danube)
 
-```{r, fig.align='center'}
-my_tree <- igraph::graph_from_adjacency_matrix(
-  rbind(
-    c(0, 1, 0, 0),
-    c(1, 0, 1, 1),
-    c(0, 1, 0, 0),
-    c(0, 1, 0, 0)
-  ),
-  mode = "undirected"
-)
-Gamma_vec <- c(.5, 1.4, .8)
-
-my_data <- rmpareto_tree(n=100, "HR", tree = my_tree, par = Gamma_vec)
-my_fit <- fmpareto_graph_HR(my_data,
-  graph = my_tree,
-  p = NULL
-)
+```{r}
+# !!! move up
+danube_flow <- igraph::graph_from_edgelist(danube$flow_connections)
 
 
-danube_mst <- emst(data = X, p = .8, method = "vario")
-danube_fit <- fmpareto_graph_HR(data = X,
-  graph = danube_mst$tree,
-  p = .8
-)
+danube_tree <- igraph::as.undirected(danube_flow)
+my_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
 
-plot(Gamma2chi(danube_fit$Gamma), Gamma2chi(Gamma_hat), xlab = "Fitted", ylab = "Empirical")
-abline(a = 0, b = 1)
+ggplot() +
+  geom_point(aes(x = Gamma2chi(my_fit$Gamma), y = Gamma2chi(Gamma_hat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
 
 
 ```
@@ -293,7 +279,8 @@ The function `emst()` estimates the extremal tree structure by a minimum spannig
 
 
 ```{r, fig.align='center'}
-#mst_HR(data = X, p = .8)
+my_fit <- emst(data = X, p = .8, method = "vario")
+plot(my_fit$tree, layout = danube$coords_to_plot)
 ```
 
 
@@ -317,6 +304,11 @@ This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missin
 
 While the Huesler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$ and $\Theta^{(k)}$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` (to program) are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an igraph object (?? be more precise) and plots it.
 
+```{r}
+options(scipen = 10^6, digits = 3)
+```
+
+
 ```{r, fig.align='center'}
 Gamma <- cbind(
   c(0, 1.5, 1.5, 2),
@@ -324,8 +316,8 @@ Gamma <- cbind(
   c(1.5, 2, 0, 1.5),
   c(2, 1.5, 1.5, 0)
 )
-round(Gamma2Sigma(Gamma, k = 1),3)
-round(Gamma2Theta(Gamma),3)
+Gamma2Sigma(Gamma, k = 1)
+Gamma2Theta(Gamma)
 my_graph <- Gamma2graph(Gamma)
 
 ```
@@ -342,17 +334,11 @@ The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E
 from the additive tree metric property \@ref(eq:treemetric).
 
 ```{r, fig.align='center'}
-my_tree <- igraph::graph_from_adjacency_matrix(
-  rbind(
-    c(0, 1, 0, 0),
-    c(1, 0, 1, 1),
-    c(0, 1, 0, 0),
-    c(0, 1, 0, 0)
-  ),
-  mode = "undirected"
-)
+set.seed(42)
+my_tree <- generate_random_model(d = 4, graph_type = "tree")$graph
 Gamma_vec <- c(.5, 1.4, .8)
 complete_Gamma(Gamma = Gamma_vec, graph = my_tree)
+plot(my_tree)
 ```
 
 This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. The graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
@@ -365,14 +351,15 @@ c(7, 14, 0, 5, 5),
 c(6, 15, 5, 0, 6),
 c(NA, NA, 5, 6, 0)
 )
-
-complete_Gamma(G)
+complete_Gamma(Gamma = G)
+Gamma2graph(complete_Gamma(G))
 ```
 
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
 
 
 ```{r, fig.align='center'}
+set.seed(42)
 G <- rbind(
 c(0, 5, 7, 6, 6),
 c(5, 0, 14, 15, 13),
@@ -380,16 +367,11 @@ c(7, 14, 0, 5, 5),
 c(6, 15, 5, 0, 6),
 c(6, 13, 5, 6, 0)
 )
-g <- igraph::make_ring(5)
-
-complete_Gamma(G, g)
+my_graph <- generate_random_model(d = 5, graph_type = "general", m = 5)$graph
+complete_Gamma(Gamma = G, graph = my_graph)
+plot(my_graph)
 ```
 
-### Simulation
-rmpareto
-
-
-Obsolete since discussed in the Section 2.2??
 
 ### Estimation
 
