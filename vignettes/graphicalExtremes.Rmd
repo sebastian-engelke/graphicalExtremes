@@ -213,7 +213,7 @@ For extremal graphical models on trees, the extremal variograms $\Gamma^{(k)}$, 
 
 ### Simulation
 
-By reprensetation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Huesler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Huesler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
+By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Huesler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Huesler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
 
 The functions `rmpareto_tree()` and `rmstable_tree()` generate samples from extremal tree models and the corresponding max-stable distributions.
 
