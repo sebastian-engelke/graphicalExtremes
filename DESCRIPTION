@@ -37,9 +37,6 @@ Imports:
     Rdpack,
     stats (>= 3.6.0),
     grDevices (>= 3.6.0),
-    doFuture,
-    future,
-    foreach,
     utils,
     corpcor
 URL: https://github.com/sebastian-engelke/graphicalExtremes

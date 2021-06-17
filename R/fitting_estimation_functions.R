@@ -427,6 +427,8 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' components below the threshold. By default, \code{cens = FALSE}.
 #' @param init Numeric vector. Initial parameter values in the optimization. If
 #' \code{graph} is given, then the entries should correspond to the edges of the \code{graph}.
+#' @param fixParams Numeric vector. Indices of the parameter vectors that are kept
+#' fixed during the optimization. Default is `integer(0)`.
 #' @param maxit Positive integer. The maximum number of iterations in the
 #' optimization.
 #' @param graph Graph object from \code{igraph} package or \code{NULL}.
@@ -438,7 +440,8 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' @return List consisting of:
 #' \itemize{
 #' \item \code{convergence}: Logical. Indicates whether the optimization converged or not.
-#' \item \code{par}: Numeric vector. Optimized parameters.
+#' \item \code{par}: Numeric vector. Optimized parameters and fixed parameters.
+#' \item \code{par_opt}: Numeric. Optimized parameters.
 #' \item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
 #' matrix.
 #' \item \code{nllik}: Numeric. Optimized value of the negative log-likelihood function.
@@ -472,7 +475,7 @@ fmpareto_HR <- function(data,
 
   # convert vector of fixed parameters to logical if necessary
   if(!is.logical(fixParams)){
-    fixParams <- (1:d) %in% fixParams
+    fixParams <- seq_along(init) %in% fixParams
   }
 
   # negative log likelihood function
@@ -660,7 +663,41 @@ fmpareto_HR <- function(data,
 #' @references
 #'  \insertAllCited{}
 #' @export
-fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL) {
+fmpareto_graph_HR <- function(data, graph, p = NULL, method = c("ML", "vario"),
+                              cens = FALSE){
+
+  # Check arguments
+  method <- match.arg(method)
+
+  # Check graph
+  d <- ncol(data)
+  graph <- check_graph(graph, nVertices = d)
+
+  # Infer graph type
+  is_decomp <- igraph::is.chordal(graph)
+
+  if (is_decomp$chordal) {
+
+    max_clique <- 2 #!!!
+
+    if (max_clique > 3) {
+      method <- "vario"
+      warning(paste0("The maximal clique size is larger than 3.",
+      " Forced to use empirical variogram."), call. = FALSE)
+    }
+
+    if (method == "ML") {
+      fmpareto_graph_HR_decomposable(data, graph, p, cens)
+    } else {
+      fmpareto_graph_HR_general(data, graph, p) #!!! to optimize
+    }
+
+  } else {
+    fmpareto_graph_HR_general(data, graph, p)
+  }
+}
+
+fmpareto_graph_HR_add_edges <- function(data, graph, p = NULL, cens = FALSE, edges_to_add = NULL) {
 
   # set up main variables
   d <- igraph::vcount(graph)
@@ -860,6 +897,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, cens = FALSE, edges_to_add 
 
   return(list(graph = set_graph_parameters(graph), Gamma = Ghat[[1]]))
 }
+
 
 
 #' Fitting extremal minimum spanning tree
