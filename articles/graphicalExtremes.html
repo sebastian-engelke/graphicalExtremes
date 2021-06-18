@@ -173,14 +173,14 @@ strength of dependence between the <span class="math inline">\(i\)</span>th and 
 Brown–Resnick processes <span class="citation">(Kabluchko, Schlather, and Haan 2009)</span>, which are widely used models for spatial
 extremes.</p>
 </div>
-<p>We can simulate from MPDs and the corresponding max-stable distribution using the function <code><a href="../reference/rmpareto.html">rmpareto()</a></code> and <code><a href="../reference/rmstable.html">rmstable()</a></code>, respectively.
-!!!</p>
+<p>The function <code><a href="../reference/rmpareto_tree.html">rmpareto_tree()</a></code> generates samples from a MPD <span class="math inline">\(\mathbf{Y}\)</span> based on the exact algorithm described in <span class="citation">Engelke and Hitz (2020)</span>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">G</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span>
 
 <span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">.5</span>
 <span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></code></pre></div>
+<p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable_tree.html">rmstable_tree()</a></code>, following the exact algorithm in <span class="citation">Dombry, Engelke, and Oesting (2016)</span>.</p>
 </div>
 <div id="measures-of-extremal-dependence" class="section level2">
 <h2 class="hasAnchor">
@@ -236,7 +236,7 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 <div id="extremal-graphical-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#extremal-graphical-models" class="anchor"></a><span class="header-section-number">4</span> Extremal graphical models</h1>
-<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. (??Here give examples of graph: tree, block, deomposable, non-decomposable) <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MTPs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
+<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MTPs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
 <span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.\]</span>
 that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
 <p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a Hammersley–Clifford theorem stating that for an extr emal graphical model on a decomposable graph <span class="math inline">\(G\)</span>, the density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes into the marginal density on the cliques.</p>
@@ -458,6 +458,9 @@ Combining the clique estimates relies on the same principle as in the <code><a h
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
+<div id="ref-dom2016">
+<p>Dombry, C., S. Engelke, and M. Oesting. 2016. “Exact Simulation of Max-Stable Processes.” <em>Biometrika</em> 103: 303–17.</p>
+</div>
 <div id="ref-eng2019">
 <p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p>
 </div>
