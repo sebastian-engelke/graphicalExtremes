@@ -1,0 +1,42 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usepackage{mytikzstyles}
+
+\usepackage{subcaption}
+
+
+\begin{document}
+\pagestyle{empty}
+\begin{figure}[h]  
+\centering 
+\begin{tikzpicture}
+      \node[nodeObs] (n1) {$Y_2$}; 
+      \node[nodeObs] (n2) [right of = n1, xshift=1em]  {$Y_1$};
+      \node[nodeObs] (n3) [above right of = n2, xshift=1em]  {$Y_3$};
+      \node[nodeObs] (n4) [below right of = n2, xshift=1em] {$Y_4$};
+      \foreach \from/\to in {n1/n2,n2/n3,n2/n4}
+      \draw[edgeObs](\from) -- (\to);
+    \end{tikzpicture}
+    \quad
+       \begin{tikzpicture}
+      \node[nodeObs] (n1) {$Y_2$}; 
+      \node[nodeObs] (n2) [right of = n1, xshift=1em]  {$Y_1$};
+      \node[nodeObs] (n3) [above right of = n2, xshift=1em]  {$Y_3$};
+      \node[nodeObs] (n4) [below right of = n2, xshift=1em] {$Y_4$};
+      \foreach \from/\to in {n1/n2,n2/n3,n2/n4,n3/n4}
+      \draw[edgeObs](\from) -- (\to);
+    \end{tikzpicture}
+    \quad      
+    \begin{tikzpicture}
+      [auto=left,every node/.style={circle,fill=blue!20}]
+      \node[nodeObs] (n1)  {$Y_1$};
+      \node[nodeObs] (n2) [right of = n1, xshift=1em]  {$Y_2$};
+      \node[nodeObs] (n3) [below of = n1, yshift=-1em]  {$Y_3$};
+      \node[nodeObs] (n4) [right of = n3, xshift=1em]  {$Y_4$};
+      \foreach \from/\to in {n1/n2,n1/n3,n3/n4,n2/n4}
+      \draw[edgeObs] (\from) -- (\to);
+    \end{tikzpicture}
+\end{figure}
+
+\end{document}

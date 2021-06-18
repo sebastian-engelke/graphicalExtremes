@@ -216,7 +216,13 @@ Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edg
 $$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
 
-If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
+If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extr emal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
+
+```{r, echo = FALSE, fig.align='center'}
+# All defaults
+knitr::include_graphics("images/graphs.png")
+```
+
 
 ## Trees
 

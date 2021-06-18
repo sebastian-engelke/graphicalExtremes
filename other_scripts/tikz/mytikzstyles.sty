@@ -1,0 +1,76 @@
+\ProvidesPackage{./tikz/style/mytikzstyles}[2018/09/17]
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.markings}
+
+%% Define colors
+\definecolor{TolBrightBlue}{HTML}{4477AA}
+\definecolor{TolBrightRed}{HTML}{EE6677}
+\definecolor{TolBrightGreen}{HTML}{228833}
+\definecolor{TolBrightYellow}{HTML}{CCBB44}
+\definecolor{TolBrightCyan}{HTML}{66CCEE}
+\definecolor{TolBrightPurple}{HTML}{AA3377}
+\definecolor{TolBrightGrey}{HTML}{BBBBBB}
+
+%% Bigger dot
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\newcommand\bigdots{\bigcdot\bigcdot\bigcdot}
+\makeatother
+
+
+%% Graph
+% Nodes and edges in causal graphs
+\tikzstyle{nodeObs} = [circle, draw = TolBrightBlue, fill = TolBrightBlue!40, thick,
+                        inner sep = 0pt, minimum size = 6mm]
+\tikzstyle{nodeOther} = [circle, draw = TolBrightGrey, fill = TolBrightGrey!40, thick,
+                        inner sep = 0pt, minimum size = 6mm]
+\tikzstyle{nodeConf} = [circle, draw = TolBrightGrey, fill = TolBrightGrey!40, thick, dashed,
+                        inner sep = 0pt, minimum size = 6mm]
+\tikzstyle{nodeSet} =   [cloud, fill = green!20, cloud puffs=16.7, minimum width = 1.3cm]
+\tikzstyle{nodedSep} =  [rectangle, fill = purple!20, thick,
+                        inner sep = 0pt, minimum size = 6mm]
+\tikzstyle{nodeEmpty} =  [circle, inner sep = 0pt, minimum size = 3mm, outer sep = 0pt]
+\tikzstyle{nodePoster} = [circle, draw = TolBrightBlue, fill = TolBrightBlue!40, thick,
+                        inner sep = 0pt, minimum size = 12mm]
+
+\tikzstyle{edgeObs}  = [shorten <= 1pt, >=stealth, semithick]
+\tikzstyle{dirPath} = [shorten <= 1pt, >=stealth, semithick, dashed]
+\tikzstyle{edgeConf} = [shorten <= 1pt, >=stealth, semithick, dashed]
+\tikzstyle{edgePoster} = [decoration={markings,mark=at position 1 with {\arrow[scale=2,>=stealth, ultra thick]{>}}},postaction={decorate}]
+
+%% Matrix
+% Define square brace
+\tikzset{
+    ncbar angle/.initial=90,
+    ncbar/.style={
+        to path=(\tikztostart)
+        -- ($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)
+        -- ($(\tikztotarget)!($(\tikztostart)!#1!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztotarget)$)!\pgfkeysvalueof{/tikz/ncbar angle}:(\tikztostart)$)
+        -- (\tikztotarget)
+    },
+    ncbar/.default=0.5cm,
+}
+
+\tikzset{square right brace/.style={ncbar=0.1cm}}
+\tikzset{square left brace/.style={ncbar=-0.1cm}}
+
+% Define coloured entries
+\newcommand{\colorEntry}[3]{
+%input: reference color size
+\node (#1) [circle, draw = #2!50, fill = #2!20, thick, anchor = center, inner sep = 0pt, outer sep = 1pt, minimum size = #3]{};
+}
+
+% Define null entries
+\newcommand{\nullEntry}[3]{
+%input: reference color size.out
+\node (#1) [circle, draw = white, fill = white, thick, anchor = center, inner sep = 0pt, outer sep = 1pt, minimum size = #3]{};
+\node [circle, draw = #2!50, fill = #2!20, thick, anchor = center, inner sep = 0pt, outer sep = 1pt, minimum size = #3/2]{};
+}
+
+% Define text entries
+\newcommand{\textEntry}[2]{
+%input: reference text
+\node (#1) [circle, draw = white, fill = white, anchor = center, inner sep = 0pt, outer sep = 20pt, minimum size = 0pt, scale = 0.5]{#2};
+}
