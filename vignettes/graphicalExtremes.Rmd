@@ -33,6 +33,21 @@ library(dplyr)
 library(ggplot2)
 ```
 
+# Installation
+
+<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
+
+<!-- ``` r -->
+<!-- install.packages("graphicalExtremes") -->
+<!-- ``` -->
+
+Make sure to install the _development_ version of graphicalExtremes from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("sebastian-engelke/graphicalExtremes")
+```
+
 # Data
 
 ```{r, fig.show='hold', out.width="50%"}
@@ -437,8 +452,8 @@ ggplot() +
 
 
 
-### Eglasso
+<!-- ### Eglasso -->
 
-function: eglasso
+<!-- function: eglasso -->
 
 # References
