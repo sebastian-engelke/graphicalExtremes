@@ -255,7 +255,8 @@ ggplot() +
   geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(Gamma_hat)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
-  ylab("Empirical")
+  ylab("Empirical") +
+  ylim(c(0.4, 1))
 
 
 ```
@@ -410,7 +411,8 @@ ggplot() +
   geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
-  ylab("True")
+  ylab("True") +
+  ylim(c(0.35, 1))
 ```
 
 
@@ -428,7 +430,8 @@ ggplot() +
   geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
-  ylab("True")
+  ylab("True") +
+  ylim(c(0.5, 1))
 ```
 
 
