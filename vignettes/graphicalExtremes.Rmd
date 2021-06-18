@@ -38,7 +38,7 @@ library(ggplot2)
 ```{r, fig.show='hold', out.width="50%"}
 danube = graphicalExtremes::danube
 
-X = danube$DataEvents
+X = danube$data
   
 ggplot(X %>% as_tibble()) +
   geom_point(aes(x = X1, y = X2))
@@ -47,9 +47,9 @@ ggplot(X %>% as_tibble()) +
 
 ```
 
-```{r, fig.align='center', echo=FALSE, fig.width=10}
-danube_flow <- igraph::graph_from_edgelist(danube$flow_connections)
-plot(danube_flow, layout = danube$coords_to_plot, edge.arrow.size=.2)
+```{r, fig.align='center', fig.width=10, out.width="150%}
+danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
+plot(danube_flow, layout = danube$coords_to_plot, edge.arrow.size=.3)
 ```
 
 
@@ -144,7 +144,7 @@ For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can 
 chi_hat <- emp_chi(data = X, p = .8)
 ```
 
-In this function, and in all subsequent functions, if the variable `p = NULL` then the data is already expected to be on MPD scale, and no thresholding is performed. For the `danube` data, we may therefore directly use $\g Y$ instead of $\g X$:
+In this function, and in all subsequent functions, if the variable `p = NULL` then the data is already expected to be on MPD scale, and no thresholding is performed. For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
 chi_hat <- emp_chi(data = Y) 
@@ -245,7 +245,7 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a H&uuml;sler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube` data set and compare the the fitted with the empirical extremal coefficients.
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a H&uuml;sler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
 
 ```{r, fig.align='center'}
 danube_tree <- igraph::as.undirected(danube_flow)
