@@ -881,7 +881,7 @@ fmpareto_graph_HR_add_edges <- function(data, graph, p = NULL, cens = FALSE, edg
         l <- l + 1
         graph.cur[[l]] <-
           igraph::add_edges(graph = graph.cur[[l - 1]], edges = edges_to_add[add.idx, ])
-        graph.cur[[l]] <- set_graph_parameters(graph.cur[[l]])
+        graph.cur[[l]] <- graph.cur[[l]]
         Ghat[[l]] <- Ghat.tmp[[add.idx]]
         AIC <- c(AIC, AIC.tmp[add.idx])
         edges_added <- rbind(edges_added, t(as.matrix(edges_to_add[add.idx, ])))
@@ -895,7 +895,7 @@ fmpareto_graph_HR_add_edges <- function(data, graph, p = NULL, cens = FALSE, edg
     ))
   }
 
-  return(list(graph = set_graph_parameters(graph), Gamma = Ghat[[1]]))
+  return(list(graph = graph, Gamma = Ghat[[1]]))
 }
 
 
@@ -990,7 +990,7 @@ emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
   )
 
   # Set graphical parameters
-  mst.tree <- set_graph_parameters(mst.tree)
+  mst.tree <- mst.tree
 
   # Return tree and completed Gamma
   return(list(
@@ -1057,7 +1057,7 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
   )
 
   # set graphical parameters
-  mst.tree <- set_graph_parameters(mst.tree)
+  mst.tree <- mst.tree
 
   # Estimated Gamma
   est_Gamma <- par2Gamma(bivLLH["par", ])

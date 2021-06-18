@@ -43,7 +43,6 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
     mode = "undirected"
   )
 
-  graph <- set_graph_parameters(graph)
   if (to_plot) {
     igraph::plot.igraph(graph, ...)
   }
@@ -255,7 +254,7 @@ Gamma2Theta <- function(Gamma, k=NULL) {
 }
 
 #' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
-#' 
+#'
 #' @export
 Theta2Gamma <- function(Theta, k=NULL) {
   if(is.null(k)){
