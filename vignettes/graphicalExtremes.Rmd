@@ -144,7 +144,7 @@ For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can 
 chi_hat <- emp_chi(data = X, p = .8)
 ```
 
-In this function, and in all subsequent functions, if the variable `p = NULL` (?? is this correct or other syntax) then the data is already expected to be on MPD scale, and no thresholding is performed. For the Danube date, we may therefore directly use $\g Y$ instead of $\g X$:
+In this function, and in all subsequent functions, if the variable `p = NULL` then the data is already expected to be on MPD scale, and no thresholding is performed. For the `danube` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
 chi_hat <- emp_chi(data = Y) 
@@ -189,6 +189,7 @@ $$ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.$$
 In this case it makes sense to estimate the extremal variogram $\hat \Gamma$ as the average of the estimators $\hat \Gamma^{(k)}$:
 ```{r}
 Gamma_hat = emp_vario(data = X, p = 0.8)
+Gamma_hat = emp_vario(data = Y)
 ```
 
 
@@ -204,9 +205,7 @@ If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connecte
 
 ## Trees
 
-A tree $T = (V,E)$ is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly $|E| = d-1$ edges. For instance, the river data can be visualised as a tree with and edges between two stations if water is flowing from one station to the other without passing through another station (?? include igraph plot, we should add the coordinates and flow-connections of the stations so that they can be plotted easily).
-
-The Hammersley--Clifford theorem shown in @eng2019 yields that the density of an extremal tree model $\g Y$ on the tree $T= (V,E)$ factorizes into 
+A tree $T = (V,E)$ is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly $|E| = d-1$ edges. The Hammersley--Clifford theorem shown in @eng2019 yields that the density of an extremal tree model $\g Y$ on the tree $T= (V,E)$ factorizes into 
 \begin{equation}
   f_{\g Y}(\g y) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  (\#eq:treedens)
 \end{equation}
@@ -223,8 +222,7 @@ where $\text{ph}(ij)$ denotes the path between node $i$ and $j$ on the tree $T$.
 
 By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate H&uuml;sler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again H&uuml;sler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
 
-The functions `rmpareto_tree()` and `rmstable_tree()` generate samples from extremal tree models and the corresponding max-stable distributions.
-!!!
+The function `rmpareto_tree()` generates samples from an extremal tree model $\g Y$.
 
 ```{r}
 set.seed(42)
@@ -241,20 +239,20 @@ Ysim <- rmpareto_tree(n=100, model = "logistic",
 
 ```
 
+Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable_tree()`.
 
 ### Estimation
 
-For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
+For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a H&uuml;sler--Reiss model on that tree. (??mention vario or ML estimation) (?? put example of Danube)
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a H&uuml;sler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube` data set and compare the the fitted with the empirical extremal coefficients.
 
 ```{r, fig.align='center'}
-
 danube_tree <- igraph::as.undirected(danube_flow)
 my_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
 
 ggplot() +
-  geom_point(aes(x = Gamma2chi(my_fit$Gamma), y = Gamma2chi(Gamma_hat))) +
+  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(Gamma_hat)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical")
@@ -270,16 +268,16 @@ In practice, the underlying conditonal independence tree $T = (V,E)$ is usually 
 
 The method is based on the notion of a minimum spanning tree. For a set of symmetric weights $\rho_{ij} > 0$ associated with any pair of nodes $i,j\in V$, $i\neq j$, the latter is defined as the tree structure
 \begin{align}\label{Tmin}
-  T_{\MST} = \argmin_{T = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
+  T_{\MST} = \argmin_{T' = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
 \end{align}
 that minimizes the sum of distances on that tree.
 
 @eng2020 showed that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
 
-In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation. @eng2020 further show that $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, however the performance is typically inferior to extremal variogram based algorithms.
+In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empircal extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
 
 
-The function `emst()` estimates the extremal tree structure by a minimum spannign tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
+The function `emst()` estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
 
 
 ```{r, fig.align='center'}
@@ -302,11 +300,20 @@ is parametrized by the variogram matrix $\Gamma$. Using the linear transformatio
   \end{equation*}
 This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros on the off-diagonal and zero row sums. 
 
+Note that the matrices $\Theta^{(k)}$ are $(d-1)\times(d-1)$ dimensional. To combine all these precision matrices for $k\in V$, we may in fact a positive semi-definite precision matrix $\Theta \in \mathbb R^{d\times d}$ as
+\begin{equation*}
+ \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j,
+\end{equation*}
+which contains all extremal conditional independencies as zeros on the off-diagonal:
+  \begin{equation*}
+    Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
+       \Theta_{ij}= 0,  \quad i,j \in V.
+\end{equation*}
 
 
 ### Transformations
 
-While the H&uuml;sler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$ and $\Theta^{(k)}$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` (to program) are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an igraph object (?? be more precise) and plots it.
+While the H&uuml;sler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$, $\Theta^{(k)}$ and $\Theta$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an igraph object (?? be more precise) and plots it.
 
 ```{r, eval=FALSE}
 Gamma <- cbind(
@@ -338,7 +345,7 @@ my_graph <- Gamma2graph(Gamma)
 
 ### Completion of $\Gamma$
 
-For H&uuml;sler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ and all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implicitely implied by the graph structure. 
+For H&uuml;sler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implicitely implied by the graph structure. 
 
 The function `complete_Gamma()` takes as an input the partially specified $\Gamma$ matrix and the corresponding graph structure $G$, and completes the $\Gamma$ matrix. The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
 
@@ -353,7 +360,7 @@ complete_Gamma(Gamma = Gamma_vec, graph = my_tree)
 plot(my_tree)
 ```
 
-This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. The graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
+This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
 
 ```{r, fig.align='center'}
 G <- rbind(
@@ -364,7 +371,7 @@ c(6, 15, 5, 0, 6),
 c(NA, NA, 5, 6, 0)
 )
 complete_Gamma(Gamma = G)
-Gamma2graph(complete_Gamma(G))
+my_graph <- Gamma2graph(complete_Gamma(G))
 ```
 
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
@@ -392,9 +399,38 @@ Let us first suppose that a connected graph $G$ is given. For some data set, the
 If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full $\Gamma$ matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
 Combining the clique estimates relies on the same principle as in the `complete_Gamma()` function, but with some care required to ensure that the $\Gamma_{ij}$ estimates are consistent if $(i,j)$ belongs to a separator set between two or more cliques. 
 
-?? Example of river?
+```{r, fig.align='center'}
+set.seed(42)
+d <- 10
+my_model <- generate_random_model(d = d, graph_type = "decomposable")
+plot(my_model$graph)
+Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
+my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "ML")
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("True")
+```
+
 
 If the graph $G$ is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of $G$ using the function `complete_Gamma()`.
+
+
+```{r, fig.align='center'}
+set.seed(42)
+d <- 20
+my_model <- generate_random_model(d = d, graph_type = "general")
+plot(my_model$graph)
+Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
+my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "vario")
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("True")
+```
+
 
 
 
