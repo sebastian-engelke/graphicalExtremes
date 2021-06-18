@@ -47,7 +47,7 @@ ggplot(X %>% as_tibble()) +
 
 ```
 
-```{r, fig.align='center', fig.width=10, out.width="150%}
+```{r, fig.align='center', fig.width=10}
 danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
 plot(danube_flow, layout = danube$coords_to_plot, edge.arrow.size=.3)
 ```
