@@ -129,9 +129,8 @@ Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
 :::
 
+The function `rmpareto_tree()` generates samples from a MPD $\g Y$ based on the exact algorithm described in @eng2019.
 
-We can simulate from MPDs and the corresponding max-stable distribution using the function `rmpareto()` and `rmstable()`, respectively.
-!!!
 
 ```{r, fig.align='center'}
 G <-  cbind(c(0,1.5), c(1.5,0))
@@ -142,6 +141,9 @@ Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
 
 
 ```
+
+Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable_tree()`, following the exact algorithm in @dom2016.
+
 
 ## Measures of extremal dependence
 
@@ -212,7 +214,7 @@ Gamma_hat = emp_vario(data = Y)
 
 # Extremal graphical models
 
-Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. (??Here give examples of graph: tree, block, deomposable, non-decomposable) @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
+Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
 $$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
 
