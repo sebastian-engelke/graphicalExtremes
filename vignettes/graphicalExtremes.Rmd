@@ -62,7 +62,7 @@ ggplot(X %>% as_tibble()) +
 
 ```
 
-```{r, fig.align='center', fig.width=5, fig.height=5}
+```{r, fig.align='center'}
 danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
 plot(danube_flow, layout = danube$coords_to_plot, 
      edge.arrow.size=.3)
@@ -221,7 +221,7 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extr emal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
-```{r, echo = FALSE, fig.align='center'}
+```{r, echo = FALSE, fig.align='center', out.width="50%"}
 # All defaults
 knitr::include_graphics("images/graphs.png")
 ```
@@ -280,7 +280,7 @@ ggplot() +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical") +
-  ylim(c(0.4, 1))
+  coord_cartesian(ylim = c(0.4, 1))
 
 
 ```
@@ -436,7 +436,7 @@ ggplot() +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("True") +
-  ylim(c(0.35, 1))
+  coord_cartesian(ylim = c(0.35, 1))
 ```
 
 
@@ -455,7 +455,7 @@ ggplot() +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("True") +
-  ylim(c(0.5, 1))
+  coord_cartesian(ylim = c(0.5, 1))
 ```
 
 
