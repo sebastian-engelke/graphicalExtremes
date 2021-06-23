@@ -470,3 +470,15 @@ test_that("emst works", {
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 })
+
+test_that("loglik_HR works", {
+  d <- 3
+  v_idx <- c(2, 4, 1)
+  Gamma_small_block <- Gamma3_completed[v_idx, v_idx]
+  data <- rmpareto(1e3, "HR", d = d, Gamma_small_block)
+
+  expect_named(
+    loglik_HR(data, graph = block, Gamma = Gamma_small_block, cens = FALSE),
+    c("loglik", "aic", "bic")
+  )
+})

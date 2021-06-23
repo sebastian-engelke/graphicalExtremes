@@ -1070,7 +1070,6 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
 }
 
 
-
 ml_weight_matrix <- function(data, cens){
   ## numeric_matrix boolean -> list
   ## produce a named list made of
@@ -1128,4 +1127,53 @@ ml_weight_matrix <- function(data, cens){
     llh_hr = bivLLH.mat,
     est_gamma = est_gamma
   ))
+}
+
+#' Compute Huesler--Reiss log-likelihood
+#'
+#' Computes Huesler--Reiss log-likelihood, AIC, and BIC values.
+#'
+#' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
+#' observations following a multivariate HR Pareto distribution.
+#'
+#' @param graph An [igraph::graph] object. The `graph` must be undirected and
+#' connected
+#'
+#' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
+#' It represents a variogram matrix \eqn{\Gamma}.
+#'
+#' @param cens Boolean. If true, then censored log-likelihood is computed.
+#' By default, \code{cens = FALSE}.
+#'
+#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
+#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
+#' to standardize the \code{data}.
+#'
+#' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated
+#' log-likelihood, AIC, and BIC values.
+#'
+loglik_HR <- function(data, p = NULL, graph, Gamma, cens){
+
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
+  loglik <- logLH_HR(
+    data = data.std,
+    Gamma = Gamma,
+    cens = cens
+  )
+
+  n <- nrow(data)
+  n_edges <-  igraph::ecount(graph)
+
+  aic <- 2 * n_edges - 2 * loglik
+
+  bic <- log(n) * n_edges - 2 * loglik
+
+  c("loglik" = loglik, "aic" = aic, "bic" = bic)
+
 }
