@@ -1,3 +1,4 @@
+library(graphicalExtremes)
 library(tidyverse)
 
 # Function definition
@@ -75,8 +76,8 @@ airlines <- read_csv("other_scripts/data/flights_data/airlines.csv")
 # Constansts
 n_flights_large <- 1.5e5
 n_flights_small <- 5e3
-distance <- 1500
-large_airports_vec <- c("LAX", "ORD") #c("DFW", "LAX", "ORD")
+distance <- 400
+large_airports_vec <- c("DFW", "LAX", "ORD")
 
 # Select airports
 airports2 <- df %>%
@@ -143,21 +144,22 @@ ggplot() +
              alpha = .1, curvature = 0) +
   theme_bw()
 
-# Compute Gamma
+
+# Minimum Spanning Tree
 dat <- df %>%
-  filter(AIRLINE == airline,
-         ORIGIN_AIRPORT %in% airports_nodes$AIRPORT,
-         DESTINATION_AIRPORT %in% airports_nodes$AIRPORT) %>%
-  mutate(DELAY = if_else(ARRIVAL_DELAY < 0, 0, ARRIVAL_DELAY)) %>%
+  # mutate(DELAY = if_else(ARRIVAL_DELAY < 0, 0, ARRIVAL_DELAY)) %>%
+  mutate(DELAY = ARRIVAL_DELAY) %>%
   group_by(DAY, MONTH, ORIGIN_AIRPORT) %>%
   summarise(SUM_DELAY = sum(DELAY)) %>%
   replace_na(list(SUM_DELAY = 0)) %>%
+  filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) %>%
   ungroup()
 
 mat <- dat %>%
   pivot_wider(id_cols = c("DAY", "MONTH"),
               names_from = ORIGIN_AIRPORT,
-              values_from = SUM_DELAY)
+              values_from = SUM_DELAY) %>%
+  select(-MONTH, -DAY)
 
 
 my_fit <- emst(data = mat, p = .8, method = "vario")
@@ -178,11 +180,11 @@ ggplot() +
   geom_polygon(data = map_data("usa"),
                aes(x = long, y = lat, group = group), color = "grey65",
                fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = airports_nodes,
+  geom_point(data = selected_airports,
              aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
              alpha = 1) +
   geom_curve(data = flights_connections_est,
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .5, curvature = 0) +
+             alpha = .1, curvature = 0) +
   theme_bw()
