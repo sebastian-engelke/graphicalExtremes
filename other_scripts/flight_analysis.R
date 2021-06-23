@@ -1,5 +1,6 @@
 library(graphicalExtremes)
 library(tidyverse)
+library(glasso)
 
 # Function definition
 haversine_dist <- function(lat1, lon1, lat2, lon2){
@@ -66,7 +67,44 @@ is_within <- function(lat1_list, lon1_list, lat2_list, lon2_list, d){
 #           large_airports$LATITUDE, large_airports$LONGITUDE,
 #           100)
 
+eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205), ret.graph=FALSE,
+                    eps=.5, reg_method = c("mb", "glasso", "ct", "tiger")){
+  r <- length(rholist)
+  d <- ncol(Gamma)
+  null.vote <- array(0, dim=c(d, d, length(rholist))) # votes for EXCLUDING the edge
+  for(k in 1:d){
+    Sk <- cov2cor(Gamma2Sigma(Gamma=Gamma, k=k))
+    ###### Added regularization
+    # Tk <- solve(Sk)
+    # Tk.reg <- Tk + diag(rep(eps, nrow(Tk)))
+    # Sk.reg <- solve(Tk.reg)
+    # Ck <- Sk.reg #cov2cor(Sk.reg)
 
+    ###### Same regularization, but does not require Sk to be invertible
+    tmp <- solve(diag(ncol(Sk)) + eps*Sk)
+    Ck <- tmp %*% Sk
+
+    ###### Using "glasso" package
+    approx <- (reg_method == "mb")
+    if(reg_method != "glasso" && reg_method != "mb") warning(paste("Method", reg_method, "not implemended in glasso. Regular glasso was used instead."))
+    invisible(capture.output(gl.tmp <- glassopath(Ck, rholist = rholist, approx=approx))) #penalize.diagonal = FALSE
+    null.vote[-k,-k, ] <-  null.vote[-k,-k,] + (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
+
+    # ###### Using "huge" package
+    # gl.tmp <- huge(Ck, lambda = rholist, method=reg_method, scr=T, verbose=F)$path
+    # null.vote[-k,-k, ] <- null.vote[-k,-k,] + 1 - array(unlist(lapply(gl.tmp, function(M) as.matrix(M))), c(d-1, d-1, r))  ## change back to == 0 .. <=1e-4
+
+  }
+  adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
+  if(ret.graph){
+    graph <- list()
+    for(j in 1:r)
+      graph[[j]] <- graph_from_adjacency_matrix(adj.est[,,j], mode="undirected", diag=FALSE)
+    return(graph)
+  }
+  else
+    return(adj.est)
+}
 
 # Import data
 df <- read_csv("other_scripts/data/flights_data/flights.csv")
@@ -145,7 +183,7 @@ ggplot() +
   theme_bw()
 
 
-# Minimum Spanning Tree
+# Set up matrix
 dat <- df %>%
   # mutate(DELAY = if_else(ARRIVAL_DELAY < 0, 0, ARRIVAL_DELAY)) %>%
   mutate(DELAY = ARRIVAL_DELAY) %>%
@@ -162,6 +200,7 @@ mat <- dat %>%
   select(-MONTH, -DAY)
 
 
+# Minimum spanning tree
 my_fit <- emst(data = mat, p = .8, method = "vario")
 igraph::V(my_fit$tree)$name <- names(mat)
 
@@ -174,6 +213,36 @@ flights_connections_est <- igraph::get.edgelist(my_fit$tree) %>%
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
 
+
+# Plot estimated map
+ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = selected_airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = flights_connections_est,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest),
+             alpha = .1, curvature = 0) +
+  theme_bw()
+
+
+# Glasso
+Gamma <- emp_vario(mat %>% as.matrix(), p = .8)
+adj_mat <- eglasso(Gamma, )
+est_graph <- igraph::graph_from_adjacency_matrix(adj_mat[, , 1])
+igraph::V(est_graph)$name <- names(mat)
+
+flights_connections_est <- igraph::get.edgelist(est_graph) %>%
+  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
+  left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
+  left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
+            suffix = c(".origin", ".dest")) %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+         LATITUDE.origin, LONGITUDE.origin,
+         LATITUDE.dest, LONGITUDE.dest)
 
 # Plot estimated map
 ggplot() +
