@@ -1129,9 +1129,9 @@ ml_weight_matrix <- function(data, cens){
   ))
 }
 
-#' Compute Huesler--Reiss log-likelihood
+#' Compute Huesler--Reiss log-likelihood, AIC, and BIC
 #'
-#' Computes Huesler--Reiss log-likelihood, AIC, and BIC values.
+#' Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.
 #'
 #' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
 #' observations following a multivariate HR Pareto distribution.
@@ -1153,6 +1153,7 @@ ml_weight_matrix <- function(data, cens){
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated
 #' log-likelihood, AIC, and BIC values.
 #'
+#' @export
 loglik_HR <- function(data, p = NULL, graph, Gamma, cens){
 
   if (!is.null(p)) {
@@ -1176,4 +1177,84 @@ loglik_HR <- function(data, p = NULL, graph, Gamma, cens){
 
   c("loglik" = loglik, "aic" = aic, "bic" = bic)
 
+}
+
+#' Fitting extremal graphical lasso
+#'
+#' Fits an extremal minimum spanning tree
+#'
+#' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
+#' It represents a variogram matrix \eqn{\Gamma}.
+#'
+#' @param rholist Numeric vector of non-negative regularization parameters
+#' for the lasso. For details see [glasso::glassopath].
+#'
+#' @param reg_method One of `"mb"` and `"glasso"`.
+#' Default is `reg_method = "mb"`.
+#'
+#' @param eps Regularizatoin parameter for covariance matrix.
+#'
+#'
+#' @return List with as many elements as entries in `rholist`. Each element of
+#' the list contains:
+#' \describe{
+#'   \item{`rho`}{The penalty coefficient.}
+#'   \item{`graph`}{An [igraph::graph] object representing the fitted graph.}
+#'   \item{`Gamma`}{A numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+#' corresponding to the fitted graph.}
+#' }
+#'
+#'
+#' @export
+eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205),
+                    reg_method =  c("mb", "glasso"),
+                    eps=.5){
+
+  # Check args
+  reg_method <- match.arg(reg_method)
+
+  # Set main variables
+  r <- length(rholist)
+  d <- ncol(Gamma)
+  null.vote <- array(
+    0,
+    dim=c(d, d, length(rholist))) # votes for EXCLUDING the edge
+
+  for(k in 1:d){
+    Sk <- stats::cov2cor(Gamma2Sigma(Gamma=Gamma, k=k))
+    ###### Same regularization, but does not require Sk to be invertible
+    tmp <- solve(diag(ncol(Sk)) + eps*Sk)
+    Ck <- tmp %*% Sk
+
+    ###### Using "glasso" package
+    approx <- (reg_method == "mb")
+    if(reg_method != "glasso" && reg_method != "mb") {
+      warning(paste(
+        "Method",
+        reg_method,
+        "not implemended in glasso. Regular glasso was used instead."),
+        call. = FALSE)
+    }
+
+    invisible(utils::capture.output(
+      gl.tmp <- glasso::glassopath(Ck, rholist = rholist, approx=approx)))
+    null.vote[-k,-k, ] <-  null.vote[-k,-k,] + (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
+
+  }
+  adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
+
+  output <- list()
+  for(j in 1:r) {
+    rho <- rholist[j]
+    est_graph <- igraph::graph_from_adjacency_matrix(adj.est[,,j],
+                                         mode="undirected",
+                                         diag=FALSE)
+    Gamma <- 0 # !!! cannot complete disconnected graph!
+    #complete_Gamma(graph = est_graph, Gamma = Gamma)
+
+    output[[j]] <- list(rho = rho, graph = est_graph, Gamma = Gamma)
+
+  }
+
+  return(output)
 }
