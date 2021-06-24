@@ -9,7 +9,7 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
-\item{k}{Integer between \code{1} (the default value) and \code{d}.
+\item{k}{NULL or Integer between \code{1} (the default value) and \code{d}.
 Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.}
 
 \item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
@@ -18,7 +18,7 @@ By default, \code{full = FALSE}.}
 }
 \value{
 Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-\code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+\code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE} or \code{k = NULL}.
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a
@@ -34,6 +34,11 @@ with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^{(k)
 is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 This is the inverse of function of \code{\link{Sigma2Gamma}}.
+
+If \code{k = NULL}, the following matrix is produced:
+\eqn{(I - D)(-1/2 \Gamma)(I - D)}
+with \eqn{I} being the d-dimensional identity matrix and \eqn{D} being the \eqn{d \times d}{d x d}
+matrix with all entries identical \eqn{1/d}.
 }
 \examples{
 Gamma <- cbind(

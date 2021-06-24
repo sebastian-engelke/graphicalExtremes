@@ -135,15 +135,9 @@ data2mpareto <- function(data, p) {
 Sigma2Gamma <- function(S, k = 1, full = FALSE) {
   # complete S
   if (!full) {
-    d <- NROW(S)
-    S_full <- rbind(rep(0, d + 1), cbind(rep(0, d), S))
-
-    shuffle <- 1:(d + 1)
-    shuffle[shuffle <= k] <- shuffle[shuffle <= k] - 1
-    shuffle[1] <- k
-    shuffle <- order(shuffle)
-
-    S_full <- S_full[shuffle, shuffle]
+    d <- NROW(S) + 1
+    S_full <- matrix(0, d, d)
+    S_full[-k ,-k] <- S
   } else {
     S_full <- S
   }
@@ -165,7 +159,7 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE) {
 #'
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
-#' @param k Integer between \code{1} (the default value) and \code{d}.
+#' @param k NULL or Integer between \code{1} (the default value) and \code{d}.
 #' Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.
 #' @param full Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' are included and the function returns a \eqn{d \times d}{d x d} matrix.
@@ -181,9 +175,14 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE) {
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
 #' that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 #' This is the inverse of function of \code{\link{Sigma2Gamma}}.
+#' 
+#' If `k = NULL`, the following matrix is produced:
+#' \eqn{(I - D)(-1/2 \Gamma)(I - D)}
+#' with \eqn{I} being the d-dimensional identity matrix and \eqn{D} being the \eqn{d \times d}{d x d}
+#' matrix with all entries identical \eqn{1/d}.
 #'
 #' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-#' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+#' \code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE} or `k = NULL`.
 #'
 #' @examples
 #' Gamma <- cbind(
@@ -199,7 +198,11 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE) {
 #' @export
 Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
   d <- ncol(Gamma)
-  if (full) {
+  if(is.null(k)){
+    I <- diag(d)
+    D <- matrix(1/d, d, d)
+    (I - D) %*% (-1/2 * Gamma) %*% (I - D)
+  } else if (full) {
     1 / 2 * (matrix(rep(Gamma[, k], d), ncol = d, nrow = d) +
       t(matrix(rep(Gamma[, k], d), ncol = d, nrow = d)) - Gamma)
   } else {
