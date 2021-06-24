@@ -482,3 +482,43 @@ test_that("loglik_HR works", {
     c("loglik", "aic", "bic")
   )
 })
+
+
+test_that("eglasso works", {
+  d <- 4
+  my_model <- generate_random_model(d = d)
+  data <- rmpareto(1e3, "HR", d = d, my_model$Gamma)
+
+  eglasso(my_model$Gamma, rholist = c(1, 2))
+  eglasso(my_model$Gamma, rholist = c(.0001, 2))
+  # !!! continue from here
+  eglasso(my_model$Gamma, rholist = c(.03))
+
+  res <- emst(data = data, p = NULL, cens = FALSE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- emst(data = data, p = 0.95, cens = FALSE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- emst(data = data, p = NULL, cens = TRUE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+
+  res <- emst(data = data, p = 0.95, cens = TRUE)
+  expect_length(res, 2)
+  expect_equal(class(res$tree), "igraph")
+  expect_equal(res$Gamma, t(res$Gamma))
+  expect_equal(all(!is.na(res$Gamma)), TRUE)
+  expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
+})

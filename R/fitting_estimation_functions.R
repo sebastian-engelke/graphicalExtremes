@@ -58,7 +58,8 @@ eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205),
 
     invisible(utils::capture.output(
       gl.tmp <- glasso::glassopath(Ck, rholist = rholist, approx=approx)))
-    null.vote[-k,-k, ] <-  null.vote[-k,-k,] + (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
+    null.vote[-k,-k, ] <-  null.vote[-k,-k, , drop = FALSE] +
+      (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
 
   }
   adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
@@ -69,8 +70,16 @@ eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205),
     est_graph <- igraph::graph_from_adjacency_matrix(adj.est[,,j],
                                                      mode="undirected",
                                                      diag=FALSE)
-    Gamma <- 0 # !!! cannot complete disconnected graph!
-    #complete_Gamma(graph = est_graph, Gamma = Gamma)
+    Gamma <- tryCatch({
+      complete_Gamma(graph = est_graph, Gamma = Gamma)
+    },
+    error = function(e){
+      if (e$message == "The given graph is not connected."){
+        NA
+      } else {
+        stop(e)
+      }
+    })
 
     output[[j]] <- list(rho = rho, graph = est_graph, Gamma = Gamma)
 
