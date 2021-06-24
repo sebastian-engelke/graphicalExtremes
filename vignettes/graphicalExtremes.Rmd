@@ -338,7 +338,7 @@ which contains all extremal conditional independencies as zeros on the off-diago
 
 ### Transformations
 
-While the H&uuml;sler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$, $\Theta^{(k)}$ and $\Theta$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an igraph object (?? be more precise) and plots it.
+While the H&uuml;sler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$, $\Theta^{(k)}$ and $\Theta$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an `igraph::graph()` object and plots it.
 
 ```{r, eval=FALSE}
 Gamma <- cbind(
