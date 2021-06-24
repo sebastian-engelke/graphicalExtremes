@@ -4,7 +4,7 @@
 \alias{Theta2Gamma}
 \title{Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix}
 \usage{
-Theta2Gamma(Theta)
+Theta2Gamma(Theta, k = NULL)
 }
 \description{
 Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix

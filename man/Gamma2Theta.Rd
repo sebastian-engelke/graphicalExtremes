@@ -4,7 +4,7 @@
 \alias{Gamma2Theta}
 \title{Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix}
 \usage{
-Gamma2Theta(Gamma)
+Gamma2Theta(Gamma, k = NULL)
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
