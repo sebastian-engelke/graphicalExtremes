@@ -333,7 +333,7 @@ which contains all extremal conditional independencies as zeros on the off-diago
 <div id="transformations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#transformations" class="anchor"></a><span class="header-section-number">4.2.1</span> Transformations</h3>
-<p>While the Hüsler–Reiss distribution is parameterized by the variogram matrix <span class="math inline">\(\Gamma\)</span>, other objects such as <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta^{(k)}\)</span> and <span class="math inline">\(\Theta\)</span> are often required, for instance, to identify the extremal graphical structure. The functions <code><a href="../reference/Gamma2Sigma.html">Gamma2Sigma()</a></code>, <code><a href="../reference/Sigma2Gamma.html">Sigma2Gamma()</a></code>, <code><a href="../reference/Gamma2Theta.html">Gamma2Theta()</a></code> and <code><a href="../reference/Theta2Gamma.html">Theta2Gamma()</a></code> are often useful. Note that all of these function are bijections. The function <code><a href="../reference/Gamma2graph.html">Gamma2graph()</a></code> creates an igraph object (?? be more precise) and plots it.</p>
+<p>While the Hüsler–Reiss distribution is parameterized by the variogram matrix <span class="math inline">\(\Gamma\)</span>, other objects such as <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta^{(k)}\)</span> and <span class="math inline">\(\Theta\)</span> are often required, for instance, to identify the extremal graphical structure. The functions <code><a href="../reference/Gamma2Sigma.html">Gamma2Sigma()</a></code>, <code><a href="../reference/Sigma2Gamma.html">Sigma2Gamma()</a></code>, <code><a href="../reference/Gamma2Theta.html">Gamma2Theta()</a></code> and <code><a href="../reference/Theta2Gamma.html">Theta2Gamma()</a></code> are often useful. Note that all of these function are bijections. The function <code><a href="../reference/Gamma2graph.html">Gamma2graph()</a></code> creates an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html">igraph::graph()</a></code> object and plots it.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span>,
@@ -466,7 +466,7 @@ Combining the clique estimates relies on the same principle as in the <code><a h
 <p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p>
 </div>
 <div id="ref-eng2020">
-<p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.”</p>
+<p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.” <a href="https://arxiv.org/abs/2012.06179">https://arxiv.org/abs/2012.06179</a>.</p>
 </div>
 <div id="ref-hue1989">
 <p>Hüsler, J., and R.-D. Reiss. 1989. “Maxima of Normal Random Vectors: Between Independence and Complete Dependence.” <em>Statist. Probab. Lett.</em> 7: 283–86.</p>
