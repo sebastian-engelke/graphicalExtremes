@@ -1,5 +1,3 @@
-
-
 fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
   if(any(xMax<xMin)){
     stop('Make sure that xMax>=xMin!')
