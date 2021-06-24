@@ -26,12 +26,16 @@
 #'
 #'
 #' @export
-eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205),
+eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
                     reg_method =  c("mb", "glasso"),
                     eps=0.5){
 
   # Check args
   reg_method <- match.arg(reg_method)
+  if (any(rholist < 0)) {
+    stop("The regularization parameters in `rholist` must be non-negative.",
+         call. = FALSE)
+  }
 
   # Set main variables
   r <- length(rholist)
