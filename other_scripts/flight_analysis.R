@@ -67,68 +67,31 @@ is_within <- function(lat1_list, lon1_list, lat2_list, lon2_list, d){
 #           large_airports$LATITUDE, large_airports$LONGITUDE,
 #           100)
 
-eglasso <- function(Gamma, rholist=c(0.1, 0.15, 0.19, 0.205), ret.graph=FALSE,
-                    eps=.5, reg_method = c("mb", "glasso", "ct", "tiger")){
-  r <- length(rholist)
-  d <- ncol(Gamma)
-  null.vote <- array(0, dim=c(d, d, length(rholist))) # votes for EXCLUDING the edge
-  for(k in 1:d){
-    Sk <- cov2cor(Gamma2Sigma(Gamma=Gamma, k=k))
-    ###### Added regularization
-    # Tk <- solve(Sk)
-    # Tk.reg <- Tk + diag(rep(eps, nrow(Tk)))
-    # Sk.reg <- solve(Tk.reg)
-    # Ck <- Sk.reg #cov2cor(Sk.reg)
-
-    ###### Same regularization, but does not require Sk to be invertible
-    tmp <- solve(diag(ncol(Sk)) + eps*Sk)
-    Ck <- tmp %*% Sk
-
-    ###### Using "glasso" package
-    approx <- (reg_method == "mb")
-    if(reg_method != "glasso" && reg_method != "mb") warning(paste("Method", reg_method, "not implemended in glasso. Regular glasso was used instead."))
-    invisible(capture.output(gl.tmp <- glassopath(Ck, rholist = rholist, approx=approx))) #penalize.diagonal = FALSE
-    null.vote[-k,-k, ] <-  null.vote[-k,-k,] + (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
-
-    # ###### Using "huge" package
-    # gl.tmp <- huge(Ck, lambda = rholist, method=reg_method, scr=T, verbose=F)$path
-    # null.vote[-k,-k, ] <- null.vote[-k,-k,] + 1 - array(unlist(lapply(gl.tmp, function(M) as.matrix(M))), c(d-1, d-1, r))  ## change back to == 0 .. <=1e-4
-
-  }
-  adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
-  if(ret.graph){
-    graph <- list()
-    for(j in 1:r)
-      graph[[j]] <- graph_from_adjacency_matrix(adj.est[,,j], mode="undirected", diag=FALSE)
-    return(graph)
-  }
-  else
-    return(adj.est)
-}
-
 # Import data
-df <- read_csv("other_scripts/data/flights_data/flights.csv")
+df <- read_csv("other_scripts/data/flights_data/flights_jan.csv")
 airports <- read_csv("other_scripts/data/flights_data/airports.csv")
 airlines <- read_csv("other_scripts/data/flights_data/airlines.csv")
 
 # Constansts
-n_flights_large <- 1.5e5
-n_flights_small <- 5e3
-distance <- 400
-large_airports_vec <- c("DFW", "LAX", "ORD")
+n_flights_large <- 3e4
+n_flights_small <- 10e6
+distance <- 1e4
+large_airports_vec <- c("LAX") #c("DFW", "LAX", "ORD")
 
 # Select airports
 airports2 <- df %>%
+  filter(AIRLINE == "WN") %>%
   group_by(ORIGIN_AIRPORT) %>%
   summarise(N_FLIGHTS = n()) %>%
   left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
-  drop_na()
+  drop_na() %>%
+  filter(STATE == "CA")
 
 large_airports <- airports2 %>%
   filter(N_FLIGHTS > n_flights_large)
 
 large_airports <- airports2 %>%
-  filter(ORIGIN_AIRPORT %in% large_airports_vec)
+filter(ORIGIN_AIRPORT %in% large_airports_vec)
 
 small_airports <- airports2 %>%
   filter(is_within(LATITUDE, LONGITUDE,
@@ -142,10 +105,11 @@ selected_airports <- bind_rows(
 
 # Select flights
 selected_flights <- df %>%
+  filter(AIRLINE == "WN") %>%
   filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT,
-         DESTINATION_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) %>%
-  filter(ORIGIN_AIRPORT %in% large_airports_vec | DESTINATION_AIRPORT %in%
-           large_airports_vec)
+         DESTINATION_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) # %>%
+  # filter(ORIGIN_AIRPORT %in% large_airports_vec | DESTINATION_AIRPORT %in%
+  #          large_airports_vec)
 
 
 # Edges
@@ -180,18 +144,34 @@ ggplot() +
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .1, curvature = 0) +
-  theme_bw()
+  theme_bw() +
+  xlim(c(-130, -110))
 
 
 # Set up matrix
-dat <- df %>%
+dat <- selected_flights %>%
+  filter(AIRLINE == "WN") %>%
   # mutate(DELAY = if_else(ARRIVAL_DELAY < 0, 0, ARRIVAL_DELAY)) %>%
   mutate(DELAY = ARRIVAL_DELAY) %>%
   group_by(DAY, MONTH, ORIGIN_AIRPORT) %>%
-  summarise(SUM_DELAY = sum(DELAY)) %>%
-  replace_na(list(SUM_DELAY = 0)) %>%
+  summarise(SUM_DELAY = sum(DELAY, na.rm = TRUE)) %>%
+  # replace_na(list(SUM_DELAY = 0)) %>%
   filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) %>%
   ungroup()
+
+dat %>%
+  filter(ORIGIN_AIRPORT == "ATL") %>%
+  select(DAY, MONTH, SUM_DELAY)
+
+dat %>%
+  filter(ORIGIN_AIRPORT == "ATL") %>%
+  select(SUM_DELAY) %>%
+  as.matrix() %>% hist()
+
+df %>%
+  filter(ORIGIN_AIRPORT == "ATL", MONTH == 4, DAY == 1) %>%
+  View()
+
 
 mat <- dat %>%
   pivot_wider(id_cols = c("DAY", "MONTH"),
@@ -226,13 +206,14 @@ ggplot() +
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .1, curvature = 0) +
-  theme_bw()
+  theme_bw() +
+  xlim(c(-130, -110))
 
 
 # Glasso
 Gamma <- emp_vario(mat %>% as.matrix(), p = .8)
-adj_mat <- eglasso(Gamma, )
-est_graph <- igraph::graph_from_adjacency_matrix(adj_mat[, , 1])
+my_fit <- eglasso(Gamma)
+est_graph <- my_fit[[1]]$graph
 igraph::V(est_graph)$name <- names(mat)
 
 flights_connections_est <- igraph::get.edgelist(est_graph) %>%
@@ -256,4 +237,16 @@ ggplot() +
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .1, curvature = 0) +
-  theme_bw()
+  theme_bw() +
+  xlim(c(-130, -110))
+
+
+# Scatter
+plot(mat[, c(1, 3)])
+
+# Emp chi
+emp_chi(mat %>% as.matrix(), p = .5) %>% hist(xlim=c(0, 1))
+emp_chi(mat %>% as.matrix(), p = .7) %>% hist(xlim=c(0, 1))
+emp_chi(mat %>% as.matrix(), p = .9) %>% hist(xlim=c(0, 1))
+
+evd::chiplot(mat[, c(1, 3)])
