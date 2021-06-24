@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix — Gamma2Theta • graphicalExtremes</title>
+<title>Fitting extremal graphical lasso — eglasso • graphicalExtremes</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Transformation of \(\Gamma\) matrix to \(\Theta\) matrix — Gamma2Theta" />
-<meta property="og:description" content="Transforms the Gamma matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \(\Theta\) matrix." />
+<meta property="og:title" content="Fitting extremal graphical lasso — eglasso" />
+<meta property="og:description" content="Fits an extremal minimum spanning tree" />
 
 
 
@@ -112,54 +111,58 @@ Huesler--Reiss distribution to the corresponding \(\Theta\) matrix." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/transformation_functions.R'><code>R/transformation_functions.R</code></a></small>
-    <div class="hidden name"><code>Gamma2Theta.Rd</code></div>
+    <h1>Fitting extremal graphical lasso</h1>
+    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/fitting_estimation_functions.R'><code>R/fitting_estimation_functions.R</code></a></small>
+    <div class="hidden name"><code>eglasso.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Transforms the <code>Gamma</code> matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \(\Theta\) matrix.</p>
+    <p>Fits an extremal minimum spanning tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Gamma2Theta</span><span class='op'>(</span><span class='va'>Gamma</span>, k <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>eglasso</span><span class='op'>(</span>
+  <span class='va'>Gamma</span>,
+  rholist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.15</span>, <span class='fl'>0.19</span>, <span class='fl'>0.205</span><span class='op'>)</span>,
+  reg_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mb"</span>, <span class='st'>"glasso"</span><span class='op'>)</span>,
+  eps <span class='op'>=</span> <span class='fl'>0.5</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Gamma</th>
-      <td><p>Numeric \(d \times d\) variogram matrix.</p></td>
+      <td><p>Numeric matrix \(n\times d\).
+It represents a variogram matrix \(\Gamma\).</p></td>
+    </tr>
+    <tr>
+      <th>rholist</th>
+      <td><p>Numeric vector of non-negative regularization parameters
+for the lasso. For details see <a href='https://rdrr.io/pkg/glasso/man/glassopath.html'>glasso::glassopath</a>.</p></td>
+    </tr>
+    <tr>
+      <th>reg_method</th>
+      <td><p>One of <code>"mb"</code> and <code>"glasso"</code>.
+Default is <code>reg_method = "mb"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>eps</th>
+      <td><p>Regularizatoin parameter for covariance matrix.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Numeric \(\Sigma^{(k)}\) matrix of size \((d - 1) \times (d - 1)\) if
-<code>full = FALSE</code>, and of size \(d \times d\) if <code>full = TRUE</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>List with as many elements as entries in <code>rholist</code>. Each element of
+the list contains:</p><dl>
+<dt><code>rho</code></dt><dd><p>The penalty coefficient.</p></dd>
+<dt><code>graph</code></dt><dd><p>An <a href='https://rdrr.io/pkg/igraph/man/make_graph.html'>igraph::graph</a> object representing the fitted graph.</p></dd>
+<dt><code>Gamma</code></dt><dd><p>A numeric \(d\times d\) estimated variogram matrix \(\Gamma\)
+corresponding to the fitted graph.</p></dd>
 
-    <p>Every \(d \times d\) <code>Gamma</code> matrix in the definition of a
-Huesler--Reiss distribution can be transformed into a
-\(d \times d\) \(\Theta\) matrix, which
-contains the graph structure corresponding to the Huesler--Reiss distribution
-with parameter matrix <code>Gamma</code>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+</dl>
 
-    <p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>Gamma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='Gamma2Sigma.html'>Gamma2Sigma</a></span><span class='op'>(</span><span class='va'>Gamma</span>, k <span class='op'>=</span> <span class='fl'>1</span>, full <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1] [,2] [,3]
-#&gt; [1,]  1.5  0.5    1
-#&gt; [2,]  0.5  1.5    1
-#&gt; [3,]  1.0  1.0    2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

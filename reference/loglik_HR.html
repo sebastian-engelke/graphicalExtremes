@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix — Gamma2Theta • graphicalExtremes</title>
+<title>Compute Huesler--Reiss log-likelihood, AIC, and BIC — loglik_HR • graphicalExtremes</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Transformation of \(\Gamma\) matrix to \(\Theta\) matrix — Gamma2Theta" />
-<meta property="og:description" content="Transforms the Gamma matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \(\Theta\) matrix." />
+<meta property="og:title" content="Compute Huesler--Reiss log-likelihood, AIC, and BIC — loglik_HR" />
+<meta property="og:description" content="Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values." />
 
 
 
@@ -112,54 +111,54 @@ Huesler--Reiss distribution to the corresponding \(\Theta\) matrix." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/transformation_functions.R'><code>R/transformation_functions.R</code></a></small>
-    <div class="hidden name"><code>Gamma2Theta.Rd</code></div>
+    <h1>Compute Huesler--Reiss log-likelihood, AIC, and BIC</h1>
+    <small class="dont-index">Source: <a href='https://github.com/sebastian-engelke/graphicalExtremes/blob/master/R/fitting_estimation_functions.R'><code>R/fitting_estimation_functions.R</code></a></small>
+    <div class="hidden name"><code>loglik_HR.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Transforms the <code>Gamma</code> matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \(\Theta\) matrix.</p>
+    <p>Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Gamma2Theta</span><span class='op'>(</span><span class='va'>Gamma</span>, k <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>loglik_HR</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>graph</span>, <span class='va'>Gamma</span>, <span class='va'>cens</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>data</th>
+      <td><p>Numeric matrix \(n\times d\). It contains
+observations following a multivariate HR Pareto distribution.</p></td>
+    </tr>
+    <tr>
+      <th>p</th>
+      <td><p>Numeric between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
+it is assumed that the <code>data</code> are already on multivariate Pareto scale. Else,
+<code>p</code> is used as the probability in the function <code><a href='data2mpareto.html'>data2mpareto</a></code>
+to standardize the <code>data</code>.</p></td>
+    </tr>
+    <tr>
+      <th>graph</th>
+      <td><p>An <a href='https://rdrr.io/pkg/igraph/man/make_graph.html'>igraph::graph</a> object. The <code>graph</code> must be undirected and
+connected</p></td>
+    </tr>
+    <tr>
       <th>Gamma</th>
-      <td><p>Numeric \(d \times d\) variogram matrix.</p></td>
+      <td><p>Numeric matrix \(n\times d\).
+It represents a variogram matrix \(\Gamma\).</p></td>
+    </tr>
+    <tr>
+      <th>cens</th>
+      <td><p>Boolean. If true, then censored log-likelihood is computed.
+By default, <code>cens = FALSE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Numeric \(\Sigma^{(k)}\) matrix of size \((d - 1) \times (d - 1)\) if
-<code>full = FALSE</code>, and of size \(d \times d\) if <code>full = TRUE</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>Numeric vector <code><a href='https://rdrr.io/r/base/c.html'>c("loglik"=..., "aic"=..., "bic"=...)</a></code> with the evaluated
+log-likelihood, AIC, and BIC values.</p>
 
-    <p>Every \(d \times d\) <code>Gamma</code> matrix in the definition of a
-Huesler--Reiss distribution can be transformed into a
-\(d \times d\) \(\Theta\) matrix, which
-contains the graph structure corresponding to the Huesler--Reiss distribution
-with parameter matrix <code>Gamma</code>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>There are no references for Rd macro <code>\insertAllCites</code> on this help page.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>Gamma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='Gamma2Sigma.html'>Gamma2Sigma</a></span><span class='op'>(</span><span class='va'>Gamma</span>, k <span class='op'>=</span> <span class='fl'>1</span>, full <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1] [,2] [,3]
-#&gt; [1,]  1.5  0.5    1
-#&gt; [2,]  0.5  1.5    1
-#&gt; [3,]  1.0  1.0    2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
