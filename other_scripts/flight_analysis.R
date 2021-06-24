@@ -1,6 +1,5 @@
 library(graphicalExtremes)
 library(tidyverse)
-library(glasso)
 
 # Function definition
 haversine_dist <- function(lat1, lon1, lat2, lon2){
@@ -54,62 +53,82 @@ is_within <- function(lat1_list, lon1_list, lat2_list, lon2_list, d){
     stop("lat1_list and lon1_list must have same length.", call. = FALSE)
   }
 
+  if (length(lat1_list) == 0) {
+    return(FALSE)
+  }
+
   sapply(seq_along(lat1_list), function(i){
     is_within_helper(lat1_list[i], lon1_list[i], lat2_list, lon2_list, d)
   })
 }
 
-# haversine_dist(airports$LATITUDE[1], airports$LONGITUDE[1],
-#                airports$LATITUDE[2], airports$LONGITUDE[2])
-#
-# is_within_helper(lat1, lon1, lat_list, lon_list, 100)
-# is_within(airports2$LATITUDE, airports2$LONGITUDE,
-#           large_airports$LATITUDE, large_airports$LONGITUDE,
-#           100)
+select_airports <- function(df,
+                            airline, state = NULL, n_large_airports = NULL,
+                            large_airports_vec,
+                            n_flights_small, distance){
+  ## tibble character (2x) numeric character_vector numeric numeric -> tibble
+  ## select list of airports
+  airports2 <- df %>%
+    filter(AIRLINE %in% airline) %>%
+    group_by(ORIGIN_AIRPORT) %>%
+    summarise(N_FLIGHTS = n()) %>%
+    left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
+    drop_na()
+
+    if (is.null(state)) {
+      if (is.null(n_large_airports)) {
+        large_airports <- airports2 %>%
+          filter(ORIGIN_AIRPORT %in% large_airports_vec)
+      } else {
+        large_airports <- airports2 %>%
+          slice_max(N_FLIGHTS, n = n_large_airports)
+      }
+
+
+      small_airports <- airports2 %>%
+        filter(is_within(LATITUDE, LONGITUDE,
+                         large_airports$LATITUDE, large_airports$LONGITUDE,
+                         distance)) %>%
+      filter(N_FLIGHTS < n_flights_small)
+
+      selected_airports <- bind_rows(
+        large_airports,
+        small_airports
+      ) %>%
+        distinct()
+
+    } else {
+      selected_airports <- airports2 %>%
+        filter(STATE %in% state)
+    }
+
+  return(selected_airports)
+}
 
 # Import data
-df <- read_csv("other_scripts/data/flights_data/flights_jan.csv")
+df <- read_csv("other_scripts/data/flights_data/flights.csv")
 airports <- read_csv("other_scripts/data/flights_data/airports.csv")
 airlines <- read_csv("other_scripts/data/flights_data/airlines.csv")
 
 # Constansts
-n_flights_large <- 3e4
-n_flights_small <- 10e6
-distance <- 1e4
-large_airports_vec <- c("LAX") #c("DFW", "LAX", "ORD")
+n_large_airports <- NULL
+large_airports_vec <- c("JFK", "DFW") #c("LAX", "SAN", "SFO") #c("DFW", "LAX", "ORD")
+n_flights_small <- 3e4
+distance <- 300
+airline <- "WN"
+state <- c("TX", "NY", "GA")
+
 
 # Select airports
-airports2 <- df %>%
-  filter(AIRLINE == "WN") %>%
-  group_by(ORIGIN_AIRPORT) %>%
-  summarise(N_FLIGHTS = n()) %>%
-  left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
-  drop_na() %>%
-  filter(STATE == "CA")
-
-large_airports <- airports2 %>%
-  filter(N_FLIGHTS > n_flights_large)
-
-large_airports <- airports2 %>%
-filter(ORIGIN_AIRPORT %in% large_airports_vec)
-
-small_airports <- airports2 %>%
-  filter(is_within(LATITUDE, LONGITUDE,
-                   large_airports$LATITUDE, large_airports$LONGITUDE, distance),
-         N_FLIGHTS < n_flights_small)
-
-selected_airports <- bind_rows(
-  large_airports,
-  small_airports
-)
+selected_airports <- select_airports(df, airline,
+                                     state, n_large_airports, large_airports_vec,
+                                     n_flights_small, distance)
 
 # Select flights
 selected_flights <- df %>%
-  filter(AIRLINE == "WN") %>%
+  filter(AIRLINE %in% airline) %>%
   filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT,
-         DESTINATION_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) # %>%
-  # filter(ORIGIN_AIRPORT %in% large_airports_vec | DESTINATION_AIRPORT %in%
-  #          large_airports_vec)
+         DESTINATION_AIRPORT %in% selected_airports$ORIGIN_AIRPORT)
 
 
 # Edges
@@ -143,45 +162,29 @@ ggplot() +
   geom_curve(data = flights_connections,
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .1, curvature = 0) +
-  theme_bw() +
-  xlim(c(-130, -110))
-
+             alpha = .2, curvature = 0) +
+  theme_bw()
 
 # Set up matrix
 dat <- selected_flights %>%
-  filter(AIRLINE == "WN") %>%
-  # mutate(DELAY = if_else(ARRIVAL_DELAY < 0, 0, ARRIVAL_DELAY)) %>%
   mutate(DELAY = ARRIVAL_DELAY) %>%
   group_by(DAY, MONTH, ORIGIN_AIRPORT) %>%
   summarise(SUM_DELAY = sum(DELAY, na.rm = TRUE)) %>%
-  # replace_na(list(SUM_DELAY = 0)) %>%
   filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) %>%
-  ungroup()
-
-dat %>%
-  filter(ORIGIN_AIRPORT == "ATL") %>%
-  select(DAY, MONTH, SUM_DELAY)
-
-dat %>%
-  filter(ORIGIN_AIRPORT == "ATL") %>%
-  select(SUM_DELAY) %>%
-  as.matrix() %>% hist()
-
-df %>%
-  filter(ORIGIN_AIRPORT == "ATL", MONTH == 4, DAY == 1) %>%
-  View()
-
+  ungroup() %>%
+  rename(day = DAY)
 
 mat <- dat %>%
-  pivot_wider(id_cols = c("DAY", "MONTH"),
-              names_from = ORIGIN_AIRPORT,
-              values_from = SUM_DELAY) %>%
-  select(-MONTH, -DAY)
+  pivot_wider(id_cols = c("day", "MONTH"),
+              names_from = "ORIGIN_AIRPORT",
+              values_from = "SUM_DELAY") %>%
+  select(-MONTH, -day)
+
+pairs(mat)
 
 
 # Minimum spanning tree
-my_fit <- emst(data = mat, p = .8, method = "vario")
+my_fit <- emst(data = mat, p = .7, method = "vario")
 igraph::V(my_fit$tree)$name <- names(mat)
 
 flights_connections_est <- igraph::get.edgelist(my_fit$tree) %>%
@@ -205,13 +208,12 @@ ggplot() +
   geom_curve(data = flights_connections_est,
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .1, curvature = 0) +
-  theme_bw() +
-  xlim(c(-130, -110))
+             alpha = .4, curvature = 0) +
+  theme_bw()
 
 
 # Glasso
-Gamma <- emp_vario(mat %>% as.matrix(), p = .8)
+Gamma <- emp_vario(mat %>% as.matrix(), p = .7)
 my_fit <- eglasso(Gamma)
 est_graph <- my_fit[[1]]$graph
 igraph::V(est_graph)$name <- names(mat)
@@ -236,13 +238,11 @@ ggplot() +
   geom_curve(data = flights_connections_est,
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .1, curvature = 0) +
-  theme_bw() +
-  xlim(c(-130, -110))
-
+             alpha = .4, curvature = 0) +
+  theme_bw()
 
 # Scatter
-plot(mat[, c(1, 3)])
+plot(mat[, c(4, 9)])
 
 # Emp chi
 emp_chi(mat %>% as.matrix(), p = .5) %>% hist(xlim=c(0, 1))
