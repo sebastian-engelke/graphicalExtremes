@@ -273,10 +273,10 @@ If provided with a tree and data, the function `fmpareto_graph_HR()` estimates t
 
 ```{r, fig.align='center'}
 danube_tree <- igraph::as.undirected(danube_flow)
-my_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
+danube_flow_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
 
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(Gamma_hat)))) +
+  geom_point(aes(x = c(Gamma2chi(danube_flow_fit$Gamma)), y = c(chi_hat))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical") +
@@ -306,8 +306,8 @@ The function `emst()` estimates the extremal tree structure by a minimum spannin
 
 
 ```{r, fig.align='center'}
-my_fit <- emst(data = X, p = .8, method = "vario")
-plot(my_fit$tree, layout = danube$coords_to_plot)
+danube_emst_fit <- emst(data = X, p = .8, method = "vario")
+plot(danube_emst_fit$tree, layout = danube$coords_to_plot)
 ```
 
 
@@ -459,7 +459,35 @@ ggplot() +
 ```
 
 
+### Extremal graphical lasso
 
+
+
+```{r, fig.align='center'}
+set.seed(42)
+rholist = seq(1e-5, 0.04, length.out = 20)
+my_eglasso <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
+                    eps = .5, reg_method = "glasso")
+
+my_loglik <- sapply(1:length(rholist), FUN = function(j) 
+  loglik_HR(data=X, p=.8, Gamma = my_eglasso[[j]]$Gamma, cens = FALSE, graph =  my_eglasso[[j]]$graph))
+
+na.idx <- length(rholist)
+plot(rholist[1:na.idx], my_loglik[3,], col="blue", type="b")
+
+tree_loglik_HR <- loglik_HR(data=X, p=.8, Gamma = danube_emst_fit$Gamma, cens = FALSE, graph = danube_emst_fit$tree)
+abline(h = tree_loglik_HR[3], col="blue")
+
+my_model <- my_eglasso[[which.min(my_loglik[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(my_model$Gamma)), y = c(chi_hat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical") +
+  coord_cartesian(ylim = c(0.4, 1))
+
+```
 
 <!-- ### Eglasso -->
 
