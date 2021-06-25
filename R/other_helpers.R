@@ -167,3 +167,16 @@ fast_diag <- function(y, M) {
     u %*% M %*% t(u)
   })
 }
+
+
+graphs_equal <- function(g1, g2) {
+  ## graph graph -> boolean
+  ## produce true if two graphs have same edge and node list
+
+  e1 <- igraph::as_edgelist(g1)
+  e2 <- igraph::as_edgelist(g2)
+  n1 <- igraph::V(g1)
+  n2 <- igraph::V(g2)
+
+  identical(e1, e2)
+}

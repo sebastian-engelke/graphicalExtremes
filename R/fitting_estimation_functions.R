@@ -14,21 +14,25 @@
 #' @param eps Regularization parameter for the covariance matrix.
 #' Default is `eps = 0.5`.
 #'
+#' @param complete_Gamma Whether you want to complete Gamma matrix.
+#' Default is `complete_Gamma = FALSE`.
 #'
-#' @return List with as many elements as entries in `rholist`. Each element of
-#' the list contains:
+#'
+#' @return List made of:
 #' \describe{
-#'   \item{`rho`}{The penalty coefficient.}
-#'   \item{`graph`}{An [igraph::graph] object representing the fitted graph.}
-#'   \item{`Gamma`}{A numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
-#' corresponding to the fitted graph.}
+#'   \item{`graph`}{A list of [igraph::graph] objects representing the
+#'   fitted graphs for each `rho` in `rholist`.}
+#'   \item{`Gamma`}{A list of numeric \eqn{d\times d}{d x d} estimated
+#'   variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+#'   for each `rho` in `rholist`.}
+#'   \item{`rholist`}{The list of penalty coefficients.}
 #' }
 #'
 #'
 #' @export
 eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
                     reg_method =  c("mb", "glasso"),
-                    eps=0.5){
+                    eps=0.5, complete_Gamma = FALSE){
 
   # Check args
   reg_method <- match.arg(reg_method)
@@ -68,28 +72,55 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
   }
   adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
 
-  output <- list()
+
+  graphs <- list()
+  Gammas <- list()
+  rhos <- list()
+
   for(j in 1:r) {
     rho <- rholist[j]
     est_graph <- igraph::graph_from_adjacency_matrix(adj.est[,,j],
                                                      mode="undirected",
                                                      diag=FALSE)
-    Gamma <- tryCatch({
-      complete_Gamma(graph = est_graph, Gamma = Gamma)
-    },
-    error = function(e){
-      if (e$message == "The given graph is not connected."){
-        NA
-      } else {
-        stop(e)
-      }
-    })
 
-    output[[j]] <- list(rho = rho, graph = est_graph, Gamma = Gamma)
+    if (complete_Gamma == FALSE) {
+      Gamma <- NA
+    } else {
+      Gamma <- tryCatch({
+        complete_Gamma(graph = est_graph, Gamma = Gamma)
+
+      },
+      error = function(e){
+        if (e$message == "The given graph is not connected."){
+          warning(paste0("The estimated graph for rho = ", rho,
+          " is not connected, ",
+          "so it is not possible to complete Gamma."), call. = FALSE)
+
+          NA
+
+        } else {
+          stop(e)
+        }
+      })
+
+      if (!is.na(Gamma)) {
+        completed_graph <- Gamma2graph(Gamma, to_plot = FALSE)
+
+        if (!(graphs_equal(completed_graph, est_graph))) {
+          warning(paste0("The completed Gamma for rho = ", rho,
+                         " does not match with the estimated graph."),
+                  call. = FALSE)
+        }
+      }
+    }
+
+    graphs[[j]] <- est_graph
+    Gammas[[j]] <- Gamma
+    rhos[[j]] <- rho
 
   }
 
-  return(output)
+  return(list(graph = graphs, Gamma = Gammas, rholist = rhos))
 }
 
 
@@ -117,7 +148,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{tree}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
+#' \item \code{graph}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
 #' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
 #' corresponding to the fitted minimum spanning tree.
 #' }
@@ -188,7 +219,7 @@ emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
 
   # Return tree and completed Gamma
   return(list(
-    tree = mst.tree,
+    graph = mst.tree,
     Gamma = complete_Gamma(graph = mst.tree, Gamma = estimated_gamma)
   ))
 }

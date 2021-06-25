@@ -32,3 +32,13 @@ test_that("fast_diag works", {
   M <- matrix(runif(d * d), nrow = d)
   expect_equal(fast_diag(y, M), diag(y %*% M %*% t(y)))
 })
+
+test_that("graphs_equal works", {
+  g1 <- generate_random_connected_graph(d = 5)
+  g2 <- igraph::add_edges(g1, c(1, 2, 2, 3, 2, 4))
+
+  expect_equal(graphs_equal(g1, g2), FALSE)
+  expect_equal(graphs_equal(g1, g1), TRUE)
+})
+
+

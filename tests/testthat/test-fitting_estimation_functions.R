@@ -488,11 +488,13 @@ test_that("eglasso works", {
   d <- 4
   my_model <- generate_random_model(d = d)
   data <- rmpareto(1e3, "HR", d = d, my_model$Gamma)
-
   res <- eglasso(my_model$Gamma, rholist = c(1, 200))
-  expect_length(res, 2)
-  expect_equal(class(res[[1]]$graph), "igraph")
-  expect_equal(res[[1]]$Gamma, NA)
+
+  expect_length(res, 3)
+  expect_equal(class(res$graph[[1]]), "igraph")
+  expect_equal(res$Gamma[[1]], NA)
   expect_error(eglasso(my_model$Gamma, rholist = -1))
   expect_error(eglasso(my_model$Gamma, rholist = c(2, -1)))
+  expect_warning(eglasso(my_model$Gamma, rholist = c(1, 200),
+                         complete_Gamma = TRUE))
 })
