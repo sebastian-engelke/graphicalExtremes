@@ -116,7 +116,8 @@ large_airports_vec <- c("JFK", "DFW") #c("LAX", "SAN", "SFO") #c("DFW", "LAX", "
 n_flights_small <- 3e4
 distance <- 300
 airline <- "WN"
-state <- c("TX", "GA", "NY")
+state <- c("TX", "CO", "AZ", "GA", "IL", "NM", "NV", "OK")
+state <- c("CA", "NV", "AZ", "UT", "TX")
 
 
 # Select airports
@@ -182,16 +183,17 @@ mat <- dat %>%
               values_from = "SUM_DELAY") %>%
   select(-MONTH, -day)
 
-pairs(mat)
-plot(mat$AMA, mat$LGA)
-plot(mat$DAL, type = "line")
+# pairs(mat)
+# plot(mat$AMA, mat$LGA)
+# plot(mat$DAL, type = "line")
 
 
 # Minimum spanning tree
-my_fit <- emst(data = mat, p = .7, method = "vario")
-igraph::V(my_fit$graph)$name <- names(mat)
+p <- .7
+my_fit_tree <- emst(data = mat, p = p, method = "vario")
+igraph::V(my_fit_tree$graph)$name <- names(mat)
 
-flights_connections_est <- igraph::get.edgelist(my_fit$graph) %>%
+flights_connections_est <- igraph::get.edgelist(my_fit_tree$graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
   left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
   left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
@@ -217,10 +219,10 @@ ggplot() +
 
 
 # Glasso
-Gamma <- emp_vario(mat %>% as.matrix(), p = .7)
-rholist = seq(1e-4, 0.1, length.out = 10)
-my_fit <- eglasso(Gamma, rholist = rholist, )
-est_graph <- my_fit[[5]]$graph
+Gamma <- emp_vario(mat %>% as.matrix(), p = p)
+rholist = seq(1e-4, 0.09, length.out = 10)
+my_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
+est_graph <- my_fit$graph[[6]]
 igraph::V(est_graph)$name <- names(mat)
 
 flights_connections_est <- igraph::get.edgelist(est_graph) %>%
@@ -245,6 +247,77 @@ ggplot() +
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .4, curvature = 0) +
   theme_bw()
+
+
+# BIC
+flights_loglik <- sapply(1:length(rholist), FUN = function(j)
+  loglik_HR(data=mat, p=p, Gamma = my_fit$Gamma[[j]],
+            graph =  my_fit$graph[[j]]))
+
+
+flights_loglik_tree <- loglik_HR(data=mat, p=p,
+                                 Gamma = my_fit_tree$Gamma,
+                                 graph = my_fit_tree$graph)
+
+ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
+  geom_line() +
+  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+  geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
+  xlab("rho") +
+  ylab("BIC") +
+  scale_x_continuous(
+    breaks = rholist,
+    labels = round(rholist, 3),
+    sec.axis = sec_axis(trans=~., breaks = rholist,
+                        labels = sapply(my_fit$graph, igraph::gsize),
+                        name="Number of edges")
+  )
+
+# introduce dataset + how to plot flight connections
+# emst
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(my_fit_tree$Gamma)),
+                 y = c(emp_chi(mat %>% as.matrix(), p = p)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
+
+# eglasso
+best_Gamma <- my_fit$Gamma[[which.min(flights_loglik[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)),
+                 y = c(emp_chi(mat %>% as.matrix(), p = p)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
+
+# fix flights_connections to remove duplicates
+flight_graph <- flights_connections %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
+  as.matrix() %>%
+  igraph::graph_from_edgelist(directed = FALSE) %>%
+  igraph::simplify()
+
+
+plot(flight_graph)
+# fmpareto_graph_HR: check completed Gamma agrees with given graph
+model_fit <- fmpareto_graph_HR(data = mat %>% as.matrix(),
+                               graph = flight_graph, p = p, method = "vario")
+
+
+loglik_HR(data = mat %>% as.matrix(), p = p, graph = flight_graph,
+          Gamma = model_fit$Gamma)
+
+igraph::gsize(flight_graph)
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(model_fit$Gamma)),
+                 y = c(emp_chi(mat %>% as.matrix(), p = p)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
+
 
 # Scatter
 plot(mat[, c(4, 9)])

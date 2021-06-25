@@ -525,7 +525,8 @@ ggplot() +
 
 ## Trees
 ```{r}
-flights_emst_fit <- emst(data = flights$data, p = .8, method = "vario")
+p <- .7
+flights_emst_fit <- emst(data = flights$data, p = p, method = "vario")
 igraph::V(flights_emst_fit$graph)$name <- names(flights$data)
 
 flights_connections_est <- igraph::get.edgelist(flights_emst_fit$graph) %>%
@@ -554,10 +555,10 @@ ggplot() +
 ```
 ## General graphs
 ```{r}
-Gamma <- emp_vario(flights$data %>% as.matrix(), p = .7)
-rholist = seq(1e-4, 0.1, length.out = 10)
+Gamma <- emp_vario(flights$data %>% as.matrix(), p = p)
+rholist = seq(1e-4, 0.12, length.out = 20)
 flights_eglasso_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
-est_graph <- flights_eglasso_fit$graph[[5]]
+est_graph <- flights_eglasso_fit$graph[[19]]
 igraph::V(est_graph)$name <- names(flights$data)
 
 flights_connections_est <- igraph::get.edgelist(est_graph) %>%
@@ -585,19 +586,20 @@ ggplot() +
 ```
 ```{r}
 flights_loglik <- sapply(1:length(rholist), FUN = function(j) 
-  loglik_HR(data=flights$data, p=.7, Gamma = flights_eglasso_fit$Gamma[[j]], 
+  loglik_HR(data=flights$data, p=p, Gamma = flights_eglasso_fit$Gamma[[j]], 
             graph =  flights_eglasso_fit$graph[[j]]))
 
 
-flights_loglik_tree <- loglik_HR(data=flights$data, p=.7, Gamma = flights_emst_fit$Gamma,
-                                graph = flights_emst_fit$graph)
+flights_loglik_tree <- loglik_HR(data=flights$data, p=p, 
+                                 Gamma = flights_emst_fit$Gamma,
+                                 graph = flights_emst_fit$graph)
 
 ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
   geom_line() +
   geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
   geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
   xlab("rho") +
-  ylab("Loglik") +
+  ylab("BIC") +
   scale_x_continuous(
     breaks = rholist,
     labels = round(rholist, 3),
@@ -610,11 +612,37 @@ ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
 best_Gamma <- flights_eglasso_fit$Gamma[[which.min(flights_loglik[3,])]]
 
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(emp_chi(flights$data %>%  as.matrix(), p = .7)))) +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)), 
+                 y = c(emp_chi(flights$data %>% as.matrix(), p = p)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical")
 ```
+1. Introduce dataset and how to plot connections.
+
+### Part A
+1. Fit an extremal tree model, choosing threshold `p = 0.7`.
+2. Plot the tree on the US map and interpret the results.
+3. Compute BIC values of fitted tree model.
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
+5. Take the `flight_connection` (!!! change) graph and fit a HR graphical model on it.
+6. Repeat steps 3., 4..
+7. If you see some "outliers" in plot from Part 4 from the `flight_connection` graph, can you provide explanation?
+
+### Part B
+1. Fit an extremal graphical lasso model, choosing threshold `p = 0.7`. Choose `rholist = seq(1e-4, 0.09, length.out = 10)`.
+2. Plot the tree on the US map for different values of `rho` and interpret the results.
+3. Compute BIC graph for different values of `rho`.
+3b. Another way to choose best `rho` is to compute `loglik` on test data (!!! if you have more data).
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
+5. Provide `Gamma` matrix using different methods
+  * `emp_vario`
+  * `emp_vario`, fix some`k = 1`
+  * `chi` -> `Gamma`
+  * `ML`using `ml_weight_matrix`
+fit `eglasso` and plot the different BIC curves.
+
+# !!! ask Leo about Zoom rooms
 
 
 # References
