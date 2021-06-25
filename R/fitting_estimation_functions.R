@@ -49,7 +49,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
     dim=c(d, d, length(rholist))) # votes for EXCLUDING the edge
 
   for(k in 1:d){
-    Sk <- stats::cov2cor(Gamma2Sigma(Gamma=Gamma, k=k))
+    Sk <- Gamma2Sigma(Gamma=Gamma, k=k) #stats::cov2cor(Gamma2Sigma(Gamma=Gamma, k=k)) #Not normalizing seems slighlty more stable
     ###### Same regularization, but does not require Sk to be invertible
     tmp <- solve(diag(ncol(Sk)) + eps*Sk)
     Ck <- tmp %*% Sk
@@ -67,7 +67,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
     invisible(utils::capture.output(
       gl.tmp <- glasso::glassopath(Ck, rholist = rholist, approx=approx)))
     null.vote[-k,-k, ] <-  null.vote[-k,-k, , drop = FALSE] +
-      (abs(gl.tmp$wi)==0)  ## change back to == 0 .. <=1e-4
+      (abs(gl.tmp$wi)<=1e-10)  ## change back to == 0 .. <=1e-4
 
   }
   adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
