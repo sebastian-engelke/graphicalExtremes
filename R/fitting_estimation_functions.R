@@ -92,9 +92,9 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
       },
       error = function(e){
         if (e$message == "The given graph is not connected."){
-          warning(paste0("The estimated graph for rho = ", rho,
+          warning(paste0("The estimated graph for rho = ", round(rho, 3),
           " is not connected, ",
-          "so it is not possible to complete Gamma."), call. = FALSE)
+          "so it is not possible to complete Gamma.\n"), call. = FALSE)
 
           NA
 
@@ -108,7 +108,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 
         if (!(graphs_equal(completed_graph, est_graph))) {
           warning(paste0("The completed Gamma for rho = ", round(rho, 3),
-                         " does not match with the estimated graph."),
+                         " does not match the estimated graph.\n"),
                   call. = FALSE)
         }
       }

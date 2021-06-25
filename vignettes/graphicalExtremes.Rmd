@@ -31,6 +31,15 @@ knitr::opts_chunk$set(
 library(graphicalExtremes)
 library(dplyr)
 library(ggplot2)
+theme_set(theme_bw() +
+            theme(plot.background = element_blank(),
+                  legend.background = element_blank(),
+                  strip.background = element_rect(fill = "white"),
+                  plot.caption=element_text(size=7.5, hjust=0, 
+                                            margin=margin(t=15)),
+                  text = element_text(size = 11),
+                  axis.ticks = element_blank(),
+                  panel.grid.major = element_line(size = 0.25)))
 ```
 
 # Installation
@@ -307,7 +316,7 @@ The function `emst()` estimates the extremal tree structure by a minimum spannin
 
 ```{r, fig.align='center'}
 danube_emst_fit <- emst(data = X, p = .8, method = "vario")
-plot(danube_emst_fit$tree, layout = danube$coords_to_plot)
+plot(danube_emst_fit$graph, layout = danube$coords_to_plot)
 ```
 
 
@@ -462,35 +471,54 @@ ggplot() +
 ### Extremal graphical lasso
 
 
-
-```{r, fig.align='center'}
+```{r, fig.align='center', warning=FALSE}
 set.seed(42)
-rholist = seq(1e-5, 0.04, length.out = 20) # !!! update list
+rholist = seq(1e-5, 0.04, length.out = 10)
 danube_eglasso_fit <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
-                    eps = .5, reg_method = "glasso")
+                    eps = .5, reg_method = "glasso", complete_Gamma = TRUE)
 
 danube_loglik <- sapply(1:length(rholist), FUN = function(j) 
-  loglik_HR(data=X, p=.8, Gamma = danube_eglasso_fit[[j]]$Gamma, 
-            graph =  danube_eglasso_fit[[j]]$graph))
+  loglik_HR(data=X, p=.8, Gamma = danube_eglasso_fit$Gamma[[j]], 
+            graph =  danube_eglasso_fit$graph[[j]]))
 
-na.idx <- length(rholist)
-plot(rholist[1:na.idx], danube_loglik[3,], col="blue", type="b")
 
 danube_loglik_tree <- loglik_HR(data=X, p=.8, Gamma = danube_emst_fit$Gamma,
-                                graph = danube_emst_fit$tree)
-abline(h = danube_loglik_tree[3], col="blue")
+                                graph = danube_emst_fit$graph)
 
-# !!! plot 3 graphs from low to high rho
+ggplot(mapping = aes(x = rholist, y = danube_loglik[3, ])) +
+  geom_line() +
+  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+  geom_hline(aes(yintercept = danube_loglik_tree[3]), lty = "dashed") +
+  xlab("rho") +
+  ylab("Loglik") +
+  scale_x_continuous(
+    breaks = rholist,
+    labels = round(rholist, 3),
+    sec.axis = sec_axis(trans=~., breaks = rholist,
+                        labels = sapply(danube_eglasso_fit$graph, igraph::gsize),
+                        name="Number of edges")
+  )
 
-my_model <- danube_eglasso_fit[[which.min(danube_loglik[3,])]]
+```
+```{r, fig.show="hold", out.width="30%"}
+plot(danube_eglasso_fit$graph[[1]], layout = danube$coords_to_plot,
+     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[1]], 3)))
+plot(danube_eglasso_fit$graph[[5]], layout = danube$coords_to_plot,
+     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[5]], 3)))
+plot(danube_eglasso_fit$graph[[10]], layout = danube$coords_to_plot,
+     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[10]], 3)))
+```
+
+
+```{r, fig.align='center'}
+best_Gamma <- danube_eglasso_fit$Gamma[[which.min(danube_loglik[3,])]]
 
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_model$Gamma)), y = c(chi_hat))) +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(chi_hat))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical") +
   coord_cartesian(ylim = c(0.4, 1))
-
 ```
 
 
