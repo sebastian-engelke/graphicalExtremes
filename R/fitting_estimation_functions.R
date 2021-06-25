@@ -103,11 +103,11 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
         }
       })
 
-      if (!is.na(Gamma)) {
+      if (all(!is.na(Gamma))) {
         completed_graph <- Gamma2graph(Gamma, to_plot = FALSE)
 
         if (!(graphs_equal(completed_graph, est_graph))) {
-          warning(paste0("The completed Gamma for rho = ", rho,
+          warning(paste0("The completed Gamma for rho = ", round(rho, 3),
                          " does not match with the estimated graph."),
                   call. = FALSE)
         }
