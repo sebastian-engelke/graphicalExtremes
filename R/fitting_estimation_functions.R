@@ -49,7 +49,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
     dim=c(d, d, length(rholist))) # votes for EXCLUDING the edge
 
   for(k in 1:d){
-    Sk <- stats::cov2cor(Gamma2Sigma(Gamma=Gamma, k=k))
+    Sk <- Gamma2Sigma(Gamma=Gamma, k=k) #stats::cov2cor(Gamma2Sigma(Gamma=Gamma, k=k)) #Not normalizing seems slighlty more stable
     ###### Same regularization, but does not require Sk to be invertible
     tmp <- solve(diag(ncol(Sk)) + eps*Sk)
     Ck <- tmp %*% Sk
