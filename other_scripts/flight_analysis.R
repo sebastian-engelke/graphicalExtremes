@@ -134,11 +134,12 @@ selected_flights <- df %>%
 # Edges
 flights_connections <- selected_flights %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
-  distinct() %>%
+  group_by(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
+  summarise(N_FLIGHTS = n()) %>%
   left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
   left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
             suffix = c(".origin", ".dest")) %>%
-  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT, N_FLIGHTS,
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
 
@@ -161,7 +162,8 @@ ggplot() +
              alpha = 1) +
   geom_curve(data = flights_connections,
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest),
+                 y = LATITUDE.origin, yend = LATITUDE.dest,
+                 size = N_FLIGHTS),
              alpha = .2, curvature = 0) +
   theme_bw()
 
