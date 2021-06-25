@@ -67,7 +67,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
     invisible(utils::capture.output(
       gl.tmp <- glasso::glassopath(Ck, rholist = rholist, approx=approx)))
     null.vote[-k,-k, ] <-  null.vote[-k,-k, , drop = FALSE] +
-      (abs(gl.tmp$wi)<=1e-6)  ## change back to == 0 .. <=1e-4
+      (abs(gl.tmp$wi)<=1e-4)  ## change back to == 0 .. <=1e-4
 
   }
   adj.est <- (null.vote/(ncol(null.vote)-2)) < .49
