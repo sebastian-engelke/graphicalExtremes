@@ -521,5 +521,100 @@ ggplot() +
   coord_cartesian(ylim = c(0.4, 1))
 ```
 
+# Exercises
+
+## Trees
+```{r}
+flights_emst_fit <- emst(data = flights$data, p = .8, method = "vario")
+igraph::V(flights_emst_fit$graph)$name <- names(flights$data)
+
+flights_connections_est <- igraph::get.edgelist(flights_emst_fit$graph) %>%
+  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
+  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
+  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
+            suffix = c(".origin", ".dest")) %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+         LATITUDE.origin, LONGITUDE.origin,
+         LATITUDE.dest, LONGITUDE.dest)
+
+ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = flights$airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = flights_connections_est,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest),
+             alpha = .4, curvature = 0) +
+  theme_bw()
+
+
+```
+## General graphs
+```{r}
+Gamma <- emp_vario(flights$data %>% as.matrix(), p = .7)
+rholist = seq(1e-4, 0.1, length.out = 10)
+flights_eglasso_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
+est_graph <- flights_eglasso_fit$graph[[5]]
+igraph::V(est_graph)$name <- names(flights$data)
+
+flights_connections_est <- igraph::get.edgelist(est_graph) %>%
+  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
+  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
+  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
+            suffix = c(".origin", ".dest")) %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+         LATITUDE.origin, LONGITUDE.origin,
+         LATITUDE.dest, LONGITUDE.dest)
+
+# Plot estimated map
+ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = flights$airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = flights_connections_est,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest),
+             alpha = .4, curvature = 0) +
+  theme_bw()
+```
+```{r}
+flights_loglik <- sapply(1:length(rholist), FUN = function(j) 
+  loglik_HR(data=flights$data, p=.7, Gamma = flights_eglasso_fit$Gamma[[j]], 
+            graph =  flights_eglasso_fit$graph[[j]]))
+
+
+flights_loglik_tree <- loglik_HR(data=flights$data, p=.7, Gamma = flights_emst_fit$Gamma,
+                                graph = flights_emst_fit$graph)
+
+ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
+  geom_line() +
+  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+  geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
+  xlab("rho") +
+  ylab("Loglik") +
+  scale_x_continuous(
+    breaks = rholist,
+    labels = round(rholist, 3),
+    sec.axis = sec_axis(trans=~., breaks = rholist,
+                        labels = sapply(flights_eglasso_fit$graph, igraph::gsize),
+                        name="Number of edges")
+  )
+```
+```{r}
+best_Gamma <- flights_eglasso_fit$Gamma[[which.min(flights_loglik[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(emp_chi(flights$data %>%  as.matrix(), p = .7)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
+```
+
 
 # References
