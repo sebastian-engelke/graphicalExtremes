@@ -116,7 +116,7 @@ large_airports_vec <- c("JFK", "DFW") #c("LAX", "SAN", "SFO") #c("DFW", "LAX", "
 n_flights_small <- 3e4
 distance <- 300
 airline <- "WN"
-state <- c("TX", "NY", "GA")
+state <- c("TX", "GA", "NY")
 
 
 # Select airports
@@ -183,13 +183,15 @@ mat <- dat %>%
   select(-MONTH, -day)
 
 pairs(mat)
+plot(mat$AMA, mat$LGA)
+plot(mat$DAL, type = "line")
 
 
 # Minimum spanning tree
 my_fit <- emst(data = mat, p = .7, method = "vario")
-igraph::V(my_fit$tree)$name <- names(mat)
+igraph::V(my_fit$graph)$name <- names(mat)
 
-flights_connections_est <- igraph::get.edgelist(my_fit$tree) %>%
+flights_connections_est <- igraph::get.edgelist(my_fit$graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
   left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
   left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
@@ -216,8 +218,9 @@ ggplot() +
 
 # Glasso
 Gamma <- emp_vario(mat %>% as.matrix(), p = .7)
-my_fit <- eglasso(Gamma)
-est_graph <- my_fit[[1]]$graph
+rholist = seq(1e-4, 0.1, length.out = 10)
+my_fit <- eglasso(Gamma, rholist = rholist, )
+est_graph <- my_fit[[5]]$graph
 igraph::V(est_graph)$name <- names(mat)
 
 flights_connections_est <- igraph::get.edgelist(est_graph) %>%
@@ -249,6 +252,6 @@ plot(mat[, c(4, 9)])
 # Emp chi
 emp_chi(mat %>% as.matrix(), p = .5) %>% hist(xlim=c(0, 1))
 emp_chi(mat %>% as.matrix(), p = .7) %>% hist(xlim=c(0, 1))
-emp_chi(mat %>% as.matrix(), p = .9) %>% hist(xlim=c(0, 1))
+emp_chi(mat %>% as.matrix(), p = .8) %>% hist(xlim=c(0, 1))
 
 evd::chiplot(mat[, c(1, 3)])

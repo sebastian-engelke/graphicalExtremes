@@ -465,20 +465,24 @@ ggplot() +
 
 ```{r, fig.align='center'}
 set.seed(42)
-rholist = seq(1e-5, 0.04, length.out = 20)
-my_eglasso <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
+rholist = seq(1e-5, 0.04, length.out = 20) # !!! update list
+danube_eglasso_fit <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
                     eps = .5, reg_method = "glasso")
 
-my_loglik <- sapply(1:length(rholist), FUN = function(j) 
-  loglik_HR(data=X, p=.8, Gamma = my_eglasso[[j]]$Gamma, cens = FALSE, graph =  my_eglasso[[j]]$graph))
+danube_loglik <- sapply(1:length(rholist), FUN = function(j) 
+  loglik_HR(data=X, p=.8, Gamma = danube_eglasso_fit[[j]]$Gamma, 
+            graph =  danube_eglasso_fit[[j]]$graph))
 
 na.idx <- length(rholist)
-plot(rholist[1:na.idx], my_loglik[3,], col="blue", type="b")
+plot(rholist[1:na.idx], danube_loglik[3,], col="blue", type="b")
 
-tree_loglik_HR <- loglik_HR(data=X, p=.8, Gamma = danube_emst_fit$Gamma, cens = FALSE, graph = danube_emst_fit$tree)
-abline(h = tree_loglik_HR[3], col="blue")
+danube_loglik_tree <- loglik_HR(data=X, p=.8, Gamma = danube_emst_fit$Gamma,
+                                graph = danube_emst_fit$tree)
+abline(h = danube_loglik_tree[3], col="blue")
 
-my_model <- my_eglasso[[which.min(my_loglik[3,])]]
+# !!! plot 3 graphs from low to high rho
+
+my_model <- danube_eglasso_fit[[which.min(danube_loglik[3,])]]
 
 ggplot() +
   geom_point(aes(x = c(Gamma2chi(my_model$Gamma)), y = c(chi_hat))) +
@@ -489,8 +493,5 @@ ggplot() +
 
 ```
 
-<!-- ### Eglasso -->
-
-<!-- function: eglasso -->
 
 # References
