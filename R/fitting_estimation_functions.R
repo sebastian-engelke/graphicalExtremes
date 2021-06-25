@@ -596,7 +596,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' log-likelihood, AIC, and BIC values.
 #'
 #' @export
-loglik_HR <- function(data, p = NULL, graph, Gamma, cens){
+loglik_HR <- function(data, p = NULL, graph, Gamma, cens = FALSE){
 
   if (!is.null(p)) {
     data.std <- data2mpareto(data, p)
