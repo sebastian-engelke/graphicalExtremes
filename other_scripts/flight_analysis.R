@@ -292,7 +292,7 @@ Gamma <- Gamma$est_gamma
 rholist = seq(1e-4, 0.09, length.out = 10)
 rholist = seq(1e-4, 0.07, length.out = 8)
 my_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
-est_graph <- my_fit$graph[[6]]
+est_graph <- my_fit$graph[[10]]
 igraph::V(est_graph)$name <- names(mat)
 
 flights_connections_est <- igraph::get.edgelist(est_graph) %>%
@@ -362,7 +362,7 @@ ggplot() +
   xlab("Fitted") +
   ylab("Empirical")
 
-flight_graph2 <- flights_connections %>%
+flight_graph <- flights_connections %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
   as.matrix() %>%
   igraph::graph_from_edgelist(directed = FALSE) %>%
@@ -372,7 +372,7 @@ igraph::gsize(flight_graph)
 igraph::gsize(flight_graph2)
 
 plot(flight_graph)
-# fmpareto_graph_HR: check completed Gamma agrees with given graph
+
 model_fit <- fmpareto_graph_HR(data = mat %>% as.matrix(),
                                graph = flight_graph, p = p, method = "vario")
 
