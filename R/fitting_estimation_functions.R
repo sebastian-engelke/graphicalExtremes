@@ -350,6 +350,13 @@ fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
   # fit the empirical variogram to the graph
   Gamma_graph <- complete_Gamma(Gamma_emp, graph, allowed_graph_type = 'general', ...)
 
+  # check that completed Gamma matches the given graph
+  completed_graph <- Gamma2graph(Gamma_graph, to_plot = FALSE)
+
+  if (!(graphs_equal(completed_graph, graph))) {
+    message(paste0("The completed Gamma", " does not match the given graph.\n"))
+  }
+
   return(list(
     Gamma = Gamma_graph,
     graph = graph
@@ -422,6 +429,13 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 
   # fill entries that don't correspond to edges:
   Ghat <- complete_Gamma(Ghat, allowed_graph_type = 'decomposable')
+
+  # check that completed Gamma matches the given graph
+  completed_graph <- Gamma2graph(Ghat, to_plot = FALSE)
+
+  if (!(graphs_equal(completed_graph, graph))) {
+    message(paste0("The completed Gamma", " does not match the given graph.\n"))
+  }
 
   return(list(graph = graph, Gamma = Ghat))
 }
