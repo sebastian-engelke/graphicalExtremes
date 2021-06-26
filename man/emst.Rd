@@ -15,7 +15,8 @@ it is assumed that the \code{data} are already on multivariate Pareto scale. Els
 \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 to standardize the \code{data}.}
 
-\item{method}{One of \verb{"ML", "vario", "chi"}.}
+\item{method}{One of \verb{"ML", "vario", "chi"}.
+Default is \code{method = "ML"}.}
 
 \item{cens}{Logical. This argument is considered only if \code{method = "ML"}.
 If \code{TRUE}, then censored likelihood contributions are used for
@@ -24,7 +25,7 @@ components below the threshold. By default, \code{cens = FALSE}.}
 \value{
 List consisting of:
 \itemize{
-\item \code{graph}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
+\item \code{graph}: An \code{\link[igraph:make_graph]{igraph::graph()}} object. The fitted minimum spanning tree.
 \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
 corresponding to the fitted minimum spanning tree.
 }
@@ -34,12 +35,12 @@ Fits an extremal minimum spanning tree, where the edge weights are:
 \itemize{
 \item negative maximized log-likelihoods of the bivariate Huesler--Reiss
 distributions, if \code{method = "ML"}. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
-\item empirical extremal variogram, if \code{method = "vario"}.
-\item empirical extremal correlation, if \code{method = "chi"}.
+\item empirical extremal variogram, if \code{method = "vario"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
+\item empirical extremal correlation, if \code{method = "chi"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 }
 }
 \examples{
-## Fitting a 4-dimensional HR MST tree
+## Fitting a 4-dimensional HR minimum spanning tree
 
 my_graph <- igraph::graph_from_adjacency_matrix(
   rbind(
@@ -56,7 +57,7 @@ complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
 
 set.seed(123)
 my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
-my_fit <- mst_HR(my_data, p = NULL, cens = FALSE)
+my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 }
 \references{
 \insertAllCited{}

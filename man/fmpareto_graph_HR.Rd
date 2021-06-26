@@ -24,25 +24,18 @@ it is assumed that the \code{data} are already on multivariate Pareto scale. Els
 \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 to standardize the \code{data}.}
 
+\item{method}{One of \verb{"ML", "vario"}.
+Default is \code{method = "ML"}.}
+
 \item{cens}{Logical. If true, then censored likelihood contributions are used for
 components below the threshold. By default, \code{cens = FALSE}.}
-
-\item{edges_to_add}{Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
-the number of edges that are tried to be added in the greedy search.
-By default, \code{edges_to_add = NULL}.}
 }
 \value{
 List consisting of:
 \itemize{
-\item \code{graph}: Graph object from \code{igraph} package. If \code{edges_to_add} are provided,
-then this is a list of the resulting graphs in each step of the greedy search.
-\item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}.
-If \code{edges_to_add} are provided,
-then this is a list of the estimated variogram matrices in each step of the greedy search.
-\item \code{AIC}: (only if \code{edges_to_add} are provided) List of AIC values of the fitted models
-in each step of the greedy search.
-\item \code{edges_added}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
-the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy search.
+\item \code{graph}: An \code{\link[igraph:make_graph]{igraph::graph()}} object.
+\item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix
+\eqn{\Gamma}.
 }
 }
 \description{
@@ -72,8 +65,8 @@ edges_to_add <- rbind(c(1, 3), c(1, 4), c(3, 4))
 set.seed(123)
 my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
 my_fit <- fmpareto_graph_HR(my_data,
-  graph = my_graph,
-  p = NULL, cens = FALSE, edges_to_add = edges_to_add
+  graph = my_graph, method = "ML",
+  p = NULL, cens = FALSE
 )
 }
 \references{
