@@ -4,6 +4,7 @@ output:
   bookdown::html_document2:
     fig_width: 5
     fig_height: 5
+    number_sections: false
 bibliography: ../inst/REFERENCES.bib
 toc:
   depth: 2
@@ -46,9 +47,9 @@ theme_set(theme_bw() +
 The `flights()`dataset contains daily delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
 The object `flights()` is a list made of:
 
-* `data`: a `dplyr::tibble()`  with the delay data. Each row corresponds to a day and each column to an airport.
-* `airports`: a `dplyr::tibble()` with the details for each airport.
-* `connections`: a `dplyr::tibble()` with the details of the _undirected_ flights.
+* `data`: a `dplyr::tibble()`  containing the delay data. Each row corresponds to a day and each column to an airport.
+* `airports`: a `dplyr::tibble()` containing the details for each airport.
+* `connections`: a `dplyr::tibble()` containing the details of the _undirected_ flights.
 
 In the code below, we show how to load the dataset and plot the flight connections.
 
@@ -206,7 +207,7 @@ ggplot() +
 
 # Part B
 
-1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.09, length.out = 10)`.
+1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
 
 ```{r}
 Gamma <- emp_vario(data %>% as.matrix(), p = p)
@@ -294,6 +295,7 @@ ggplot() +
 * `emp_vario()`, fixing some `k`, e.g., `k = 1`.
 * `emp_chi()` and then transforming the result with `chi2Gamma()`.
 * `graphicalExtremes:::ml_weight_matrix()`, which is an internal function.
+
 With these different estimates for the variogram, fit an `eglasso()` model and plot the different BIC curves.
 
 _Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
