@@ -141,6 +141,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 #' to standardize the \code{data}.
 #' @param method One of `"ML", "vario", "chi"`.
+#' Default is `method = "ML"`.
 #' @param cens Logical. This argument is considered only if `method = "ML"`.
 #' If `TRUE`, then censored likelihood contributions are used for
 #' components below the threshold. By default, `cens = FALSE`.
@@ -153,7 +154,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #' }
 #'
 #' @examples
-#' ## Fitting a 4-dimensional HR MST tree
+#' ## Fitting a 4-dimensional HR minimum spanning tree
 #'
 #' my_graph <- igraph::graph_from_adjacency_matrix(
 #'   rbind(
@@ -170,7 +171,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'
 #' set.seed(123)
 #' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
-#' my_fit <- mst_HR(my_data, p = NULL, cens = FALSE)
+#' my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 #' @references
 #'  \insertAllCited{}
 #'
