@@ -120,7 +120,7 @@
     <p>Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loglik_HR</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>graph</span>, <span class='va'>Gamma</span>, <span class='va'>cens</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>loglik_HR</span><span class='op'>(</span><span class='va'>data</span>, p <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>graph</span>, <span class='va'>Gamma</span>, cens <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,8 +133,8 @@ observations following a multivariate HR Pareto distribution.</p></td>
     <tr>
       <th>p</th>
       <td><p>Numeric between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
-it is assumed that the <code>data</code> are already on multivariate Pareto scale. Else,
-<code>p</code> is used as the probability in the function <code><a href='data2mpareto.html'>data2mpareto</a></code>
+it is assumed that the <code>data</code> are already on multivariate Pareto scale.
+Else, <code>p</code> is used as the probability in the function <code><a href='data2mpareto.html'>data2mpareto</a></code>
 to standardize the <code>data</code>.</p></td>
     </tr>
     <tr>

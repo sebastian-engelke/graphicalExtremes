@@ -124,7 +124,8 @@
   <span class='va'>Gamma</span>,
   rholist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.15</span>, <span class='fl'>0.19</span>, <span class='fl'>0.205</span><span class='op'>)</span>,
   reg_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mb"</span>, <span class='st'>"glasso"</span><span class='op'>)</span>,
-  eps <span class='op'>=</span> <span class='fl'>0.5</span>
+  eps <span class='op'>=</span> <span class='fl'>0.5</span>,
+  complete_Gamma <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -147,18 +148,25 @@ Default is <code>reg_method = "mb"</code>.</p></td>
     </tr>
     <tr>
       <th>eps</th>
-      <td><p>Regularizatoin parameter for covariance matrix.</p></td>
+      <td><p>Regularization parameter for the covariance matrix.
+Default is <code>eps = 0.5</code>.</p></td>
+    </tr>
+    <tr>
+      <th>complete_Gamma</th>
+      <td><p>Whether you want to complete Gamma matrix.
+Default is <code>complete_Gamma = FALSE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>List with as many elements as entries in <code>rholist</code>. Each element of
-the list contains:</p><dl>
-<dt><code>rho</code></dt><dd><p>The penalty coefficient.</p></dd>
-<dt><code>graph</code></dt><dd><p>An <a href='https://rdrr.io/pkg/igraph/man/make_graph.html'>igraph::graph</a> object representing the fitted graph.</p></dd>
-<dt><code>Gamma</code></dt><dd><p>A numeric \(d\times d\) estimated variogram matrix \(\Gamma\)
-corresponding to the fitted graph.</p></dd>
+    <p>List made of:</p><dl>
+<dt><code>graph</code></dt><dd><p>A list of <a href='https://rdrr.io/pkg/igraph/man/make_graph.html'>igraph::graph</a> objects representing the
+fitted graphs for each <code>rho</code> in <code>rholist</code>.</p></dd>
+<dt><code>Gamma</code></dt><dd><p>A list of numeric \(d\times d\) estimated
+variogram matrices \(\Gamma\) corresponding to the fitted graphs,
+for each <code>rho</code> in <code>rholist</code>.</p></dd>
+<dt><code>rholist</code></dt><dd><p>The list of penalty coefficients.</p></dd>
 
 </dl>
 
