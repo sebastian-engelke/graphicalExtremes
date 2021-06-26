@@ -130,8 +130,8 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #' \itemize{
 #' \item negative maximized log-likelihoods of the bivariate Huesler--Reiss
 #' distributions, if `method = "ML"`. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
-#' \item empirical extremal variogram, if `method = "vario"`.
-#' \item empirical extremal correlation, if `method = "chi"`.
+#' \item empirical extremal variogram, if `method = "vario"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
+#' \item empirical extremal correlation, if `method = "chi"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 #' }
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
@@ -148,7 +148,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{graph}: Graph object from \code{igraph} package. The fitted minimum spanning tree.
+#' \item \code{graph}: An [igraph::graph()] object. The fitted minimum spanning tree.
 #' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
 #' corresponding to the fitted minimum spanning tree.
 #' }
@@ -236,29 +236,26 @@ emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
+#'
+#' @param graph Graph object from \code{igraph} package. The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+#' graph with singleton separator sets.
+#'
 #' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 #' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 #' to standardize the \code{data}.
+#'
+#' @param method One of `"ML", "vario"`.
+#' Default is `method = "ML"`.
+#'
 #' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, \code{cens = FALSE}.
-#' @param graph Graph object from \code{igraph} package. The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
-#' graph with singleton separator sets.
-#' @param edges_to_add Numeric matrix \eqn{m\times 2}{m x 2}, where \eqn{m} is
-#' the number of edges that are tried to be added in the greedy search.
-#' By default, \code{edges_to_add = NULL}.
+#' components below the threshold. By default, `cens = FALSE`.
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{graph}: Graph object from \code{igraph} package. If \code{edges_to_add} are provided,
-#' then this is a list of the resulting graphs in each step of the greedy search.
-#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}.
-#' If \code{edges_to_add} are provided,
-#' then this is a list of the estimated variogram matrices in each step of the greedy search.
-#' \item \code{AIC}: (only if \code{edges_to_add} are provided) List of AIC values of the fitted models
-#' in each step of the greedy search.
-#' \item \code{edges_added}: (only if \code{edges_to_add} are provided) Numeric matrix \eqn{m'\times 2}{m' x 2}, where
-#' the \eqn{m'\leq m}{m'<=m} rows contain the edges that were added in the greedy search.
+#' \item \code{graph}: An [igraph::graph()] object.
+#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix
+#' \eqn{\Gamma}.
 #' }
 #'
 #' @examples
@@ -281,8 +278,8 @@ emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
 #' set.seed(123)
 #' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
 #' my_fit <- fmpareto_graph_HR(my_data,
-#'   graph = my_graph,
-#'   p = NULL, cens = FALSE, edges_to_add = edges_to_add
+#'   graph = my_graph, method = "ML",
+#'   p = NULL, cens = FALSE
 #' )
 #' @references
 #'  \insertAllCited{}
