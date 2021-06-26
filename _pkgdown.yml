@@ -11,11 +11,16 @@ reference:
 - title: Fitting
   desc: Description for these functions
   contents:
+  - eglasso
+  - emst
+  - fmpareto_graph_HR
+  - fmpareto_graph_HR_general
+  - fmpareto_graph_HR_decomposable
   - emp_chi
   - emp_vario
-  - fmpareto_graph_HR
   - emp_chi_multdim
-  - emst
+  - loglik_HR
+
 
 - title: Completion
   contents:
@@ -29,6 +34,12 @@ reference:
   contents:
   - contains("2")
 
+- title: Generate Examples
+  contents:
+  - generate_random_model
+  - generate_random_integer_Gamma
+
 - title: Datasets
   contents:
   - danube
+  - flights

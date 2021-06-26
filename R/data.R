@@ -10,3 +10,13 @@
 #' }
 #' @source ???
 "danube"
+
+
+#' Flights delay data
+#'
+#'
+#' @format A list containing:
+#'
+#'
+#' @source ???
+"flights"

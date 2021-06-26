@@ -8,7 +8,8 @@ eglasso(
   Gamma,
   rholist = c(0.1, 0.15, 0.19, 0.205),
   reg_method = c("mb", "glasso"),
-  eps = 0.5
+  eps = 0.5,
+  complete_Gamma = FALSE
 )
 }
 \arguments{
@@ -21,16 +22,21 @@ for the lasso. For details see \link[glasso:glassopath]{glasso::glassopath}.}
 \item{reg_method}{One of \code{"mb"} and \code{"glasso"}.
 Default is \code{reg_method = "mb"}.}
 
-\item{eps}{Regularizatoin parameter for covariance matrix.}
+\item{eps}{Regularization parameter for the covariance matrix.
+Default is \code{eps = 0.5}.}
+
+\item{complete_Gamma}{Whether you want to complete Gamma matrix.
+Default is \code{complete_Gamma = FALSE}.}
 }
 \value{
-List with as many elements as entries in \code{rholist}. Each element of
-the list contains:
+List made of:
 \describe{
-\item{\code{rho}}{The penalty coefficient.}
-\item{\code{graph}}{An \link[igraph:make_graph]{igraph::graph} object representing the fitted graph.}
-\item{\code{Gamma}}{A numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
-corresponding to the fitted graph.}
+\item{\code{graph}}{A list of \link[igraph:make_graph]{igraph::graph} objects representing the
+fitted graphs for each \code{rho} in \code{rholist}.}
+\item{\code{Gamma}}{A list of numeric \eqn{d\times d}{d x d} estimated
+variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+for each \code{rho} in \code{rholist}.}
+\item{\code{rholist}}{The list of penalty coefficients.}
 }
 }
 \description{

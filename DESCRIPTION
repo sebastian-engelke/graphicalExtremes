@@ -27,7 +27,8 @@ Suggests:
     rmarkdown,
     dplyr,
     ggplot2,
-    bookdown
+    bookdown,
+    maps
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Imports: 
