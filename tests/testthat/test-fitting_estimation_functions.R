@@ -444,28 +444,28 @@ test_that("emst works", {
 
   res <- emst(data = data, p = NULL, cens = FALSE)
   expect_length(res, 2)
-  expect_equal(class(res$tree), "igraph")
+  expect_equal(class(res$graph), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- emst(data = data, p = 0.95, cens = FALSE)
   expect_length(res, 2)
-  expect_equal(class(res$tree), "igraph")
+  expect_equal(class(res$graph), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- emst(data = data, p = NULL, cens = TRUE)
   expect_length(res, 2)
-  expect_equal(class(res$tree), "igraph")
+  expect_equal(class(res$graph), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
 
   res <- emst(data = data, p = 0.95, cens = TRUE)
   expect_length(res, 2)
-  expect_equal(class(res$tree), "igraph")
+  expect_equal(class(res$graph), "igraph")
   expect_equal(res$Gamma, t(res$Gamma))
   expect_equal(all(!is.na(res$Gamma)), TRUE)
   expect_equal(is.numeric(res$Gamma) & is.matrix(res$Gamma), TRUE)
@@ -495,6 +495,6 @@ test_that("eglasso works", {
   expect_equal(res$Gamma[[1]], NA)
   expect_error(eglasso(my_model$Gamma, rholist = -1))
   expect_error(eglasso(my_model$Gamma, rholist = c(2, -1)))
-  expect_warning(eglasso(my_model$Gamma, rholist = c(1, 200),
+  expect_message(eglasso(my_model$Gamma, rholist = c(1, 200),
                          complete_Gamma = TRUE))
 })
