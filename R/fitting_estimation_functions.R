@@ -84,17 +84,17 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
                                                      diag=FALSE)
 
     if (complete_Gamma == FALSE) {
-      Gamma <- NA
+      Gamma_curr <- NA
     } else {
-      Gamma <- tryCatch({
+      Gamma_curr <- tryCatch({
         complete_Gamma(graph = est_graph, Gamma = Gamma)
 
       },
       error = function(e){
         if (e$message == "The given graph is not connected."){
-          warning(paste0("The estimated graph for rho = ", round(rho, 3),
+          message(paste0("The estimated graph for rho = ", round(rho, 3),
           " is not connected, ",
-          "so it is not possible to complete Gamma.\n"), call. = FALSE)
+          "so it is not possible to complete Gamma.\n"))
 
           NA
 
@@ -103,19 +103,18 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
         }
       })
 
-      if (all(!is.na(Gamma))) {
-        completed_graph <- Gamma2graph(Gamma, to_plot = FALSE)
+      if (all(!is.na(Gamma_curr))) {
+        completed_graph <- Gamma2graph(Gamma_curr, to_plot = FALSE)
 
         if (!(graphs_equal(completed_graph, est_graph))) {
-          warning(paste0("The completed Gamma for rho = ", round(rho, 3),
-                         " does not match the estimated graph.\n"),
-                  call. = FALSE)
+          message(paste0("The completed Gamma for rho = ", round(rho, 3),
+                         " does not match the estimated graph.\n"))
         }
       }
     }
 
     graphs[[j]] <- est_graph
-    Gammas[[j]] <- Gamma
+    Gammas[[j]] <- Gamma_curr
     rhos[[j]] <- rho
 
   }
