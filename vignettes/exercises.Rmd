@@ -196,22 +196,22 @@ ggplot(data) +
   geom_point(aes(x = DATE, y = SAN))
 
 # Possible explanation July 18, 2015 from dataset  (https://www.sandiegouniontribune.com/sdut-thunderstorms-fire-dolors-2015jul18-story.html)
-mat_wo_storm <- data %>% 
-  filter(lubridate::month(DATE) != 7) %>%
-  select(-DATE) %>% 
-  as.matrix()
-
-# Fit again the model
-model_fit_wo_storm <- fmpareto_graph_HR(data = mat_wo_storm,
-                               graph = flight_graph, p = p, method = "vario")
-
-# Plot goodness of fit
-ggplot() +
-  geom_point(aes(x = c(Gamma2chi(model_fit_wo_storm$Gamma)),
-                 y = c(emp_chi(mat_wo_storm, p = p)))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("Empirical")
+# mat_wo_storm <- data %>% 
+#   filter(lubridate::month(DATE) != 7) %>%
+#   select(-DATE) %>% 
+#   as.matrix()
+# 
+# # Fit again the model
+# model_fit_wo_storm <- fmpareto_graph_HR(data = mat_wo_storm,
+#                                graph = flight_graph, p = p, method = "vario")
+# 
+# # Plot goodness of fit
+# ggplot() +
+#   geom_point(aes(x = c(Gamma2chi(model_fit_wo_storm$Gamma)),
+#                  y = c(emp_chi(mat_wo_storm, p = p)))) +
+#   geom_abline(slope = 1, intercept = 0) +
+#   xlab("Fitted") +
+#   ylab("Empirical")
 
 ```
 
