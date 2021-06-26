@@ -58,6 +58,9 @@ In the code below, we show how to load the dataset and plot the flight connectio
 data <- flights$data
 airports <- flights$airports
 connections <- flights$connections
+mat <- data %>% 
+  select(-DATE) %>% 
+  as.matrix()
 
 # Plot flight connection
 ggplot() +
@@ -88,8 +91,8 @@ flight_graph <- connections %>%
 1. Fit an extremal tree model with `emst()`, choosing threshold `p = 0.7`. 
 ```{r, collapse=TRUE, fig.align='center'}
 p <- .7
-flights_emst_fit <- emst(data = data, p = p, method = "vario")
-igraph::V(flights_emst_fit$graph)$name <- names(data)
+flights_emst_fit <- emst(data = mat, p = p, method = "vario")
+igraph::V(flights_emst_fit$graph)$name <- colnames(mat)
 
 ```
 
@@ -120,7 +123,7 @@ ggplot() +
 
 3. Compute the BIC value of the fitted tree model.
 ```{r}
-flights_loglik_tree <- loglik_HR(data=data, p=p,
+flights_loglik_tree <- loglik_HR(data=mat, p=p,
                                  Gamma = flights_emst_fit$Gamma,
                                  graph = flights_emst_fit$graph)
 
@@ -132,7 +135,7 @@ paste0("Tree BIC = ", flights_loglik_tree[3] %>% round(2))
 
 _Hint_: The function `emp_chi()` accepts `base::matrix()` as input.
 ```{r, fig.align='center'}
-emp_chi_mat <- emp_chi(data %>% as.matrix(), p = p)
+emp_chi_mat <- emp_chi(mat, p = p)
 
 ggplot() +
   geom_point(aes(x = c(Gamma2chi(flights_emst_fit$Gamma)),
@@ -144,14 +147,14 @@ ggplot() +
 
 5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
 ```{r}
-model_fit <- fmpareto_graph_HR(data = data %>% as.matrix(),
+model_fit <- fmpareto_graph_HR(data = mat,
                                graph = flight_graph, p = p, method = "vario")
 ```
 
 6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
 
 ```{r}
-flights_loglik_graph <- loglik_HR(data = data %>% as.matrix(), 
+flights_loglik_graph <- loglik_HR(data = mat, 
                                   p = p, graph = flight_graph,
                                   Gamma = model_fit$Gamma)
 paste0("Tree BIC = ", flights_loglik_graph[3] %>% round(2))
@@ -171,36 +174,44 @@ ggplot() +
 
 7. Do you observe any "outliers" in the previous plot? Can you provide an explanation for these?
 ```{r, fig.align='center', fig.width=10}
-outlier_inds <- which(Gamma2chi(model_fit$Gamma) < 0.4 & emp_chi_mat > 0.5,
+# Select suspicious flight connections
+outlier_inds <- which(upper.tri(emp_chi_mat) & 
+                        Gamma2chi(model_fit$Gamma) < 0.4 &
+                        emp_chi_mat > 0.5,
                       arr.ind = TRUE)
 
-outlier_tib <- tibble(
-  ORIGIN_AIRPORT = colnames(data)[outlier_inds[, 1]],
-  DESTINATION_AIRPORT = colnames(data)[outlier_inds[, 2]]
-)
+outlier_connections <- tibble(
+  ORIGIN_AIRPORT = colnames(mat)[outlier_inds[, 1]],
+  DESTINATION_AIRPORT = colnames(mat)[outlier_inds[, 2]]
+) %>% 
+  left_join(airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
+  left_join(airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
+            suffix = c(".origin", ".dest")) %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+         LATITUDE.origin, LONGITUDE.origin,
+         LATITUDE.dest, LONGITUDE.dest)
 
-outlier_connections <- 
-  paste0(connections$ORIGIN_AIRPORT, connections$DESTINATION_AIRPORT) %in%
-  paste0(outlier_tib$ORIGIN_AIRPORT, outlier_tib$DESTINATION_AIRPORT)
+# Plot San Diego International Airport delays
+ggplot(data) +
+  geom_point(aes(x = DATE, y = SAN))
 
+# Possible explanation July 18, 2015 from dataset  (https://www.sandiegouniontribune.com/sdut-thunderstorms-fire-dolors-2015jul18-story.html)
+mat_wo_storm <- data %>% 
+  filter(lubridate::month(DATE) != 7) %>%
+  select(-DATE) %>% 
+  as.matrix()
+
+# Fit again the model
+model_fit_wo_storm <- fmpareto_graph_HR(data = mat_wo_storm,
+                               graph = flight_graph, p = p, method = "vario")
+
+# Plot goodness of fit
 ggplot() +
-  geom_polygon(data = map_data("usa"),
-               aes(x = long, y = lat, group = group), color = "grey65",
-               fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = airports,
-             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
-             alpha = 1) +
-  geom_curve(data = connections[!outlier_connections, ],
-             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest,
-                 size = N_FLIGHTS),
-             alpha = .2, curvature = 0) +
-  geom_curve(data = connections[outlier_connections, ],
-             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest,
-                 size = N_FLIGHTS),
-             alpha = .2, curvature = 0, color = "orange")
-
+  geom_point(aes(x = c(Gamma2chi(model_fit_wo_storm$Gamma)),
+                 y = c(emp_chi(mat_wo_storm, p = p)))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
 
 ```
 
@@ -210,14 +221,14 @@ ggplot() +
 1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
 
 ```{r}
-Gamma <- emp_vario(data %>% as.matrix(), p = p)
+Gamma <- emp_vario(mat, p = p)
 rholist = seq(1e-4, 0.10, length.out = 10)
 flights_eglasso_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
 
 # Add labels to graph edges
 flights_eglasso_fit$graph <- lapply(seq_along(rholist), function(i) {
   est_graph <- flights_eglasso_fit$graph[[i]]
-  igraph::V(est_graph)$name <- names(data)
+  igraph::V(est_graph)$name <- colnames(mat)
   est_graph
 })
 ```
@@ -252,7 +263,7 @@ ggplot() +
 
 ```{r, fig.align='center'}
 flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
- loglik_HR(data=data, p=p, 
+ loglik_HR(data=mat, p=p, 
            Gamma = flights_eglasso_fit$Gamma[[j]],
            graph = flights_eglasso_fit$graph[[j]] )
 })
@@ -301,12 +312,12 @@ With these different estimates for the variogram, fit an `eglasso()` model and p
 _Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
 
 ```{r, fig.align='center'}
-Gamma_vario_k_1 <- emp_vario(data = data %>% as.matrix(), k = 1, p = p)
+Gamma_vario_k_1 <- emp_vario(data = mat, k = 1, p = p)
 
 flights_eglasso_fit <- eglasso(Gamma_vario_k_1, rholist, complete_Gamma = TRUE)
 
 flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
- loglik_HR(data=data, p=p, 
+ loglik_HR(data=mat, p=p, 
            Gamma = flights_eglasso_fit$Gamma[[j]],
            graph = flights_eglasso_fit$graph[[j]] )
 })
@@ -330,9 +341,9 @@ ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
 
 
 ```{r, fig.align='center'}
-# Gamma_from_chi <- chi2Gamma(chi = emp_chi(data = data %>% as.matrix, p = p))
+# Gamma_from_chi <- chi2Gamma(chi = emp_chi(data = mat, p = p))
 # !!! opposite behaviour wrt rho
-Gamma_ml <- graphicalExtremes:::ml_weight_matrix(data = data %>% as.matrix,
+Gamma_ml <- graphicalExtremes:::ml_weight_matrix(data = mat,
                                                  p = p)
 flights_eglasso_fit <- eglasso(Gamma_ml$est_gamma, rholist, 
                                complete_Gamma = TRUE)
@@ -340,7 +351,7 @@ flights_eglasso_fit <- eglasso(Gamma_ml$est_gamma, rholist,
 not_na <- !is.na(flights_eglasso_fit$Gamma)
 
 flights_loglik <- sapply(seq_along(rholist[not_na]), FUN = function(j) {
- loglik_HR(data=data, p=p, 
+ loglik_HR(data=mat, p=p, 
            Gamma = flights_eglasso_fit$Gamma[[j]],
            graph = flights_eglasso_fit$graph[[j]] )
 })
