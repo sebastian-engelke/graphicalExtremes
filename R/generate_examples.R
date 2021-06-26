@@ -92,7 +92,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
     stop('Make sure that b_step > 0!')
   }
   repeat {
-    B <- floor(b * (runif(d1**2)*2 - 1))
+    B <- floor(b * (stats::runif(d1**2)*2 - 1))
     B <- matrix(B, d1, d1)
     S <- B %*% t(B)
     if(matrixcalc::is.positive.definite(S)){
@@ -117,7 +117,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param ... Ignored, only allowed for compatibility
 #' @family Example generations
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
-  B <- bMin + runif(d**2) * (bMax-bMin)
+  B <- bMin + stats::runif(d**2) * (bMax-bMin)
   B <- matrix(B, d, d)
   M <- B %*% t(B)
   m <- max(floor(log(det(M), 10) / d), 0)
@@ -152,15 +152,15 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
   if(cMax < cMin || sMax < sMin || cMin < sMin || cMax <= sMin || cMin > d){
     stop('Inconsistent parameters')
   }
-  c0 <- floor(runif(1, max(cMin, sMin+1), min(d, cMax)))
+  c0 <- floor(stats::runif(1, max(cMin, sMin+1), min(d, cMax)))
   g <- igraph::make_full_graph(c0, directed = FALSE)
   missingVertices <- d - igraph::vcount(g)
   while(missingVertices > 0){
     cliques <- igraph::maximal.cliques(g)
     cliqueSizes <- sapply(cliques, length)
     cM <- max(cliqueSizes)
-    c1 <- floor(runif(1, cMin, cMax))
-    s1 <- floor(runif(1, sMin, sMax))
+    c1 <- floor(stats::runif(1, cMin, cMax))
+    s1 <- floor(stats::runif(1, sMin, sMax))
     dVertices <- c1 - s1
     if(dVertices <= 0 || s1 >= cM){
       next
@@ -254,7 +254,7 @@ generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000, ...
 #' @return An [igraph::graph] object
 #' @family Example generations
 generate_random_tree <- function(d){
-  pruefer <- floor(runif(d-2, 1, d-1))
+  pruefer <- floor(stats::runif(d-2, 1, d-1))
   pruefer_to_graph(pruefer)
 }
 
