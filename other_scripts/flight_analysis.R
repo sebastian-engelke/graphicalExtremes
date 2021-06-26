@@ -105,6 +105,46 @@ select_airports <- function(df,
   return(selected_airports)
 }
 
+get_adj_mat <- function(my_airports) {
+  ## character_vector -> tibble
+  ## get adjacency matrix
+
+  M <- matrix(1:(length(my_airports)^2), nrow = length(my_airports))
+  M <- M * upper.tri(M)
+  M <- M + t(M)
+  colnames(M) <- rownames(M) <- my_airports
+  return(M)
+}
+
+get_flight_dictionary <- function(orig, dest) {
+  ## character_vector (2x) -> tibble
+  ## get undirected ids for flight connections
+
+  my_airports <- unique(c(orig, dest))
+  M <- get_adj_mat(my_airports)
+
+  grid <- expand_grid(ORIGIN_AIRPORT = my_airports,
+                      DESTINATION_AIRPORT = my_airports)
+  ids <- apply(grid, 1, function(r){M[r[1], r[2]]})
+  grid <- grid %>% mutate(ids)
+  return(grid)
+
+}
+
+get_upper_tri_names <- function(orig, dest) {
+  ## character_vector (2x) -> tibble
+  ## tibble with upper triangular names
+
+  my_airports <- unique(c(orig, dest))
+  M <- get_adj_mat(my_airports)
+  M <- M * upper.tri(M)
+  grid <- expand_grid(ORIGIN_AIRPORT = my_airports,
+                      DESTINATION_AIRPORT = my_airports)
+  ids <- apply(grid, 1, function(r){M[r[1], r[2]]})
+  grid <- grid %>% mutate(ids)
+  return(grid)
+}
+
 # Import data
 df <- read_csv("other_scripts/data/flights_data/flights.csv")
 airports <- read_csv("other_scripts/data/flights_data/airports.csv")
@@ -116,7 +156,7 @@ large_airports_vec <- c("JFK", "DFW") #c("LAX", "SAN", "SFO") #c("DFW", "LAX", "
 n_flights_small <- 3e4
 distance <- 300
 airline <- "WN"
-state <- c("TX", "CO", "AZ", "GA", "IL", "NM", "NV", "OK")
+# state <- c("TX", "CO", "AZ", "GA", "IL", "NM", "NV", "OK")
 state <- c("CA", "NV", "AZ", "UT", "TX")
 
 
@@ -143,6 +183,32 @@ flights_connections <- selected_flights %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT, N_FLIGHTS,
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
+
+flight_dictionary <- get_flight_dictionary(
+  flights_connections$ORIGIN_AIRPORT,
+  flights_connections$DESTINATION_AIRPORT
+)
+
+flights_connections <- flights_connections %>%
+  left_join(flight_dictionary, by = c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT"))
+
+total_flights <- flights_connections %>%
+  group_by(ids) %>%
+  summarise(N_FLIGHTS = sum(N_FLIGHTS))
+
+flights_connections <- flights_connections %>%
+  select(-N_FLIGHTS) %>%
+  left_join(total_flights, by = c("ids"))
+
+unique_flights <- get_upper_tri_names(
+  flights_connections$ORIGIN_AIRPORT,
+  flights_connections$DESTINATION_AIRPORT
+)
+
+flights_connections <- flights_connections %>%
+  left_join(unique_flights, by = c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
+  filter(ids.y != 0)
+
 
 
 # Take only connections from/to main airports
@@ -220,7 +286,11 @@ ggplot() +
 
 # Glasso
 Gamma <- emp_vario(mat %>% as.matrix(), p = p)
+Gamma <- emp_vario(mat %>% as.matrix(), p = p, k = 1)
+Gamma <- ml_weight_matrix(data2mpareto(mat %>% as.matrix(), p = p), cens = FALSE)
+Gamma <- Gamma$est_gamma
 rholist = seq(1e-4, 0.09, length.out = 10)
+rholist = seq(1e-4, 0.07, length.out = 8)
 my_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
 est_graph <- my_fit$graph[[6]]
 igraph::V(est_graph)$name <- names(mat)
@@ -292,13 +362,14 @@ ggplot() +
   xlab("Fitted") +
   ylab("Empirical")
 
-# fix flights_connections to remove duplicates
-flight_graph <- flights_connections %>%
+flight_graph2 <- flights_connections %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
   as.matrix() %>%
   igraph::graph_from_edgelist(directed = FALSE) %>%
   igraph::simplify()
 
+igraph::gsize(flight_graph)
+igraph::gsize(flight_graph2)
 
 plot(flight_graph)
 # fmpareto_graph_HR: check completed Gamma agrees with given graph
