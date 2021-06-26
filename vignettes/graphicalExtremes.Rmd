@@ -522,12 +522,44 @@ ggplot() +
 ```
 
 # Exercises
+The `flights()`dataset contains daily delays at different airports for the Southwest Airlines carriers, from January 1 until December 31, 2015.
+The chosen airports are in California, Nevada, Arizona, Utah, and Texas.
+The object `flights()` is a list made of:
+* `data`: a `dplyr::tibble()`  with the delay data. Each row corresponds to a day and each column to an airport,
+* `airports`: a `dplyr::tibble()` with the details for each airport.
+* `connections`: a `dplyr::tibble()` with the details of the _undirected_ flights.
 
-## Trees
+In the code below, we show how to load the dataset and plot the flight connections.
+
 ```{r}
+# Load the dataset
+data <- flights$data
+airports <- flights$airports
+connections <- flights$connections
+
+# Plot flight connection
+ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = connections,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest,
+                 size = N_FLIGHTS),
+             alpha = .2, curvature = 0) +
+  theme_bw()
+
+```
+
+## Part A
+1. Fit an extremal tree model, choosing threshold `p = 0.7`.
+```{r, collapse=TRUE}
 p <- .7
-flights_emst_fit <- emst(data = flights$data, p = p, method = "vario")
-igraph::V(flights_emst_fit$graph)$name <- names(flights$data)
+flights_emst_fit <- emst(data = data, p = p, method = "vario")
+igraph::V(flights_emst_fit$graph)$name <- names(data)
 
 flights_connections_est <- igraph::get.edgelist(flights_emst_fit$graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
@@ -538,11 +570,15 @@ flights_connections_est <- igraph::get.edgelist(flights_emst_fit$graph) %>%
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
 
+```
+
+2. Plot the tree on the US map and interpret the results.
+```{r, collapse=TRUE}
 ggplot() +
   geom_polygon(data = map_data("usa"),
                aes(x = long, y = lat, group = group), color = "grey65",
                fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = flights$airports,
+  geom_point(data = airports,
              aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
              alpha = 1) +
   geom_curve(data = flights_connections_est,
@@ -551,8 +587,31 @@ ggplot() +
              alpha = .4, curvature = 0) +
   theme_bw()
 
-
 ```
+
+3. Compute BIC values of fitted tree model.
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
+5. Take the `flight_connection` (!!! change) graph and fit a HR graphical model on it.
+6. Repeat steps 3., 4..
+7. If you see some "outliers" in plot from Part 4 from the `flight_connection` graph, can you provide explanation?
+
+### Part B
+1. Fit an extremal graphical lasso model, choosing threshold `p = 0.7`. Choose `rholist = seq(1e-4, 0.09, length.out = 10)`.
+2. Plot the tree on the US map for different values of `rho` and interpret the results.
+3. Compute BIC graph for different values of `rho`.
+3b. Another way to choose best `rho` is to compute `loglik` on test data (!!! if you have more data).
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
+5. Provide `Gamma` matrix using different methods
+  * `emp_vario`
+  * `emp_vario`, fix some`k = 1`
+  * `chi` -> `Gamma`
+  * `ML`using `ml_weight_matrix`
+fit `eglasso` and plot the different BIC curves.
+
+# !!! ask Leo about Zoom rooms
+# !!! ask Leo about assistants during the tutorial
+
+
 ## General graphs
 ```{r}
 Gamma <- emp_vario(flights$data %>% as.matrix(), p = p)
@@ -618,31 +677,6 @@ ggplot() +
   xlab("Fitted") +
   ylab("Empirical")
 ```
-1. Introduce dataset and how to plot connections.
-
-### Part A
-1. Fit an extremal tree model, choosing threshold `p = 0.7`.
-2. Plot the tree on the US map and interpret the results.
-3. Compute BIC values of fitted tree model.
-4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
-5. Take the `flight_connection` (!!! change) graph and fit a HR graphical model on it.
-6. Repeat steps 3., 4..
-7. If you see some "outliers" in plot from Part 4 from the `flight_connection` graph, can you provide explanation?
-
-### Part B
-1. Fit an extremal graphical lasso model, choosing threshold `p = 0.7`. Choose `rholist = seq(1e-4, 0.09, length.out = 10)`.
-2. Plot the tree on the US map for different values of `rho` and interpret the results.
-3. Compute BIC graph for different values of `rho`.
-3b. Another way to choose best `rho` is to compute `loglik` on test data (!!! if you have more data).
-4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
-5. Provide `Gamma` matrix using different methods
-  * `emp_vario`
-  * `emp_vario`, fix some`k = 1`
-  * `chi` -> `Gamma`
-  * `ML`using `ml_weight_matrix`
-fit `eglasso` and plot the different BIC curves.
-
-# !!! ask Leo about Zoom rooms
 
 
 # References
