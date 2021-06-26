@@ -509,8 +509,8 @@ fit_graph <- function(data, m=NULL, Gamma_emp=NULL){
 
 
 
-ml_weight_matrix <- function(data, cens){
-  ## numeric_matrix boolean -> list
+ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
+  ## numeric_matrix boolean numeric -> list
   ## produce a named list made of
   ## - llh_hr: loglikelihood values
   ## - est_gamma: estimated parameters
@@ -547,16 +547,23 @@ ml_weight_matrix <- function(data, cens){
 
   }
 
+  # Standardize data
+  if (!is.null(p)) {
+    data.std <- data2mpareto(data, p)
+  } else {
+    data.std <- data
+  }
+
   # Set up some variables
-  d <- ncol(data)
-  G_emp <- emp_vario(data = data)
+  d <- ncol(data.std)
+  G_emp <- emp_vario(data = data.std)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
 
   # Fig loglikelihood
   if (cens) {
-    bivLLH <- apply(res[, 1:2], 1, llh_cens, data, G_emp)
+    bivLLH <- apply(res[, 1:2], 1, llh_cens, data.std, G_emp)
   } else {
-    bivLLH <- apply(res[, 1:2], 1, llh_uncens, data, G_emp)
+    bivLLH <- apply(res[, 1:2], 1, llh_uncens, data.std, G_emp)
   }
 
   bivLLH.mat <- -par2Gamma(bivLLH["llh_hr", ])
