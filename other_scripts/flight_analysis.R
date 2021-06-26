@@ -236,18 +236,21 @@ ggplot() +
 
 # Set up matrix
 dat <- selected_flights %>%
+  mutate(DATE = as.Date(paste(YEAR, MONTH, DAY, sep = "-"))) %>%
   mutate(DELAY = ARRIVAL_DELAY) %>%
-  group_by(DAY, MONTH, ORIGIN_AIRPORT) %>%
+  group_by(DATE, ORIGIN_AIRPORT) %>%
   summarise(SUM_DELAY = sum(DELAY, na.rm = TRUE)) %>%
   filter(ORIGIN_AIRPORT %in% selected_airports$ORIGIN_AIRPORT) %>%
-  ungroup() %>%
-  rename(day = DAY)
+  arrange(DATE) %>%
+  ungroup()
 
 mat <- dat %>%
-  pivot_wider(id_cols = c("day", "MONTH"),
+  pivot_wider(id_cols = c("DATE"),
               names_from = "ORIGIN_AIRPORT",
               values_from = "SUM_DELAY") %>%
-  select(-MONTH, -day)
+  arrange(DATE) %>%
+  select(-DATE)
+
 
 # pairs(mat)
 # plot(mat$AMA, mat$LGA)
