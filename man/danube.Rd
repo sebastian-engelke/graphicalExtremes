@@ -5,20 +5,15 @@
 \alias{danube}
 \title{Upper Danube basin dataset.}
 \format{
-A list containing:
-\describe{
-\item{DataEvents}{a dataframe with the declustered timeseries for the 31
-stations.}
-...
-}
+An object of class \code{list} of length 4.
 }
 \source{
-???
+Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
 }
 \usage{
 danube
 }
 \description{
-A dataset containing river discharge data for tributaries of Danube in the ...
+A dataset containing river discharge data for tributaries of Danube.
 }
 \keyword{datasets}

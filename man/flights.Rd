@@ -3,17 +3,19 @@
 \docType{data}
 \name{flights}
 \alias{flights}
-\title{Flights delay data}
+\title{Flights delay data.}
 \format{
-A list containing:
+An object of class \code{list} of length 3.
 }
 \source{
-???
+U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics \url{https://www.bts.gov/}.
 }
 \usage{
 flights
 }
 \description{
-Flights delay data
+A dataset containing daily total delays (Jan 1, 2015 -- Dec 31, 2015)
+of Southwest Airlines at different airports in California, Nevada,
+Arizona, Utah, and Texas.
 }
 \keyword{datasets}
