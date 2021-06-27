@@ -19,6 +19,7 @@ vignette: >
 \newcommand{\g}[1]{\mathbf{#1}}
 \DeclareMathOperator{\MST}{mst}
 \DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\argmax}{arg\,max}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -469,6 +470,18 @@ ggplot() +
 
 
 ### Extremal graphical lasso
+
+For structure learning of more general, possibly non-decomposable graphs, we can use the extremal graphical lasso for H&uuml;sler--Reiss distributions. Given an estimate $\widehat \Gamma$ of the parameter matrix, e.g., obtained by `emp_vario()`, we compute the corresponding matrices $\widehat \Sigma^{(k)}$ through the function `Gamma2Sigma()`.
+
+In order to enforce sparsity, we compute the $\ell_1$-penalized precision matrices for each $k\in V$. For a tuning parameter $\rho\geq 0$, the extremal graphical lasso is 
+\begin{align*}  
+\widehat \Theta^{(k)}_{\rho} = \underset{{\Theta} \succeq 0}{\argmax} \,\,   \log \det{\Theta}-\operatorname{tr}(\widehat \Sigma^{(k)}\Theta) -\rho \sum_{\substack{i\neq j \\ i,j\neq k}} \left|\Theta_{ij}\right|.
+\end{align*}
+Since we run $d$ different graphical lasso algorithms and the $k$th only enforces sparsity for all edges that do not involve the $k$th node, we determine the estimated graph structure $\widehat{G}_\rho = (\widehat E_\rho,V)$ by majority vote:
+ $$ (i,j) \in \widehat E_\rho \quad \Leftrightarrow \quad \frac1{d-2} \# \left\{k \in V \setminus \{i,j\}: \right(\widehat\Theta^{(k)}_\rho \left)_{ij} \neq 0 \right\} \geq 1/2.$$
+
+The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the `eglasso()` function. It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
+
 
 ```{r, fig.align='center'}
 set.seed(42)
