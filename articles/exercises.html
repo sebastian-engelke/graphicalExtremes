@@ -134,6 +134,8 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
   <span class="fu">select</span><span class="op">(</span><span class="va">ID.origin</span>, <span class="va">ID.dest</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the <code>flight_graph</code> does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs.</p>
+<p>Below, we provide a helper functions that you might want to use to plot the estimated graph onto the US map.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plot_connections</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">airports</span>, <span class="va">connections</span><span class="op">)</span> <span class="op">{</span>
   <span class="co">## igraph tibble tibble -&gt; ggplot</span>
@@ -166,28 +168,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
              alpha <span class="op">=</span> <span class="fl">.4</span>, curvature <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
   
   
-<span class="op">}</span>
-
-<span class="va">plot_bic</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rholist</span>, <span class="va">bic_values</span>, <span class="va">eglasso_graph</span><span class="op">)</span><span class="op">{</span>
-  <span class="co">## numeric_vector numeric_vector graph -&gt; ggplot</span>
-  <span class="co">## produce plot with bic vs rho</span>
-  
-  <span class="fu">ggplot</span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">rholist</span>, y <span class="op">=</span> <span class="va">bic_values</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"rho"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"BIC"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>
-    breaks <span class="op">=</span> <span class="va">rholist</span>,
-    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">rholist</span>, <span class="fl">3</span><span class="op">)</span>,
-    sec.axis <span class="op">=</span> <span class="fu">sec_axis</span><span class="op">(</span>trans<span class="op">=</span><span class="op">~</span><span class="va">.</span>, breaks <span class="op">=</span> <span class="va">rholist</span>,
-                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">eglasso_graph</span><span class="op">$</span><span class="va">graph</span>, 
-                                        <span class="fu">igraph</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/igraph/man/gsize.html">gsize</a></span><span class="op">)</span>,
-                        name<span class="op">=</span><span class="st">"Number of edges"</span><span class="op">)</span>
-  <span class="op">)</span>
-  
 <span class="op">}</span></code></pre></div>
-<p>In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the <code>flight_graph</code> does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs.</p>
 <div id="part-a" class="section level1">
 <h1 class="hasAnchor">
 <a href="#part-a" class="anchor"></a>Part A</h1>
@@ -211,7 +192,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb6-3"><a href="#cb6-3"></a>                                 <span class="dt">graph =</span> flights_emst_fit<span class="op">$</span>graph)</span>
 <span id="cb6-4"><a href="#cb6-4"></a></span>
 <span id="cb6-5"><a href="#cb6-5"></a><span class="kw">paste0</span>(<span class="st">"Tree BIC = "</span>, flights_loglik_tree[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17056.23"</span></span></code></pre></div>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17044.26"</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model.</li>
 </ol>
@@ -228,9 +209,9 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <ol start="5" style="list-style-type: decimal">
 <li>Given the <code>flight_graph</code> object, fit a HR graphical model using <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code>.</li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_fit &lt;-<span class="st"> </span><span class="kw">fmpareto_graph_HR</span>(<span class="dt">data =</span> mat,</span>
-<span id="cb8-2"><a href="#cb8-2"></a>                               <span class="dt">graph =</span> flight_graph, <span class="dt">p =</span> p, <span class="dt">method =</span> <span class="st">"vario"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;</span><span class="st"> </span>The completed Gamma does not match the given graph.</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mat</span>,
+                               graph <span class="op">=</span> <span class="va">flight_graph</span>, p <span class="op">=</span> <span class="va">p</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
 <li>Compute the BIC value for the <code>flight_graph</code> object and the corresponding <code>Gamma</code> matrix obtained at Step 5.</li>
 </ol>
@@ -238,7 +219,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb9-2"><a href="#cb9-2"></a>                                  <span class="dt">p =</span> p, <span class="dt">graph =</span> flight_graph,</span>
 <span id="cb9-3"><a href="#cb9-3"></a>                                  <span class="dt">Gamma =</span> model_fit<span class="op">$</span>Gamma)</span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="kw">paste0</span>(<span class="st">"Tree BIC = "</span>, flights_loglik_graph[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 15084.12"</span></span></code></pre></div>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 15088.46"</span></span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model of Step 5.</li>
 </ol>
