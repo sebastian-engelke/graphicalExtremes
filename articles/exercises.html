@@ -173,7 +173,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 
 <span class="co"># Plot an igraph object</span>
 <span class="fu">plot_connections</span><span class="op">(</span><span class="va">flight_graph</span>, <span class="va">airports</span><span class="op">)</span></code></pre></div>
-<p><img src="exercises_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="exercises_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
 <div id="part-a" class="section level1">
 <h1 class="hasAnchor">
 <a href="#part-a" class="anchor"></a>Part A</h1>
@@ -197,7 +197,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb6-3"><a href="#cb6-3"></a>                                 <span class="dt">graph =</span> flights_emst_fit<span class="op">$</span>graph)</span>
 <span id="cb6-4"><a href="#cb6-4"></a></span>
 <span id="cb6-5"><a href="#cb6-5"></a><span class="kw">paste0</span>(<span class="st">"Tree BIC = "</span>, flights_loglik_tree[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17043.53"</span></span></code></pre></div>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17044.58"</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model.</li>
 </ol>
@@ -224,7 +224,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb9-2"><a href="#cb9-2"></a>                                  <span class="dt">p =</span> p, <span class="dt">graph =</span> flight_graph,</span>
 <span id="cb9-3"><a href="#cb9-3"></a>                                  <span class="dt">Gamma =</span> model_fit<span class="op">$</span>Gamma)</span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="kw">paste0</span>(<span class="st">"BIC = "</span>, flights_loglik_graph[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"BIC = 15084.04"</span></span></code></pre></div>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"BIC = 15087.11"</span></span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model of Step 5.</li>
 </ol>
