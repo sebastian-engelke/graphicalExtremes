@@ -285,12 +285,6 @@ If provided with a tree and data, the function `fmpareto_graph_HR()` estimates t
 danube_tree <- igraph::as.undirected(danube_flow)
 danube_flow_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
 
-ggplot() +
-  geom_point(aes(x = c(Gamma2chi(danube_flow_fit$Gamma)), y = c(chi_hat))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("Empirical") +
-  coord_cartesian(ylim = c(0.4, 1))
 
 
 ```
@@ -320,6 +314,14 @@ danube_emst_fit <- emst(data = X, p = .8, method = "vario")
 plot(danube_emst_fit$graph, layout = danube$coords_to_plot)
 ```
 
+```{r, fig.align='center'}
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(danube_flow_fit$Gamma)), y = c(chi_hat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical") +
+  coord_cartesian(ylim = c(0.4, 1))
+```
 
 
 ## H&uuml;sler--Reiss graphical models
