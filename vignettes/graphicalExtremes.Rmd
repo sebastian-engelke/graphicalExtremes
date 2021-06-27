@@ -587,7 +587,7 @@ Below, we provide a helper functions that you might use to plot an `igraph::grap
 ```{r, fig.align='center', fig.width=10}
 # Function definition
 plot_connections <- function(graph, airports) {
-  ## igraph tibble tibble -> ggplot
+  ## igraph tibble -> ggplot
   ## plots the given `graph` on the US map
   
   # name the graph nodes
