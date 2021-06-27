@@ -4,15 +4,15 @@
 #' Given a `graph` and `Gamma` matrix specified (at least) on the
 #' edges of `graph`, returns the full `Gamma` matrix implied
 #' by the conditional independencies.
-#' 
+#'
 #' If `graph` is decomposable, `Gamma` only needs to be specified on
 #' the edges of the graph and the graph structure can be implied by setting
 #' the remaining entries to `NA`.
-#' 
+#'
 #' If `graph` is not decomposable, the algorithm requires a fully specified
 #' variogram matrix `Gamma` and the graph structure needs to be explicitly
 #' provided in `graph`.
-#' 
+#'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
 #' @param graph Graph object from \code{igraph} package.
 #' The \code{graph} must be a connected, undirected graph.
@@ -50,7 +50,7 @@
 #' ), mode = "undirected")
 #' Gamma_vec <- c(.5, 1, 1.5, .8)
 #' complete_Gamma(Gamma_vec, my_graph)
-#' 
+#'
 #' ## Decomposable graph:
 #' G <- rbind(
 #' c(0, 5, 7, 6, NA),
@@ -59,9 +59,9 @@
 #' c(6, 15, 5, 0, 6),
 #' c(NA, NA, 5, 6, 0)
 #' )
-#' 
+#'
 #' complete_Gamma(G)
-#' 
+#'
 #' ## Non-decomposable graph:
 #' G <- rbind(
 #' c(0, 5, 7, 6, 6),
@@ -71,10 +71,10 @@
 #' c(6, 13, 5, 6, 0)
 #' )
 #' g <- igraph::make_ring(5)
-#' 
+#'
 #' complete_Gamma(G, g)
-#' 
-#' 
+#'
+#'
 #' @references
 #'  \insertAllCited{}
 #'
@@ -86,7 +86,7 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
   tmp <- check_Gamma_and_graph(Gamma, graph, graph_type = allowed_graph_type)
   Gamma <- tmp$Gamma
   graph <- tmp$graph
-  
+
   if(igraph::is_chordal(graph)$chordal){
     complete_Gamma_decomposable(Gamma, graph)
   } else{
@@ -96,23 +96,23 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
 
 
 #' Completion of non-decomposable Gamma matrices
-#' 
+#'
 #' Given a \code{graph} and variogram matrix `Gamma`, returns the full \code{Gamma}
 #' matrix implied by the conditional independencies.
 #' This function uses a convergent iterative algorithm.
-#' 
+#'
 #' @param Gamma A complete variogram matrix (without any graphical structure)
 #' @param graph An [igraph::graph] object
 #' @param N The maximal number of iterations of the algorithm
 #' @param tol The tolerance to use when checking for zero entries in `Theta`
 #' @param check_tol After how many iterations to check the tolerance in `Theta`
-#' 
-#' @return A matrix that agrees with `Gamma` on the entries corresponding to 
+#'
+#' @return A matrix that agrees with `Gamma` on the entries corresponding to
 #' edges in `graph` and the diagonals.
 #' The corresponding \eqn{\Theta} matrix produced by [Gamma2Theta] has values
-#' close to zero in the remaining entries (how close depends on the input 
+#' close to zero in the remaining entries (how close depends on the input
 #' and the number of iterations).
-#' 
+#'
 #' @family Matrix completions
 complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100) {
 
@@ -123,7 +123,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
     t <- (n - 1) %% m + 1
     g <- gList[[t]]
     Gamma <- complete_Gamma_decomposable(Gamma, g)
-    
+
     # Check if tolerance has been reached
     if(check_tol > 0 && n %% check_tol == 0){
       P <- Gamma2Theta(Gamma)
@@ -146,19 +146,19 @@ make_graph_list <- function(graph){
   edgeList <- lapply(seq_len(NROW(edgeMat)), function(i){
     edgeMat[i,]
   })
-  
+
   edgeMat0 <- igraph::as_edgelist(graph)
   edgeList0 <- lapply(seq_len(NROW(edgeMat0)), function(i){
     edgeMat0[i,]
   })
-  
+
   # order edges by vertex connectivity
   conn <- sapply(edgeList, function(edge){
     igraph::vertex_connectivity(graph, edge[1], edge[2])
   })
   ind <- order(conn, decreasing = TRUE)
   edgeList <- edgeList[ind]
-  
+
   gList <- list()
   for(edge in edgeList){
     tmp <- igraph::max_flow(
@@ -166,7 +166,7 @@ make_graph_list <- function(graph){
       edge[1],
       edge[2]
     )
-    
+
     cutEdges <- edgeList0[tmp$cut]
     sep <- integer(0)
     for(ce in cutEdges){
@@ -186,24 +186,24 @@ make_graph_list <- function(graph){
     g <- igraph::graph_from_adjacency_matrix(adj, mode='undirected')
     gList <- c(gList, list(g))
   }
-  
+
   return(gList)
 }
 
 #' Completion of decomposable Gamma matrices
-#' 
+#'
 #' Given a decomposable `graph` and incomplete variogram matrix `Gamma`,
 #' returns the full `Gamma` matrix implied by the conditional independencies.
-#' 
+#'
 #' @param Gamma A variogram matrix that is specified on the edges of `graph`
 #' and the diagonals. All other entries are ignored.
 #' @param graph A decomposable [igraph::graph] object
-#' 
+#'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries
 #' corresponding to edges in `graph` and the diagonals.
 #' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
 #' in the remaining entries.
-#' 
+#'
 #' @family Matrix completions
 complete_Gamma_decomposable <- function(Gamma, graph) {
   # computes cliques
@@ -234,21 +234,21 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
 
 
 #' Completion of two-clique decomposable Gamma matrices
-#' 
+#'
 #' Given a decomposable `graph` consisting of two cliques and incomplete
 #' variogram matrix `Gamma`,
 #' returns the full `Gamma` matrix implied by the conditional independencies.
-#' 
+#'
 #' @param Gamma A variogram matrix that is specified on the edges of `graph`
 #' and the diagonals. All other entries are ignored.
 #' @param graph A decomposable [igraph::graph] object with two cliques and
 #' non-empty separator set
-#' 
+#'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries
 #' corresponding to edges in `graph` and the diagonals.
 #' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
 #' in the remaining entries.
-#' 
+#'
 #' @family Matrix completions
 complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   n <- nA + nB + nC

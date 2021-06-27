@@ -171,12 +171,11 @@ fast_diag <- function(y, M) {
 
 graphs_equal <- function(g1, g2) {
   ## graph graph -> boolean
-  ## produce true if two graphs have same edge and node list
+  ## produce true if two graphs have same edges
 
-  e1 <- igraph::as_edgelist(g1)
-  e2 <- igraph::as_edgelist(g2)
-  n1 <- igraph::V(g1)
-  n2 <- igraph::V(g2)
+  s1 <- igraph::gsize(g1)
+  s2 <- igraph::gsize(g2)
+  s_int <- igraph::gsize(igraph::intersection(g1, g2))
 
-  identical(e1, e2)
+  (s_int == s1) & (s_int == s2)
 }
