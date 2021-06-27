@@ -88,6 +88,9 @@ flight_graph <- connections %>%
 
 ```
 
+In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
+
+Below, we provide a helper functions that you might want to use to plot the estimated graph onto the US map.
 ```{r}
 plot_connections <- function(graph, airports, connections) {
   ## igraph tibble tibble -> ggplot
@@ -122,28 +125,9 @@ plot_connections <- function(graph, airports, connections) {
   
 }
 
-plot_bic <- function(rholist, bic_values, eglasso_graph){
-  ## numeric_vector numeric_vector graph -> ggplot
-  ## produce plot with bic vs rho
-  
-  ggplot(mapping = aes(x = rholist, y = bic_values)) +
-  geom_line() +
-  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-  xlab("rho") +
-  ylab("BIC") +
-  scale_x_continuous(
-    breaks = rholist,
-    labels = round(rholist, 3),
-    sec.axis = sec_axis(trans=~., breaks = rholist,
-                        labels = sapply(eglasso_graph$graph, 
-                                        igraph::gsize),
-                        name="Number of edges")
-  )
-  
-}
 ```
 
-In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
+
 
 # Part A
 1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
