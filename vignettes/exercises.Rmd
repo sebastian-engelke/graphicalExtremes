@@ -44,7 +44,7 @@ theme_set(theme_bw() +
 ```
 
 
-The `flights()`dataset contains daily delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
+The `flights()`dataset contains daily total delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
 The object `flights()` is a list made of:
 
 * `data`: a `dplyr::tibble()`  containing the delay data. Each row corresponds to a day and each column to an airport.
@@ -104,8 +104,11 @@ mat
 
 ```
 
+
+In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
+
 # Part A
-1. Fit an extremal tree model with `emst()`, choosing threshold `p = 0.7`. 
+1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
 ```{r, collapse=TRUE, fig.align='center'}
 p <- .7
 flights_emst_fit <- emst(data = mat, p = p, method = "vario")
@@ -150,7 +153,6 @@ paste0("Tree BIC = ", flights_loglik_tree[3] %>% round(2))
 
 4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
 
-_Hint_: The function `emp_chi()` accepts `base::matrix()` as input.
 ```{r, fig.align='center'}
 emp_chi_mat <- emp_chi(mat, p = p)
 
