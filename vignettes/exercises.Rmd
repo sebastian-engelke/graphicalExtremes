@@ -167,7 +167,7 @@ ggplot() +
 ```
 
 5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
-```{r}
+```{r, message=FALSE, warning=FALSE}
 model_fit <- fmpareto_graph_HR(data = mat,
                                graph = flight_graph, p = p, method = "vario")
 ```
