@@ -93,7 +93,7 @@
     
 
 
-<p>The <code><a href="../reference/flights.html">flights()</a></code>dataset contains daily delays (Jan 1, 2015 – Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
+<p>The <code><a href="../reference/flights.html">flights()</a></code>dataset contains daily total delays (Jan 1, 2015 – Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
 The object <code><a href="../reference/flights.html">flights()</a></code> is a list made of:</p>
 <ul>
 <li>
@@ -133,11 +133,12 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
   <span class="fu">select</span><span class="op">(</span><span class="va">ORIGIN_AIRPORT</span>, <span class="va">DESTINATION_AIRPORT</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the <code>flight_graph</code> does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs.</p>
 <div id="part-a" class="section level1">
 <h1 class="hasAnchor">
 <a href="#part-a" class="anchor"></a>Part A</h1>
 <ol style="list-style-type: decimal">
-<li>Fit an extremal tree model with <code><a href="../reference/emst.html">emst()</a></code>, choosing threshold <code>p = 0.7</code>.</li>
+<li>Fit an extremal tree model to the flight delays using <code><a href="../reference/emst.html">emst()</a></code>, choosing the threshold <code>p = 0.7</code>.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">.7</span>
@@ -176,11 +177,10 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb5-3"><a href="#cb5-3"></a>                                 <span class="dt">graph =</span> flights_emst_fit<span class="op">$</span>graph)</span>
 <span id="cb5-4"><a href="#cb5-4"></a></span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="kw">paste0</span>(<span class="st">"Tree BIC = "</span>, flights_loglik_tree[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17049.64"</span></span></code></pre></div>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 17055.99"</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model.</li>
 </ol>
-<p><em>Hint</em>: The function <code><a href="../reference/emp_chi.html">emp_chi()</a></code> accepts <code><a href="https://rdrr.io/r/base/matrix.html">base::matrix()</a></code> as input.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">emp_chi_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span><span class="va">mat</span>, p <span class="op">=</span> <span class="va">p</span><span class="op">)</span>
 
@@ -205,7 +205,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <span id="cb8-2"><a href="#cb8-2"></a>                                  <span class="dt">p =</span> p, <span class="dt">graph =</span> flight_graph,</span>
 <span id="cb8-3"><a href="#cb8-3"></a>                                  <span class="dt">Gamma =</span> model_fit<span class="op">$</span>Gamma)</span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="kw">paste0</span>(<span class="st">"Tree BIC = "</span>, flights_loglik_graph[<span class="dv">3</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>))</span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 16836.19"</span></span></code></pre></div>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>] <span class="st">"Tree BIC = 16832.55"</span></span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model of Step 5.</li>
 </ol>
