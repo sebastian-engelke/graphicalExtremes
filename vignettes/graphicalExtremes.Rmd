@@ -483,7 +483,7 @@ Since we run $d$ different graphical lasso algorithms and the $k$th only enforce
 The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the `eglasso()` function. It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
 
-```{r, fig.align='center'}
+```{r, fig.align='center', message=FALSE, warning=FALSE}
 set.seed(42)
 rholist = seq(1e-5, 0.04, length.out = 10)
 danube_eglasso_fit <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
@@ -522,7 +522,7 @@ plot(danube_eglasso_fit$graph[[10]], layout = danube$coords_to_plot,
 ```
 
 
-```{r, fig.align='center'}
+```{r, fig.align='center', message=FALSE, warning=FALSE}
 best_Gamma <- danube_eglasso_fit$Gamma[[which.min(danube_loglik[3,])]]
 
 ggplot() +
@@ -533,6 +533,121 @@ ggplot() +
   coord_cartesian(ylim = c(0.4, 1))
 ```
 
+
+# Exercises
+The `flights()`dataset contains daily total delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
+The object `flights()` is a list made of:
+
+* `data`: a `dplyr::tibble()`  containing the delay data. Each row corresponds to a day and each column to an airport.
+* `airports`: a `dplyr::tibble()` containing the details for each airport.
+* `connections`: a `dplyr::tibble()` containing the details of the _undirected_ flights.
+
+In the code below, we show how to load the dataset and plot the flight connections.
+
+```{r, fig.align='center', fig.width=10}
+# Load the dataset
+data <- flights$data
+airports <- flights$airports
+connections <- flights$connections
+
+mat <- data %>% 
+  select(-DATE) %>% 
+  as.matrix()
+
+# Plot flight connection
+ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = connections,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest,
+                 size = N_FLIGHTS),
+             alpha = .2, curvature = 0)
+
+```
+
+Also, it is useful to create an `igraph::graph()` object for the flights connections.
+```{r}
+flight_graph <- connections %>%
+  select(ID.origin, ID.dest) %>%
+  as.matrix() %>%
+  igraph::graph_from_edgelist(directed = FALSE)
+
+```
+
+In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
+
+Below, we provide a helper functions that you might want to use to plot the estimated graph onto the US map.
+```{r}
+plot_connections <- function(graph, airports, connections) {
+  ## igraph tibble tibble -> ggplot
+  ## plots the given `graph` on the US map
+  
+  # name the graph nodes
+  igraph::V(graph)$name <- airports$IATA_CODE[airports$ID == igraph::V(graph)]
+  
+  # write flight connections
+  flights_connections_est <- igraph::get.edgelist(graph) %>%
+  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
+  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
+  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
+            suffix = c(".origin", ".dest")) %>%
+  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
+         LATITUDE.origin, LONGITUDE.origin,
+         LATITUDE.dest, LONGITUDE.dest)
+  
+  # plot connections
+  ggplot() +
+  geom_polygon(data = map_data("usa"),
+               aes(x = long, y = lat, group = group), color = "grey65",
+               fill = "#f9f9f9", size = 0.2) +
+  geom_point(data = airports,
+             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
+             alpha = 1) +
+  geom_curve(data = flights_connections_est,
+             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
+                 y = LATITUDE.origin, yend = LATITUDE.dest),
+             alpha = .4, curvature = 0)
+  
+  
+}
+
+```
+
+
+
+## Part A
+
+1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
+2. Plot the estimated tree on the US map and interpret the results.
+3. Compute the BIC value of the fitted tree model.
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
+5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
+6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
+7. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model of Step 5.
+
+## Part B
+
+1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
+2. Plot the estimated graph on the US map for different values of `rho` and interpret the results.
+3. Compute and plot the BIC values of the estimated models for different values of `rho`.
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
+5. The function `eglasso()` accepts as input the variogram matrix `Gamma`. Try to estimate the variogram matrix using different methods, such as:
+
+* `emp_vario()`, fixing some `k`, e.g., `k = 1`.
+* `graphicalExtremes:::ml_weight_matrix()`, which is an internal function.
+
+With these different estimates for the variogram:
+
+* fit an `eglasso()` model,
+* plot the corresponding BIC curves,
+* plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* `eglasso()` fit.
+
+_Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
 
 
 # References
