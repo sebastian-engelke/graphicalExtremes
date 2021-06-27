@@ -141,7 +141,7 @@ flights_emst_fit <- emst(data = mat, p = p, method = "vario")
 
 2. Plot the estimated tree on the US map and interpret the results.
 ```{r, fig.align='center', fig.width=10}
-plot_connections(flights_emst_fit$graph, airports, connections)
+plot_connections(flights_emst_fit$graph, airports)
 
 ```
 
@@ -211,7 +211,7 @@ flights_eglasso_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
 2. Plot the estimated graph on the US map for different values of `rho` and interpret the results.
 
 ```{r, fig.align='center', fig.width=10}
-plot_connections(flights_eglasso_fit$graph[[10]], airports, connections)
+plot_connections(flights_eglasso_fit$graph[[10]], airports)
 
 ```
 
