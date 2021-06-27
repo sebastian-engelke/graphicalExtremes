@@ -57,13 +57,7 @@ In the code below, we show how to load the dataset and plot the flight connectio
 # Load the dataset
 data <- flights$data
 airports <- flights$airports
-
-airports_id <- tibble(ORIGIN_AIRPORT = airports$ORIGIN_AIRPORT, 
-                      ID = seq_len(nrow(airports)))
-connections <- flights$connections %>% 
-  left_join(airports_id, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>% 
-  left_join(airports_id, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"), 
-            suffix = c(".origin", ".dest"))
+connections <- flights$connections
 
 mat <- data %>% 
   select(-DATE) %>% 
@@ -88,46 +82,32 @@ ggplot() +
 Also, it is useful to create an `igraph::graph()` object for the flights connections.
 ```{r}
 flight_graph <- connections %>%
-  ungroup() %>% 
   select(ID.origin, ID.dest) %>%
   as.matrix() %>%
   igraph::graph_from_edgelist(directed = FALSE)
 
-flight_graph2 <- connections %>% 
-  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
-  as.matrix() %>%
-  igraph::graph_from_edgelist(directed = FALSE)
-
-
-igraph::E(flight_graph)
-mat
-
 ```
 
-
-In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
-
-# Part A
-1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
-```{r, collapse=TRUE, fig.align='center'}
-p <- .7
-flights_emst_fit <- emst(data = mat, p = p, method = "vario")
-igraph::V(flights_emst_fit$graph)$name <- colnames(mat)
-
-```
-
-2. Plot the estimated tree on the US map and interpret the results.
-```{r, fig.align='center', fig.width=10}
-flights_connections_est <- igraph::get.edgelist(flights_emst_fit$graph) %>%
+```{r}
+plot_connections <- function(graph, airports, connections) {
+  ## igraph tibble tibble -> ggplot
+  ## plots the given `graph` on the US map
+  
+  # name the graph nodes
+  igraph::V(graph)$name <- airports$IATA_CODE[airports$ID == igraph::V(graph)]
+  
+  # write flight connections
+  flights_connections_est <- igraph::get.edgelist(graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
-  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
-  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
+  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
+  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
             suffix = c(".origin", ".dest")) %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
-
-ggplot() +
+  
+  # plot connections
+  ggplot() +
   geom_polygon(data = map_data("usa"),
                aes(x = long, y = lat, group = group), color = "grey65",
                fill = "#f9f9f9", size = 0.2) +
@@ -138,6 +118,44 @@ ggplot() +
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .4, curvature = 0)
+  
+  
+}
+
+plot_bic <- function(rholist, bic_values, eglasso_graph){
+  ## numeric_vector numeric_vector graph -> ggplot
+  ## produce plot with bic vs rho
+  
+  ggplot(mapping = aes(x = rholist, y = bic_values)) +
+  geom_line() +
+  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+  xlab("rho") +
+  ylab("BIC") +
+  scale_x_continuous(
+    breaks = rholist,
+    labels = round(rholist, 3),
+    sec.axis = sec_axis(trans=~., breaks = rholist,
+                        labels = sapply(eglasso_graph$graph, 
+                                        igraph::gsize),
+                        name="Number of edges")
+  )
+  
+}
+```
+
+In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
+
+# Part A
+1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
+```{r, collapse=TRUE, fig.align='center'}
+p <- .7
+flights_emst_fit <- emst(data = mat, p = p, method = "vario")
+
+```
+
+2. Plot the estimated tree on the US map and interpret the results.
+```{r, fig.align='center', fig.width=10}
+plot_connections(flights_emst_fit$graph, airports, connections)
 
 ```
 
@@ -168,23 +186,6 @@ ggplot() +
 ```{r}
 model_fit <- fmpareto_graph_HR(data = mat,
                                graph = flight_graph, p = p, method = "vario")
-
-compl_gamma <- complete_Gamma(emp_vario(data = mat, p = .7), graph = flight_graph2)
-outliers <- which(abs(Gamma2chi(compl_gamma) - 
-            Gamma2chi(emp_vario(data = mat, p = .7))) > .05,
-      arr.ind = TRUE) %>% 
-  as_tibble() %>% 
-  rename(ID.origin = row, ID.dest = col) %>% 
-  left_join(airports_id, by = c("ID.origin" = "ID")) %>% 
-  left_join(airports_id, by = c("ID.dest" = "ID")) %>% 
-  mutate(name1 = paste0(ORIGIN_AIRPORT.x, ORIGIN_AIRPORT.y),
-         name2 = paste0(ORIGIN_AIRPORT.y, ORIGIN_AIRPORT.x))
-
-
-unique(c(outliers$name1, outliers$name2)) %in% 
-  paste0(connections$ORIGIN_AIRPORT, connections$DESTINATION_AIRPORT)
-
-compl_gamma2 <- complete_Gamma(emp_vario(data = mat, p = .8), graph = flight_graph)
 ```
 
 6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
@@ -202,62 +203,10 @@ paste0("Tree BIC = ", flights_loglik_graph[3] %>% round(2))
 ```{r, fig.align='center'}
 ggplot() +
   geom_point(aes(x = c(Gamma2chi(model_fit$Gamma)),
-                 y = c(Gamma2chi(emp_vario(mat, p = p))))) +
+                 y = c(emp_chi_mat))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical")
-
-
-Gamma2chi(model_fit$Gamma) == Gamma2chi(emp_vario(mat, p = p))
-
-outlier_inds <- which(upper.tri(Gamma2chi(emp_vario(mat, p = p))) & 
-                        Gamma2chi(model_fit$Gamma) < 0.4 &
-                        Gamma2chi(emp_vario(mat, p = p)) > 0.5,
-                      arr.ind = TRUE)
-
-```
-
-7. Do you observe any "outliers" in the previous plot? Can you provide an explanation for these?
-```{r, fig.align='center', fig.width=10}
-# Select suspicious flight connections
-outlier_inds2 <- which(upper.tri(emp_chi_mat) & 
-                        Gamma2chi(model_fit$Gamma) < 0.4 &
-                        emp_chi_mat > 0.5,
-                      arr.ind = TRUE)
-
-outlier_connections <- tibble(
-  ORIGIN_AIRPORT = colnames(mat)[outlier_inds[, 1]],
-  DESTINATION_AIRPORT = colnames(mat)[outlier_inds[, 2]]
-) %>% 
-  left_join(airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
-  left_join(airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
-            suffix = c(".origin", ".dest")) %>%
-  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
-         LATITUDE.origin, LONGITUDE.origin,
-         LATITUDE.dest, LONGITUDE.dest)
-
-
-# Plot San Diego International Airport delays
-ggplot(data) +
-  geom_point(aes(x = DATE, y = SAN))
-
-# Possible explanation July 18, 2015 from dataset  (https://www.sandiegouniontribune.com/sdut-thunderstorms-fire-dolors-2015jul18-story.html)
-# mat_wo_storm <- data %>% 
-#   filter(lubridate::month(DATE) != 7) %>%
-#   select(-DATE) %>% 
-#   as.matrix()
-# 
-# # Fit again the model
-# model_fit_wo_storm <- fmpareto_graph_HR(data = mat_wo_storm,
-#                                graph = flight_graph, p = p, method = "vario")
-# 
-# # Plot goodness of fit
-# ggplot() +
-#   geom_point(aes(x = c(Gamma2chi(model_fit_wo_storm$Gamma)),
-#                  y = c(emp_chi(mat_wo_storm, p = p)))) +
-#   geom_abline(slope = 1, intercept = 0) +
-#   xlab("Fitted") +
-#   ylab("Empirical")
 
 ```
 
@@ -266,43 +215,18 @@ ggplot(data) +
 
 1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 Gamma <- emp_vario(mat, p = p)
 rholist = seq(1e-4, 0.10, length.out = 10)
 flights_eglasso_fit <- eglasso(Gamma, rholist = rholist, complete_Gamma = TRUE)
 
-# Add labels to graph edges
-flights_eglasso_fit$graph <- lapply(seq_along(rholist), function(i) {
-  est_graph <- flights_eglasso_fit$graph[[i]]
-  igraph::V(est_graph)$name <- colnames(mat)
-  est_graph
-})
 ```
 
 2. Plot the estimated graph on the US map for different values of `rho` and interpret the results.
 
 ```{r, fig.align='center', fig.width=10}
-flights_connections_est <-
-  igraph::get.edgelist(flights_eglasso_fit$graph[[10]]) %>%
-  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
-  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>%
-  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"),
-            suffix = c(".origin", ".dest")) %>%
-  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
-         LATITUDE.origin, LONGITUDE.origin,
-         LATITUDE.dest, LONGITUDE.dest)
+plot_connections(flights_eglasso_fit$graph[[10]], airports, connections)
 
-ggplot() +
-  geom_polygon(data = map_data("usa"),
-               aes(x = long, y = lat, group = group), color = "grey65",
-               fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = airports,
-             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
-             alpha = 1) +
-  geom_curve(data = flights_connections_est,
-             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .4, curvature = 0)
 ```
 
 3. Compute and plot the BIC values of the estimated models for different values of `rho`.
@@ -331,7 +255,6 @@ ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
 
 ```
 
-<!-- 3b. Another way to choose best `rho` is to compute `loglik` on test data (!!! if you have more data). -->
 
 4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
 
@@ -350,23 +273,42 @@ ggplot() +
 5. The function `eglasso()` accepts as input the variogram matrix `Gamma`. Try to estimate the variogram matrix using different methods, such as:
 
 * `emp_vario()`, fixing some `k`, e.g., `k = 1`.
-* `emp_chi()` and then transforming the result with `chi2Gamma()`.
 * `graphicalExtremes:::ml_weight_matrix()`, which is an internal function.
 
-With these different estimates for the variogram, fit an `eglasso()` model and plot the different BIC curves.
+With these different estimates for the variogram:
+
+* fit an `eglasso()` model,
+* plot the corresponding BIC curves,
+* plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* `eglasso()` fit.
 
 _Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
 
-```{r, fig.align='center'}
+```{r, message=FALSE, warning=FALSE}
 Gamma_vario_k_1 <- emp_vario(data = mat, k = 1, p = p)
+flights_eglasso_k_1 <- eglasso(Gamma_vario_k_1, rholist, 
+                               complete_Gamma = TRUE)
 
-flights_eglasso_fit <- eglasso(Gamma_vario_k_1, rholist, complete_Gamma = TRUE)
+Gamma_ml <- graphicalExtremes:::ml_weight_matrix(data = mat, p = p)
+flights_eglasso_ml <- eglasso(Gamma_ml$est_gamma, rholist, 
+                               complete_Gamma = TRUE)
 
-flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
+```
+
+```{r, fig.show='hold', echo=FALSE, out.width="33%"}
+flights_loglik_k_1 <- sapply(seq_along(rholist), FUN = function(j) {
  loglik_HR(data=mat, p=p, 
-           Gamma = flights_eglasso_fit$Gamma[[j]],
-           graph = flights_eglasso_fit$graph[[j]] )
+           Gamma = flights_eglasso_k_1$Gamma[[j]],
+           graph = flights_eglasso_k_1$graph[[j]] )
 })
+
+not_na <- !is.na(flights_eglasso_ml$Gamma)
+
+flights_loglik_ml <- sapply(seq_along(rholist[not_na]), FUN = function(j) {
+ loglik_HR(data=mat, p=p, 
+           Gamma = flights_eglasso_ml$Gamma[[j]],
+           graph = flights_eglasso_ml$graph[[j]] )
+})
+
 
 ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
   geom_line() +
@@ -381,32 +323,10 @@ ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
                         labels = sapply(flights_eglasso_fit$graph, 
                                         igraph::gsize),
                         name="Number of edges")
-  )
+  ) +
+  ggtitle("Empirical variogram")
 
-```
-
-
-```{r, fig.align='center'}
-Gamma_from_chi <- chi2Gamma(chi = emp_chi(data = mat, p = p))
-
-matrixcalc::is.positive.definite(Gamma2Sigma(Gamma_from_chi, k = 1))
-
-# !!! opposite behaviour wrt rho
-rholist <- seq(0.09, 0.2, length.out = 10)
-Gamma_ml <- graphicalExtremes:::ml_weight_matrix(data = mat,
-                                                 p = p)
-flights_eglasso_fit <- eglasso(Gamma_from_chi, rholist, 
-                               complete_Gamma = TRUE)
-
-not_na <- !is.na(flights_eglasso_fit$Gamma)
-
-flights_loglik <- sapply(seq_along(rholist[not_na]), FUN = function(j) {
- loglik_HR(data=mat, p=p, 
-           Gamma = flights_eglasso_fit$Gamma[[j]],
-           graph = flights_eglasso_fit$graph[[j]] )
-})
-
-ggplot(mapping = aes(x = rholist[not_na], y = flights_loglik[3, ])) +
+ggplot(mapping = aes(x = rholist, y = flights_loglik_k_1[3, ])) +
   geom_line() +
   geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
   geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
@@ -419,6 +339,61 @@ ggplot(mapping = aes(x = rholist[not_na], y = flights_loglik[3, ])) +
                         labels = sapply(flights_eglasso_fit$graph, 
                                         igraph::gsize),
                         name="Number of edges")
-  )
+  ) +
+  ggtitle("Empirical variogram with k = 1")
+
+
+
+ggplot(mapping = aes(x = rholist[not_na], y = flights_loglik_ml[3, ])) +
+  geom_line() +
+  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+  geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
+  xlab("rho") +
+  ylab("BIC") +
+  scale_x_continuous(
+    breaks = rholist,
+    labels = round(rholist, 3),
+    sec.axis = sec_axis(trans=~., breaks = rholist,
+                        labels = sapply(flights_eglasso_fit$graph, 
+                                        igraph::gsize),
+                        name="Number of edges")
+  ) +
+  ggtitle("ML variogram")
+
+
+
+```
+
+
+```{r, fig.show='hold', echo=FALSE, out.width="33%"}
+best_Gamma <- flights_eglasso_fit$Gamma[[which.min(flights_loglik[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)),
+                 y = c(emp_chi_mat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical") +
+  ggtitle("Empirical variogram")
+
+best_Gamma <- flights_eglasso_k_1$Gamma[[which.min(flights_loglik_k_1[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)),
+                 y = c(emp_chi_mat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical") +
+  ggtitle("Empirical variogram with k = 1")
+
+best_Gamma <- flights_eglasso_ml$Gamma[[which.min(flights_loglik_ml[3,])]]
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(best_Gamma)),
+                 y = c(emp_chi_mat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical") +
+  ggtitle("ML variogram")
 ```
 
