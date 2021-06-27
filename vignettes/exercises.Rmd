@@ -91,7 +91,7 @@ flight_graph <- connections %>%
 In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
 
 Below, we provide a helper functions that you might use to plot an `igraph::graph()` object on the US map.
-```{r}
+```{r, fig.align='center'}
 # Function definition
 plot_connections <- function(graph, airports) {
   ## igraph tibble tibble -> ggplot
