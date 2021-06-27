@@ -581,9 +581,10 @@ flight_graph <- connections %>%
 
 In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
 
-Below, we provide a helper functions that you might want to use to plot the estimated graph onto the US map.
+Below, we provide a helper functions that you might use to plot an `igraph::graph()` object on the US map.
 ```{r}
-plot_connections <- function(graph, airports, connections) {
+# Function definition
+plot_connections <- function(graph, airports) {
   ## igraph tibble tibble -> ggplot
   ## plots the given `graph` on the US map
   
@@ -593,8 +594,8 @@ plot_connections <- function(graph, airports, connections) {
   # write flight connections
   flights_connections_est <- igraph::get.edgelist(graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
-  left_join(flights$airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
-  left_join(flights$airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
+  left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
+  left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
             suffix = c(".origin", ".dest")) %>%
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
          LATITUDE.origin, LONGITUDE.origin,
@@ -616,8 +617,9 @@ plot_connections <- function(graph, airports, connections) {
   
 }
 
+# Plot an igraph object
+plot_connections(flight_graph, airports)
 ```
-
 
 
 ## Part A
