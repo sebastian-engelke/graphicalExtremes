@@ -17,7 +17,7 @@ vignette: >
 
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
-\DeclareMathOperator{\MST}{mst}the
+\DeclareMathOperator{\MST}{mst}
 \DeclareMathOperator{\argmin}{arg\,min}
 \DeclareMathOperator{\argmax}{arg\,max}
 
