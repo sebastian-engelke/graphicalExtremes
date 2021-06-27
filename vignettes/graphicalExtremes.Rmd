@@ -17,7 +17,7 @@ vignette: >
 
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
-\DeclareMathOperator{\MST}{mst}
+\DeclareMathOperator{\MST}{mst}the
 \DeclareMathOperator{\argmin}{arg\,min}
 \DeclareMathOperator{\argmax}{arg\,max}
 
@@ -140,7 +140,7 @@ Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
 :::
 
-The function `rmpareto_tree()` generates samples from a MPD $\g Y$ based on the exact algorithm described in @eng2019.
+The function `rmpareto()` generates samples from a MPD $\g Y$ based on the exact algorithm described in @eng2019.
 
 
 ```{r, fig.align='center'}
@@ -153,7 +153,7 @@ Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
 
 ```
 
-Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable_tree()`, following the exact algorithm in @dom2016.
+Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable()`, following the exact algorithm in @dom2016.
 
 
 ## Measures of extremal dependence
