@@ -57,7 +57,14 @@ In the code below, we show how to load the dataset and plot the flight connectio
 # Load the dataset
 data <- flights$data
 airports <- flights$airports
-connections <- flights$connections
+
+airports_id <- tibble(ORIGIN_AIRPORT = airports$ORIGIN_AIRPORT, 
+                      ID = seq_len(nrow(airports)))
+connections <- flights$connections %>% 
+  left_join(airports_id, by = c("ORIGIN_AIRPORT" = "ORIGIN_AIRPORT")) %>% 
+  left_join(airports_id, by = c("DESTINATION_AIRPORT" = "ORIGIN_AIRPORT"), 
+            suffix = c(".origin", ".dest"))
+
 mat <- data %>% 
   select(-DATE) %>% 
   as.matrix()
@@ -81,9 +88,19 @@ ggplot() +
 Also, it is useful to create an `igraph::graph()` object for the flights connections.
 ```{r}
 flight_graph <- connections %>%
+  ungroup() %>% 
+  select(ID.origin, ID.dest) %>%
+  as.matrix() %>%
+  igraph::graph_from_edgelist(directed = FALSE)
+
+flight_graph2 <- connections %>% 
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT) %>%
   as.matrix() %>%
   igraph::graph_from_edgelist(directed = FALSE)
+
+
+igraph::E(flight_graph)
+mat
 
 ```
 
@@ -149,6 +166,23 @@ ggplot() +
 ```{r}
 model_fit <- fmpareto_graph_HR(data = mat,
                                graph = flight_graph, p = p, method = "vario")
+
+compl_gamma <- complete_Gamma(emp_vario(data = mat, p = .7), graph = flight_graph2)
+outliers <- which(abs(Gamma2chi(compl_gamma) - 
+            Gamma2chi(emp_vario(data = mat, p = .7))) > .05,
+      arr.ind = TRUE) %>% 
+  as_tibble() %>% 
+  rename(ID.origin = row, ID.dest = col) %>% 
+  left_join(airports_id, by = c("ID.origin" = "ID")) %>% 
+  left_join(airports_id, by = c("ID.dest" = "ID")) %>% 
+  mutate(name1 = paste0(ORIGIN_AIRPORT.x, ORIGIN_AIRPORT.y),
+         name2 = paste0(ORIGIN_AIRPORT.y, ORIGIN_AIRPORT.x))
+
+
+unique(c(outliers$name1, outliers$name2)) %in% 
+  paste0(connections$ORIGIN_AIRPORT, connections$DESTINATION_AIRPORT)
+
+compl_gamma2 <- complete_Gamma(emp_vario(data = mat, p = .8), graph = flight_graph)
 ```
 
 6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
@@ -166,16 +200,25 @@ paste0("Tree BIC = ", flights_loglik_graph[3] %>% round(2))
 ```{r, fig.align='center'}
 ggplot() +
   geom_point(aes(x = c(Gamma2chi(model_fit$Gamma)),
-                 y = c(emp_chi_mat))) +
+                 y = c(Gamma2chi(emp_vario(mat, p = p))))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical")
+
+
+Gamma2chi(model_fit$Gamma) == Gamma2chi(emp_vario(mat, p = p))
+
+outlier_inds <- which(upper.tri(Gamma2chi(emp_vario(mat, p = p))) & 
+                        Gamma2chi(model_fit$Gamma) < 0.4 &
+                        Gamma2chi(emp_vario(mat, p = p)) > 0.5,
+                      arr.ind = TRUE)
+
 ```
 
 7. Do you observe any "outliers" in the previous plot? Can you provide an explanation for these?
 ```{r, fig.align='center', fig.width=10}
 # Select suspicious flight connections
-outlier_inds <- which(upper.tri(emp_chi_mat) & 
+outlier_inds2 <- which(upper.tri(emp_chi_mat) & 
                         Gamma2chi(model_fit$Gamma) < 0.4 &
                         emp_chi_mat > 0.5,
                       arr.ind = TRUE)
@@ -190,6 +233,7 @@ outlier_connections <- tibble(
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
+
 
 # Plot San Diego International Airport delays
 ggplot(data) +
@@ -341,11 +385,15 @@ ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
 
 
 ```{r, fig.align='center'}
-# Gamma_from_chi <- chi2Gamma(chi = emp_chi(data = mat, p = p))
+Gamma_from_chi <- chi2Gamma(chi = emp_chi(data = mat, p = p))
+
+matrixcalc::is.positive.definite(Gamma2Sigma(Gamma_from_chi, k = 1))
+
 # !!! opposite behaviour wrt rho
+rholist <- seq(0.09, 0.2, length.out = 10)
 Gamma_ml <- graphicalExtremes:::ml_weight_matrix(data = mat,
                                                  p = p)
-flights_eglasso_fit <- eglasso(Gamma_ml$est_gamma, rholist, 
+flights_eglasso_fit <- eglasso(Gamma_from_chi, rholist, 
                                complete_Gamma = TRUE)
 
 not_na <- !is.na(flights_eglasso_fit$Gamma)
