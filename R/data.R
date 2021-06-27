@@ -1,22 +1,17 @@
 #' Upper Danube basin dataset.
 #'
-#' A dataset containing river discharge data for tributaries of Danube in the ...
+#' A dataset containing river discharge data for tributaries of Danube.
 #'
-#' @format A list containing:
-#' \describe{
-#'   \item{DataEvents}{a dataframe with the declustered timeseries for the 31
-#'   stations.}
-#'   ...
-#' }
-#' @source ???
+#' @source Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
+#'
 "danube"
 
 
-#' Flights delay data
+#' Flights delay data.
 #'
+#' A dataset containing daily total delays (Jan 1, 2015 -- Dec 31, 2015)
+#' of Southwest Airlines at different airports in California, Nevada,
+#' Arizona, Utah, and Texas.
 #'
-#' @format A list containing:
-#'
-#'
-#' @source ???
+#' @source U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics \url{https://www.bts.gov/}.
 "flights"
