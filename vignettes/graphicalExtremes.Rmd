@@ -99,7 +99,7 @@ $$ \g{Y} = \lim_{u\to \infty} \g{X}_u /u,$$
 where the limit is in terms of convergence in distribution. By construction, the distribution of the MPD $\g Y$ is defined on the space $\mathcal L = \{\g x \in [0,\infty)^d : \| \g x \|_\infty > 1\}$, and if $\g Y$ possesses a density $f_{\g Y}$, then it is proportional to the so-called exponent measure density $\lambda$; for details see @eng2019.
 
 In practice, we use the approximation $\g Y \approx \g X_u$ for some large value $u$, where $u$ can be chosen as the $p$th quantile of the distribution of $\|\g{X}\|_\infty$.
-Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function \texttt{data2mpareto} first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $\g X_u$ according to \@ref(eq:exc). 
+Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function `data2mpareto()` first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $\g X_u$ according to \@ref(eq:exc). 
 
 
 ```{r, fig.align='center'}
@@ -652,6 +652,9 @@ With these different estimates for the variogram:
 * plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* `eglasso()` fit.
 
 _Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
+
+## Solutions
+For solutions see `vignette("exercises")`.
 
 
 # References
