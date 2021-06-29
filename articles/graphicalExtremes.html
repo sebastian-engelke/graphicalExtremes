@@ -49,6 +49,19 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li class="divider">
+    <li>
+      <a href="../articles/index.html">More...</a>
+    </li>
+  </ul>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -142,7 +155,7 @@ By sending <span class="math inline">\(u\to \infty\)</span> and normalizing prop
 <span class="math display">\[ \mathbf{Y} = \lim_{u\to \infty} \mathbf{X}_u /u,\]</span>
 where the limit is in terms of convergence in distribution. By construction, the distribution of the MPD <span class="math inline">\(\mathbf{Y}\)</span> is defined on the space <span class="math inline">\(\mathcal L = \{\mathbf{x} \in [0,\infty)^d : \| \mathbf{x} \|_\infty &gt; 1\}\)</span>, and if <span class="math inline">\(\mathbf{Y}\)</span> possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then it is proportional to the so-called exponent measure density <span class="math inline">\(\lambda\)</span>; for details see <span class="citation">Engelke and Hitz (2020)</span>.</p>
 <p>In practice, we use the approximation <span class="math inline">\(\mathbf{Y} \approx \mathbf{X}_u\)</span> for some large value <span class="math inline">\(u\)</span>, where <span class="math inline">\(u\)</span> can be chosen as the <span class="math inline">\(p\)</span>th quantile of the distribution of <span class="math inline">\(\|\mathbf{X}\|_\infty\)</span>.
-Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(\mathbf{X}_1, \dots, \mathbf{X}_n\)</span> of <span class="math inline">\(\mathbf{X}\)</span>, the function  first computes the standardization in <a href="#eq:pareto">(3.1)</a> based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances <span class="math inline">\(\mathbf{X}_u\)</span> according to <a href="#eq:exc">(3.2)</a>.</p>
+Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(\mathbf{X}_1, \dots, \mathbf{X}_n\)</span> of <span class="math inline">\(\mathbf{X}\)</span>, the function <code><a href="../reference/data2mpareto.html">data2mpareto()</a></code> first computes the standardization in <a href="#eq:pareto">(3.1)</a> based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances <span class="math inline">\(\mathbf{X}_u\)</span> according to <a href="#eq:exc">(3.2)</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></code></pre></div>
 </div>
@@ -631,6 +644,11 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <li>plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the <em>best</em> <code><a href="../reference/eglasso.html">eglasso()</a></code> fit.</li>
 </ul>
 <p><em>Hint</em>: For some of the methods, you might need to adjust the <code>rholist</code> provided to <code><a href="../reference/eglasso.html">eglasso()</a></code>.</p>
+</div>
+<div id="solutions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#solutions" class="anchor"></a><span class="header-section-number">5.3</span> Solutions</h2>
+<p>For solutions see <code><a href="../articles/exercises.html">vignette("exercises")</a></code>.</p>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
