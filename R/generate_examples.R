@@ -204,10 +204,10 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #' @return An [igraph::graph] object
 #'
 #' @family Example generations
-generate_random_connected_graph <- function(d, m=2*d, p=NULL, maxTries=1000, ...){
+generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
   # Usually works for small d / large m:
-  if(is.null(p)){
+  if(!is.null(m)){
     if(m < d-1){
       stop('m must be at least d-1!')
     } else if(m == d-1){
