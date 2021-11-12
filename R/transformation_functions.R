@@ -132,20 +132,15 @@ data2mpareto <- function(data, p) {
 #'  \insertAllCited{}
 #'
 #' @export
-Sigma2Gamma <- function(S, k = 1, full = FALSE) {
-  # complete S
-  if (!full) {
-    d <- NROW(S)
-    S_full <- rbind(rep(0, d + 1), cbind(rep(0, d), S))
-
-    shuffle <- 1:(d + 1)
-    shuffle[shuffle <= k] <- shuffle[shuffle <= k] - 1
-    shuffle[1] <- k
-    shuffle <- order(shuffle)
-
-    S_full <- S_full[shuffle, shuffle]
-  } else {
+Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
+  if (full || is.null(k)) {
+    # S is already d x d
     S_full <- S
+  } else {
+    # S is (d-1) x (d-1) => fill up with zeros
+    d <- NROW(S) + 1
+    S_full <- matrix(0, d, d)
+    S_full[-k ,-k] <- S
   }
 
   # compute Gamma
@@ -197,9 +192,12 @@ Sigma2Gamma <- function(S, k = 1, full = FALSE) {
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2Sigma <- function(Gamma, k = 1, full = FALSE) {
+Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
   d <- ncol(Gamma)
-  if (full) {
+  if(is.null(k)) {
+    ID <- diag(d) - matrix(1/d, d, d)
+    ID %*% (-1/2 * Gamma) %*% ID
+  } else if (full) {
     1 / 2 * (matrix(rep(Gamma[, k], d), ncol = d, nrow = d) +
       t(matrix(rep(Gamma[, k], d), ncol = d, nrow = d)) - Gamma)
   } else {
