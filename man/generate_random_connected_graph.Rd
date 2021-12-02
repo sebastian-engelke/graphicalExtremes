@@ -4,7 +4,13 @@
 \alias{generate_random_connected_graph}
 \title{Generate a random connected graph}
 \usage{
-generate_random_connected_graph(d, m = 2 * d, p = NULL, maxTries = 1000, ...)
+generate_random_connected_graph(
+  d,
+  m = NULL,
+  p = 2/(d + 1),
+  maxTries = 1000,
+  ...
+)
 }
 \arguments{
 \item{d}{Number of vertices in the graph}

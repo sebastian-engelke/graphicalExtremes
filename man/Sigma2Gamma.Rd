@@ -4,7 +4,7 @@
 \alias{Sigma2Gamma}
 \title{Transformation of \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix to \eqn{\Gamma} matrix}
 \usage{
-Sigma2Gamma(S, k = 1, full = FALSE)
+Sigma2Gamma(S, k = NULL, full = FALSE)
 }
 \arguments{
 \item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}

@@ -4,7 +4,7 @@
 \alias{Gamma2Sigma}
 \title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
 \usage{
-Gamma2Sigma(Gamma, k = 1, full = FALSE)
+Gamma2Sigma(Gamma, k = NULL, full = FALSE)
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
