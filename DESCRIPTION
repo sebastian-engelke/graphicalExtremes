@@ -40,7 +40,9 @@ Imports:
     grDevices (>= 3.6.0),
     utils,
     corpcor,
-    glasso
+    glasso,
+    golazo,
+    osqp
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack
