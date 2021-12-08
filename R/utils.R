@@ -18,7 +18,7 @@ replaceGammaSubMatrix <- function(G.est, G.fix){
   M.est <- Gamma2Sigma(G.est, k)
   M.fix <- Gamma2Sigma(G.fix, k)
   M <- replaceSpdSubmatrix(M.est, M.fix)
-  G <- Sigma2Gamma(M)
+  G <- Sigma2Gamma(M, k=k)
   return(G)
 }
 
