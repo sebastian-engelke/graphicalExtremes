@@ -8,7 +8,7 @@
 #'
 #' @keywords internal
 unif <- function(x) {
-  rank(x, ties.method = "random") / (length(x) + 1)
+  rank(x, ties.method = "first") / (length(x) + 1)
 }
 
 
