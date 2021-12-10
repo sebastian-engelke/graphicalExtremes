@@ -10,8 +10,8 @@ Zmatrix(S)
 \item{S}{a covariance matrix}
 }
 \description{
-Copied from the R package "golazo" with kind permission by Piotr Zwiernik \href{mailto:piotr.zwiernik@upf.edu}{piotr.zwiernik@upf.edu}.
-This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S. This matrix is used to connstruct a starting point in teh GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
+Copied from the R package "golazo" with kind permission by Piotr Zwiernik \href{mailto:piotr.zwiernik@utoronto.ca}{piotr.zwiernik@utoronto.ca}.
+This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S. This matrix is used to connstruct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 }
 \keyword{Z-matrix,}
 \keyword{point}
