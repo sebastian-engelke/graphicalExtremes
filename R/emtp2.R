@@ -57,7 +57,7 @@ emtp2 <- function(G,tol=1e-6, verbose = TRUE, initial_point = TRUE){
 
 #' Computes the Z-matrix
 #'
-#' Copied from the R package "golazo" with kind permission by Piotr Zwiernik <piotr.zwiernik@upf.edu>.
+#' Copied from the R package "golazo" with kind permission by Piotr Zwiernik <piotr.zwiernik@utoronto.ca>.
 #' This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S. This matrix is used to connstruct a starting point in teh GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 #' @param S a covariance matrix
 #' @keywords Z-matrix, starting point
