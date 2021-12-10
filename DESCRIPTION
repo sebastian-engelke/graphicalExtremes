@@ -41,7 +41,6 @@ Imports:
     utils,
     corpcor,
     glasso,
-    golazo,
     osqp
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
