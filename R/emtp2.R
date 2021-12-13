@@ -26,7 +26,7 @@ emtp2 <- function(G,tol=1e-6, verbose = TRUE, initial_point = TRUE){
   }
   it <- 0
   if (verbose==TRUE){
-    cat("\n The algorithm will stop when the duality gap is below: ",tol,"\b.\n\n")
+    cat("The algorithm terminates when the sum of absolute differences between two iterations is below: ",tol,"\b.\n\n")
     cat("Iteration | Gap\n")
   }
 
