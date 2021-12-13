@@ -229,16 +229,12 @@ emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on block graphs
 #'
 #' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution using (censored) likelihood estimation.
-#' Fitting is done separately on the cliques of the block graph. If  \code{edges_to_add}
-#' are provided, then these edges are added in a greedy search to the original \code{graph},
-#' such that in each step the likelihood is improved maximally and the new graph stays in the
-#' class of block graphs. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+#' See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #'
-#' @param graph Graph object from \code{igraph} package. The \code{graph} must be an undirected block graph, i.e., a decomposable, connected
-#' graph with singleton separator sets.
+#' @param graph Undirected graph object from \code{igraph} package.
 #'
 #' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
