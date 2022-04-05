@@ -285,20 +285,21 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
 
 #' Order Cliques
 #'
-#' Orders the cliques in a graph so that they fulfill the running intersection property.
+#' Orders the cliques in a connected decomposable graph so that they fulfill the running intersection property.
 order_cliques <- function(cliques) {
   n <- length(cliques)
   ret <- list()
-  includedVertices <- numeric(0)
   for (i in 1:n) {
     for (j in seq_along(cliques)) {
       foundNextClique <- FALSE
-      clique <- cliques[[j]]
-      if (i == 1 || length(intersect(includedVertices, clique)) > 0) {
+      candidate <- cliques[[j]]
+      rest <- Reduce(union, cliques[-j], c())
+      separator <- intersect(candidate, rest)
+      sepInClique <- sapply(cliques[-j], function(C) all(separator %in% C))
+      if (length(sepInClique) == 0 || any(sepInClique)) {
         # add clique to return list
-        ret[[i]] <- clique
-        # update list of vertices already included
-        includedVertices <- union(includedVertices, clique)
+        # ret[[i]] <- candidate
+        ret <- c(list(candidate), ret)
         # remove clique from input list
         cliques[j] <- NULL
         foundNextClique <- TRUE
@@ -306,7 +307,7 @@ order_cliques <- function(cliques) {
       }
     }
     if (!foundNextClique) {
-      stop("Graph not connected!")
+      stop("Graph not decomposable or not connected!")
     }
   }
   return(ret)
