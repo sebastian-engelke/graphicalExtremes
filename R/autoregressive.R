@@ -7,6 +7,7 @@ ar_gauss <- function(Sigma, mu=NULL, graph=NULL, tol=1e-6){
   if(is.null(graph)){
     P <- solve(Sigma)
     A <- abs(P) > tol
+    diag(A) <- 0
     graph <- igraph::graph_from_adjacency_matrix(A, mode='undirected')
   }
   if(!igraph::is.chordal(graph)$chordal || !igraph::is.connected(graph)){
@@ -35,10 +36,11 @@ ar_gauss <- function(Sigma, mu=NULL, graph=NULL, tol=1e-6){
   for(i in seq_len(length(cliques) - 1)){
     E <- EList[[i]]
     D <- separators[[i]]
-    SDDinv <- solve(Sigma[D, D])
-    SigmaList[[i]] <- Sigma[E,E] - Sigma[E,D] %*% SDDinv %*% Sigma[D,E]
-    muList[[i]] <- mu[E] - Sigma[E,D] %*% SDDinv %*% mu[D]
-    MList[[i]] <- Sigma[E,D] %*% SDDinv
+    M <- Sigma[E,D] %*% solve(Sigma[D, D])
+    # or: M <- t(solve(Sigma[D,D], t(Sigma[E,D])))
+    SigmaList[[i]] <- Sigma[E,E] - M %*% Sigma[D,E]
+    muList[[i]] <- mu[E] - M %*% mu[D]
+    MList[[i]] <- M
   }
   
   return(list(
