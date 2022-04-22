@@ -87,8 +87,61 @@ ar2Sigma_gauss <- function(cliques, mu1, Sigma1, SigmaList, MList, muList){
 }
 
 
+ar_HR <- function(Gamma, graph=NULL, tol=1e-6){
+  # Check input
+  if(is.null(graph)){
+    P <- Gamma2Theta(Gamma)
+    A <- abs(P) > tol
+    diag(A) <- 0
+    graph <- igraph::graph_from_adjacency_matrix(A, mode='undirected')
+  }
+  if(!igraph::is.chordal(graph)$chordal || !igraph::is.connected(graph)){
+    stop('graph must be connected, decomposable.')
+  }
+  d <- nrow(Gamma)
 
-computeVertexSets <- function(cliques){
+  # Make separators etc.
+  cliques <- order_cliques(igraph::maximal.cliques(graph))
+  tmp <- computeVertexSets(cliques, makeSep1=TRUE)
+  separators <- tmp$separators
+  JList <- tmp$JList
+  EList <- tmp$EList
+  
+  kList <- lapply(separators, function(sep) sep[1])
+
+  # Compute vectors, matrices
+  SigmaList <- list()
+  MList <- list()
+  muList <- list()
+  for(i in seq_along(cliques)){
+    k <- kList[[i]]
+    D <- setdiff(separators[[i]], k)
+    E <- setdiff(EList[[i]], k)
+    J <- setdiff(JList[[i]], k)
+
+    Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
+    if(length(D) > 0){
+      B <- Sk[E,D] %*% solve(Sk[D,D])
+      SigmaList[[i]] <- Sk[E,E] - B %*% Sk[D,E]
+      M <- matrix(0, nrow(B), ncol(B) + 1)
+      M[, D != k] <- B
+      M[, D == k] <- 1 - rowSums(B)
+      MList[[i]] <- M
+    } else{
+      SigmaList[[i]] <- Sk[E, E]
+      MList[[i]] <- matrix(1, length(E), 1)
+    }
+  }
+  
+  return(list(
+    cliques = cliques,
+    SigmaList = SigmaList,
+    MList = MList
+  ))
+}
+
+
+computeVertexSets <- function(cliques, makeSep1=FALSE){
   # Make separators etc.
   tmp <- c()
   JList <- list()
@@ -102,6 +155,11 @@ computeVertexSets <- function(cliques){
   EList <- lapply(seq_len(length(cliques)-1)+1, function(i){
     setdiff(cliques[[i]], JList[[i-1]])
   })
+  if(makeSep1){
+    k1 <- cliques[[1]][1]
+    separators <- c(list(k1), separators)
+    EList <- c(list(setdiff(cliques[[i]], k1)), EList)
+  }
   return(list(
     cliques = cliques,
     separators = separators,
