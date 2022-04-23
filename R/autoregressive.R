@@ -87,7 +87,7 @@ ar2Sigma_gauss <- function(cliques, mu1, Sigma1, SigmaList, MList, muList){
 }
 
 
-ar_HR <- function(Gamma, graph=NULL, tol=1e-6){
+ar_HR <- function(Gamma, graph=NULL, tol=1e-6, GammaSub=TRUE){
   # Check input
   if(is.null(graph)){
     P <- Gamma2Theta(Gamma)
@@ -118,22 +118,29 @@ ar_HR <- function(Gamma, graph=NULL, tol=1e-6){
     SigmaList[[i]] <- list()
     for(j in seq_along(separators[[i]])){
       k <- separators[[i]][[j]]
-      sep <- separators[[i]]
-      D <- setdiff(separators[[i]], k)
-      E <- setdiff(EList[[i]], k)
-      J <- setdiff(JList[[i]], k)
+      D <- separators[[i]]
+      D_k <- setdiff(separators[[i]], k) # "D without k"
+      E_k <- setdiff(EList[[i]], k) # "E without k"
 
-      Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
-      if(length(D) > 0){
-        B <- Sk[E,D] %*% solve(Sk[D,D])
-        SigmaList[[i]][[j]] <- Sk[E,E] - B %*% Sk[D,E]
+      J <- JList[[i]]
+
+      if(GammaSub){
+        k2 <- which(J == k)
+        Sk <- matrix(0, d, d)
+        Sk[J, J] <- Gamma2Sigma(Gamma[J, J], k=k2, full=TRUE)
+      } else{
+        Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
+      }
+      if(length(D_k) > 0){
+        B <- Sk[E_k,D_k] %*% solve(Sk[D_k,D_k])
+        SigmaList[[i]][[j]] <- Sk[E_k,E_k] - B %*% Sk[D_k,E_k]
         M <- matrix(0, nrow(B), ncol(B) + 1)
-        M[, sep != k] <- B
-        M[, sep == k] <- 1 - rowSums(B)
+        M[, D != k] <- B
+        M[, D == k] <- 1 - rowSums(B)
         MList[[i]][[j]] <- M
       } else{
-        SigmaList[[i]][[j]] <- Sk[E, E]
-        MList[[i]][[j]] <- matrix(1, length(E), 1)
+        SigmaList[[i]][[j]] <- Sk[E_k, E_k]
+        MList[[i]][[j]] <- matrix(1, length(E_k), 1)
       }
     }
   }
