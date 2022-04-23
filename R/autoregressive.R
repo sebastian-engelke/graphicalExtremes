@@ -112,24 +112,29 @@ ar_HR <- function(Gamma, graph=NULL, tol=1e-6){
   # Compute vectors, matrices
   SigmaList <- list()
   MList <- list()
-  muList <- list()
   for(i in seq_along(cliques)){
-    k <- kList[[i]]
-    D <- setdiff(separators[[i]], k)
-    E <- setdiff(EList[[i]], k)
-    J <- setdiff(JList[[i]], k)
+    # k <- kList[[i]]
+    MList[[i]] <- list()
+    SigmaList[[i]] <- list()
+    for(j in seq_along(separators[[i]])){
+      k <- separators[[i]][[j]]
+      sep <- separators[[i]]
+      D <- setdiff(separators[[i]], k)
+      E <- setdiff(EList[[i]], k)
+      J <- setdiff(JList[[i]], k)
 
-    Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
-    if(length(D) > 0){
-      B <- Sk[E,D] %*% solve(Sk[D,D])
-      SigmaList[[i]] <- Sk[E,E] - B %*% Sk[D,E]
-      M <- matrix(0, nrow(B), ncol(B) + 1)
-      M[, D != k] <- B
-      M[, D == k] <- 1 - rowSums(B)
-      MList[[i]] <- M
-    } else{
-      SigmaList[[i]] <- Sk[E, E]
-      MList[[i]] <- matrix(1, length(E), 1)
+      Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
+      if(length(D) > 0){
+        B <- Sk[E,D] %*% solve(Sk[D,D])
+        SigmaList[[i]][[j]] <- Sk[E,E] - B %*% Sk[D,E]
+        M <- matrix(0, nrow(B), ncol(B) + 1)
+        M[, sep != k] <- B
+        M[, sep == k] <- 1 - rowSums(B)
+        MList[[i]][[j]] <- M
+      } else{
+        SigmaList[[i]][[j]] <- Sk[E, E]
+        MList[[i]][[j]] <- matrix(1, length(E), 1)
+      }
     }
   }
   
