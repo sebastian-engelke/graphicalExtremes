@@ -87,7 +87,7 @@ ar2Sigma_gauss <- function(cliques, mu1, Sigma1, SigmaList, MList, muList){
 }
 
 
-ar_HR <- function(Gamma, graph=NULL, tol=1e-6, GammaSub=TRUE){
+ar_HR <- function(Gamma, graph=NULL, tol=1e-6){
   # Check input
   if(is.null(graph)){
     P <- Gamma2Theta(Gamma)
@@ -124,13 +124,7 @@ ar_HR <- function(Gamma, graph=NULL, tol=1e-6, GammaSub=TRUE){
 
       J <- JList[[i]]
 
-      if(GammaSub){
-        k2 <- which(J == k)
-        Sk <- matrix(0, d, d)
-        Sk[J, J] <- Gamma2Sigma(Gamma[J, J], k=k2, full=TRUE)
-      } else{
-        Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
-      }
+      Sk <- Gamma2Sigma(Gamma, k=k, full=TRUE)
       if(length(D_k) > 0){
         B <- Sk[E_k,D_k] %*% solve(Sk[D_k,D_k])
         SigmaList[[i]][[j]] <- Sk[E_k,E_k] - B %*% Sk[D_k,E_k]
