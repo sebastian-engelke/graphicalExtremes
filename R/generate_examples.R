@@ -100,7 +100,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
     }
     b <- b+b_step
   }
-  G <- Sigma2Gamma(S)
+  G <- Sigma2Gamma(S, k=1)
   return(G)
 }
 
