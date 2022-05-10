@@ -123,7 +123,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 }
 
 
-#' Lerning extremal graph structure
+#' Learning extremal graph structure
 #'
 #' Fits an extremal graph structure using the neighborhood selection approach
 #' (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso

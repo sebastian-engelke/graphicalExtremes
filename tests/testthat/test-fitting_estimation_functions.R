@@ -504,7 +504,7 @@ test_that("eglearn works", {
   my_model <- generate_random_model(d = d)
   data <- rmpareto(1e3, "HR", d = d, my_model$Gamma)
   res1 <- eglearn(data, reg_method = "ns", sel_method = "AIC",
-                 complete_Gamma = TRUE)
+                 complete_Gamma = FALSE)
 
   res2 <- eglearn(data, reg_method = "ns", sel_method = "MBIC",
                   complete_Gamma = FALSE)
