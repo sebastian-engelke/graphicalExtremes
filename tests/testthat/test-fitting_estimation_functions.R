@@ -498,3 +498,27 @@ test_that("eglasso works", {
   expect_message(eglasso(my_model$Gamma, rholist = c(1, 200),
                          complete_Gamma = TRUE))
 })
+
+test_that("eglearn works", {
+  d <- 4
+  my_model <- generate_random_model(d = d)
+  data <- rmpareto(1e3, "HR", d = d, my_model$Gamma)
+  res1 <- eglearn(data, reg_method = "ns", sel_method = "AIC",
+                 complete_Gamma = TRUE)
+
+  res2 <- eglearn(data, reg_method = "ns", sel_method = "MBIC",
+                  complete_Gamma = FALSE)
+
+  res3 <- eglearn(data, reg_method = "glasso", sel_method = "MBIC",
+                  complete_Gamma = FALSE)
+
+  expect_length(res1, 5)
+  expect_equal(class(res1$graph[[1]]), "igraph")
+  expect_equal(res3$Gamma[[1]], NA)
+  expect_error(eglearn(data, rholist = -1))
+  expect_error(eglearn(data, rholist = c(2, -1)))
+  expect_message(eglearn(data, rholist = c(1, 200),
+                         complete_Gamma = TRUE))
+
+})
+

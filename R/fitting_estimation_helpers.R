@@ -507,8 +507,6 @@ fit_graph <- function(data, m=NULL, Gamma_emp=NULL){
   ))
 }
 
-
-
 ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
   ## numeric_matrix boolean numeric -> list
   ## produce a named list made of
@@ -574,3 +572,68 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     est_gamma = est_gamma
   ))
 }
+
+glasso_mb <- function(data, lambda, sel_method =  c("BIC", "MBIC", "AIC")) {
+
+  # Check arguments
+  sel_method <- match.arg(sel_method)
+  if (sel_method == "AIC"){
+    ic_fun <- aic
+  } else if (sel_method == "BIC"){
+    ic_fun <- bic
+  } else if (sel_method == "MBIC"){
+    ic_fun <- mbic
+  }
+
+  # Initialize variables
+  dd <- ncol(data)
+  data_std <- scale(data)
+  adj.est <- array(NA, dim = c(dd, dd, length(lambda)))
+  adj.ic.est <- array(NA, dim = c(dd, dd, 1))
+  lambda_order <- order(lambda, decreasing = TRUE)
+  lambda_dec <- sort(lambda, decreasing = TRUE)
+  # there was some subtlety with the ordering since glmnet always gives back in
+  # a certain order, that's why I have this here
+
+  # Loop through variables
+  for (i in (1:dd)) {
+    X <- data_std[, -i]
+    Y <- data_std[, i]
+    lasso_fit <- glmnet::glmnet(x = X, y = Y, family = "gaussian", lambda = lambda_dec)
+    if (i == 1) {
+      # make sure the same lambda sequence is used for different lasso regressions
+      lambda_dec <- lasso_fit$lambda
+      null.vote <- array(0, dim = c(dd, dd, length(lambda)))
+      null.vote.ic <- array(0, dim = c(dd, dd, 1))
+    }
+
+    # make sure consistent with default value
+    null.vote[i, -i, ] <- null.vote[i, -i, ] +
+      (abs(as.matrix(lasso_fit$beta)) <= 1e-10)
+    null.vote[-i, i, ] <- null.vote[-i, i, ] +
+      (abs(as.matrix(lasso_fit$beta)) <= 1e-10)
+
+
+    sel.idx <- which.min((1 - lasso_fit$dev.ratio) * lasso_fit$nulldev +
+                           ic_fun(nrow(X), ncol(X) + 1) * lasso_fit$df)
+
+    null.vote.ic[i, -i, ] <- null.vote.ic[i, -i, ] +
+      (abs(as.matrix(lasso_fit$beta[, sel.idx])) <= 1e-10)
+    null.vote.ic[-i, i, ] <- null.vote.ic[-i, i, ] +
+      (abs(as.matrix(lasso_fit$beta[, sel.idx])) <= 1e-10)
+  }
+
+  adj.est[, , lambda_order] <- null.vote <= 1
+  adj.ic.est <- null.vote.ic <= 1
+
+  return(list(adj.est = adj.est, adj.ic.est = adj.ic.est))
+}
+
+# traditional criteria
+# is consistent for a fixed design, fixed p
+aic <- function(n, p) 2
+bic <- function(n, p) log(n)
+
+# modified BIC of Wang & Leng, JRSSB 2009
+# it has a weird justification in the paper
+mbic <- function(n, p) log(n) * log(log(p))
