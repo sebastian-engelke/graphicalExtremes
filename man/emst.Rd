@@ -4,7 +4,7 @@
 \alias{emst}
 \title{Fitting extremal minimum spanning tree}
 \usage{
-emst(data, p = NULL, method = c("ML", "vario", "chi"), cens = FALSE)
+emst(data, p = NULL, method = c("vario", "ML", "chi"), cens = FALSE)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
@@ -15,8 +15,8 @@ it is assumed that the \code{data} are already on multivariate Pareto scale. Els
 \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 to standardize the \code{data}.}
 
-\item{method}{One of \verb{"ML", "vario", "chi"}.
-Default is \code{method = "ML"}.}
+\item{method}{One of \verb{"vario", "ML", "chi"}.
+Default is \code{method = "vario"}.}
 
 \item{cens}{Logical. This argument is considered only if \code{method = "ML"}.
 If \code{TRUE}, then censored likelihood contributions are used for

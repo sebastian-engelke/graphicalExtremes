@@ -342,8 +342,8 @@ eglearn <- function(data,
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 #' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
 #' to standardize the \code{data}.
-#' @param method One of `"ML", "vario", "chi"`.
-#' Default is `method = "ML"`.
+#' @param method One of `"vario", "ML", "chi"`.
+#' Default is `method = "vario"`.
 #' @param cens Logical. This argument is considered only if `method = "ML"`.
 #' If `TRUE`, then censored likelihood contributions are used for
 #' components below the threshold. By default, `cens = FALSE`.
@@ -379,7 +379,7 @@ eglearn <- function(data,
 #'
 #' @export
 #'
-emst <- function(data, p = NULL, method = c("ML", "vario", "chi"),
+emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
                  cens = FALSE) {
 
   # Validate arguments
