@@ -503,13 +503,13 @@ test_that("eglearn works", {
   d <- 4
   my_model <- generate_random_model(d = d)
   data <- rmpareto(1e3, "HR", d = d, my_model$Gamma)
-  res1 <- eglearn(data, reg_method = "ns", sel_method = "AIC",
+  res1 <- eglearn(data, reg_method = "ns",
                  complete_Gamma = FALSE)
 
-  res2 <- eglearn(data, reg_method = "ns", sel_method = "MBIC",
+  res2 <- eglearn(data, reg_method = "ns",
                   complete_Gamma = FALSE)
 
-  res3 <- eglearn(data, reg_method = "glasso", sel_method = "MBIC",
+  res3 <- eglearn(data, reg_method = "glasso",
                   complete_Gamma = FALSE)
 
   expect_length(res1, 5)

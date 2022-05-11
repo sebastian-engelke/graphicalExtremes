@@ -93,8 +93,8 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
       error = function(e){
         if (e$message == "The given graph is not connected."){
           message(paste0("The estimated graph for rho = ", round(rho, 3),
-          " is not connected, ",
-          "so it is not possible to complete Gamma.\n"))
+                         " is not connected, ",
+                         "so it is not possible to complete Gamma.\n"))
 
           NA
 
@@ -148,9 +148,6 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'  For details see \insertCite{meins2006;textual}{graphicalExtremes},
 #'  \insertCite{friedman2008;textual}{graphicalExtremes}.
 #'
-#' @param sel_method One of `"BIC", "MBIC", AIC"`.
-#'  Default is `sel_method = "BIC`.
-#'
 #' @param complete_Gamma Whether you want to try fto complete Gamma matrix.
 #'  Default is `complete_Gamma = FALSE`.
 #'
@@ -163,11 +160,15 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'   for each `rho` in `rholist`. If `complete_Gamma = FALSE` or the
 #'   underlying graph is not connected, it returns `NA`.}
 #'   \item{`rholist`}{The list of penalty coefficients.}
-#'   \item{`graph_ic`}{An [igraph::graph] object representing the optimal graph
-#'   according to the information criterion `sel_method`, when `reg_method = "ns`.}
-#'   \item{`Gamma_ic`}{The variogram matrix \eqn{\Gamma} corresponding to the
-#'   optimal graph `graph_ic`. If `complete_Gamma = FALSE` or the underlying
-#'   graph is not connected, it returns `NA`.}
+#'   \item{`graph_ic`}{A list of [igraph::graph] objects
+#'   representing the optimal graph
+#'   according to the `aic`, `bic`, and `mbic` information criteria.
+#'   If `reg_method = "glasso"`, it returns a list of `NA`.}
+#'   \item{`Gamma_ic`}{A list of numeric \eqn{d\times d}{d x d} estimated
+#'   variogram matrices \eqn{\Gamma} corresponding
+#'   to the `aic`, `bic`, and `mbic` information criteria.
+#'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
+#'   graph is not connected, it returns a list of `NA`.}
 #' }
 #'
 #' @export
@@ -176,12 +177,11 @@ eglearn <- function(data,
                     p = NULL,
                     rholist = c(0.1, 0.15, 0.19, 0.205),
                     reg_method = c("ns", "glasso"),
-                    sel_method = c("BIC", "MBIC", "AIC"),
                     complete_Gamma = FALSE) {
 
   # Check arguments
   reg_method <- match.arg(reg_method)
-  sel_method <- match.arg(sel_method)
+
   if (any(rholist < 0)) {
     stop("The regularization parameters in `rholist` must be non-negative.",
          call. = FALSE
@@ -198,6 +198,7 @@ eglearn <- function(data,
 
   # Initialize variables
   Gamma <- emp_vario(data = data.std)
+  sel_methods <- c("aic", "bic", "mbic")
 
   graphs <- list()
   Gammas <- list()
@@ -206,7 +207,7 @@ eglearn <- function(data,
   d <- ncol(Gamma)
 
   null.vote <- array(0, dim = c(d, d, length(rholist)))
-  null.vote.ic <- array(0, dim = c(d, d, 1))
+  null.vote.ic <- array(0, dim = c(d, d, length(sel_methods)))
 
   # Loop through variables
   for (k in 1:d) {
@@ -222,7 +223,7 @@ eglearn <- function(data,
     else if (reg_method == "ns") {
       idx_k <- which(data.std[, k] > 1)
       X <- log(data.std[idx_k, -k] / data.std[idx_k, k])
-      gl.tmp <- glasso_mb(data = X, lambda = rholist, sel_method = sel_method)
+      gl.tmp <- glasso_mb(data = X, lambda = rholist)
       null.vote[-k, -k, ] <- null.vote[-k, -k, , drop = FALSE] + (!gl.tmp$adj.est)
       null.vote.ic[-k, -k, ] <- null.vote.ic[-k, -k, , drop = FALSE] + (!gl.tmp$adj.ic.est)
     }
@@ -239,37 +240,13 @@ eglearn <- function(data,
     rho <- rholist[j]
     est_graph <- igraph::graph_from_adjacency_matrix(
       adj.est[, ,j], mode = "undirected", diag = FALSE)
+
     if (complete_Gamma == FALSE) {
+
       Gamma_curr <- NA
     }
     else {
-      Gamma_curr <- tryCatch(
-        {
-          complete_Gamma(graph = est_graph, Gamma = Gamma)
-        },
-        error = function(e) {
-          if (e$message == "The given graph is not connected.") {
-            message(paste0(
-              "The estimated graph for rho = ",
-              round(rho, 3), " is not connected, ",
-              "so it is not possible to complete Gamma.\n"
-            ))
-            NA
-          }
-          else {
-            stop(e)
-          }
-        }
-      )
-      if (all(!is.na(Gamma_curr))) {
-        completed_graph <- Gamma2graph(Gamma_curr, to_plot = FALSE)
-        if (!(graphicalExtremes:::graphs_equal(completed_graph, est_graph))) {
-          message(paste0(
-            "The completed Gamma for rho = ",
-            round(rho, 3), " does not match the estimated graph.\n"
-          ))
-        }
-      }
+      Gamma_curr <- try_complete_Gamma(est_graph, Gamma, "rho", round(rho, 3))
     }
 
     graphs[[j]] <- est_graph
@@ -278,52 +255,35 @@ eglearn <- function(data,
   }
 
   # complete Gamma for ns
-  if (reg_method == "ns") {
-    graphs_ic <- apply(adj.ic.est, MARGIN = 3, FUN = function(x){
-      igraph::graph_from_adjacency_matrix(x, mode = "undirected", diag = FALSE)
-      })[[1]]
+  graphs_ic <-  list(aic = NA, bic = NA, mbic = NA)
+  Gammas_ic <-  list(aic = NA, bic = NA, mbic = NA)
 
-    if (complete_Gamma == FALSE) {
-      Gamma_ic <- NA
-    } else {
-      Gamma_ic <- tryCatch(
-        {
-          complete_Gamma(graph = graphs_ic, Gamma = Gamma)
-        },
-        error = function(e) {
-          if (e$message == "The given graph is not connected.") {
-            message(paste0(
-              "The estimated graph for `sel_method` = ",
-              sel_method, " is not connected, ",
-              "so it is not possible to complete Gamma.\n"
-            ))
-            NA
-          }
-          else {
-            stop(e)
-          }
-        }
-      )
-      if (all(!is.na(Gamma_ic))) {
-        completed_graph <- Gamma2graph(Gamma_ic, to_plot = FALSE)
-        if (!(graphicalExtremes:::graphs_equal(completed_graph, graphs_ic))) {
-          message(paste0(
-            "The completed Gamma for `sel_method` = ",
-            sel_method, " does not match the estimated graph.\n"
-          ))
-        }
+  if (reg_method == "ns") {
+    for (l in seq_along(sel_methods)){
+
+      est_graph <-  igraph::graph_from_adjacency_matrix(
+        adj.ic.est[, ,l], mode = "undirected", diag = FALSE)
+
+      if (complete_Gamma == FALSE) {
+
+        Gamma_curr <- NA
+      }
+      else {
+        Gamma_curr <- try_complete_Gamma(est_graph, Gamma,
+                                         key = "information criterion",
+                                         val = sel_methods[l])
       }
 
+      graphs_ic[[l]] <- est_graph
+      Gammas_ic[[l]] <- Gamma_curr
     }
-  } else {
-    graphs_ic <- NA
-    Gamma_ic <- NA
   }
+
   return(list(graph = graphs,
               Gamma = Gammas,
               rholist = rhos,
               graph_ic = graphs_ic,
-              Gamma_ic = Gamma_ic))
+              Gamma_ic = Gammas_ic))
 }
 
 #' Fitting extremal minimum spanning tree
