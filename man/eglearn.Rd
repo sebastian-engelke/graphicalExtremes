@@ -9,7 +9,6 @@ eglearn(
   p = NULL,
   rholist = c(0.1, 0.15, 0.19, 0.205),
   reg_method = c("ns", "glasso"),
-  sel_method = c("BIC", "MBIC", "AIC"),
   complete_Gamma = FALSE
 )
 }
@@ -33,9 +32,6 @@ Default is \code{reg_method = "ns"}.
 For details see \insertCite{meins2006;textual}{graphicalExtremes},
 \insertCite{friedman2008;textual}{graphicalExtremes}.}
 
-\item{sel_method}{One of \verb{"BIC", "MBIC", AIC"}.
-Default is \verb{sel_method = "BIC}.}
-
 \item{complete_Gamma}{Whether you want to try fto complete Gamma matrix.
 Default is \code{complete_Gamma = FALSE}.}
 }
@@ -49,11 +45,15 @@ variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
 for each \code{rho} in \code{rholist}. If \code{complete_Gamma = FALSE} or the
 underlying graph is not connected, it returns \code{NA}.}
 \item{\code{rholist}}{The list of penalty coefficients.}
-\item{\code{graph_ic}}{An \link[igraph:make_graph]{igraph::graph} object representing the optimal graph
-according to the information criterion \code{sel_method}, when \verb{reg_method = "ns}.}
-\item{\code{Gamma_ic}}{The variogram matrix \eqn{\Gamma} corresponding to the
-optimal graph \code{graph_ic}. If \code{complete_Gamma = FALSE} or the underlying
-graph is not connected, it returns \code{NA}.}
+\item{\code{graph_ic}}{A list of \link[igraph:make_graph]{igraph::graph} objects
+representing the optimal graph
+according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
+If \code{reg_method = "glasso"}, it returns a list of \code{NA}.}
+\item{\code{Gamma_ic}}{A list of numeric \eqn{d\times d}{d x d} estimated
+variogram matrices \eqn{\Gamma} corresponding
+to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
+If \code{reg_method = "glasso"}, \code{complete_Gamma = FALSE}, or the underlying
+graph is not connected, it returns a list of \code{NA}.}
 }
 }
 \description{
