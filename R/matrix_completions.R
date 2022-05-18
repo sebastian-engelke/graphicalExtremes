@@ -114,15 +114,23 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
 #' and the number of iterations).
 #'
 #' @family Matrix completions
-complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100) {
+complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE) {
 
   gList <- make_graph_list(graph)
   m <- length(gList)
+  
+  if(saveDetails){
+    GammaList <- list(Gamma)
+  }
 
   for (n in 1:N) {
     t <- (n - 1) %% m + 1
     g <- gList[[t]]
     Gamma <- complete_Gamma_decomposable(Gamma, g)
+    
+    if(saveDetails){
+      GammaList <- c(GammaList, list(Gamma))
+    }
 
     # Check if tolerance has been reached
     if(check_tol > 0 && n %% check_tol == 0){
@@ -131,9 +139,19 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
       diag(A) <- 1
       err <- max(abs(P[A == 0]))
       if(err <= tol){
-        return(Gamma)
+        break
       }
     }
+  }
+
+  if(saveDetails){
+    return(list(
+      GammaList = GammaList,
+      graphList = gList,
+      N = N,
+      tol = tol,
+      check_tol = check_tol
+    ))
   }
 
   return(Gamma)
