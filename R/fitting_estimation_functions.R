@@ -820,3 +820,7 @@ loglik_HR <- function(data, p = NULL, graph, Gamma, cens = FALSE){
   c("loglik" = loglik, "aic" = aic, "bic" = bic)
 
 }
+
+# Todo:
+# change log(n) above to log(n_edges)
+# explain in help file how we compute bic, aic

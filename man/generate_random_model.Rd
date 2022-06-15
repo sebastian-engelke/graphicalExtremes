@@ -9,7 +9,7 @@ generate_random_model(d, graph_type = "tree", ...)
 \arguments{
 \item{d}{Number of vertices in the graph}
 
-\item{graph_type}{\code{"tree"}, \code{"block"}, \code{"decomposable"}, or \code{"general"}}
+\item{graph_type}{\code{"tree"}, \code{"block"}, \code{"decomposable"}, \code{"complete"}, or \code{"general"}}
 
 \item{...}{Further arguments passed to functions generating the graph and Gamma matrix}
 }
@@ -25,10 +25,12 @@ generate_random_model(d, 'tree')
 generate_random_model(d, 'block')
 generate_random_model(d, 'decomposable')
 generate_random_model(d, 'general')
+generate_random_model(d, 'complete')
 
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},

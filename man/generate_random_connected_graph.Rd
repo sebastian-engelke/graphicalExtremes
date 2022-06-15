@@ -33,6 +33,7 @@ to producing a tree and adding random edges to that tree.
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},
 \code{\link{generate_random_integer_Gamma}()},

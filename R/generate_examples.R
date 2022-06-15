@@ -4,7 +4,7 @@
 #' structure corresponding to that graph.
 #'
 #' @param d Number of vertices in the graph
-#' @param graph_type `"tree"`, `"block"`, `"decomposable"`, or `"general"`
+#' @param graph_type `"tree"`, `"block"`, `"decomposable"`, `"complete"`, or `"general"`
 #' @param ... Further arguments passed to functions generating the graph and Gamma matrix
 #'
 #' @family Example generations
@@ -17,6 +17,7 @@
 #' generate_random_model(d, 'block')
 #' generate_random_model(d, 'decomposable')
 #' generate_random_model(d, 'general')
+#' generate_random_model(d, 'complete')
 #'
 #' @export
 generate_random_model <- function(d, graph_type='tree', ...){
@@ -28,6 +29,8 @@ generate_random_model <- function(d, graph_type='tree', ...){
     generate_random_chordal_graph(d, ...)
   } else if(graph_type == 'general'){
     generate_random_connected_graph(d, ...)
+  } else if(graph_type == 'complete'){
+    igraph::make_full_graph(d)
   } else{
     stop('Invalid graph_type!')
   }
@@ -63,6 +66,19 @@ generate_random_graphical_Gamma <- function(graph, ...){
   return(Gamma)
 }
 
+#' Generate a random Gamma matrix
+#' 
+#' Generates a valid Gamma matrix with a given dimension
+#' 
+#' @param d Size of the matrix
+#' @param ... Further arguments passed to [generate_random_spd_matrix()]
+#' @family Example generations
+#' 
+#' @export
+generate_random_Gamma <- function(d, ...){
+  g <- igraph::make_full_graph(d)
+  generate_random_graphical_Gamma(g, ...)
+}
 
 #' Generate a random Gamma matrix containing only integers
 #'

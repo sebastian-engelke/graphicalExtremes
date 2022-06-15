@@ -4,7 +4,14 @@
 \alias{complete_Gamma_general}
 \title{Completion of non-decomposable Gamma matrices}
 \usage{
-complete_Gamma_general(Gamma, graph, N = 1000, tol = 0, check_tol = 100)
+complete_Gamma_general(
+  Gamma,
+  graph,
+  N = 1000,
+  tol = 0,
+  check_tol = 100,
+  saveDetails = FALSE
+)
 }
 \arguments{
 \item{Gamma}{A complete variogram matrix (without any graphical structure)}
