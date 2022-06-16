@@ -1,58 +1,69 @@
 
-set.seed(1)
 
-d <- 20
+nA <- 2
+nC <- 3
+nB <- 4
+nV <- nA + nB + nC
 
-G <- generate_random_model(d)$Gamma
+A <- 1:nA
+AC <- 1:(nA + nC)
+C <- (nA + 1):(nA + nC)
+BC <- (nA + 1):nV
+B <- (nA + nC + 1):nV
+V <- 1:nV
 
-g <- generate_random_connected_graph(d, m = d*4)
+G0 <- generate_random_Gamma(nV)
 
-ret <- complete_Gamma_general(G, g, N=10000, saveDetails=TRUE)
-GammaList <- ret$GammaList
-G2 <- GammaList[[length(GammaList)]]
+G <- matrix(NA, nV, nV)
+G[AC,AC] <- G0[AC,AC]
+G[BC,BC] <- G0[BC,BC]
 
-P2 <- Gamma2Theta(G2)
-A <- igraph::as_adjacency_matrix(g, sparse = FALSE)
-B <- igraph::as_adjacency_matrix(igraph::complementer(g), sparse = FALSE)
-B <- B * upper.tri(B)
+G1 <- graphicalExtremes::complete_Gamma(G)
+Gnew1 <- G1[A, B]
 
-m <- sum(B)
-
-print(max(abs(P2[B == 1])))
-print(max(abs(G2 - G)[A == 1]))
-
-ThetaList <- lapply(GammaList, Gamma2Theta)
-
-eVec <- c()
-iVec <- c()
-pMat <- matrix(0, m, 0)
-for(i in seq_along(ThetaList)){
-  P3 <- ThetaList[[i]]
-  eVec[i] <- max(abs(P3 * B))
-  iVec[i] <- which.max(P3 * B)
-  pMat <- cbind(pMat, P3[B == 1])
+make_eD <- function(V, D){
+  eD <- numeric(length(V))
+  eD[D] <- 1 / length(D)
+  return(eD)
+}
+make_Pv <- function(v){
+  oneVec <- numeric(length(v)) + 1
+  return(diag(length(v)) - oneVec %*% t(v))
+}
+make_PD <- function(V, D){
+  make_Pv(make_eD(V, D))
 }
 
-x <- seq_along(eVec)
 
-nOrd <- 4
-
-ord <- order(tabulate(iVec), decreasing = TRUE)
-
-# plot(cbind(x, x, x), log(cbind(eVec, p1Vec, p2Vec)), type='l')
-
-mx <- log(max(abs(c(eVec, pMat))))
-mn <- log(min(abs(c(eVec, pMat))))
-
-plot(x, log(eVec), type='l', ylim=c(mn, mx), lwd = 2)
-
-for(i in seq_len(m)){
-  lines(x, log(abs(pMat[i,])), type='l', col=i+1)
+makeSD <- function(G, D){
+  G2 <- G
+  G[is.na(G)] <- 1
+  G2[is.na(G2)] <- 10
+  eD <- make_eD(V, D)
+  PD <- make_Pv(eD)
+  S <- PD %*% (-G/2) %*% t(PD)
+  S2 <- PD %*% (-G2/2) %*% t(PD)
+  diffInd <- (abs(S - S2)) > 1e-6
+  S[diffInd] <- NA
+  return(S)
 }
 
-lines(x, log(eVec), type='l', col = 1, lwd = 2)
+oneVec <- numeric(nV) + 1
+eD <- make_eD(V, C)
+PD <- make_Pv(eD)
 
+# S <- PD %*% (-G0/2) %*% t(PD)
 
+SD <- makeSD(G, C[1])
 
+S1 <- makeSD(G1, C)
+
+ThetaC <- corpcor::pseudoinverse(SD[C, C, drop=FALSE])
+SDnew <- SD[A, C] %*% ThetaC %*% SD[C, B]
+
+S2 <- SD
+S2[A,B] <- SDnew
+S2[B,A] <- t(SDnew)
+G2 <- Sigma2Gamma(S2)
 
 
