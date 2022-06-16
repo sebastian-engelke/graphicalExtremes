@@ -157,6 +157,13 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
   return(Gamma)
 }
 
+#' Create graph list for non-decomposable completion
+#' 
+#' Creates a list of decomposable graphs such that the intersection of their edge sets
+#' is identical to the edgeset of the input graph.
+#' 
+#' @param graph Graph object from \code{igraph} package.
+#' @return List of decomposable graphs
 make_graph_list <- function(graph){
   d <- igraph::vcount(graph)
   gTilde <- igraph::complementer(graph)
