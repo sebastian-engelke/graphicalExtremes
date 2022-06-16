@@ -114,9 +114,9 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
 #' and the number of iterations).
 #'
 #' @family Matrix completions
-complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE) {
+complete_Gamma_general_0 <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE) {
 
-  gList <- make_graph_list(graph)
+  gList <- make_graph_list(graph)$graphs
   m <- length(gList)
   
   if(saveDetails){
@@ -159,7 +159,8 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
 
 #' Create graph list for non-decomposable completion
 #' 
-#' Creates a list of decomposable graphs such that the intersection of their edge sets
+#' Creates a list of decomposable graphs, each consisting of two cliques,
+#' such that the intersection of their edge sets
 #' is identical to the edgeset of the input graph.
 #' 
 #' @param graph Graph object from \code{igraph} package.
@@ -185,6 +186,7 @@ make_graph_list <- function(graph){
   edgeList <- edgeList[ind]
 
   gList <- list()
+  partitionList <- list()
   for(edge in edgeList){
     # Check if edge is already covered by a different graph:
     alreadyCovered <- FALSE
@@ -222,9 +224,16 @@ make_graph_list <- function(graph){
     diag(adj) <- 0
     g <- igraph::graph_from_adjacency_matrix(adj, mode='undirected')
     gList <- c(gList, list(g))
+    partitionList <- c(partitionList, list(list(
+      A = A,
+      B = B
+    )))
   }
 
-  return(gList)
+  return(list(
+    graphs = gList,
+    partitions = partitionList
+  ))
 }
 
 #' Completion of decomposable Gamma matrices
