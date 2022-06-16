@@ -58,3 +58,7 @@ replaceSpdSubmatrix <- function(M.est, M.fix){
 
   return(M)
 }
+
+subMatrix <- function(M, rows, cols){
+  matrix(M[rows, cols], length(rows))
+}

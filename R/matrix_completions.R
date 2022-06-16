@@ -282,10 +282,15 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   Sigma <- Gamma2Sigma(Gamma, k = k0)
 
   if (nC > 1) {
-    L <- chol(Sigma[vC, vC])
-    SigmaCCinv <- chol2inv(L)
-
+    R <- chol(Sigma[vC, vC, drop=FALSE])
+    SigmaCCinv <- chol2inv(R)
     SigmaAB <- Sigma[vA, vC] %*% SigmaCCinv %*% Sigma[vC, vB]
+    
+    ## These don't seem to improve performance:
+    # # X <- solve(Sigma[vC, vC, drop=FALSE], Sigma[vC, vB, drop=FALSE])
+    # Y <- backsolve(R, Sigma[vC, vB, drop=FALSE])
+    # X <- forwardsolve(t(R), Y)
+    # SigmaAB <- Sigma[vA, vC, drop=FALSE] %*% X
   } else {
     SigmaAB <- 0
   }

@@ -39,6 +39,7 @@ The sizes of cliques and separators can be specified.
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},
 \code{\link{generate_random_integer_Gamma}()},

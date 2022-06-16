@@ -66,6 +66,19 @@ generate_random_graphical_Gamma <- function(graph, ...){
   return(Gamma)
 }
 
+#' Generate a random Gamma matrix
+#' 
+#' Generates a valid Gamma matrix with a given dimension
+#' 
+#' @param d Size of the matrix
+#' @param ... Further arguments passed to [generate_random_spd_matrix()]
+#' @family Example generations
+#' 
+#' @export
+generate_random_Gamma <- function(d, ...){
+  g <- igraph::make_full_graph(d)
+  generate_random_graphical_Gamma(g, ...)
+}
 
 #' Generate a random Gamma matrix containing only integers
 #'
