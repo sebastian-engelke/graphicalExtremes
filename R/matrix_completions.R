@@ -179,6 +179,18 @@ make_graph_list <- function(graph){
 
   gList <- list()
   for(edge in edgeList){
+    # Check if edge is already covered by a different graph:
+    alreadyCovered <- FALSE
+    for(gg in gList){
+      if(!igraph::are.connected(gg, edge[1], edge[2])){
+        alreadyCovered <- TRUE
+        break
+      }
+    }
+    if(alreadyCovered){
+      next
+    }
+
     tmp <- igraph::max_flow(
       graph,
       edge[1],
