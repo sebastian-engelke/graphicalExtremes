@@ -54,7 +54,7 @@ PD <- make_Pv(eD)
 
 # S <- PD %*% (-G0/2) %*% t(PD)
 
-SD <- makeSD(G, C[1])
+SD <- makeSD(G, C)
 
 S1 <- makeSD(G1, C)
 
