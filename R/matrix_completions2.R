@@ -22,7 +22,6 @@
 #' @export
 complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE) {
 
-  
   partitionList <- make_graph_list(graph)$partitions
   
   indList <- lapply(partitionList, function(AB) list(
