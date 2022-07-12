@@ -53,7 +53,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
       Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE)
       R <- chol(Sigma[vC_Sigma, vC_Sigma, drop=FALSE])
       SigmaCCinv <- chol2inv(R)
-      SigmaAB <- Sigma[vA, vC_Sigma] %*% SigmaCCinv %*% Sigma[vC_Sigma, vB]
+      SigmaAB <- Sigma[vA, vC_Sigma, drop=FALSE] %*% SigmaCCinv %*% Sigma[vC_Sigma, vB, drop=FALSE]
       Sigma[vA, vB] <- SigmaAB
       Sigma[vB, vA] <- t(SigmaAB)
       Gamma <- Sigma2Gamma(Sigma)
