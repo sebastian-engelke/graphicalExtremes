@@ -4,144 +4,122 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="graphicalExtremes">
 <title>Introduction to Extremal Graphical Models • graphicalExtremes</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to Extremal Graphical Models">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to Extremal Graphical Models">
 <meta property="og:description" content="graphicalExtremes">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">graphicalExtremes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/graphicalExtremes.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li>
-      <a href="../articles/index.html">More...</a>
-    </li>
-  </ul>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/sebastian-engelke/graphicalExtremes/">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
-<!--/.container -->
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/sebastian-engelke/graphicalExtremes/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
+    
+  </div>
+</nav><div class="container template-article">
 
-      </header><script src="graphicalExtremes_files/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="graphicalExtremes_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
-<script src="graphicalExtremes_files/bootstrap-3.3.5/js/bootstrap.min.js"></script><script src="graphicalExtremes_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script><script src="graphicalExtremes_files/bootstrap-3.3.5/shim/respond.min.js"></script><style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="graphicalExtremes_files/navigation-1.1/tabsets.js"></script><script src="graphicalExtremes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Introduction to Extremal Graphical Models</h1>
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Introduction to Extremal Graphical Models</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/master/vignettes/graphicalExtremes.Rmd"><code>vignettes/graphicalExtremes.Rmd</code></a></small>
-      <div class="hidden name"><code>graphicalExtremes.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/vignettes/graphicalExtremes.Rmd" class="external-link"><code>vignettes/graphicalExtremes.Rmd</code></a></small>
+      <div class="d-none name"><code>graphicalExtremes.Rmd</code></div>
     </div>
 
     
     
 
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a><span class="header-section-number">1</span> Installation</h1>
+<div class="section level2">
+<h2 id="installation">
+<span class="header-section-number">1</span> Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
 <!-- ``` r -->
 <!-- install.packages("graphicalExtremes") -->
 <!-- ``` -->
-<p>Make sure to install the <em>development</em> version of graphicalExtremes from <a href="https://github.com/">GitHub</a> with:</p>
+<p>Make sure to install the <em>development</em> version of graphicalExtremes from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sebastian-engelke/graphicalExtremes"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sebastian-engelke/graphicalExtremes"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#data" class="anchor"></a><span class="header-section-number">2</span> Data</h1>
+<div class="section level2">
+<h2 id="data">
+<span class="header-section-number">2</span> Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">danube</span> <span class="op">=</span> <span class="fu">graphicalExtremes</span><span class="fu">::</span><span class="va"><a href="../reference/danube.html">danube</a></span>
-
-<span class="va">X</span> <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">data</span>
-  
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">X</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">X</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X22</span>, y <span class="op">=</span> <span class="va">X28</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">danube</span> <span class="op">=</span> <span class="fu">graphicalExtremes</span><span class="fu">::</span><span class="va"><a href="../reference/danube.html">danube</a></span></span>
+<span></span>
+<span><span class="va">X</span> <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">data</span></span>
+<span>  </span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">X</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">X</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X22</span>, y <span class="op">=</span> <span class="va">X28</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-2-1.png" width="50%"><img src="graphicalExtremes_files/figure-html/unnamed-chunk-2-2.png" width="50%"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">danube_flow</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">flow_edges</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">danube_flow</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>, 
-     edge.arrow.size<span class="op">=</span><span class="fl">.3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">danube_flow</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html" class="external-link">graph_from_edgelist</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">flow_edges</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_flow</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>, </span>
+<span>     edge.arrow.size<span class="op">=</span><span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-3-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div id="multivariate-pareto-distributions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#multivariate-pareto-distributions" class="anchor"></a><span class="header-section-number">3</span> Multivariate Pareto distributions</h1>
-<div id="definition" class="section level2">
-<h2 class="hasAnchor">
-<a href="#definition" class="anchor"></a><span class="header-section-number">3.1</span> Definition</h2>
+<div class="section level2">
+<h2 id="multivariate-pareto-distributions">
+<span class="header-section-number">3</span> Multivariate Pareto distributions<a class="anchor" aria-label="anchor" href="#multivariate-pareto-distributions"></a>
+</h2>
+<div class="section level3">
+<h3 id="definition">
+<span class="header-section-number">3.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
+</h3>
 <p>The goal is to study the extremal tail of a multivariate random vector <span class="math inline">\(\mathbf{X} = (X_1,\dots, X_d)\)</span>. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
 <span class="math display" id="eq:pareto">\[\begin{equation}
 1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d. \tag{3.1}
@@ -157,11 +135,12 @@ where the limit is in terms of convergence in distribution. By construction, the
 <p>In practice, we use the approximation <span class="math inline">\(\mathbf{Y} \approx \mathbf{X}_u\)</span> for some large value <span class="math inline">\(u\)</span>, where <span class="math inline">\(u\)</span> can be chosen as the <span class="math inline">\(p\)</span>th quantile of the distribution of <span class="math inline">\(\|\mathbf{X}\|_\infty\)</span>.
 Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(\mathbf{X}_1, \dots, \mathbf{X}_n\)</span> of <span class="math inline">\(\mathbf{X}\)</span>, the function <code><a href="../reference/data2mpareto.html">data2mpareto()</a></code> first computes the standardization in <a href="#eq:pareto">(3.1)</a> based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances <span class="math inline">\(\mathbf{X}_u\)</span> according to <a href="#eq:exc">(3.2)</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a><span class="header-section-number">3.2</span> Examples</h2>
+<div class="section level3">
+<h3 id="examples">
+<span class="header-section-number">3.2</span> Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h3>
 <div class="example">
 <p><span id="exm:unlabeled-div-1" class="example"><strong>Example 3.1  </strong></span>The extremal logistic distribution with parameter <span class="math inline">\(\theta\in(0,1)\)</span> induces a multivariate
 Pareto distribution with density
@@ -189,19 +168,21 @@ extremes.</p>
 </div>
 <p>The function <code><a href="../reference/rmpareto.html">rmpareto()</a></code> generates samples from a MPD <span class="math inline">\(\mathbf{Y}\)</span> based on the exact algorithm described in <span class="citation">Engelke and Hitz (2020)</span>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">G</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span>
-
-<span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">.5</span>
-<span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">G</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">.5</span></span>
+<span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span></code></pre></div>
 <p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable.html">rmstable()</a></code>, following the exact algorithm in <span class="citation">Dombry, Engelke, and Oesting (2016)</span>.</p>
 </div>
-<div id="measures-of-extremal-dependence" class="section level2">
-<h2 class="hasAnchor">
-<a href="#measures-of-extremal-dependence" class="anchor"></a><span class="header-section-number">3.3</span> Measures of extremal dependence</h2>
-<div id="extremal-correlation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#extremal-correlation" class="anchor"></a><span class="header-section-number">3.3.1</span> Extremal correlation</h3>
+<div class="section level3">
+<h3 id="measures-of-extremal-dependence">
+<span class="header-section-number">3.3</span> Measures of extremal dependence<a class="anchor" aria-label="anchor" href="#measures-of-extremal-dependence"></a>
+</h3>
+<div class="section level4">
+<h4 id="extremal-correlation">
+<span class="header-section-number">3.3.1</span> Extremal correlation<a class="anchor" aria-label="anchor" href="#extremal-correlation"></a>
+</h4>
 <p>The extremal correlation <span class="math inline">\(\chi_{ij}\in [0,1]\)</span> measures the dependence between the largest values of the random variables <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>. It is defined as
 <span class="math display">\[\begin{equation}\label{EC}
   \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb P\left\{F_i(X_i) &gt; p\mid  F_j(X_j) &gt; p \right\},
@@ -209,19 +190,20 @@ extremes.</p>
 where the boundary cases <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> correspond to asymptotic independence and complete dependence, respectively.</p>
 <p>For <span class="math inline">\(n\)</span> observations <span class="math inline">\(X_1,\dots, X_n\)</span> of the <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(X\)</span>, we can empirically estimate the <span class="math inline">\(d\times d\)</span> matrix of all pairwise extremal correlations for a fixed threshold <span class="math inline">\(p\)</span> close to 1.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
 <p>In this function, and in all subsequent functions, if the variable <code>p = NULL</code> then the data is already expected to be on MPD scale, and no thresholding is performed. For the <code><a href="../reference/danube.html">danube()</a></code> data, we may therefore directly use <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span> </span></code></pre></div>
 <div class="example">
 <p><span id="exm:unlabeled-div-3" class="example"><strong>Example 3.3  </strong></span>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>, the extremal correlation is given by
 <span class="math display">\[ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),\]</span>
 where <span class="math inline">\(\Phi\)</span> is the standard normal distribution function. We can use the functions <code><a href="../reference/Gamma2chi.html">Gamma2chi()</a></code> and <code><a href="../reference/chi2Gamma.html">chi2Gamma()</a></code> to switch between the two coefficients.</p>
 </div>
 </div>
-<div id="extremal-variogram" class="section level3">
-<h3 class="hasAnchor">
-<a href="#extremal-variogram" class="anchor"></a><span class="header-section-number">3.3.2</span> Extremal variogram</h3>
+<div class="section level4">
+<h4 id="extremal-variogram">
+<span class="header-section-number">3.3.2</span> Extremal variogram<a class="anchor" aria-label="anchor" href="#extremal-variogram"></a>
+</h4>
 <p>There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in  and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
 <p>For any root node <span class="math inline">\(k\in V\)</span>, the pre-asymptotic extremal variogram is defined as the matrix <span class="math inline">\(\Gamma^{(k)}\)</span> with entries
 <span class="math display">\[\begin{equation*}
@@ -234,7 +216,7 @@ whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 
 \end{equation*}\]</span><br>
 Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function <code><a href="../reference/emp_vario.html">emp_vario()</a></code> estimates the (pre-asymptotic) extremal variogram, for instance for <span class="math inline">\(k=1\)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Gamma_1_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, k <span class="op">=</span> <span class="fl">1</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Gamma_1_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, k <span class="op">=</span> <span class="fl">1</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
 <p>In general, the matrices <span class="math inline">\(\Gamma^{(k)}\)</span> can be different for <span class="math inline">\(k \in V\)</span>, but for example for the Hüsler–Reiss distribution, they all coincide.</p>
 <div class="example">
 <p><span id="exm:unlabeled-div-4" class="example"><strong>Example 3.4  </strong></span>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma\)</span>, the extremal variogram matrices satisfy
@@ -242,22 +224,24 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 </div>
 <p>In this case it makes sense to estimate the extremal variogram <span class="math inline">\(\hat \Gamma\)</span> as the average of the estimators <span class="math inline">\(\hat \Gamma^{(k)}\)</span>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Gamma_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
-<span class="va">Gamma_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Gamma_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">Gamma_hat</span> <span class="op">=</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="extremal-graphical-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#extremal-graphical-models" class="anchor"></a><span class="header-section-number">4</span> Extremal graphical models</h1>
+<div class="section level2">
+<h2 id="extremal-graphical-models">
+<span class="header-section-number">4</span> Extremal graphical models<a class="anchor" aria-label="anchor" href="#extremal-graphical-models"></a>
+</h2>
 <p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MTPs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
 <span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.\]</span>
 that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
 <p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a Hammersley–Clifford theorem stating that for an extr emal graphical model on a decomposable graph <span class="math inline">\(G\)</span>, the density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes into the marginal density on the cliques.</p>
 <p><img src="images/graphs.png" width="50%" style="display: block; margin: auto;"></p>
-<div id="trees" class="section level2">
-<h2 class="hasAnchor">
-<a href="#trees" class="anchor"></a><span class="header-section-number">4.1</span> Trees</h2>
+<div class="section level3">
+<h3 id="trees">
+<span class="header-section-number">4.1</span> Trees<a class="anchor" aria-label="anchor" href="#trees"></a>
+</h3>
 <p>A tree <span class="math inline">\(T = (V,E)\)</span> is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly <span class="math inline">\(|E| = d-1\)</span> edges. The Hammersley–Clifford theorem shown in <span class="citation">Engelke and Hitz (2020)</span> yields that the density of an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span> on the tree <span class="math inline">\(T= (V,E)\)</span> factorizes into
 <span class="math display" id="eq:treedens">\[\begin{equation}
   f_{\mathbf{Y}}(\mathbf{y}) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  \tag{4.1}
@@ -267,37 +251,40 @@ where <span class="math inline">\(\lambda_{ij}\)</span> are the bivariate margin
 \Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(k)}_{st}, \tag{4.2}
 \end{equation}\]</span>
 where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path between node <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> on the tree <span class="math inline">\(T\)</span>.</p>
-<div id="simulation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#simulation" class="anchor"></a><span class="header-section-number">4.1.1</span> Simulation</h3>
+<div class="section level4">
+<h4 id="simulation">
+<span class="header-section-number">4.1.1</span> Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
+</h4>
 <p>By representation <a href="#eq:treedens">(4.1)</a> we can specify any models bivariate <span class="math inline">\(\lambda_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span> and combine them to a valid tree model. For instance, if we use bivariate Hüsler–Reiss distributions on all edges of the tree <span class="math inline">\(T\)</span>, the resulting <span class="math inline">\(d\)</span>-dimensional tree model is again Hüsler–Reiss and its parameter matrix <span class="math inline">\(\Gamma\)</span> is implied by <a href="#eq:treemetric">(4.2)</a>. If we use bivariate logistic distributions on all edges, the results extremal tree model is not a <span class="math inline">\(d\)</span>-dimensional logistic model, but a more flexible model with <span class="math inline">\(d-1\)</span> parameters.</p>
 <p>The function <code><a href="../reference/rmpareto_tree.html">rmpareto_tree()</a></code> generates samples from an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-
-<span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="fl">4</span>, graph_type <span class="op">=</span> <span class="st">"tree"</span><span class="op">)</span>
-<span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto_tree.html">rmpareto_tree</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, 
-                      tree <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>,
-                      par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>
-
-<span class="va">theta_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.8</span>, <span class="fl">.3</span><span class="op">)</span>
-<span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto_tree.html">rmpareto_tree</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, 
-                      tree <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, 
-                      par <span class="op">=</span> <span class="va">theta_vec</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="fl">4</span>, graph_type <span class="op">=</span> <span class="st">"tree"</span><span class="op">)</span></span>
+<span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto_tree.html">rmpareto_tree</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, </span>
+<span>                      tree <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>,</span>
+<span>                      par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">theta_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.8</span>, <span class="fl">.3</span><span class="op">)</span></span>
+<span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto_tree.html">rmpareto_tree</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, </span>
+<span>                      tree <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, </span>
+<span>                      par <span class="op">=</span> <span class="va">theta_vec</span><span class="op">)</span></span></code></pre></div>
 <p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable_tree.html">rmstable_tree()</a></code>.</p>
 </div>
-<div id="estimation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimation" class="anchor"></a><span class="header-section-number">4.1.2</span> Estimation</h3>
+<div class="section level4">
+<h4 id="estimation">
+<span class="header-section-number">4.1.2</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
+</h4>
 <p>For a given tree <span class="math inline">\(T= (V,E)\)</span> and a parametric model <span class="math inline">\(\{f_{\mathbf{Y}}(\mathbf{y}; \theta): \theta \in \Theta\}\)</span> of MPDs on the tree <span class="math inline">\(T\)</span>, estimation of the model parameters is fairly straight-forward. If <span class="math inline">\(\theta = \{ \theta_{ij}: (i,j) \in E\}\)</span> consists of one parameter per edge, then thanks to the factorization <a href="#eq:treedens">(4.1)</a> we may fit each parameter <span class="math inline">\(\theta_{ij}\)</span> separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.</p>
 <p>If provided with a tree and data, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> estimates the <span class="math inline">\(d-1\)</span> parametres of a Hüsler–Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the <code><a href="../reference/danube.html">danube()</a></code> data set and compare the the fitted with the empirical extremal coefficients.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">danube_tree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as.directed.html">as.undirected</a></span><span class="op">(</span><span class="va">danube_flow</span><span class="op">)</span>
-<span class="va">danube_flow_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, graph <span class="op">=</span> <span class="va">danube_tree</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">danube_tree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as.directed.html" class="external-link">as.undirected</a></span><span class="op">(</span><span class="va">danube_flow</span><span class="op">)</span></span>
+<span><span class="va">danube_flow_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, graph <span class="op">=</span> <span class="va">danube_tree</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="structure-learning" class="section level3">
-<h3 class="hasAnchor">
-<a href="#structure-learning" class="anchor"></a><span class="header-section-number">4.1.3</span> Structure learning</h3>
+<div class="section level4">
+<h4 id="structure-learning">
+<span class="header-section-number">4.1.3</span> Structure learning<a class="anchor" aria-label="anchor" href="#structure-learning"></a>
+</h4>
 <p>In practice, the underlying conditonal independence tree <span class="math inline">\(T = (V,E)\)</span> is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see <span class="citation">Engelke and Volgushev (2020)</span> for details.</p>
 <p>The method is based on the notion of a minimum spanning tree. For a set of symmetric weights <span class="math inline">\(\rho_{ij} &gt; 0\)</span> associated with any pair of nodes <span class="math inline">\(i,j\in V\)</span>, <span class="math inline">\(i\neq j\)</span>, the latter is defined as the tree structure
 <span class="math display">\[\begin{align}\label{Tmin}
@@ -308,22 +295,23 @@ that minimizes the sum of distances on that tree.</p>
 <p>In fact, taking the average of all <span class="math inline">\(\hat \Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, and using this as weights <span class="math inline">\(\rho_{ij} = \hat \Gamma_{ij}\)</span> makes better use of the data and usually improves the performance of structure estimation significantly. <span class="citation">Engelke and Volgushev (2020)</span> further show that the empircal extremal correlation <span class="math inline">\(\rho_{ij} = \hat \chi_{ij}\)</span> may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.</p>
 <p>The function <code><a href="../reference/emst.html">emst()</a></code> estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through <a href="#eq:treemetric">(4.2)</a>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">danube_emst_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emst.html">emst</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">graph</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">danube_emst_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emst.html">emst</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">graph</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-13-1.png" width="480" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">danube_flow_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">chi_hat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Empirical"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">danube_flow_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">chi_hat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Empirical"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-14-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="hüslerreiss-graphical-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#h%C3%BCslerreiss-graphical-models" class="anchor"></a><span class="header-section-number">4.2</span> Hüsler–Reiss graphical models</h2>
+<div class="section level3">
+<h3 id="hüslerreiss-graphical-models">
+<span class="header-section-number">4.2</span> Hüsler–Reiss graphical models<a class="anchor" aria-label="anchor" href="#h%C3%BCslerreiss-graphical-models"></a>
+</h3>
 <p>The Hüsler–Reiss Pareto distribution <span class="math inline">\(\mathbf{Y}\)</span>
 is parametrized by the variogram matrix <span class="math inline">\(\Gamma\)</span>. Using the linear transformation <a href="#eq:Sigmak">(3.4)</a>, we obtain the covariance matrix <span class="math inline">\(\Sigma^{(k)}\)</span> for <span class="math inline">\(k\in V\)</span>. The inverse, called a precision matrix, is denoted by <span class="math inline">\(\Theta^{(k)}\)</span>. <span class="citation">Engelke and Hitz (2020)</span> showed that for any <span class="math inline">\(k\in V\)</span> this precision matrix contains the conditional independence structure of <span class="math inline">\(\mathbf{Y}\)</span>, since for <span class="math inline">\(i,j\in V\)</span> with <span class="math inline">\(i\neq j\)</span>,
 <span class="math display">\[\begin{equation*}
@@ -343,20 +331,21 @@ which contains all extremal conditional independencies as zeros on the off-diago
     Y_i\perp_e Y_j\mid \mathbf{Y}_{V\setminus \{i,j\}} \quad \iff \quad
        \Theta_{ij}= 0,  \quad i,j \in V.
 \end{equation*}\]</span></p>
-<div id="transformations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#transformations" class="anchor"></a><span class="header-section-number">4.2.1</span> Transformations</h3>
-<p>While the Hüsler–Reiss distribution is parameterized by the variogram matrix <span class="math inline">\(\Gamma\)</span>, other objects such as <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta^{(k)}\)</span> and <span class="math inline">\(\Theta\)</span> are often required, for instance, to identify the extremal graphical structure. The functions <code><a href="../reference/Gamma2Sigma.html">Gamma2Sigma()</a></code>, <code><a href="../reference/Sigma2Gamma.html">Sigma2Gamma()</a></code>, <code><a href="../reference/Gamma2Theta.html">Gamma2Theta()</a></code> and <code><a href="../reference/Theta2Gamma.html">Theta2Gamma()</a></code> are often useful. Note that all of these function are bijections. The function <code><a href="../reference/Gamma2graph.html">Gamma2graph()</a></code> creates an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html">igraph::graph()</a></code> object and plots it.</p>
+<div class="section level4">
+<h4 id="transformations">
+<span class="header-section-number">4.2.1</span> Transformations<a class="anchor" aria-label="anchor" href="#transformations"></a>
+</h4>
+<p>While the Hüsler–Reiss distribution is parameterized by the variogram matrix <span class="math inline">\(\Gamma\)</span>, other objects such as <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta^{(k)}\)</span> and <span class="math inline">\(\Theta\)</span> are often required, for instance, to identify the extremal graphical structure. The functions <code><a href="../reference/Gamma2Sigma.html">Gamma2Sigma()</a></code>, <code><a href="../reference/Sigma2Gamma.html">Sigma2Gamma()</a></code>, <code><a href="../reference/Gamma2Theta.html">Gamma2Theta()</a></code> and <code><a href="../reference/Theta2Gamma.html">Theta2Gamma()</a></code> are often useful. Note that all of these function are bijections. The function <code><a href="../reference/Gamma2graph.html">Gamma2graph()</a></code> creates an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph()</a></code> object and plots it.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">1.5</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">0</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="fu"><a href="../reference/Gamma2Sigma.html">Gamma2Sigma</a></span><span class="op">(</span><span class="va">Gamma</span>, k <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="../reference/Gamma2Theta.html">Gamma2Theta</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span>
-<span class="va">my_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Gamma2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Gamma2Sigma.html">Gamma2Sigma</a></span><span class="op">(</span><span class="va">Gamma</span>, k <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Gamma2Theta.html">Gamma2Theta</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span>
+<span><span class="va">my_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Gamma2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt;      [,1] [,2] [,3]
 &gt; [1,]  1.5  0.5    1
 &gt; [2,]  0.5  1.5    1
@@ -368,10 +357,10 @@ which contains all extremal conditional independencies as zeros on the off-diago
 &gt; [4,]  0.0 -0.5 -0.5  1.0</code></pre>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-16-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div id="completion-of-gamma" class="section level3">
-<h3 class="hasAnchor">
-<a href="#completion-of-gamma" class="anchor"></a><span class="header-section-number">4.2.2</span> Completion of <span class="math inline">\(\Gamma\)</span>
-</h3>
+<div class="section level4">
+<h4 id="completion-of-gamma">
+<span class="header-section-number">4.2.2</span> Completion of <span class="math inline">\(\Gamma\)</span><a class="anchor" aria-label="anchor" href="#completion-of-gamma"></a>
+</h4>
 <p>For Hüsler–Reiss graphical models it suffices to specify the graph structure <span class="math inline">\(G = (V,E)\)</span> on all entries of the parameter matrix <span class="math inline">\(\Gamma_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span>. The remaining entries of the matrix <span class="math inline">\(\Gamma\)</span> are then implicitely implied by the graph structure.</p>
 <p>The function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> takes as an input the partially specified <span class="math inline">\(\Gamma\)</span> matrix and the corresponding graph structure <span class="math inline">\(G\)</span>, and completes the <span class="math inline">\(\Gamma\)</span> matrix. The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.</p>
 <p>The simplest case is a tree, where the entries <span class="math inline">\(\Gamma_{ij}\)</span> for <span class="math inline">\((i,j) \notin E\)</span> can be easily obtained
@@ -424,49 +413,51 @@ from the additive tree metric property <a href="#eq:treemetric">(4.2)</a>.</p>
 <span id="cb18-17"><a href="#cb18-17"></a><span class="kw">plot</span>(my_graph)</span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-19-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div id="estimation-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimation-1" class="anchor"></a><span class="header-section-number">4.2.3</span> Estimation</h3>
+<div class="section level4">
+<h4 id="estimation-1">
+<span class="header-section-number">4.2.3</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation-1"></a>
+</h4>
 <p>Let us first suppose that a connected graph <span class="math inline">\(G\)</span> is given. For some data set, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> fits a Hüsler–Reiss graphical model on the graph <span class="math inline">\(G\)</span>.</p>
 <p>If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full <span class="math inline">\(\Gamma\)</span> matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
 Combining the clique estimates relies on the same principle as in the <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> function, but with some care required to ensure that the <span class="math inline">\(\Gamma_{ij}\)</span> estimates are consistent if <span class="math inline">\((i,j)\)</span> belongs to a separator set between two or more cliques.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"decomposable"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"decomposable"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-20-1.png" width="480" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>
-<span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"True"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
+<span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"True"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-20-2.png" width="480" style="display: block; margin: auto;"></p>
 <p>If the graph <span class="math inline">\(G\)</span> is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of <span class="math inline">\(G\)</span> using the function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">20</span>
-<span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"general"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"general"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-21-1.png" width="480" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>
-<span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"True"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
+<span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"True"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-21-2.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div id="extremal-graphical-lasso" class="section level3">
-<h3 class="hasAnchor">
-<a href="#extremal-graphical-lasso" class="anchor"></a><span class="header-section-number">4.2.4</span> Extremal graphical lasso</h3>
+<div class="section level4">
+<h4 id="extremal-graphical-lasso">
+<span class="header-section-number">4.2.4</span> Extremal graphical lasso<a class="anchor" aria-label="anchor" href="#extremal-graphical-lasso"></a>
+</h4>
 <p>For structure learning of more general, possibly non-decomposable graphs, we can use the extremal graphical lasso for Hüsler–Reiss distributions. Given an estimate <span class="math inline">\(\widehat \Gamma\)</span> of the parameter matrix, e.g., obtained by <code><a href="../reference/emp_vario.html">emp_vario()</a></code>, we compute the corresponding matrices <span class="math inline">\(\widehat \Sigma^{(k)}\)</span> through the function <code><a href="../reference/Gamma2Sigma.html">Gamma2Sigma()</a></code>.</p>
 <p>In order to enforce sparsity, we compute the <span class="math inline">\(\ell_1\)</span>-penalized precision matrices for each <span class="math inline">\(k\in V\)</span>. For a tuning parameter <span class="math inline">\(\rho\geq 0\)</span>, the extremal graphical lasso is
 <span class="math display">\[\begin{align*}  
@@ -476,141 +467,143 @@ Since we run <span class="math inline">\(d\)</span> different graphical lasso al
 <span class="math display">\[ (i,j) \in \widehat E_\rho \quad \Leftrightarrow \quad \frac1{d-2} \# \left\{k \in V \setminus \{i,j\}: \right(\widehat\Theta^{(k)}_\rho \left)_{ij} \neq 0 \right\} \geq 1/2.\]</span></p>
 <p>The best parameter <span class="math inline">\(\rho\)</span> can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the <code><a href="../reference/eglasso.html">eglasso()</a></code> function. It returns the (sequence) of estimated graphs and, if desired, the corresponding <span class="math inline">\(\widehat \Gamma_\rho\)</span> estimates.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="va">rholist</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1e-5</span>, <span class="fl">0.04</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="va">danube_eglasso_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/eglasso.html">eglasso</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">Gamma_hat</span>, rholist <span class="op">=</span> <span class="va">rholist</span>, 
-                    eps <span class="op">=</span> <span class="fl">.5</span>, reg_method <span class="op">=</span> <span class="st">"glasso"</span>, complete_Gamma <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">danube_loglik</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">rholist</span><span class="op">)</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span> 
-  <span class="fu"><a href="../reference/loglik_HR.html">loglik_HR</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p<span class="op">=</span><span class="fl">.8</span>, Gamma <span class="op">=</span> <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span>, 
-            graph <span class="op">=</span>  <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-
-
-<span class="va">danube_loglik_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loglik_HR.html">loglik_HR</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p<span class="op">=</span><span class="fl">.8</span>, Gamma <span class="op">=</span> <span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">Gamma</span>,
-                                graph <span class="op">=</span> <span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span>
-
-<span class="fu">ggplot</span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">rholist</span>, y <span class="op">=</span> <span class="va">danube_loglik</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">danube_loglik_tree</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"rho"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"BIC"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>
-    breaks <span class="op">=</span> <span class="va">rholist</span>,
-    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">rholist</span>, <span class="fl">3</span><span class="op">)</span>,
-    sec.axis <span class="op">=</span> <span class="fu">sec_axis</span><span class="op">(</span>trans<span class="op">=</span><span class="op">~</span><span class="va">.</span>, breaks <span class="op">=</span> <span class="va">rholist</span>,
-                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span>, <span class="fu">igraph</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/igraph/man/gsize.html">gsize</a></span><span class="op">)</span>,
-                        name<span class="op">=</span><span class="st">"Number of edges"</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">rholist</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1e-5</span>, <span class="fl">0.04</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">danube_eglasso_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/eglasso.html">eglasso</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">Gamma_hat</span>, rholist <span class="op">=</span> <span class="va">rholist</span>, </span>
+<span>                    eps <span class="op">=</span> <span class="fl">.5</span>, reg_method <span class="op">=</span> <span class="st">"glasso"</span>, complete_Gamma <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">danube_loglik</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">rholist</span><span class="op">)</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="../reference/loglik_HR.html">loglik_HR</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p<span class="op">=</span><span class="fl">.8</span>, Gamma <span class="op">=</span> <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>            graph <span class="op">=</span>  <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">danube_loglik_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loglik_HR.html">loglik_HR</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">X</span>, p<span class="op">=</span><span class="fl">.8</span>, Gamma <span class="op">=</span> <span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">Gamma</span>,</span>
+<span>                                graph <span class="op">=</span> <span class="va">danube_emst_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">rholist</span>, y <span class="op">=</span> <span class="va">danube_loglik</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">danube_loglik_tree</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"rho"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"BIC"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span></span>
+<span>    breaks <span class="op">=</span> <span class="va">rholist</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rholist</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    sec.axis <span class="op">=</span> <span class="fu">sec_axis</span><span class="op">(</span>trans<span class="op">=</span><span class="op">~</span><span class="va">.</span>, breaks <span class="op">=</span> <span class="va">rholist</span>,</span>
+<span>                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span>, <span class="fu">igraph</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/igraph/man/gsize.html" class="external-link">gsize</a></span><span class="op">)</span>,</span>
+<span>                        name<span class="op">=</span><span class="st">"Number of edges"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-22-1.png" width="480" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,
-     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,
-     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,
-     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,</span>
+<span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,</span>
+<span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>, layout <span class="op">=</span> <span class="va">danube</span><span class="op">$</span><span class="va">coords_to_plot</span>,</span>
+<span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"rho = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">rholist</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-23-1.png" width="33%"><img src="graphicalExtremes_files/figure-html/unnamed-chunk-23-2.png" width="33%"><img src="graphicalExtremes_files/figure-html/unnamed-chunk-23-3.png" width="33%"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">best_Gamma</span> <span class="op">&lt;-</span> <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.min</a></span><span class="op">(</span><span class="va">danube_loglik</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>
-
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">best_Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">chi_hat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Empirical"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">best_Gamma</span> <span class="op">&lt;-</span> <span class="va">danube_eglasso_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">danube_loglik</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/Gamma2chi.html">Gamma2chi</a></span><span class="op">(</span><span class="va">best_Gamma</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">chi_hat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Fitted"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Empirical"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-24-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
-<div id="exercises" class="section level1">
-<h1 class="hasAnchor">
-<a href="#exercises" class="anchor"></a><span class="header-section-number">5</span> Exercises</h1>
+<div class="section level2">
+<h2 id="exercises">
+<span class="header-section-number">5</span> Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
+</h2>
 <p>The <code><a href="../reference/flights.html">flights()</a></code>dataset contains daily total delays (Jan 1, 2015 – Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
 The object <code><a href="../reference/flights.html">flights()</a></code> is a list made of:</p>
 <ul>
 <li>
-<code>data</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html">dplyr::tibble()</a></code> containing the delay data. Each row corresponds to a day and each column to an airport.</li>
+<code>data</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">dplyr::tibble()</a></code> containing the delay data. Each row corresponds to a day and each column to an airport.</li>
 <li>
-<code>airports</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html">dplyr::tibble()</a></code> containing the details for each airport.</li>
+<code>airports</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">dplyr::tibble()</a></code> containing the details for each airport.</li>
 <li>
-<code>connections</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html">dplyr::tibble()</a></code> containing the details of the <em>undirected</em> flights.</li>
+<code>connections</code>: a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">dplyr::tibble()</a></code> containing the details of the <em>undirected</em> flights.</li>
 </ul>
 <p>In the code below, we show how to load the dataset and plot the flight connections.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Load the dataset</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">data</span>
-<span class="va">airports</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">airports</span>
-<span class="va">connections</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">connections</span>
-
-<span class="va">mat</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">%&gt;%</span> 
-  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">DATE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># Plot flight connection</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_polygon</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">map_data</span><span class="op">(</span><span class="st">"usa"</span><span class="op">)</span>,
-               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">long</span>, y <span class="op">=</span> <span class="va">lat</span>, group <span class="op">=</span> <span class="va">group</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey65"</span>,
-               fill <span class="op">=</span> <span class="st">"#f9f9f9"</span>, size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airports</span>,
-             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE</span>, y <span class="op">=</span> <span class="va">LATITUDE</span>, size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,
-             alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_curve</span><span class="op">(</span>data <span class="op">=</span> <span class="va">connections</span>,
-             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE.origin</span>, xend <span class="op">=</span> <span class="va">LONGITUDE.dest</span>,
-                 y <span class="op">=</span> <span class="va">LATITUDE.origin</span>, yend <span class="op">=</span> <span class="va">LATITUDE.dest</span>,
-                 size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,
-             alpha <span class="op">=</span> <span class="fl">.2</span>, curvature <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Load the dataset</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">data</span></span>
+<span><span class="va">airports</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">airports</span></span>
+<span><span class="va">connections</span> <span class="op">&lt;-</span> <span class="va">flights</span><span class="op">$</span><span class="va">connections</span></span>
+<span></span>
+<span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">DATE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot flight connection</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_polygon</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">map_data</span><span class="op">(</span><span class="st">"usa"</span><span class="op">)</span>,</span>
+<span>               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">long</span>, y <span class="op">=</span> <span class="va">lat</span>, group <span class="op">=</span> <span class="va">group</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey65"</span>,</span>
+<span>               fill <span class="op">=</span> <span class="st">"#f9f9f9"</span>, size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airports</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE</span>, y <span class="op">=</span> <span class="va">LATITUDE</span>, size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,</span>
+<span>             alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_curve</span><span class="op">(</span>data <span class="op">=</span> <span class="va">connections</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE.origin</span>, xend <span class="op">=</span> <span class="va">LONGITUDE.dest</span>,</span>
+<span>                 y <span class="op">=</span> <span class="va">LATITUDE.origin</span>, yend <span class="op">=</span> <span class="va">LATITUDE.dest</span>,</span>
+<span>                 size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,</span>
+<span>             alpha <span class="op">=</span> <span class="fl">.2</span>, curvature <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-25-1.png" width="960" style="display: block; margin: auto;"></p>
-<p>Also, it is useful to create an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html">igraph::graph()</a></code> object for the flights connections.</p>
+<p>Also, it is useful to create an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph()</a></code> object for the flights connections.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">flight_graph</span> <span class="op">&lt;-</span> <span class="va">connections</span> <span class="op">%&gt;%</span>
-  <span class="fu">select</span><span class="op">(</span><span class="va">ID.origin</span>, <span class="va">ID.dest</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">flight_graph</span> <span class="op">&lt;-</span> <span class="va">connections</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">ID.origin</span>, <span class="va">ID.dest</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html" class="external-link">graph_from_edgelist</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the <code>flight_graph</code> does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs.</p>
-<p>Below, we provide a helper functions that you might use to plot an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html">igraph::graph()</a></code> object on the US map.</p>
+<p>Below, we provide a helper functions that you might use to plot an <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph()</a></code> object on the US map.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Function definition</span>
-<span class="va">plot_connections</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">airports</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co">## igraph tibble -&gt; ggplot</span>
-  <span class="co">## plots the given `graph` on the US map</span>
-  
-  <span class="co"># name the graph nodes</span>
-  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="va">airports</span><span class="op">$</span><span class="va">IATA_CODE</span><span class="op">[</span><span class="va">airports</span><span class="op">$</span><span class="va">ID</span> <span class="op">==</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span><span class="op">]</span>
-  
-  <span class="co"># write flight connections</span>
-  <span class="va">flights_connections_est</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as_edgelist.html">get.edgelist</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">as_tibble</span><span class="op">(</span>.name_repair <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ORIGIN_AIRPORT"</span>, <span class="st">"DESTINATION_AIRPORT"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="va">airports</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ORIGIN_AIRPORT"</span> <span class="op">=</span> <span class="st">"IATA_CODE"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="va">airports</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DESTINATION_AIRPORT"</span> <span class="op">=</span> <span class="st">"IATA_CODE"</span><span class="op">)</span>,
-            suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">".origin"</span>, <span class="st">".dest"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">select</span><span class="op">(</span><span class="va">ORIGIN_AIRPORT</span>, <span class="va">DESTINATION_AIRPORT</span>,
-         <span class="va">LATITUDE.origin</span>, <span class="va">LONGITUDE.origin</span>,
-         <span class="va">LATITUDE.dest</span>, <span class="va">LONGITUDE.dest</span><span class="op">)</span>
-  
-  <span class="co"># plot connections</span>
-  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_polygon</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">map_data</span><span class="op">(</span><span class="st">"usa"</span><span class="op">)</span>,
-               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">long</span>, y <span class="op">=</span> <span class="va">lat</span>, group <span class="op">=</span> <span class="va">group</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey65"</span>,
-               fill <span class="op">=</span> <span class="st">"#f9f9f9"</span>, size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airports</span>,
-             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE</span>, y <span class="op">=</span> <span class="va">LATITUDE</span>, size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,
-             alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_curve</span><span class="op">(</span>data <span class="op">=</span> <span class="va">flights_connections_est</span>,
-             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE.origin</span>, xend <span class="op">=</span> <span class="va">LONGITUDE.dest</span>,
-                 y <span class="op">=</span> <span class="va">LATITUDE.origin</span>, yend <span class="op">=</span> <span class="va">LATITUDE.dest</span><span class="op">)</span>,
-             alpha <span class="op">=</span> <span class="fl">.4</span>, curvature <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-  
-  
-<span class="op">}</span>
-
-<span class="co"># Plot an igraph object</span>
-<span class="fu">plot_connections</span><span class="op">(</span><span class="va">flight_graph</span>, <span class="va">airports</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Function definition</span></span>
+<span><span class="va">plot_connections</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span>, <span class="va">airports</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">## igraph tibble -&gt; ggplot</span></span>
+<span>  <span class="co">## plots the given `graph` on the US map</span></span>
+<span>  </span>
+<span>  <span class="co"># name the graph nodes</span></span>
+<span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="va">airports</span><span class="op">$</span><span class="va">IATA_CODE</span><span class="op">[</span><span class="va">airports</span><span class="op">$</span><span class="va">ID</span> <span class="op">==</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="co"># write flight connections</span></span>
+<span>  <span class="va">flights_connections_est</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as_edgelist.html" class="external-link">get.edgelist</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span>.name_repair <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ORIGIN_AIRPORT"</span>, <span class="st">"DESTINATION_AIRPORT"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">airports</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ORIGIN_AIRPORT"</span> <span class="op">=</span> <span class="st">"IATA_CODE"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">airports</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DESTINATION_AIRPORT"</span> <span class="op">=</span> <span class="st">"IATA_CODE"</span><span class="op">)</span>,</span>
+<span>            suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".origin"</span>, <span class="st">".dest"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">ORIGIN_AIRPORT</span>, <span class="va">DESTINATION_AIRPORT</span>,</span>
+<span>         <span class="va">LATITUDE.origin</span>, <span class="va">LONGITUDE.origin</span>,</span>
+<span>         <span class="va">LATITUDE.dest</span>, <span class="va">LONGITUDE.dest</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># plot connections</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_polygon</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">map_data</span><span class="op">(</span><span class="st">"usa"</span><span class="op">)</span>,</span>
+<span>               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">long</span>, y <span class="op">=</span> <span class="va">lat</span>, group <span class="op">=</span> <span class="va">group</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey65"</span>,</span>
+<span>               fill <span class="op">=</span> <span class="st">"#f9f9f9"</span>, size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airports</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE</span>, y <span class="op">=</span> <span class="va">LATITUDE</span>, size <span class="op">=</span> <span class="va">N_FLIGHTS</span><span class="op">)</span>,</span>
+<span>             alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_curve</span><span class="op">(</span>data <span class="op">=</span> <span class="va">flights_connections_est</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">LONGITUDE.origin</span>, xend <span class="op">=</span> <span class="va">LONGITUDE.dest</span>,</span>
+<span>                 y <span class="op">=</span> <span class="va">LATITUDE.origin</span>, yend <span class="op">=</span> <span class="va">LATITUDE.dest</span><span class="op">)</span>,</span>
+<span>             alpha <span class="op">=</span> <span class="fl">.4</span>, curvature <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  </span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Plot an igraph object</span></span>
+<span><span class="fu">plot_connections</span><span class="op">(</span><span class="va">flight_graph</span>, <span class="va">airports</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-27-1.png" width="960" style="display: block; margin: auto;"></p>
-<div id="part-a" class="section level2">
-<h2 class="hasAnchor">
-<a href="#part-a" class="anchor"></a><span class="header-section-number">5.1</span> Part A</h2>
+<div class="section level3">
+<h3 id="part-a">
+<span class="header-section-number">5.1</span> Part A<a class="anchor" aria-label="anchor" href="#part-a"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Fit an extremal tree model to the flight delays using <code><a href="../reference/emst.html">emst()</a></code>, choosing the threshold <code>p = 0.7</code>.</li>
 <li>Plot the estimated tree on the US map and interpret the results.</li>
@@ -621,9 +614,10 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <li>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model of Step 5.</li>
 </ol>
 </div>
-<div id="part-b" class="section level2">
-<h2 class="hasAnchor">
-<a href="#part-b" class="anchor"></a><span class="header-section-number">5.2</span> Part B</h2>
+<div class="section level3">
+<h3 id="part-b">
+<span class="header-section-number">5.2</span> Part B<a class="anchor" aria-label="anchor" href="#part-b"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Fit an extremal graphical lasso model with <code><a href="../reference/eglasso.html">eglasso()</a></code>, choosing threshold <code>p = 0.7</code>, and <code>rholist = seq(1e-4, 0.10, length.out = 10)</code>.</li>
 <li>Plot the estimated graph on the US map for different values of <code>rho</code> and interpret the results.</li>
@@ -645,15 +639,16 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 </ul>
 <p><em>Hint</em>: For some of the methods, you might need to adjust the <code>rholist</code> provided to <code><a href="../reference/eglasso.html">eglasso()</a></code>.</p>
 </div>
-<div id="solutions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#solutions" class="anchor"></a><span class="header-section-number">5.3</span> Solutions</h2>
+<div class="section level3">
+<h3 id="solutions">
+<span class="header-section-number">5.3</span> Solutions<a class="anchor" aria-label="anchor" href="#solutions"></a>
+</h3>
 <p>For solutions see <code><a href="../articles/exercises.html">vignette("exercises")</a></code>.</p>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-dom2016">
 <p>Dombry, C., S. Engelke, and M. Oesting. 2016. “Exact Simulation of Max-Stable Processes.” <em>Biometrika</em> 103: 303–17.</p>
@@ -662,7 +657,7 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 <p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p>
 </div>
 <div id="ref-eng2020">
-<p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.” <a href="https://arxiv.org/abs/2012.06179">https://arxiv.org/abs/2012.06179</a>.</p>
+<p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.” <a href="https://arxiv.org/abs/2012.06179" class="external-link">https://arxiv.org/abs/2012.06179</a>.</p>
 </div>
 <div id="ref-hue1989">
 <p>Hüsler, J., and R.-D. Reiss. 1989. “Maxima of Normal Random Vectors: Between Independence and Complete Dependence.” <em>Statist. Probab. Lett.</em> 7: 283–86.</p>
@@ -672,31 +667,28 @@ The object <code><a href="../reference/flights.html">flights()</a></code> is a l
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Sebastian Engelke, Adrien S. Hitz, Nicola Gnecco, Manuel Hentschel.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Sebastian Engelke, Adrien S. Hitz, Nicola Gnecco, Manuel Hentschel.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
 
+  
 
   </body>
 </html>
