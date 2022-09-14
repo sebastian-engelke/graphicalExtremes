@@ -117,6 +117,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param ... Ignored, only allowed for compatibility
 #' @family Example generations
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
+  print(0)
   M <- matrix(1:4, 2)
   print(M)
   while(!matrixcalc::is.symmetric.matrix(M)) {
