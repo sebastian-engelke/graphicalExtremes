@@ -120,8 +120,7 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
   M <- B %*% t(B)
   while(!matrixcalc::is.symmetric.matrix(M)) {
-    B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
-    M <- B %*% t(B)
+    M <- (M + t(M)) / 2
   }
   m <- max(floor(log(det(M), 10) / d), 0)
   M <- M * 10**(-m)
