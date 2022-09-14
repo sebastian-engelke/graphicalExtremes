@@ -54,7 +54,6 @@ generate_random_graphical_Gamma <- function(graph, ...){
   P <- matrix(0, d, d)
   for(cli in cliques){
     d_cli <- length(cli)
-    print(d_cli)
     P_cli <- generate_random_spd_matrix(d_cli, ...)
     ID <- diag(d_cli) - matrix(1/d_cli, d_cli, d_cli)
     P_cli <- ID %*% P_cli %*% ID
@@ -118,7 +117,8 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param ... Ignored, only allowed for compatibility
 #' @family Example generations
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
-  M <- matrix(1:4, 2)
+  B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
+  M <- B %*% t(B)
   while(!matrixcalc::is.symmetric.matrix(M)) {
     B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
     M <- B %*% t(B)
