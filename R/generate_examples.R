@@ -117,9 +117,11 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param ... Ignored, only allowed for compatibility
 #' @family Example generations
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
-  B <- bMin + stats::runif(d**2) * (bMax-bMin)
-  B <- matrix(B, d, d)
-  M <- B %*% t(B)
+  M <- 0
+  while(!matrixcalc::is.symmetric.matrix(M)) {
+    B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
+    M <- B %*% t(B)
+  }
   m <- max(floor(log(det(M), 10) / d), 0)
   M <- M * 10**(-m)
   if(!matrixcalc::is.positive.definite(M)){
