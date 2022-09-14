@@ -119,7 +119,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
   M <- B %*% t(B)
-  while(!isSymmetric.matrix(M)) {
+  while(!matrixcalc::is.symmetric.matrix(M)) {
     B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
     M <- B %*% t(B)
   }
