@@ -57,7 +57,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data2mpareto</span><span class="op">(</span><span class="va">data</span>, <span class="va">p</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data2mpareto</span><span class="op">(</span><span class="va">data</span>, <span class="va">p</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,6 +70,10 @@ number of observations and \(d\) is the dimension.</p></dd>
 <dt>p</dt>
 <dd><p>Numeric between 0 and 1. Probability used for the quantile to
 threshold the data.</p></dd>
+
+
+<dt>na.rm</dt>
+<dd><p>Logical. If rows containing NAs should be removed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -86,6 +90,8 @@ standard Pareto distributions. Then, only the observations where at least
 one component exceeds the <code>p</code>-quantile of the standard Pareto distribution
 are kept. Those observations are finally divided by the <code>p</code>-quantile
 of the standard Pareto distribution to standardize them to the multivariate Pareto scale.</p>
+<p>If <code>na.rm</code> is <code>FALSE</code>, missing entries are left as such during the transformation of univariate marginals.
+In the thresholding step, missing values are considered as <code>-Inf</code>.</p>
     </div>
 
     <div class="section level2">
@@ -104,16 +110,16 @@ of the standard Pareto distribution to standardize them to the multivariate Pare
 <span class="r-in"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="rmstable.html">rmstable</a></span><span class="op">(</span><span class="va">n</span>, <span class="st">"HR"</span>, d <span class="op">=</span> <span class="va">d</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">data2mpareto</span><span class="op">(</span><span class="va">my_data</span>, <span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]      [,2]      [,3]      [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.2801120 0.4761905 1.5873016 0.7936508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 1.1904762 0.6802721 0.3968254 0.2645503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.6802721 0.3663004 1.1904762 0.3401361</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.7936508 0.5952381 0.9523810 1.5873016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 2.3809524 1.5873016 0.6802721 0.6802721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.5291005 0.3401361 0.2506266 2.3809524</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.4329004 2.3809524 0.4329004 1.1904762</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 1.5873016 0.9523810 4.7619048 0.5291005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 4.7619048 1.1904762 2.3809524 4.7619048</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.3663004 4.7619048 0.2380952 0.2801120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.2470588 0.4200000 1.4000000 0.7000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 1.0500000 0.6000000 0.3500000 0.2333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.6000000 0.3230769 1.0500000 0.3000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.7000000 0.5250000 0.8400000 1.4000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 2.1000000 1.4000000 0.6000000 0.6000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.4666667 0.3000000 0.2210526 2.1000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.3818182 2.1000000 0.3818182 1.0500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 1.4000000 0.8400000 4.2000000 0.4666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 4.2000000 1.0500000 2.1000000 4.2000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.3230769 4.2000000 0.2100000 0.2470588</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
