@@ -3,12 +3,18 @@
 #' Rescale the vector \code{x} empirically to uniform margin.
 #'
 #' @param x Numeric vector.
+#' @param na.rm Logical. If TRUE, missing values are removed. If FALSE, missing values are kept as such.
 #'
 #' @return Numeric vector with entries rescaled to uniform margins
 #'
 #' @keywords internal
-unif <- function(x) {
-  rank(x, ties.method = "first") / (length(x) + 1)
+unif <- function(x, na.rm=FALSE) {
+  if(na.rm){
+    na.last <- NA
+  } else{
+    na.last <- 'keep'
+  }
+  rank(x, ties.method = "first", na.last=na.last) / (sum(!is.na(x)) + 1)
 }
 
 

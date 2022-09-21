@@ -4,7 +4,7 @@
 \alias{data2mpareto}
 \title{Data standardization to multivariate Pareto scale}
 \usage{
-data2mpareto(data, p)
+data2mpareto(data, p, na.rm = FALSE)
 }
 \arguments{
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
@@ -12,6 +12,8 @@ number of observations and \eqn{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1. Probability used for the quantile to
 threshold the data.}
+
+\item{na.rm}{Logical. If rows containing NAs should be removed.}
 }
 \value{
 Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
@@ -26,6 +28,9 @@ standard Pareto distributions. Then, only the observations where at least
 one component exceeds the \code{p}-quantile of the standard Pareto distribution
 are kept. Those observations are finally divided by the \code{p}-quantile
 of the standard Pareto distribution to standardize them to the multivariate Pareto scale.
+
+If \code{na.rm} is \code{FALSE}, missing entries are left as such during the transformation of univariate marginals.
+In the thresholding step, missing values are considered as \code{-Inf}.
 }
 \examples{
 n <- 20
