@@ -4,10 +4,12 @@
 \alias{unif}
 \title{Uniform margin}
 \usage{
-unif(x)
+unif(x, na.rm = FALSE)
 }
 \arguments{
 \item{x}{Numeric vector.}
+
+\item{na.rm}{Logical. If TRUE, missing values are removed. If FALSE, missing values are kept as such.}
 }
 \value{
 Numeric vector with entries rescaled to uniform margins

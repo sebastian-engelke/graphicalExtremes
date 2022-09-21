@@ -59,6 +59,7 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1. Probability used for the quantile to
 #' threshold the data.
+#' @param na.rm Logical. If rows containing NAs should be removed.
 #'
 #' @return Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
 #' of rows in the original \code{data} matrix that are above the threshold.
@@ -69,6 +70,9 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
 #' one component exceeds the \code{p}-quantile of the standard Pareto distribution
 #' are kept. Those observations are finally divided by the \code{p}-quantile
 #' of the standard Pareto distribution to standardize them to the multivariate Pareto scale.
+#' 
+#' If `na.rm` is `FALSE`, missing entries are left as such during the transformation of univariate marginals.
+#' In the thresholding step, missing values are considered as `-Inf`.
 #'
 #' @examples
 #' n <- 20
@@ -85,11 +89,26 @@ Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
 #' my_data <- rmstable(n, "HR", d = d, par = G)
 #' data2mpareto(my_data, p)
 #' @export
-data2mpareto <- function(data, p) {
-  xx <- 1 / (1 - apply(data, 2, unif))
-  q <- stats::quantile(xx, p)
-  idx <- which(apply(xx, 1, max) > q)
-  return(xx[idx, ] / q)
+data2mpareto <- function(data, p, na.rm=FALSE) {
+  # If specified, remove all rows that contain >=1 NA:
+  if(na.rm){
+    naInRow <- apply(is.na(data), 1, any)
+    data <- data[!naInRow,,drop=FALSE]
+  }
+  if(nrow(data) == 0){
+    return(data)
+  }
+  # Convert data (and quantile `p`) to std. Pareto marginals:
+  dataPar <- matrix(
+    1 / (1 - apply(data, 2, unif)), 
+    nrow(data),
+    ncol(data)
+  )
+  pPar <- 1 / (1 - p) 
+  # Keep only rows with infty-norm > threshold:
+  idx <- suppressWarnings(apply(dataPar, 1, max, na.rm=TRUE) > pPar)
+  dataPar <- dataPar[idx,,drop=FALSE] / pPar
+  return(dataPar)
 }
 
 
