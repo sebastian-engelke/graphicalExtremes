@@ -679,13 +679,13 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
   pct <- -Inf
   vcat('Computing emp_vario_pairwise, reporting progress:\n')
   for(i in seq_len(d)){
-    vario[i,i] <- 1
+    vario[i,i] <- 0
     if(i + 1 > d){
       next
     }
     for(j in (i+1):d){
       data_ij <- data2mpareto(data[,c(i,j)], p, na.rm=TRUE)
-      vario_ij <- emp_chi(data_ij, NULL)
+      vario_ij <- emp_vario(data_ij, p=NULL)
       vario[i,j] <- vario_ij[1,2]
       vario[j,i] <- vario_ij[1,2]
       pct1 <- floor(100 * sum(!is.na(vario)) / length(vario))
