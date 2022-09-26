@@ -666,6 +666,38 @@ emp_vario <- function(data, k = NULL, p = NULL) {
   return(G)
 }
 
+#' @export
+emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
+  vcat <- function(...){
+    if(verbose){
+      cat(...)
+    }
+  }
+  d <- ncol(data)
+  vario <- matrix(0, d, d)
+  vario[] <- NA
+  pct <- -Inf
+  vcat('Computing emp_vario_pairwise, reporting progress:\n')
+  for(i in seq_len(d)){
+    vario[i,i] <- 0
+    if(i + 1 > d){
+      next
+    }
+    for(j in (i+1):d){
+      data_ij <- data2mpareto(data[,c(i,j)], p, na.rm=TRUE)
+      vario_ij <- emp_vario(data_ij, p=NULL)
+      vario[i,j] <- vario_ij[1,2]
+      vario[j,i] <- vario_ij[1,2]
+      pct1 <- floor(100 * sum(!is.na(vario)) / length(vario))
+      if(pct1 > pct){
+        pct <- pct1
+        vcat(pct, '% ', sep='')
+      }
+    }
+  }
+  cat('\nDone.\n')
+  return(vario)
+}
 
 
 #' Empirical estimation of extremal correlation matrix \eqn{\chi}
@@ -699,21 +731,52 @@ emp_chi <- function(data, p = NULL) {
     stop("The data should be a matrix with at least two columns.")
   }
 
-  n <- nrow(data)
-  d <- ncol(data)
-
   if (!is.null(p)) {
     data.std <- data2mpareto(data, p)
   } else {
     data.std <- data
   }
 
+  n <- nrow(data.std)
+  d <- ncol(data.std)
 
   ind <- data.std > 1
   ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
   crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
 }
 
+#' @export
+emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
+  vcat <- function(...){
+    if(verbose){
+      cat(...)
+    }
+  }
+  d <- ncol(data)
+  chi <- matrix(0, d, d)
+  chi[] <- NA
+  pct <- -Inf
+  vcat('Computing emp_chi_pairwise, reporting progress:\n')
+  for(i in seq_len(d)){
+    chi[i,i] <- 1
+    if(i + 1 > d){
+      next
+    }
+    for(j in (i+1):d){
+      data_ij <- data2mpareto(data[,c(i,j)], p, na.rm=TRUE)
+      chi_ij <- emp_chi(data_ij, NULL)
+      chi[i,j] <- chi_ij[1,2]
+      chi[j,i] <- chi_ij[1,2]
+      pct1 <- floor(100 * sum(!is.na(chi)) / length(chi))
+      if(pct1 > pct){
+        pct <- pct1
+        vcat(pct, '% ', sep='')
+      }
+    }
+  }
+  cat('\nDone.\n')
+  return(chi)
+}
 
 
 

@@ -95,6 +95,7 @@ complete_Gamma(G, g)
 
 Other Matrix completions: 
 \code{\link{complete_Gamma_decomposable}()},
+\code{\link{complete_Gamma_general_0}()},
 \code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_one_step}()}
 }
