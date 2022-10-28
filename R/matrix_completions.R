@@ -114,9 +114,11 @@ complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', 
 #' and the number of iterations).
 #'
 #' @family Matrix completions
-complete_Gamma_general_0 <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE) {
+complete_Gamma_general_0 <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE, gList=NULL) {
 
-  gList <- make_graph_list(graph)$graphs
+  if(is.null(gList)){
+    gList <- make_graph_list(graph)$graphs
+  }
   m <- length(gList)
   
   if(saveDetails){
