@@ -91,3 +91,8 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
 
   return(Gamma)
 }
+
+
+complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE){
+  # todo
+}

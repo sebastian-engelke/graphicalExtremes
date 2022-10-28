@@ -341,8 +341,8 @@ order_cliques <- function(cliques) {
   n <- length(cliques)
   ret <- list()
   for (i in 1:n) {
+    foundNextClique <- FALSE
     for (j in seq_along(cliques)) {
-      foundNextClique <- FALSE
       candidate <- cliques[[j]]
       rest <- Reduce(union, cliques[-j], c())
       separator <- intersect(candidate, rest)

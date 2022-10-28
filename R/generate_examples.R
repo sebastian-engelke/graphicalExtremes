@@ -169,7 +169,7 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
     stop('Inconsistent parameters')
   }
   c0 <- floor(stats::runif(1, max(cMin, sMin+1), min(d, cMax)))
-  g <- igraph::make_full_graph(c0, directed = FALSE)
+  g <- without_igraph_params(igraph::make_full_graph(c0, directed = FALSE))
   missingVertices <- d - igraph::vcount(g)
   while(missingVertices > 0){
     cliques <- igraph::maximal.cliques(g)
@@ -230,7 +230,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
       return(generate_random_tree(d))
     } else{
       for(i in seq_len(maxTries)){
-        g <- igraph::sample_gnm(d, m)
+        g <- without_igraph_params(igraph::sample_gnm(d, m))
         if(igraph::is.connected(g)){
           return(g)
         }
@@ -238,7 +238,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
     }
   } else{
     for(i in seq_len(maxTries)){
-      g <- igraph::sample_gnp(d, p)
+      g <- without_igraph_params(igraph::sample_gnp(d, p))
       if(igraph::is.connected(g)){
         return(g)
       }
