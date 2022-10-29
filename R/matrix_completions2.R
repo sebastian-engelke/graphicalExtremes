@@ -36,8 +36,12 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
   if(saveDetails){
     GammaList <- list(Gamma)
   }
+  
+  if(length(gList) == 0){
+    N <- 0
+  }
 
-  for (n in 1:N) {
+  for (n in seq_len(N)) {
     t <- (n - 1) %% m + 1
     vABC <- indList[[t]]
     vA <- vABC$vA
@@ -93,6 +97,28 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100,
 }
 
 
-complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE){
+complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100){
   # todo
+  graph <- setPids(graph)
+  invSubGraphs <- split_graph(graph)
+  subMatrices <- lapply(invSubGraphs, getSubMatrixForSubgraph, fullMatrix = Gamma)
+  
+  completedSubMatrices <- mapply(
+    complete_Gamma_general,
+    subMatrices,
+    invSubGraphs,
+    MoreArgs = list(
+      N = N,
+      tol = tol,
+      check_tol = check_tol
+    )
+  )
+  
+  GammaDecomp <- NA * Gamma
+  for(i in seq_along(invSubGraphs)){
+    inds <- getIdsForSubgraph(invSubGraphs[[i]], graph)
+    GammaDecomp[inds, inds] <- completedSubMatrices[[i]]
+  }
+  
+  return(GammaDecomp)
 }

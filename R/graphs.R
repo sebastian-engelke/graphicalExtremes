@@ -67,7 +67,7 @@ setPids <- function(g, ids = NULL, pids = NULL, overwrite = FALSE){
     ids <- igraph::V(g)
   }
   if(is.null(pids)){
-    pids <- (-1) * seq_along(ids) # make negative to distinguish easily from ids
+    pids <- seq_along(ids)
   }
   g <- igraph::set_vertex_attr(g, PERSISTENT_ID_ATTR_NAME, ids, pids)
   return(g)
@@ -134,4 +134,22 @@ getConnectedComponents <- function(g){
 }
 
 
+#' Get the submatrix corresponding to a subgraph
+#' 
+#' The subgraph needs to have persistent IDs
+#' If graph==NULL it is assumed to have pIDs 1, 2, ...
+getSubMatrixForSubgraph <- function(fullMatrix, subgraph, graph=NULL){
+  sgIds <- getIdsForSubgraph(subgraph, graph)
+  return(fullMatrix[sgIds, sgIds, drop=FALSE])
+}
+
+getIdsForSubgraph <- function(subgraph, graph=NULL){
+  sgPids <- getPids(subgraph)
+  if(is.null(graph)){
+    sgIds <- abs(sgPids) # in case negative pIDs are used
+  } else{
+    sgIds <- getIds(graph, sgPids)
+  }
+  return(sgIds)
+}
 
