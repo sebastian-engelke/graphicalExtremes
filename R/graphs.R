@@ -77,12 +77,11 @@ removePids <- function(g){
 }
 
 #' Split graph into invariant subgraphs
-#' Currently cannot handle very dense graphs (e.g. complete graph on 20 nodes)
 split_graph <- function(g){
   g <- setPids(g)
   # compute cliques and sort by size:
-  cliques <- igraph::cliques(g)
-  ord <- order(sapply(cliques(g), length))
+  cliques <- igraph::max_cliques(g)
+  ord <- order(sapply(cliques, length))
   cliques <- cliques[ord]
   pCliques <- lapply(cliques, getPids, g=g)
 
@@ -104,7 +103,46 @@ split_graph <- function(g){
     }
     graphs <- newGraphs
   }
+  graphs <- split_off_cliques(graphs, pCliques)
   return(graphs)
+}
+
+split_off_cliques <- function(graphs, pCliques){
+  for(pCli in pCliques){
+    newGraphs <- list()
+    for(g in graphs){
+      if(!all(pCli %in% getPids(g))){
+        newGraphs <- c(newGraphs, list(g))
+        next # cli not fully contained in g
+      }
+      cli <- getIds(g, pCli)
+      cliDegrees <- igraph::degree(g, cli)
+      ind <- (cliDegrees > length(cli) - 1) # vertices in cli, connected to the rest of g
+      if(all(ind)){
+        newGraphs <- c(newGraphs, list(g))
+        next # all vertices of cli are connected to the rest of g
+      }
+      newSep <- cli[ind]
+      splitGraphs <- split_graph_at_sep(g, newSep, returnGraphs = TRUE)
+      newGraphs <- c(newGraphs, splitGraphs)
+    }
+    graphs <- newGraphs
+  }
+
+  # Order graphs large -> small
+  graphs <- graphs[order(sapply(graphs, igraph::vcount), decreasing = TRUE)]
+
+  # Remove cliques that are complete subsets (or equal) of another graph:
+  newGraphs <- list()
+  for(g in graphs){
+    contains_g <- sapply(newGraphs, function(g0) {
+      all(getPids(g) %in% getPids(g0))
+    })
+    if(!any(contains_g)){
+      newGraphs <- c(newGraphs, list(g))
+    }
+  }
+  return(newGraphs)
 }
 
 #' Split a graph at a single separator
@@ -237,11 +275,13 @@ make_graph_list <- function(graph){
 }
 
 
-#' Create graph list for non-decomposable completion
+#' TOO SLOW: Create graph list for non-decomposable completion
 #' 
 #' Creates a list of decomposable graphs, each consisting of two cliques,
 #' such that the intersection of their edge sets
 #' is identical to the edgeset of the input graph.
+#' Uses a different algorithm, that yields slightly smaller sets,
+#' but takes significantly longer.
 #' 
 #' @param graph Graph object from \code{igraph} package.
 #' @return List of decomposable graphs
