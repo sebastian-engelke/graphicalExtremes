@@ -30,18 +30,35 @@
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2graph <- function(Gamma, tol=1e-6) {
+Gamma2graph <- function(Gamma, tol=1e-6){
   Theta <- Gamma2Theta(Gamma)
   A <- 1*(abs(Theta) > tol)
-  diag(A) <- 0
   graph <- igraph::graph_from_adjacency_matrix(
     A,
-    mode = "undirected"
+    mode = "undirected",
+    diag = FALSE
   )
-
   return(graph)
 }
 
+#' Transformation of a partial matrix to a graph
+#' 
+#' Creates a graph that has edges in entries corresponding to non-NA entries
+#' in Gamma.
+#' 
+#' @param Gamma A matrix with NA entries
+#' 
+#' @return An `igraph::graph` object
+#' 
+partialGamma2graph <- function(Gamma){
+  A <- !is.na(Gamma)
+  graph <- igraph::graph_from_adjacency_matrix(
+    A,
+    mode='undirected',
+    diag = FALSE
+  )
+  return(graph)
+}
 
 
 #' Data standardization to multivariate Pareto scale

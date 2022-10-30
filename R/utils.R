@@ -59,10 +59,6 @@ replaceSpdSubmatrix <- function(M.est, M.fix){
   return(M)
 }
 
-subMatrix <- function(M, rows, cols){
-  matrix(M[rows, cols], length(rows))
-}
-
 rdunif <- function(n, a, b){
   a + floor((b - a + 1) * runif(n))
 }

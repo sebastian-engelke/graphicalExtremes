@@ -111,10 +111,7 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
 
   # make graph from Gamma if necessary
   if (is.null(graph) && is.matrix(Gamma)) {
-    graph <- igraph::graph_from_adjacency_matrix(
-      1 * !is.na(Gamma),
-      mode = "undirected"
-    )
+    graph <- partialGamma2graph(Gamma)
   } else if (is.null(graph)) {
     stop("Supply a graph or a valid Gamma matrix")
   }
@@ -134,9 +131,11 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
         "in the graph."
       ))
     }
-    G <- matrix(0, d, d)
-    G[igraph::as_edgelist(graph)] <- Gamma
-    Gamma <- G + t(G)
+    G <- matrix(NA, d, d)
+    edgeList <- igraph::as_edgelist(graph)
+    G[edgeList] <- Gamma # upper tri
+    G[edgeList[,c(2,1)]] <- Gamma # lower tri
+    Gamma <- G
   }
 
   # check that Gamma is d x d:

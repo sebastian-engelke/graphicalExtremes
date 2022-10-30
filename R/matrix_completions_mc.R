@@ -1,34 +1,42 @@
 
 
-complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100){
+complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, mc.cores = 1){
   # wip
   graph <- setPids(graph)
   invSubGraphs <- split_graph(graph)
   subMatrices <- lapply(invSubGraphs, getSubMatrixForSubgraph, fullMatrix = Gamma)
   
-  completedSubMatrices <- mapply(
+  needsCompletion <- sapply(invSubGraphs, function(g){
+    d <- igraph::vcount(g)
+    maxEcount <- d * (d-1) / 2
+    return(igraph::ecount(g) < maxEcount)
+  })
+  
+  completedSubMatrices <- parallel::mcmapply(
     complete_Gamma_general,
-    subMatrices,
-    invSubGraphs,
+    subMatrices[needsCompletion],
+    invSubGraphs[needsCompletion],
     MoreArgs = list(
       N = N,
       tol = tol,
       check_tol = check_tol
     ),
-    SIMPLIFY = FALSE
+    SIMPLIFY = FALSE,
+    USE.NAMES = FALSE,
+    mc.cores = mc.cores
   )
   
+  subMatrices[needsCompletion] <- completedSubMatrices
+
   GammaDecomp <- NA * Gamma
   for(i in seq_along(invSubGraphs)){
     inds <- getIdsForSubgraph(invSubGraphs[[i]], graph)
-    GammaDecomp[inds, inds] <- completedSubMatrices[[i]]
+    GammaDecomp[inds, inds] <- subMatrices[[i]]
   }
-  
-  A <- 1*(!is.na(GammaDecomp))
-  diag(A) <- 0
-  gDecomp <- igraph::graph_from_adjacency_matrix(A, mode='undirected')
+
+  gDecomp <- partialGamma2graph(GammaDecomp)
   Gamma <- complete_Gamma_decomposable(GammaDecomp, gDecomp)
-  
+
   return(Gamma)
 }
 
