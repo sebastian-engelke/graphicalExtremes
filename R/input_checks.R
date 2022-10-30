@@ -140,7 +140,7 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
   }
 
   # check that Gamma is d x d:
-  if (NROW(Gamma) != d || NCOL(Gamma) != d || any(abs(Gamma - t(Gamma)) > 1e-9, na.rm = T)) {
+  if (NROW(Gamma) != d || NCOL(Gamma) != d || any(abs(Gamma - t(Gamma)) > 1e-8, na.rm = T)) {
     stop(paste(
       "The argument Gamma must be a symmetric d x d matrix,",
       "or a vector with as many entries as the number of edges",

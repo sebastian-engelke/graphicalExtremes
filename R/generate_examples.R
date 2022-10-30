@@ -135,6 +135,9 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
   M <- B %*% t(B)
+  while(det(M) == Inf){
+    M <- M / (d+1)
+  }
   M <- (M + t(M)) / 2
   m <- max(floor(log(det(M), 10) / d), 0)
   M <- M * 10**(-m)
@@ -295,4 +298,42 @@ pruefer_to_graph <- function(pruefer){
 }
 
 
+
+#' Generate a random cactus graph
+#' 
+#' Generates a random cactus graph (mostly useful for benchmarking).
+#' 
+#' @param d Number of vertices in the graph
+#' @param cMin Minimal size of each block (last block might be smaller)
+#' @param cMax Maximal size of each block
+#' 
+#' @family Example generations
+#' @export
+generate_random_cactus <- function(d, cMin = 2, cMax = 6){
+  if(cMin > cMax || cMin < 2){
+    stop('Inconsistent Parameters')
+  }
+  A <- matrix(0, 0, 0)
+  while(nrow(A) < d){
+    nV0 <- nrow(A)
+    blockSize <- rdunif(1, cMin, cMax)
+    blockSize <- min(blockSize, d - nrow(A) + 1)
+    g1 <- igraph::make_ring(blockSize)
+    A1 <- igraph::as_adjacency_matrix(g1, sparse = FALSE)
+    A <- rbind(A, matrix(0, blockSize, ncol(A)))
+    A <- cbind(A, matrix(0, nrow(A), blockSize))
+    newInds <- (nV0 + 1):nrow(A)
+    A[newInds, newInds] <- A1
+    if(nV0 == 0){
+      next
+    }
+    joinVertex0 <- rdunif(1, 1, nV0)
+    joinVertex1 <- nV0 + 1
+    A[joinVertex0,] <- pmax(A[joinVertex0,], A[joinVertex1,])
+    A[,joinVertex0] <- A[joinVertex0,]
+    A <- A[-joinVertex1,-joinVertex1,drop=FALSE]
+  }
+  g <- igraph::graph_from_adjacency_matrix(A, mode = 'undirected')
+  return(g)
+}
 

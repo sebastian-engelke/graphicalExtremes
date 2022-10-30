@@ -6,10 +6,8 @@
 #' and plots it (optionally).
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
-#' @param to_plot Logical. If \code{TRUE} (default), it plots the resulting
-#' graph.
-#' @param ... Graphical parameters for the \code{\link[igraph]{plot.igraph}}
-#' function of the package \code{igraph}.
+#' @param tol Numeric scalar, entries in the precision matrix with absolute value
+#' smaller than this are considered to be zero.
 #'
 #' @return Graph object from \code{igraph} package. An undirected graph.
 #'
@@ -32,20 +30,15 @@
 #'  \insertAllCited{}
 #'
 #' @export
-Gamma2graph <- function(Gamma, to_plot = TRUE, ...) {
-  null.mat <- matrix(0, nrow = nrow(Gamma), ncol = ncol(Gamma))
-  for (i in 1:nrow(Gamma)) {
-    null.mat[-i, -i] <- null.mat[-i, -i] +
-      (abs(solve(Gamma2Sigma(Gamma, i))) < 1e-6)
-  }
-  graph <- igraph::graph_from_adjacency_matrix(null.mat == 0,
-    diag = FALSE,
+Gamma2graph <- function(Gamma, tol=1e-6) {
+  Theta <- Gamma2Theta(Gamma)
+  A <- 1*(abs(Theta) > tol)
+  diag(A) <- 0
+  graph <- igraph::graph_from_adjacency_matrix(
+    A,
     mode = "undirected"
   )
 
-  if (to_plot) {
-    igraph::plot.igraph(graph, ...)
-  }
   return(graph)
 }
 
