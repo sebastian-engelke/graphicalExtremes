@@ -275,6 +275,63 @@ make_graph_list <- function(graph){
 }
 
 
+make_sep_list <- function(graph){
+  d <- igraph::vcount(graph)
+  gTilde <- igraph::complementer(graph)
+  edgeTildeMat <- igraph::as_edgelist(gTilde)
+  edgeTildeList <- lapply(seq_len(NROW(edgeTildeMat)), function(i){
+    edgeTildeMat[i,]
+  })
+  edgeTildeIsCovered <- logical(length(edgeTildeList))
+
+  edgeMat0 <- igraph::as_edgelist(graph)
+  edgeList0 <- lapply(seq_len(NROW(edgeMat0)), function(i){
+    edgeMat0[i,]
+  })
+
+  # order edges by vertex connectivity
+  conn <- sapply(edgeTildeList, function(edge){
+    igraph::vertex_connectivity(graph, edge[1], edge[2])
+  })
+  ind <- order(conn, decreasing = TRUE)
+  edgeTildeList <- edgeTildeList[ind]
+  edgeTildeMat <- edgeTildeMat[ind,]
+
+  sepList <- list()
+  # for(edge in edgeTildeList){
+  while(any(!edgeTildeIsCovered)){
+    # print(sum(!edgeTildeIsCovered))
+    # shift first element of edge-tilde list:
+    i <- match(FALSE, edgeTildeIsCovered)
+    edge <- edgeTildeList[[i]]
+    edgeTildeIsCovered[i] <- TRUE
+
+    # find max flow between vertices:
+    tmp <- igraph::max_flow(
+      graph,
+      edge[1],
+      edge[2]
+    )
+    
+    # convert edge-sep to vertex-sep:
+    eSep <- edgeMat0[tmp$cut,]
+    useSecondVertex <- (eSep[,1] %in% edge)
+    vSep <- eSep[,1]
+    vSep[useSecondVertex] <- eSep[useSecondVertex,2]
+    
+    sepList <- c(sepList, list(vSep))
+    
+    # splitEdges0 <- check_split_by_sep(graph, vSep, edgeTildeList[!edgeTildeIsCovered])
+    splitEdges <- check_split_by_sep(graph, vSep, edgeTildeMat[!edgeTildeIsCovered,,drop=FALSE])
+    # print(identical(splitEdges, splitEdges2))
+    # edgeTildeList[!edgeTildeIsCovered][splitEdges] <- NULL
+    edgeTildeIsCovered[!edgeTildeIsCovered] <- splitEdges
+  }
+
+  return(sepList)
+}
+
+
 #' TOO SLOW: Create graph list for non-decomposable completion
 #' 
 #' Creates a list of decomposable graphs, each consisting of two cliques,
@@ -317,7 +374,7 @@ make_graph_list_2 <- function(graph){
       sepSets <- c(sepSets, list(newSep))
 
       edgeListFull <- edgeList[!edgeIsCovered]
-      splitByNewSep <- check_split_by_sep(graph, newSep, edgeListFull)
+      splitByNewSep <- check_split_by_sep(graph, newSep, edgeList=edgeListFull)
       edgeIsCovered[!edgeIsCovered] <- splitByNewSep
       
       minSeps2 <- minSeps2[-ind]
@@ -328,22 +385,21 @@ make_graph_list_2 <- function(graph){
 }
 
 
-get_sep_mat2 <- function(graph, minSeps, edgeList){
-  do.call(rbind, lapply(minSeps, check_split_by_sep, graph=graph, edgeList=edgeList))
-}
-
-check_split_by_sep <- function(graph, sep, edgeList){
+check_split_by_sep <- function(graph, sep, edgeMat = NULL, edgeList){
+  if(is.null(edgeMat)){
+    edgeMat <- do.call(rbind, edgeList)
+  }
+  if(nrow(edgeMat) == 0){
+    return(logical(0))
+  }
   graph <- setPids(graph)
   g2 <- delete.vertices(graph, sep)
   dists <- igraph::distances(g2)
-  ret <- sapply(edgeList, function(edge){
-    if(any(edge %in% sep)){
-      return(FALSE)
-    }
-    pEdge <- getPids(graph, edge)
-    edge2 <- getIds(g2, pEdge)
-    return(dists[edge2[1], edge2[2]] == Inf)
-  })
+  pEdgeMat <- matrix(getPids(graph, edgeMat), ncol = 2)
+  edgeMat2 <- matrix(getIds(g2, pEdgeMat), ncol = 2)
+  edgeDists <- dists[edgeMat2]
+  edgeVertexInSep <- matrix(edgeMat %in% sep, ncol = 2)
+  ret <- (edgeDists == Inf) & !is.na(edgeDists)
   return(ret)
 }
 
@@ -372,12 +428,17 @@ get_sep_mat <- function(graph, methods=c(1,2)){
     }
     
     if(2 %in% methods){
-      sepMat2[i,] <- check_split_by_sep(graph, ms, edgeList)
+      sepMat2[i,] <- check_split_by_sep(graph, ms, edgeList=edgeList)
     }
   }
   
   return(list(sepMat, sepMat2))
 }
+
+get_sep_mat2 <- function(graph, minSeps, edgeList){
+  do.call(rbind, lapply(minSeps, check_split_by_sep, graph=graph, edgeList=edgeList))
+}
+
 
 is_edge_disconnected_by_partition <- function(edge, partition){
   containsEndNode <- sapply(partition, function(p){
