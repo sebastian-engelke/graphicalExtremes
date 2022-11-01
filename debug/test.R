@@ -7,7 +7,6 @@ library(tictoc)
 
 newSeed <- floor(2^20 * runif(1))
 # newSeed <- 856790
-
 set.seed(newSeed)
 cat('Seed:', newSeed, '\n')
 

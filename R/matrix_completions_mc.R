@@ -13,7 +13,7 @@ complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=1
   })
   
   completedSubMatrices <- parallel::mcmapply(
-    complete_Gamma_general,
+    complete_Gamma_general_sc,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],
     MoreArgs = list(
@@ -40,32 +40,64 @@ complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=1
   return(Gamma)
 }
 
+complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100){
 
-iterateIndList <- function(Gamma, indList, nonEdgeIndices, N, tol, check_tol){
+  detailedSepList <- make_sep_list(graph)
+  
+  if(length(detailedSepList) == 0){
+    N <- 0
+  }
+  gTilde <- igraph::complementer(graph)
+  ATilde <- igraph::as_adjacency_matrix(gTilde, 'upper', sparse=FALSE)
+  nonEdgeIndices <- which(ATilde == 1)
+
+  GammaComp <- iterateIndList(Gamma, detailedSepList, nonEdgeIndices, N, tol, check_tol)
+
+  return(GammaComp)
+}
+
+iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
+  m <- length(sepList)
+  print(N)
   for (n in seq_len(N)) {
     # Read indices of the two cliques (A, B) and separator (C) to be used
     t <- (n - 1) %% m + 1
-    inds <- indList[[t]]
-    vA <- inds$vA
-    vB <- inds$vB
-    vC <- inds$vC
-    vC_Sigma <- inds$vC_Sigma
-    k0 <- inds$k0
+    inds <- sepList[[t]]
+    parts <- inds$parts
+    sep <- inds$sep
+    sep_Sigma <- inds$sepWithoutK
+    k <- inds$k
+    partPairs <- inds$partPairs
     
-    # Separators of size 1 don't happen if graph is decomposed first!
-    
-    ## Compute 1 iteration:
-    # Compute Sigma
-    Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE)
-    # Invert Sigma_CC
-    R <- chol(Sigma[vC_Sigma, vC_Sigma, drop=FALSE])
-    SigmaCCinv <- chol2inv(R)
-    # Compute completion:
-    SigmaAB <- Sigma[vA, vC_Sigma, drop=FALSE] %*% SigmaCCinv %*% Sigma[vC_Sigma, vB, drop=FALSE]
-    # Store completion and convert back:
-    Sigma[vA, vB] <- SigmaAB
-    Sigma[vB, vA] <- t(SigmaAB)
-    Gamma <- Sigma2Gamma(Sigma)
+    ## Compute 1 iteration. Check case #sep=1 vs #sep>1:
+    if(length(sep) == 1){
+      # Separator is of size 1 -> we can simply add variogram entries
+      for(partPair in partPairs){
+        vA <- partPair[[1]]
+        vB <- partPair[[2]]
+        GammaAB <- outer(Gamma[vA, k], Gamma[k, vB], `+`)
+        Gamma[vA, vB] <- GammaAB
+        Gamma[vB, vA] <- t(GammaAB)
+      }
+    } else{
+      # Separator is of size >1 -> we need to work with Sigma^{(k)}
+      # Compute Sigma
+      Sigma <- Gamma2Sigma(Gamma, k = k, full = TRUE)
+      # Invert Sigma_CC
+      R <- chol(Sigma[sep_Sigma, sep_Sigma, drop=FALSE])
+      SigmaCCinv <- chol2inv(R)
+      # Compute completion for each pair of separated parts
+      for(partPair in partPairs){
+        vA <- partPair[[1]]
+        vB <- partPair[[2]]
+        SigmaAB <- Sigma[vA, sep_Sigma, drop=FALSE] %*% SigmaCCinv %*% Sigma[sep_Sigma, vB, drop=FALSE]
+        # Store completion
+        Sigma[vA, vB] <- SigmaAB
+        Sigma[vB, vA] <- t(SigmaAB)
+      }
+      # Convert back to Gamma
+      Gamma <- Sigma2Gamma(Sigma)
+    }
     
     # Continue iteration if no tol-check due
     if(check_tol <= 0 || n %% check_tol != 0){
