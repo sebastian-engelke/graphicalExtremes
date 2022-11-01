@@ -8,14 +8,14 @@ plotWithPid <- function(g, ...){
 }
 
 newSeed <- floor(2^20 * runif(1))
-# newSeed <- 231320
+# newSeed <- 815653
 cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 10
+d <- 100
 
-g <- generate_random_connected_graph(d, p = 4/(d+1))
+g <- generate_random_connected_graph(d, p = 3/(d+1))
 
 d <- igraph::vcount(g)
 
@@ -25,7 +25,8 @@ B <- !A
 diag(B) <- FALSE
 
 gList <- split_graph(g)
-print(length(gList))
+cat('gList (', length(gList), '):\n', sep='')
+print(sapply(gList, igraph::vcount))
 
 g1 <- gList[[which.max(sapply(gList, length))]]
 
@@ -42,6 +43,7 @@ cat('errorG:', max(abs(G - G)[A]), '\n')
 cat('errorP:', max(abs(P[B])), '\n')
 
 # old:
+cat('\n=== old ===\n')
 tic()
 G_c <- complete_Gamma_general(G, g, N=N, tol=TOL)
 toc()
@@ -50,6 +52,7 @@ cat('errorG:', max(abs(G - G_c)[A]), '\n')
 cat('errorP:', max(abs(P_c[B])), '\n')
 
 # new:
+cat('\n=== new ===\n')
 tic()
 G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL)
 # G3 <- complete_Gamma_general_sc(G, g, N=N, tol=TOL)
