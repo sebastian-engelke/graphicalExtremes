@@ -12,7 +12,9 @@ complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=1
     return(igraph::ecount(g) < maxEcount)
   })
   
+  # completedSubMatrices <- mapply(
   completedSubMatrices <- parallel::mcmapply(
+    mc.cores = mc.cores,
     complete_Gamma_general_sc,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],
@@ -22,8 +24,7 @@ complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=1
       check_tol = check_tol
     ),
     SIMPLIFY = FALSE,
-    USE.NAMES = FALSE,
-    mc.cores = mc.cores
+    USE.NAMES = FALSE
   )
   
   subMatrices[needsCompletion] <- completedSubMatrices
@@ -58,7 +59,6 @@ complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100
 
 iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   m <- length(sepList)
-  print(N)
   for (n in seq_len(N)) {
     # Read indices of the two cliques (A, B) and separator (C) to be used
     t <- (n - 1) %% m + 1

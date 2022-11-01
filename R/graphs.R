@@ -285,6 +285,7 @@ make_graph_list <- function(graph){
 #' @param graph A graph
 #' @return A list of numeric vectors 
 make_sep_list <- function(graph, details=TRUE){
+  graph <- setPids(graph)
   # Get matrix of non-edges (edgeTildes):
   gTilde <- igraph::complementer(graph)
   edgeTildeMat <- igraph::as_edgelist(gTilde)
@@ -328,7 +329,7 @@ make_sep_list <- function(graph, details=TRUE){
 }
 
 makeSepDetails <- function(graph, sep){
-  parts <- split_graph_at_sep(graph, sep)
+  parts <- split_graph_at_sep(graph, sep, includeSep = FALSE)
   partsWithSep <- lapply(parts, function(part){
     sort(c(part, sep))
   })
@@ -346,7 +347,8 @@ makeSepDetails <- function(graph, sep){
     partsWithSep = partsWithSep,
     partPairs = partPairs,
     k = k,
-    sepWithoutK = k,
+    sep = sep,
+    sepWithoutK = sepWithoutK,
     graph = g2
   ))
 }

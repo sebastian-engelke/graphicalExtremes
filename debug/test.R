@@ -3,57 +3,78 @@ devtools::load_all('.')
 library(igraph)
 library(tictoc)
 
-# set.seed(1)
-
-newSeed <- floor(2^20 * runif(1))
-# newSeed <- 856790
-set.seed(newSeed)
-cat('Seed:', newSeed, '\n')
-
-cat('Go...\n')
-
-
-d <- 100
-
-# p <- runif(1, 4/(d+1), 1)
-p <- runif(1) * 1/6 + 1/6
-
-cat('p =', p, '\n')
-
-# g <- generate_random_connected_graph(d, p = 4/(d+1))
-g0 <- generate_random_connected_graph(d, p = p)
-tic()
-gList <- split_graph(g0)
-toc()
-g <- gList[[which.max(sapply(gList, igraph::vcount))]]
-g <- setPids(g)
-graph <- g
-
-d <- igraph::vcount(g)
-m <- igraph::ecount(g)
-p1 <- m / (d*(d-1)/2)
-cat(d, 'vertices,', m, 'edges, density:', p1, '\n')
-
-if(d < 3 || p1 == 1){
-    stop('Too small g')
+plotWithPid <- function(g, ...){
+    plot(g, vertex.label = getPids(g), ...)
 }
 
+newSeed <- floor(2^20 * runif(1))
+# newSeed <- 231320
+cat('Seed:', newSeed, '\n')
+set.seed(newSeed)
+
+
+d <- 10
+
+g <- generate_random_connected_graph(d, p = 4/(d+1))
+
+d <- igraph::vcount(g)
+
 A <- igraph::as_adjacency_matrix(g, sparse=FALSE)
-B <- (A == 0)
+A <- (A == 1)
+B <- !A
 diag(B) <- FALSE
 
+gList <- split_graph(g)
+print(length(gList))
 
+g1 <- gList[[which.max(sapply(gList, length))]]
+
+# plot(g)
+
+G <- generate_random_Gamma(d)
+
+TOL <- 1e-9
+N <- 1e5
+
+# 0:
+P <- Gamma2Theta(G)
+cat('errorG:', max(abs(G - G)[A]), '\n')
+cat('errorP:', max(abs(P[B])), '\n')
+
+# old:
 tic()
-gl1 <- make_graph_list(g)
+G_c <- complete_Gamma_general(G, g, N=N, tol=TOL)
 toc()
-print(length(gl1$graphs))
-sepList1 <- lapply(gl1$partitions, function(tmp) tmp$C)
+P_c <- Gamma2Theta(G_c)
+cat('errorG:', max(abs(G - G_c)[A]), '\n')
+cat('errorP:', max(abs(P_c[B])), '\n')
 
-
+# new:
 tic()
-sepList2 <- make_sep_list(g)
+G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL)
+# G3 <- complete_Gamma_general_sc(G, g, N=N, tol=TOL)
 toc()
-print(length(sepList2))
+P3 <- Gamma2Theta(G3)
+cat('errorG:', max(abs(G - G3)[A]), '\n')
+cat('errorP:', max(abs(P3[B])), '\n')
 
-print(identical(sepList1, sepList2))
+sepList <- make_sep_list(g, FALSE)
+sepDetailsList <- make_sep_list(g)
+AList <- lapply(sepDetailsList, function(dets){
+    gg <- dets$graph
+    A <- igraph::as_adjacency_matrix(gg, sparse=FALSE)
+})
+sep <- sepList[[1]]
+sepIds <- sep
+sepDetails <- makeSepDetails(g, sep)
+
+# # new_mc:
+# tic()
+# G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL, mc.cores = 16)
+# toc()
+# P3 <- Gamma2Theta(G3)
+# cat('error:', max(abs(P3[B])), '\n')
+
+
+g3 <- Gamma2graph(G3)
 
