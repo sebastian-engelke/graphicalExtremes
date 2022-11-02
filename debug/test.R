@@ -8,76 +8,33 @@ plotWithPid <- function(g, ...){
 }
 
 newSeed <- floor(2^20 * runif(1))
-newSeed <- 959736
+newSeed <- 494411
 cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 40
+d <- 200
 
-g <- generate_random_connected_graph(d, p = 3/(d+1))
+# g <- generate_random_connected_graph(d, p = 3/(d+1))
+g <- generate_random_chordal_graph(d)
+G0 <- generate_random_Gamma(d)
+G0 <- ensure_symmetry(G0, Inf)
 
-d <- igraph::vcount(g)
+B <- getNonEdgeIndices(g)
+G <- G0
+G[B] <- NA
 
-A <- igraph::as_adjacency_matrix(g, sparse=FALSE)
-A <- (A == 1)
-B <- !A
-diag(B) <- FALSE
+# G2 <- edmcr::edmc(G, d = d)
 
-gList <- split_graph(g)
-cat('gList (', length(gList), '):\n', sep='')
-print(sapply(gList, igraph::vcount))
+G1 <- complete_Gamma(G)
 
-g1 <- gList[[which.max(sapply(gList, length))]]
+Theta1 <- Gamma2Theta(G1)
 
-# plot(g)
+print(is_sym_cnd(G1))
 
-G <- generate_random_Gamma(d)
+g1 <- Gamma2graph(G1)
+print(graphs_equal(g1, g))
+print(max(abs(getEdgeEntries(G1 - G, g))))
+print(max(abs(getNonEdgeEntries(Theta1, g))))
 
-TOL <- 1e-9
-N <- 1e5
-
-# 0:
-P <- Gamma2Theta(G)
-cat('errorG:', max(abs(G - G)[A]), '\n')
-cat('errorP:', max(abs(P[B])), '\n')
-
-# old:
-cat('\n=== old ===\n')
-tic()
-G_c <- complete_Gamma_general(G, g, N=N, tol=TOL)
-toc()
-P_c <- Gamma2Theta(G_c)
-cat('errorG:', max(abs(G - G_c)[A]), '\n')
-cat('errorP:', max(abs(P_c[B])), '\n')
-
-# new:
-cat('\n=== new ===\n')
-tic()
-G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL, final_tol = TOL)
-# G3 <- complete_Gamma_general_sc(G, g, N=N, tol=TOL)
-toc()
-P3 <- Gamma2Theta(G3)
-cat('errorG:', max(abs(G - G3)[A]), '\n')
-cat('errorP:', max(abs(P3[B])), '\n')
-
-sepList <- make_sep_list(g, FALSE)
-sepDetailsList <- make_sep_list(g)
-AList <- lapply(sepDetailsList, function(dets){
-    gg <- dets$graph
-    A <- igraph::as_adjacency_matrix(gg, sparse=FALSE)
-})
-sep <- sepList[[1]]
-sepIds <- sep
-sepDetails <- makeSepDetails(g, sep)
-
-# # new_mc:
-# tic()
-# G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL, mc.cores = 16)
-# toc()
-# P3 <- Gamma2Theta(G3)
-# cat('error:', max(abs(P3[B])), '\n')
-
-
-g3 <- Gamma2graph(G3)
 

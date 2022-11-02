@@ -178,10 +178,13 @@ fast_diag <- function(y, M) {
 graphs_equal <- function(g1, g2) {
   ## graph graph -> boolean
   ## produce true if two graphs have same edges
-
-  s1 <- igraph::gsize(g1)
-  s2 <- igraph::gsize(g2)
-  s_int <- igraph::gsize(igraph::intersection(g1, g2))
-
-  (s_int == s1) & (s_int == s2)
+  
+  # Return early if graph sizes are different
+  if(igraph::vcount(g1) != igraph::vcount(g2)){
+    return(FALSE)
+  }
+  # Compare adjacency matrices
+  A1 <- igraph::as_adjacency_matrix(g1, sparse = FALSE)
+  A2 <- igraph::as_adjacency_matrix(g2, sparse = FALSE)
+  return(all(A1 == A2))
 }

@@ -265,6 +265,9 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
 
   return(Gamma)
 }
+
+
+
 #' Completion of decomposable Gamma matrices
 #'
 #' Given a decomposable `graph` and incomplete variogram matrix `Gamma`,
@@ -280,12 +283,17 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
 #' in the remaining entries.
 #'
 #' @family Matrix completions
-complete_Gamma_decomposable <- function(Gamma, graph) {
-  # computes cliques
+complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
+  # Compute graph if not specified
+  if(is.null(graph)){
+    graph <- partialMatrixToGraph(Gamma)
+  }
+
+  # compute cliques and order by the running intersection property
   cliques <- igraph::max_cliques(graph)
   cliques <- order_cliques(cliques)
 
-  # else, continue
+  # Start with first clique
   oldVertices <- cliques[[1]]
 
   # loop through remaining cliques. Skipped if only one clique in graph.
@@ -303,6 +311,7 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
 
     oldVertices <- union(oldVertices, newVertices)
   }
+  Gamma <- ensure_symmetry(Gamma) # todo: set tolerance = Inf?
   return(Gamma)
 }
 
@@ -326,37 +335,42 @@ complete_Gamma_decomposable <- function(Gamma, graph) {
 #'
 #' @family Matrix completions
 complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
+  # Check arguments
   n <- nA + nB + nC
   if (nrow(Gamma) != n || ncol(Gamma) != n) {
     stop("Make sure that nrow(Gamma) == ncol(Gamma) == nA+nB+nC")
   }
 
-  k0 <- nA + 1 # condition on first entry in vC.
+  # Prepare index sets
   vA <- seq_len(nA) # first nA entries
-  vC <- seq_len(nC - 1) + nA # next nC-1 entries
-  vB <- seq_len(nB) + nA + nC - 1 # remaining nB entries
-
-  Sigma <- Gamma2Sigma(Gamma, k = k0)
-
-  if (nC > 1) {
-    R <- chol(Sigma[vC, vC, drop=FALSE])
-    SigmaCCinv <- chol2inv(R)
-    SigmaAB <- Sigma[vA, vC] %*% SigmaCCinv %*% Sigma[vC, vB]
-
-    ## These don't seem to improve performance:
-    # # X <- solve(Sigma[vC, vC, drop=FALSE], Sigma[vC, vB, drop=FALSE])
-    # Y <- backsolve(R, Sigma[vC, vB, drop=FALSE])
-    # X <- forwardsolve(t(R), Y)
-    # SigmaAB <- Sigma[vA, vC, drop=FALSE] %*% X
-  } else {
-    SigmaAB <- 0
+  vC <- seq_len(nC) + nA # next nC entries
+  vB <- seq_len(nB) + nA + nC # remaining nB entries
+  k0 <- vC[1] # condition on first entry in vC.
+  vC_Sigma <- vC[-1]
+  
+  if(nC == 1){
+    ## Separator of size 1 -> use additive property of block matrix completion
+    GammaAB <- outer(Gamma[vA, k0], Gamma[k0, vB], `+`)
+    Gamma[vA, vB] <- GammaAB
+    Gamma[vB, vA] <- t(GammaAB)
+    return(Gamma)
   }
 
+  ## Larger separator -> convert to Sigma, complete, convert back
+  Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE)
+
+  # Invert separator submatrix
+  R <- chol(Sigma[vC_Sigma, vC_Sigma, drop=FALSE])
+  SigmaCCinv <- chol2inv(R)
+  # Compute completion
+  SigmaAB <- Sigma[vA, vC_Sigma] %*% SigmaCCinv %*% Sigma[vC_Sigma, vB]
+
+  # Fill in completed values
   Sigma[vA, vB] <- SigmaAB
   Sigma[vB, vA] <- t(SigmaAB)
 
-  Gamma <- Sigma2Gamma(Sigma, k = k0)
-
+  # Convert back
+  Gamma <- Sigma2Gamma(Sigma)
   return(Gamma)
 }
 

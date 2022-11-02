@@ -63,12 +63,22 @@ rdunif <- function(n, a, b){
   a + floor((b - a + 1) * runif(n))
 }
 
-is_symmetric <- function(M, tol=1e-12){
-  max(abs(M - t(M))) <= tol
+
+ensure_symmetry <- function(M, tol=1e-6){
+  if(max(abs(M - t(M))) > tol){
+    warning(paste0(
+      'Matrix not symmetric (up to tolerance: ',
+      max(abs(M - t(M))),
+      ' > ',
+      tol,
+      ')!'
+    ))
+  }
+  (M + t(M))/2
 }
 
-is_sym_cnd <- function(M, tol=1e-12){
-  if(!is_symmetric(M)){
+is_sym_cnd <- function(M){
+  if(!matrixcalc::is.symmetric.matrix(M)){
     return(FALSE)
   }
   Sk <- Gamma2Sigma(M, k=1)

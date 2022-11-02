@@ -1,0 +1,3 @@
+
+- consistent symmetry checks/fixes
+    - tol in option?

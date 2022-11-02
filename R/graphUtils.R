@@ -56,7 +56,7 @@ getEdgeIndices <- function(g, type = c('both', 'upper', 'lower'), withDiag = FAL
 }
 getNonEdgeIndices <- function(g, type = c('both', 'upper', 'lower'), doWhich = TRUE){
   gTilde <- igraph::complementer(g)
-  A <- igraph::as_adjacency_matrix(g, type=type, sparse=FALSE)
+  A <- igraph::as_adjacency_matrix(gTilde, type=type, sparse=FALSE)
   A <- (A == 1)
   if(doWhich){
     return(which(A))
