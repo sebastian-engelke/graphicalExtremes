@@ -82,82 +82,110 @@
 #' @family Matrix completions
 #' @export
 #'
-complete_Gamma <- function(Gamma, graph = NULL, allowed_graph_type = 'general', ...){
+complete_Gamma <- function(
+  Gamma,
+  graph = NULL,
+  allowed_graph_type = 'general',
+  ...
+){
   tmp <- check_Gamma_and_graph(Gamma, graph, graph_type = allowed_graph_type)
   Gamma <- tmp$Gamma
   graph <- tmp$graph
 
+  # Return completion if graph is decomposable (=chordal)
   if(igraph::is_chordal(graph)$chordal){
-    complete_Gamma_decomposable(Gamma, graph)
-  } else{
-    complete_Gamma_general(Gamma, graph, ...)
+    return(complete_Gamma_decomposable(Gamma, graph))
   }
+
+  # Compute initial non-graphical completion if necessary:
+  if(any(is.na(Gamma))){
+    A <- 1*!is.na(Gamma)
+    Gamma <- edmcr::npf(G, A, d = NROW(Gamma)-1)
+    if(!is_sym_cnd(Gamma)){
+      stop('Did not find an initial non-graphical completion (using edmcr::npf)!')
+    }
+  }
+
+  # Compute non-decomposable completion
+  return(complete_Gamma_general_mc(Gamma, graph, ...))
 }
 
 
-#' Completion of non-decomposable Gamma matrices (SLOW)
+
+#' Completion of non-decomposable Gamma matrices (demo-version)
 #'
 #' Given a \code{graph} and variogram matrix `Gamma`, returns the full \code{Gamma}
 #' matrix implied by the conditional independencies.
 #' This function uses a convergent iterative algorithm.
-#' SLOW VERSION. Allows returning details, specifying graph list.
+#' DEMO VERSION: Returns a lot of details and allows specifying the graph list
+#' that is used. Is way slower than `complete_Gamma_general`.
 #'
 #' @param Gamma A complete variogram matrix (without any graphical structure)
 #' @param graph An [igraph::graph] object
 #' @param N The maximal number of iterations of the algorithm
 #' @param tol The tolerance to use when checking for zero entries in `Theta`
-#' @param check_tol After how many iterations to check the tolerance in `Theta`
 #'
-#' @return A matrix that agrees with `Gamma` on the entries corresponding to
-#' edges in `graph` and the diagonals.
+#' @return A nested list, containing the following details: TODO!!!
+#' 
 #' The corresponding \eqn{\Theta} matrix produced by [Gamma2Theta] has values
 #' close to zero in the remaining entries (how close depends on the input
 #' and the number of iterations).
 #'
 #' @family Matrix completions
-complete_Gamma_general_0 <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, saveDetails=FALSE, gList=NULL) {
-
+complete_Gamma_general_demo <- function(Gamma, graph = NULL, N = 1000, tol=0, gList=NULL) {
+  # Compute gList if not provided:
   if(is.null(gList)){
-    gList <- make_graph_list(graph)$graphs
+    sepDetails <- make_sep_list(graph, details=TRUE)
+    gList <- lapply(sepDetails, function(dets) dets$graph)
   }
   m <- length(gList)
-  
-  if(saveDetails){
-    GammaList <- list(Gamma)
-  }
 
-  for (n in 1:N) {
+  # Initialize ret-list with initial Gamma, Theta, etc.:
+  Theta <- Gamma2Theta(Gamma)
+  iterations <- list()
+  ret <- list(
+    graph = graph,
+    Gamma0 = Gamma,
+    Theta0 = Theta,
+    err0 = max(abs(getNonEdgeEntries(Theta, graph))),
+    gList = gList,
+    tol = tol,
+    N = N
+  )
+
+  # Iterate over gList:
+  n <- 0
+  while(n < N) {
+    n <- n + 1
     t <- (n - 1) %% m + 1
     g <- gList[[t]]
     Gamma <- complete_Gamma_decomposable(Gamma, g)
-    
-    if(saveDetails){
-      GammaList <- c(GammaList, list(Gamma))
-    }
+
+    GammaList <- c(GammaList, list(Gamma))
+
+    # Compute Theta
+    Theta <- Gamma2Theta(Gamma)
+    err <- max(abs(getNonEdgeEntries(Theta, graph)))
+
+    # Store results
+    iterations <- c(iterations, list(list(
+      n = n,
+      t = t,
+      g = g,
+      Gamma = Gamma,
+      Theta = Theta,
+      err = err
+    )))
 
     # Check if tolerance has been reached
-    if(check_tol > 0 && n %% check_tol == 0){
-      P <- Gamma2Theta(Gamma)
-      A <- igraph::as_adjacency_matrix(graph, sparse=FALSE)
-      diag(A) <- 1
-      err <- max(abs(P[A == 0]))
-      if(err <= tol){
-        break
-      }
+    if(err <= tol){
+      break
     }
   }
+  
+  ret$iterations <- iterations
 
-  if(saveDetails){
-    return(list(
-      GammaList = GammaList,
-      graphList = gList,
-      N = N,
-      tol = tol,
-      check_tol = check_tol
-    ))
-  }
-
-  return(Gamma)
+  return(ret)
 }
 
 
@@ -187,14 +215,14 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
   tmp <- make_graph_list(graph)
   partitionList <- tmp$partitions
   gList <- tmp$graphs
-  
+
   indList <- lapply(partitionList, function(AB) list(
     vC = intersect(AB$A, AB$B),
     vA = setdiff(AB$A, AB$B),
     vB = setdiff(AB$B, AB$A)
   ))
   m <- length(indList)
-  
+
   if(length(gList) == 0){
     N <- 0
   }
@@ -205,7 +233,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
     vA <- vABC$vA
     vB <- vABC$vB
     vC <- vABC$vC
-    
+
     if(length(vC) == 1){
       k0 <- vC[1]
       GammaAB <- outer(Gamma[vA, k0], Gamma[k0, vB], '+')
@@ -222,7 +250,7 @@ complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100)
       Sigma[vB, vA] <- t(SigmaAB)
       Gamma <- Sigma2Gamma(Sigma)
     }
-    
+
     # Check if tolerance has been reached
     if(check_tol > 0 && n %% check_tol == 0){
       P <- Gamma2Theta(Gamma)
@@ -314,7 +342,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
     R <- chol(Sigma[vC, vC, drop=FALSE])
     SigmaCCinv <- chol2inv(R)
     SigmaAB <- Sigma[vA, vC] %*% SigmaCCinv %*% Sigma[vC, vB]
-    
+
     ## These don't seem to improve performance:
     # # X <- solve(Sigma[vC, vC, drop=FALSE], Sigma[vC, vB, drop=FALSE])
     # Y <- backsolve(R, Sigma[vC, vB, drop=FALSE])

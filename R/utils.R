@@ -62,3 +62,15 @@ replaceSpdSubmatrix <- function(M.est, M.fix){
 rdunif <- function(n, a, b){
   a + floor((b - a + 1) * runif(n))
 }
+
+is_symmetric <- function(M, tol=1e-12){
+  max(abs(M - t(M))) <= tol
+}
+
+is_sym_cnd <- function(M, tol=1e-12){
+  if(!is_symmetric(M)){
+    return(FALSE)
+  }
+  Sk <- Gamma2Sigma(M, k=1)
+  return(matrixcalc::is.positive.definite(Sk))
+}

@@ -50,8 +50,8 @@ Gamma2graph <- function(Gamma, tol=1e-6){
 #' 
 #' @return An `igraph::graph` object
 #' 
-partialGamma2graph <- function(Gamma){
-  A <- !is.na(Gamma)
+partialMatrixToGraph <- function(Matrix){
+  A <- !is.na(Matrix)
   graph <- igraph::graph_from_adjacency_matrix(
     A,
     mode='undirected',

@@ -44,7 +44,8 @@ Imports:
     osqp,
     glmnet,
     glassoFast,
-    glue
+    glue,
+    edmcr
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack

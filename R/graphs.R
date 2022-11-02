@@ -1,8 +1,6 @@
 
 ## This file contains functions related (solely) to graph manipulation
 
-PERSISTENT_ID_ATTR_NAME <- 'pid'
-
 #' Order Cliques
 #'
 #' Orders the cliques in a connected decomposable graph so that they fulfill the running intersection property.
@@ -33,48 +31,6 @@ order_cliques <- function(cliques) {
   return(ret)
 }
 
-
-# Runs an igraph command (or any other expression) with
-# igraph_options(add.params = FALSE)
-# and resets this option afterwards
-without_igraph_params <- function(expr){
-  tmp <- igraph_options(add.params = FALSE)
-  ret <- eval(expr, parent.frame())
-  igraph_options(tmp)
-  return(ret)
-}
-
-
-## Handling persistent vertex ids for graphs:
-getIds <- function(g, vPids = NULL){
-  gPids <- igraph::vertex_attr(g, PERSISTENT_ID_ATTR_NAME)
-  if(is.null(vPids)){
-    return(gPids)
-  }
-  return(match(vPids, gPids))
-}
-getPids <- function(g, vIds = NULL){
-  if(is.null(vIds)){
-    vIds <- igraph::V(g)
-  }
-  return(igraph::vertex_attr(g, PERSISTENT_ID_ATTR_NAME, vIds))
-}
-setPids <- function(g, ids = NULL, pids = NULL, overwrite = FALSE){
-  if(!overwrite && !is.null(igraph::vertex_attr(g, PERSISTENT_ID_ATTR_NAME))){
-    return(g)    
-  }
-  if(is.null(ids)){
-    ids <- igraph::V(g)
-  }
-  if(is.null(pids)){
-    pids <- seq_along(ids)
-  }
-  g <- igraph::set_vertex_attr(g, PERSISTENT_ID_ATTR_NAME, ids, pids)
-  return(g)
-}
-removePids <- function(g){
-  delete_vertex_attr(g, PERSISTENT_ID_ATTR_NAME)
-}
 
 #' Split graph into invariant subgraphs
 split_graph <- function(g){
@@ -175,26 +131,6 @@ getConnectedComponents <- function(g){
 }
 
 
-#' Get the submatrix corresponding to a subgraph
-#' 
-#' The subgraph needs to have persistent IDs
-#' If graph==NULL it is assumed to have pIDs 1, 2, ...
-getSubMatrixForSubgraph <- function(fullMatrix, subgraph, graph=NULL){
-  sgIds <- getIdsForSubgraph(subgraph, graph)
-  return(fullMatrix[sgIds, sgIds, drop=FALSE])
-}
-
-getIdsForSubgraph <- function(subgraph, graph=NULL){
-  sgPids <- getPids(subgraph)
-  if(is.null(graph)){
-    sgIds <- abs(sgPids) # in case negative pIDs are used
-  } else{
-    sgIds <- getIds(graph, sgPids)
-  }
-  return(sgIds)
-}
-
-
 #' Create graph list for non-decomposable completion
 #' 
 #' Creates a list of decomposable graphs, each consisting of two cliques,
@@ -289,7 +225,7 @@ make_sep_list <- function(graph, details=TRUE){
   # Get matrix of non-edges (edgeTildes):
   gTilde <- igraph::complementer(graph)
   edgeTildeMat <- igraph::as_edgelist(gTilde)
-  
+
   # order edgeTildes by vertex connectivity (in the original graph):
   conn <- sapply(seq_len(NROW(edgeTildeMat)), function(i){
     igraph::vertex_connectivity(graph, edgeTildeMat[i,1], edgeTildeMat[i,2])
@@ -387,20 +323,20 @@ check_split_by_sep <- function(graph, sep, edgeMat){
   if(nrow(edgeMat) == 0){
     return(logical(0))
   }
-  
+
   # Compute distances after removing `sep`:
   g2 <- delete.vertices(graph, sep)
   dists <- igraph::distances(g2)
-  
+
   # Convert vertex ids in original graph to ids in split graph:
   graph <- setPids(graph)
   pEdgeMat <- matrix(getPids(graph, edgeMat), ncol = 2)
   edgeMat2 <- matrix(getIds(g2, pEdgeMat), ncol = 2)
-  
+
   # Read distances between each vertex pair in the split graph:
   edgeDists <- dists[edgeMat2]
   edgeVertexInSep <- matrix(edgeMat %in% sep, ncol = 2)
-  
+
   # Vertexes are split if their distance is Inf in the split graph:
   isSplit <- (edgeDists == Inf) & !is.na(edgeDists)
   return(isSplit)

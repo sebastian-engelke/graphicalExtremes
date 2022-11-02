@@ -111,7 +111,7 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
 
   # make graph from Gamma if necessary
   if (is.null(graph) && is.matrix(Gamma)) {
-    graph <- partialGamma2graph(Gamma)
+    graph <- partialMatrixToGraph(Gamma)
   } else if (is.null(graph)) {
     stop("Supply a graph or a valid Gamma matrix")
   }

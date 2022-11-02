@@ -4,8 +4,8 @@ complete_Gamma_general_mc <- function(
   Gamma,
   graph,
   N = 1000,
-  tol=0,
-  check_tol=100,
+  tol = 0,
+  check_tol = 100,
   mc.cores = 1,
   final_tol = -1
 ){
@@ -13,13 +13,13 @@ complete_Gamma_general_mc <- function(
   graph <- setPids(graph)
   invSubGraphs <- split_graph(graph)
   subMatrices <- lapply(invSubGraphs, getSubMatrixForSubgraph, fullMatrix = Gamma)
-  
+
   needsCompletion <- sapply(invSubGraphs, function(g){
     d <- igraph::vcount(g)
     maxEcount <- d * (d-1) / 2
     return(igraph::ecount(g) < maxEcount)
   })
-  
+
   # completedSubMatrices <- mapply(
   completedSubMatrices <- parallel::mcmapply(
     mc.cores = mc.cores,
@@ -34,7 +34,7 @@ complete_Gamma_general_mc <- function(
     SIMPLIFY = FALSE,
     USE.NAMES = FALSE
   )
-  
+
   subMatrices[needsCompletion] <- completedSubMatrices
 
   GammaDecomp <- NA * Gamma
@@ -43,14 +43,12 @@ complete_Gamma_general_mc <- function(
     GammaDecomp[inds, inds] <- subMatrices[[i]]
   }
 
-  gDecomp <- partialGamma2graph(GammaDecomp)
+  gDecomp <- partialMatrixToGraph(GammaDecomp)
   Gamma <- complete_Gamma_decomposable(GammaDecomp, gDecomp)
-  
+
   if(final_tol >= 0){
-    gTilde <- igraph::complementer(graph)
-    B <- igraph::as_adjacency_matrix(gTilde, 'upper', sparse=FALSE)
     Theta <- Gamma2Theta(Gamma)
-    err <- max(abs(Theta[B == 1]))
+    err <- max(abs(getNonEdgeEntries(Theta, graph)))
     if(err > tol){
       warning('Matrix completion did not converge (err = ', err, ')')
     }
@@ -62,13 +60,11 @@ complete_Gamma_general_mc <- function(
 complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100){
 
   detailedSepList <- make_sep_list(graph)
-  
+
   if(length(detailedSepList) == 0){
     N <- 0
   }
-  gTilde <- igraph::complementer(graph)
-  ATilde <- igraph::as_adjacency_matrix(gTilde, 'upper', sparse=FALSE)
-  nonEdgeIndices <- which(ATilde == 1)
+  nonEdgeIndices <- getNonEdgeIndices(g, 'upper', doWhich = TRUE)
 
   GammaComp <- iterateIndList(Gamma, detailedSepList, nonEdgeIndices, N, tol, check_tol)
 
@@ -79,7 +75,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   m <- length(sepList)
   n <- 0
   while(n < N){
-    # Read indices of the two cliques (A, B) and separator (C) to be used
+    # Read of the cliques (`parts`), separator (`sep`), etc. to be used
     n <- n+1
     t <- (n - 1) %% m + 1
     inds <- sepList[[t]]
@@ -88,7 +84,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
     sep_Sigma <- inds$sepWithoutK
     k <- inds$k
     partPairs <- inds$partPairs
-    
+
     ## Compute 1 iteration. Check case #sep=1 vs #sep>1:
     if(length(sep) == 1){
       # Separator is of size 1 -> we can simply add variogram entries
@@ -118,12 +114,12 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
       # Convert back to Gamma
       Gamma <- Sigma2Gamma(Sigma)
     }
-    
+
     # Continue iteration if no tol-check due
     if(check_tol <= 0 || n %% check_tol != 0){
       next
     }
-    
+
     # Check if tolerance has been reached
     P <- Gamma2Theta(Gamma)
     err <- max(abs(P[nonEdgeIndices]))
