@@ -1,5 +1,5 @@
 
-# devtools::load_all('.')
+devtools::load_all('.')
 library(igraph)
 library(tictoc)
 
@@ -13,10 +13,10 @@ cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 200
+d <- 20
 
 # g <- generate_random_connected_graph(d, p = 3/(d+1))
-g <- generate_random_chordal_graph(d)
+g <- generate_random_connected_graph(d)
 G0 <- generate_random_Gamma(d)
 G0 <- ensure_symmetry(G0, Inf)
 

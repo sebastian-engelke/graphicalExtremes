@@ -4,16 +4,13 @@
 \alias{Gamma2graph}
 \title{Transformation of \eqn{\Gamma} matrix to graph object}
 \usage{
-Gamma2graph(Gamma, to_plot = TRUE, ...)
+Gamma2graph(Gamma, tol = 1e-06)
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
-\item{to_plot}{Logical. If \code{TRUE} (default), it plots the resulting
-graph.}
-
-\item{...}{Graphical parameters for the \code{\link[igraph]{plot.igraph}}
-function of the package \code{igraph}.}
+\item{tol}{Numeric scalar, entries in the precision matrix with absolute value
+smaller than this are considered to be zero.}
 }
 \value{
 Graph object from \code{igraph} package. An undirected graph.

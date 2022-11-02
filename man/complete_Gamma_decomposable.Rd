@@ -4,7 +4,7 @@
 \alias{complete_Gamma_decomposable}
 \title{Completion of decomposable Gamma matrices}
 \usage{
-complete_Gamma_decomposable(Gamma, graph)
+complete_Gamma_decomposable(Gamma, graph = NULL)
 }
 \arguments{
 \item{Gamma}{A variogram matrix that is specified on the edges of \code{graph}
@@ -24,8 +24,8 @@ returns the full \code{Gamma} matrix implied by the conditional independencies.
 }
 \seealso{
 Other Matrix completions: 
-\code{\link{complete_Gamma_general_0}()},
-\code{\link{complete_Gamma_general}()},
+\code{\link{DEPRECATED_complete_Gamma_general}()},
+\code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_one_step}()},
 \code{\link{complete_Gamma}()}
 }

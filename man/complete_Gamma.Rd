@@ -94,9 +94,9 @@ complete_Gamma(G, g)
 \code{\link[=Gamma2Theta]{Gamma2Theta()}}
 
 Other Matrix completions: 
+\code{\link{DEPRECATED_complete_Gamma_general}()},
 \code{\link{complete_Gamma_decomposable}()},
-\code{\link{complete_Gamma_general_0}()},
-\code{\link{complete_Gamma_general}()},
+\code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_one_step}()}
 }
 \concept{Matrix completions}

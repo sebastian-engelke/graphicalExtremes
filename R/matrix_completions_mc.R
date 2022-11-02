@@ -20,9 +20,9 @@ complete_Gamma_general_mc <- function(
     return(igraph::ecount(g) < maxEcount)
   })
 
-  # completedSubMatrices <- mapply(
-  completedSubMatrices <- parallel::mcmapply(
-    mc.cores = mc.cores,
+  completedSubMatrices <- mapply(
+  # completedSubMatrices <- parallel::mcmapply(
+  #   mc.cores = mc.cores,
     complete_Gamma_general_sc,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],
@@ -64,7 +64,7 @@ complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100
   if(length(detailedSepList) == 0){
     N <- 0
   }
-  nonEdgeIndices <- getNonEdgeIndices(g, 'upper', doWhich = TRUE)
+  nonEdgeIndices <- getNonEdgeIndices(graph, 'upper', doWhich = TRUE)
 
   GammaComp <- iterateIndList(Gamma, detailedSepList, nonEdgeIndices, N, tol, check_tol)
 

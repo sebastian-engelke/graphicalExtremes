@@ -1,3 +1,6 @@
 
 - consistent symmetry checks/fixes
     - tol in option?
+- consistent variable naming:
+    - g / graph
+    - G / Gamma
