@@ -1,6 +1,14 @@
 
 
-complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=100, mc.cores = 1){
+complete_Gamma_general_mc <- function(
+  Gamma,
+  graph,
+  N = 1000,
+  tol=0,
+  check_tol=100,
+  mc.cores = 1,
+  final_tol = -1
+){
   # wip
   graph <- setPids(graph)
   invSubGraphs <- split_graph(graph)
@@ -37,6 +45,16 @@ complete_Gamma_general_mc <- function(Gamma, graph, N = 1000, tol=0, check_tol=1
 
   gDecomp <- partialGamma2graph(GammaDecomp)
   Gamma <- complete_Gamma_decomposable(GammaDecomp, gDecomp)
+  
+  if(final_tol >= 0){
+    gTilde <- igraph::complementer(graph)
+    B <- igraph::as_adjacency_matrix(gTilde, 'upper', sparse=FALSE)
+    Theta <- Gamma2Theta(Gamma)
+    err <- max(abs(Theta[B == 1]))
+    if(err > tol){
+      warning('Matrix completion did not converge (err = ', err, ')')
+    }
+  }
 
   return(Gamma)
 }
@@ -59,8 +77,10 @@ complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100
 
 iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   m <- length(sepList)
-  for (n in seq_len(N)) {
+  n <- 0
+  while(n < N){
     # Read indices of the two cliques (A, B) and separator (C) to be used
+    n <- n+1
     t <- (n - 1) %% m + 1
     inds <- sepList[[t]]
     parts <- inds$parts

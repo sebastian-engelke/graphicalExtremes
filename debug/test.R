@@ -1,5 +1,5 @@
 
-devtools::load_all('.')
+# devtools::load_all('.')
 library(igraph)
 library(tictoc)
 
@@ -8,12 +8,12 @@ plotWithPid <- function(g, ...){
 }
 
 newSeed <- floor(2^20 * runif(1))
-# newSeed <- 815653
+newSeed <- 959736
 cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 100
+d <- 40
 
 g <- generate_random_connected_graph(d, p = 3/(d+1))
 
@@ -54,7 +54,7 @@ cat('errorP:', max(abs(P_c[B])), '\n')
 # new:
 cat('\n=== new ===\n')
 tic()
-G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL)
+G3 <- complete_Gamma_general_mc(G, g, N=N, tol=TOL, final_tol = TOL)
 # G3 <- complete_Gamma_general_sc(G, g, N=N, tol=TOL)
 toc()
 P3 <- Gamma2Theta(G3)
