@@ -22,12 +22,10 @@ distribution.}
 
 \item{par}{Respective parameter for the given \code{model}, that is,
 \itemize{
-\item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
-if \code{model = HR}.
+\item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix, if \code{model = HR}.
 \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if \code{model = logistic}.
 \item \eqn{\theta > 0}, if \code{model = neglogistic}.
-\item \eqn{\alpha}, numeric vector of size \code{d} with positive entries,
-if \code{model = dirichlet}.
+\item \eqn{\alpha}, numeric vector of size \code{d} with positive entries, if \code{model = dirichlet}.
 }}
 }
 \value{

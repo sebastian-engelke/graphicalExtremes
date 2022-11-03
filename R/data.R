@@ -2,7 +2,7 @@
 #'
 #' A dataset containing river discharge data for tributaries of Danube.
 #'
-#' @source Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
+#' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.
 #'
 "danube"
 
@@ -13,5 +13,5 @@
 #' of Southwest Airlines at different airports in California, Nevada,
 #' Arizona, Utah, and Texas.
 #'
-#' @source U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics \url{https://www.bts.gov/}.
+#' @source U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics <https://www.bts.gov/>.
 "flights"

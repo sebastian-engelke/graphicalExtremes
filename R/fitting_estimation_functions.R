@@ -152,23 +152,31 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'  Default is `complete_Gamma = FALSE`.
 #'
 #' @return List made of:
-#' \describe{
-#'   \item{`graph`}{A list of [igraph::graph] objects representing the
-#'   fitted graphs for each `rho` in `rholist`.}
-#'   \item{`Gamma`}{A list of numeric \eqn{d\times d}{d x d} estimated
+#' \item{`graph`}{
+#'   A list of [igraph::graph] objects representing the
+#'   fitted graphs for each `rho` in `rholist`.
+#' }
+#' \item{`Gamma`}{
+#'   A list of numeric \eqn{d\times d}{d x d} estimated
 #'   variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
 #'   for each `rho` in `rholist`. If `complete_Gamma = FALSE` or the
-#'   underlying graph is not connected, it returns `NULL`.}
-#'   \item{`rholist`}{The list of penalty coefficients.}
-#'   \item{`graph_ic`}{A list of [igraph::graph] objects
+#'   underlying graph is not connected, it returns `NULL`.
+#' }
+#' \item{`rholist`}{
+#'   The list of penalty coefficients.
+#' }
+#' \item{`graph_ic`}{
+#'   A list of [igraph::graph] objects
 #'   representing the optimal graph
 #'   according to the `aic`, `bic`, and `mbic` information criteria.
-#'   If `reg_method = "glasso"`, it returns a list of `NA`.}
-#'   \item{`Gamma_ic`}{A list of numeric \eqn{d\times d}{d x d} estimated
+#'   If `reg_method = "glasso"`, it returns a list of `NA`.
+#' }
+#' \item{`Gamma_ic`}{
+#'   A list of numeric \eqn{d\times d}{d x d} estimated
 #'   variogram matrices \eqn{\Gamma} corresponding
 #'   to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
-#'   graph is not connected, it returns a list of `NA`.}
+#'   graph is not connected, it returns a list of `NA`.
 #' }
 #'
 #' @export
@@ -308,10 +316,10 @@ eglearn <- function(
 #' components below the threshold. By default, `cens = FALSE`.
 #'
 #' @return List consisting of:
-#' \itemize{
-#' \item `graph`: An [igraph::graph()] object. The fitted minimum spanning tree.
-#' \item `Gamma`: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
-#' corresponding to the fitted minimum spanning tree.
+#' \item{`graph`}{An [igraph::graph()] object. The fitted minimum spanning tree.}
+#' \item{`Gamma`}{
+#'   Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+#'   corresponding to the fitted minimum spanning tree.
 #' }
 #'
 #' @examples
@@ -409,11 +417,8 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 #' components below the threshold. By default, `cens = FALSE`.
 #'
 #' @return List consisting of:
-#' \itemize{
-#' \item `graph`: An [igraph::graph()] object.
-#' \item `Gamma`: Numeric \eqn{d\times d}{d x d} estimated variogram matrix
-#' \eqn{\Gamma}.
-#' }
+#' \item{`graph`}{An [igraph::graph()] object.}
+#' \item{`Gamma`}{Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}.}
 #'
 #' @examples
 #' ## Fitting a 4-dimensional HR distribution

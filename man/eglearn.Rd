@@ -37,23 +37,31 @@ Default is \code{complete_Gamma = FALSE}.}
 }
 \value{
 List made of:
-\describe{
-\item{\code{graph}}{A list of \link[igraph:make_graph]{igraph::graph} objects representing the
-fitted graphs for each \code{rho} in \code{rholist}.}
-\item{\code{Gamma}}{A list of numeric \eqn{d\times d}{d x d} estimated
+\item{\code{graph}}{
+A list of \link[igraph:make_graph]{igraph::graph} objects representing the
+fitted graphs for each \code{rho} in \code{rholist}.
+}
+\item{\code{Gamma}}{
+A list of numeric \eqn{d\times d}{d x d} estimated
 variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
 for each \code{rho} in \code{rholist}. If \code{complete_Gamma = FALSE} or the
-underlying graph is not connected, it returns \code{NULL}.}
-\item{\code{rholist}}{The list of penalty coefficients.}
-\item{\code{graph_ic}}{A list of \link[igraph:make_graph]{igraph::graph} objects
+underlying graph is not connected, it returns \code{NULL}.
+}
+\item{\code{rholist}}{
+The list of penalty coefficients.
+}
+\item{\code{graph_ic}}{
+A list of \link[igraph:make_graph]{igraph::graph} objects
 representing the optimal graph
 according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
-If \code{reg_method = "glasso"}, it returns a list of \code{NA}.}
-\item{\code{Gamma_ic}}{A list of numeric \eqn{d\times d}{d x d} estimated
+If \code{reg_method = "glasso"}, it returns a list of \code{NA}.
+}
+\item{\code{Gamma_ic}}{
+A list of numeric \eqn{d\times d}{d x d} estimated
 variogram matrices \eqn{\Gamma} corresponding
 to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, \code{complete_Gamma = FALSE}, or the underlying
-graph is not connected, it returns a list of \code{NA}.}
+graph is not connected, it returns a list of \code{NA}.
 }
 }
 \description{

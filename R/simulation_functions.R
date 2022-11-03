@@ -5,21 +5,19 @@
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
 #' \itemize{
-#' \item `HR` (default),
-#' \item `logistic`,
-#' \item `neglogistic`,
-#' \item `dirichlet`.
+#'   \item `HR` (default),
+#'   \item `logistic`,
+#'   \item `neglogistic`,
+#'   \item `dirichlet`.
 #' }
 #' @param d Dimension of the multivariate Pareto
 #' distribution.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
-#' if `model = HR`.
-#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
-#' \item \eqn{\theta > 0}, if `model = neglogistic`.
-#' \item \eqn{\alpha}, numeric vector of size `d` with positive entries,
-#' if `model = dirichlet`.
+#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix, if `model = HR`.
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
+#'   \item \eqn{\theta > 0}, if `model = neglogistic`.
+#'   \item \eqn{\alpha}, numeric vector of size `d` with positive entries, if `model = dirichlet`.
 #' }
 #'
 #' @return
@@ -212,26 +210,26 @@ rmpareto <- function(n,
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
 #' \itemize{
-#' \item `HR` (default),
-#' \item `logistic`,
-#' \item `dirichlet`.
+#'   \item `HR` (default),
+#'   \item `logistic`,
+#'   \item `dirichlet`.
 #' }
 #' @param tree Graph object from `igraph` package.
 #' This object must be a tree, i.e., an
 #' undirected graph that is connected and has no cycles.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
-#' where only the entries corresponding to the edges of the `tree` are used,
-#' if `model = HR`. Alternatively, can be a vector of
-#' length \eqn{d - 1} containing the entries of the variogram corresponding
-#' to the edges of the given `tree`.
-#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
-#' containing the logistic parameters corresponding
-#' to the edges of the given `tree`, if `model = logistic`.
-#' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-#' contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
-#' for each of the edges in `tree`, if `model = dirichlet`.
+#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#'     where only the entries corresponding to the edges of the `tree` are used,
+#'     if `model = HR`. Alternatively, can be a vector of
+#'     length \eqn{d - 1} containing the entries of the variogram corresponding
+#'     to the edges of the given `tree`.
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#'     containing the logistic parameters corresponding
+#'     to the edges of the given `tree`, if `model = logistic`.
+#'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
+#'     contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+#'     for each of the edges in `tree`, if `model = dirichlet`.
 #' }
 #'
 #' @return
@@ -462,21 +460,19 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
 #' \itemize{
-#' \item `HR` (default),
-#' \item `logistic`,
-#' \item `neglogistic`,
-#' \item `dirichlet`.
+#'   \item `HR` (default),
+#'   \item `logistic`,
+#'   \item `neglogistic`,
+#'   \item `dirichlet`.
 #' }
 #' @param d Dimension of the multivariate Pareto
 #' distribution.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
-#' if `model = HR`.
-#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
-#' \item \eqn{\theta > 0}, if `model = neglogistic`.
-#' \item \eqn{\alpha}, numeric vector of size `d` with positive entries,
-#' if `model = dirichlet`.
+#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix, if `model = HR`.
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
+#'   \item \eqn{\theta > 0}, if `model = neglogistic`.
+#'   \item \eqn{\alpha}, numeric vector of size `d` with positive entries, if `model = dirichlet`.
 #' }
 #'
 #' @return
@@ -678,26 +674,26 @@ rmstable <- function(n,
 #' @param n Number of simulations.
 #' @param model The parametric model type; one of:
 #' \itemize{
-#' \item `HR` (default),
-#' \item `logistic`,
-#' \item `dirichlet`.
+#'   \item `HR` (default),
+#'   \item `logistic`,
+#'   \item `dirichlet`.
 #' }
 #' @param tree Graph object from `igraph` package.
 #' This object must be a tree, i.e., an
 #' undirected graph that is connected and has no cycles.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#' \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
-#' where only the entries corresponding to the edges of the `tree` are used,
-#' if `model = HR`. Alternatively, can be a vector of
-#' length \eqn{d - 1} containing the entries of the variogram corresponding
-#' to the edges of the given `tree`.
-#' \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
-#' containing the logistic parameters corresponding
-#' to the edges of the given `tree`, if `model = logistic`.
-#' \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-#' contain the parameter vectors \eqn{\alpha} of size 2 with positve entries
-#' for each of the edges in `tree`, if `model = dirichlet`.
+#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#'     where only the entries corresponding to the edges of the `tree` are used,
+#'     if `model = HR`. Alternatively, can be a vector of
+#'     length \eqn{d - 1} containing the entries of the variogram corresponding
+#'     to the edges of the given `tree`.
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#'     containing the logistic parameters corresponding
+#'     to the edges of the given `tree`, if `model = logistic`.
+#'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
+#'     contain the parameter vectors \eqn{\alpha} of size 2 with positve entries
+#'     for each of the edges in `tree`, if `model = dirichlet`.
 #' }
 #'
 #' @return

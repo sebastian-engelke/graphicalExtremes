@@ -254,16 +254,12 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' [`stats::optim`]. By default, `method = "BFGS"`.
 #'
 #' @return List consisting of:
-#' \itemize{
-#' \item `convergence`: Logical. Indicates whether the optimization converged or not.
-#' \item `par`: Numeric vector. Optimized parameters and fixed parameters.
-#' \item `par_opt`: Numeric. Optimized parameters.
-#' \item `Gamma`: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
-#' matrix.
-#' \item `nllik`: Numeric. Optimized value of the negative log-likelihood function.
-#' \item `hessian`: Numeric matrix. Estimated Hessian matrix of the
-#' estimated parameters.
-#' }
+#' \item{`convergence`}{Logical. Indicates whether the optimization converged or not.}
+#' \item{`par`}{Numeric vector. Optimized parameters and fixed parameters.}
+#' \item{`par_opt`}{Numeric. Optimized parameters.}
+#' \item{`Gamma`}{Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram #' matrix.}
+#' \item{`nllik`}{Numeric. Optimized value of the negative log-likelihood function.}
+#' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
 #'
 #' @keywords internal
 fmpareto_HR <- function(data,

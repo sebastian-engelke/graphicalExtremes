@@ -45,16 +45,12 @@ graph with singleton separator sets.}
 }
 \value{
 List consisting of:
-\itemize{
-\item \code{convergence}: Logical. Indicates whether the optimization converged or not.
-\item \code{par}: Numeric vector. Optimized parameters and fixed parameters.
-\item \code{par_opt}: Numeric. Optimized parameters.
-\item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
-matrix.
-\item \code{nllik}: Numeric. Optimized value of the negative log-likelihood function.
-\item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
-estimated parameters.
-}
+\item{\code{convergence}}{Logical. Indicates whether the optimization converged or not.}
+\item{\code{par}}{Numeric vector. Optimized parameters and fixed parameters.}
+\item{\code{par_opt}}{Numeric. Optimized parameters.}
+\item{\code{Gamma}}{Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram #' matrix.}
+\item{\code{nllik}}{Numeric. Optimized value of the negative log-likelihood function.}
+\item{\code{hessian}}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
 }
 \description{
 Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
