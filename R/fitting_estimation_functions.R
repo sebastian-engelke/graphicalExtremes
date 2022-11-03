@@ -395,7 +395,7 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #'
-#' @param graph Undirected graph object from \code{igraph} package.
+#' @param graph Undirected graph object from \code{igraph} package with `d` vertices.
 #'
 #' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 #' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
@@ -451,10 +451,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, method = c("ML", "vario"),
   d <- ncol(data)
   graph <- check_graph(graph, nVertices = d)
 
-  # Infer graph type
-  is_decomp <- igraph::is.chordal(graph)
-
-  if (is_decomp$chordal) {
+  if(is_chordal(graph)) {
 
     max_clique <- 2 #!!!
 
@@ -467,7 +464,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, method = c("ML", "vario"),
     if (method == "ML") {
       fmpareto_graph_HR_decomposable(data, graph, p, cens)
     } else {
-      fmpareto_graph_HR_general(data, graph, p) #!!! to optimize
+      fmpareto_graph_HR_general(data, graph, p)
     }
 
   } else {

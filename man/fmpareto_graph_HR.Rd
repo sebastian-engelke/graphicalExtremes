@@ -16,7 +16,7 @@ fmpareto_graph_HR(
 \item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 number of observations and \eqn{d} is the dimension.}
 
-\item{graph}{Undirected graph object from \code{igraph} package.}
+\item{graph}{Undirected graph object from \code{igraph} package with \code{d} vertices.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,

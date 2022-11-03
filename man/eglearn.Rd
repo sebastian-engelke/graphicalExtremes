@@ -43,7 +43,7 @@ fitted graphs for each \code{rho} in \code{rholist}.}
 \item{\code{Gamma}}{A list of numeric \eqn{d\times d}{d x d} estimated
 variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
 for each \code{rho} in \code{rholist}. If \code{complete_Gamma = FALSE} or the
-underlying graph is not connected, it returns \code{NA}.}
+underlying graph is not connected, it returns \code{NULL}.}
 \item{\code{rholist}}{The list of penalty coefficients.}
 \item{\code{graph_ic}}{A list of \link[igraph:make_graph]{igraph::graph} objects
 representing the optimal graph

@@ -96,3 +96,7 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
   return(sgIds)
 }
 
+
+is_chordal <- function(graph){
+  igraph::is.chordal(graph)$chordal
+}
