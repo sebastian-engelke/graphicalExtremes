@@ -1,7 +1,7 @@
 
 #' DEPRECATED: Completion of non-decomposable Gamma matrices
 #'
-#' Given a \code{graph} and variogram matrix `Gamma`, returns the full \code{Gamma}
+#' Given a `graph` and variogram matrix `Gamma`, returns the full `Gamma`
 #' matrix implied by the conditional independencies.
 #' This function uses a convergent iterative algorithm.
 #'

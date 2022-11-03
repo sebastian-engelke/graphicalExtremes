@@ -14,20 +14,20 @@
 #' provided in `graph`.
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
-#' @param graph Graph object from \code{igraph} package.
-#' The \code{graph} must be a connected, undirected graph.
-#' Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.
+#' @param graph Graph object from `igraph` package.
+#' The `graph` must be a connected, undirected graph.
+#' Can also be implied by `NA` entries in `Gamma` if decomposable.
 #' @param allowed_graph_type Is passed as `graph_type` to [check_graph()].
 #' Can be used to throw an error if `graph` is not of the specified type,
 #' but does not have any influence on the completion algorithm.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
-#' @return Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
+#' @return Completed \eqn{d \times d}{d x d} `Gamma` matrix.
 #'
 #' @details
 #' For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
-#' distribution within the cliques of the \code{graph}, the remaining entries are implied
+#' distribution within the cliques of the `graph`, the remaining entries are implied
 #' by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
@@ -115,7 +115,7 @@ complete_Gamma <- function(
 
 #' Completion of non-decomposable Gamma matrices (demo-version)
 #'
-#' Given a \code{graph} and variogram matrix `Gamma`, returns the full \code{Gamma}
+#' Given a `graph` and variogram matrix `Gamma`, returns the full `Gamma`
 #' matrix implied by the conditional independencies.
 #' This function uses a convergent iterative algorithm.
 #' DEMO VERSION: Returns a lot of details and allows specifying the graph list

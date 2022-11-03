@@ -34,7 +34,7 @@ Gamma <- cbind(
   c(2, 1.5, 1.5, 0)
 )
 
-Gamma2graph(Gamma, to_plot = TRUE)
+Gamma2graph(Gamma)
 }
 \references{
 \insertAllCited{}

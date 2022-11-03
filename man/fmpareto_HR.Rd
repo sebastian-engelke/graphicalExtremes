@@ -41,7 +41,7 @@ If provided, the \code{graph} must be an undirected block graph, i.e., a decompo
 graph with singleton separator sets.}
 
 \item{method}{String. A valid optimization method used by the function
-\code{\link[stats]{optim}}. By default, \code{method = "BFGS"}.}
+\code{\link[stats:optim]{stats::optim}}. By default, \code{method = "BFGS"}.}
 }
 \value{
 List consisting of:

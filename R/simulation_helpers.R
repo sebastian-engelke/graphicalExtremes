@@ -5,7 +5,7 @@
 #' @inheritParams rmpareto
 #' @param idx Integer. Index corresponding to the variable over which
 #' the extremal function is simulated.
-#' @param trend Numeric. Trend corresponding to the variable \code{idx}.
+#' @param trend Numeric. Trend corresponding to the variable `idx`.
 #' @param chol_mat Numeric matrix \eqn{d\times d}{d x d}.
 #' Cholesky decomposition of the desired covariance matrix.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
@@ -29,8 +29,8 @@ simu_px_HR <- function(n, d, idx, trend, chol_mat) {
 #' Simulates logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
@@ -59,8 +59,8 @@ simu_px_logistic <- function(n, d, idx, theta) {
 #' Simulates negative logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
@@ -86,9 +86,9 @@ simu_px_neglogistic <- function(n, d, idx, theta) {
 #' Simulates Dirichlet extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
-#' @param alpha Numeric vector of size \code{d}.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
+#' @param alpha Numeric vector of size `d`.
 #' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
 #'
 #' @keywords internal

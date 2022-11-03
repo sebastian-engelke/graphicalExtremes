@@ -139,13 +139,6 @@ test_that("complete_Gamma works", {
   expect_equal(Gamma3[1:2, 1:2], res2)
 })
 
-test_that("Gamma2graph works", {
-  res1 <- complete_Gamma(Gamma3, block)
-  expect_s3_class(Gamma2graph(res1), "igraph")
-  expect_s3_class(Gamma2graph(res1, to_plot = T), "igraph")
-  expect_s3_class(Gamma2graph(res1, to_plot = F), "igraph")
-})
-
 test_that("data2rmpareto works", {
   p <- .999
   m <- 1 / (1 - apply(data, 2, unif))

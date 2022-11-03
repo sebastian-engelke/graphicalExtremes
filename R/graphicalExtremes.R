@@ -1,35 +1,35 @@
 #' graphicalExtremes: Statistical methodology for graphical extreme value models.
 #'
-#' The \code{graphicalExtremes} package provides three categories of functions:
+#' The `graphicalExtremes` package provides three categories of functions:
 #' simulation, estimation and transformation.
 #'
 #' @section Simulation functions:
 #' \itemize{
-#' \item \code{\link{rmpareto}}
-#' \item \code{\link{rmpareto_tree}}
-#' \item \code{\link{rmstable}}
-#' \item \code{\link{rmstable_tree}}
+#' \item [`rmpareto`]
+#' \item [`rmpareto_tree`]
+#' \item [`rmstable`]
+#' \item [`rmstable_tree`]
 #' }
 #'
 #'
 #' @section Estimation functions:
 #' \itemize{
-#' \item \code{\link{fmpareto_graph_HR}}
-#' \item \code{\link{mst_HR}}
-#' \item \code{\link{emp_chi_multdim}}
-#' \item \code{\link{emp_chi}}
+#' \item [`fmpareto_graph_HR`]
+#' \item [`mst_HR`]
+#' \item [`emp_chi_multdim`]
+#' \item [`emp_chi`]
 #' }
 #'
 #'
 #' @section Transformation functions:
 #' \itemize{
-#' \item \code{\link{Gamma2graph}}
-#' \item \code{\link{Gamma2Sigma}}
-#' \item \code{\link{Sigma2Gamma}}
-#' \item \code{\link{Gamma2chi}}
-#' \item \code{\link{chi2Gamma}}
-#' \item \code{\link{complete_Gamma}}
-#' \item \code{\link{data2mpareto}}
+#' \item [`Gamma2graph`]
+#' \item [`Gamma2Sigma`]
+#' \item [`Sigma2Gamma`]
+#' \item [`Gamma2chi`]
+#' \item [`chi2Gamma`]
+#' \item [`complete_Gamma`]
+#' \item [`data2mpareto`]
 #' }
 #'
 #' @docType package

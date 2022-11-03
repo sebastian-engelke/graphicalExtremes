@@ -1,4 +1,4 @@
-#' Fitting extremal graphical lasso
+#' Fitting extremal graphical lasso (MH: DEPRECATED?)
 #'
 #' Fits an extremal minimum spanning tree
 #'
@@ -132,10 +132,10 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #'  number of observations and \eqn{d} is the dimension.
 #'
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#'  it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#'  \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#'  to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#'  it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#'  `p` is used as the probability in the function [`data2mpareto`]
+#'  to standardize the `data`.
 #'
 #' @param rholist Numeric vector of non-negative regularization parameters
 #'  for the lasso.
@@ -297,10 +297,10 @@ eglearn <- function(
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #' @param method One of `"vario", "ML", "chi"`.
 #' Default is `method = "vario"`.
 #' @param cens Logical. This argument is considered only if `method = "ML"`.
@@ -309,8 +309,8 @@ eglearn <- function(
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{graph}: An [igraph::graph()] object. The fitted minimum spanning tree.
-#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+#' \item `graph`: An [igraph::graph()] object. The fitted minimum spanning tree.
+#' \item `Gamma`: Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
 #' corresponding to the fitted minimum spanning tree.
 #' }
 #'
@@ -395,12 +395,12 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #'
-#' @param graph Undirected graph object from \code{igraph} package with `d` vertices.
+#' @param graph Undirected graph object from `igraph` package with `d` vertices.
 #'
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #'
 #' @param method One of `"ML", "vario"`.
 #' Default is `method = "ML"`.
@@ -410,8 +410,8 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{graph}: An [igraph::graph()] object.
-#' \item \code{Gamma}: Numeric \eqn{d\times d}{d x d} estimated variogram matrix
+#' \item `graph`: An [igraph::graph()] object.
+#' \item `Gamma`: Numeric \eqn{d\times d}{d x d} estimated variogram matrix
 #' \eqn{\Gamma}.
 #' }
 #'
@@ -481,11 +481,11 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, method = c("ML", "vario"),
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
-#' @param graph Connected graph object from \code{igraph} package.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
+#' @param graph Connected graph object from `igraph` package.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
@@ -525,13 +525,13 @@ fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, \code{cens = FALSE}.
-#' @param graph Decomposable graph object from \code{igraph} package.
+#' components below the threshold. By default, `cens = FALSE`.
+#' @param graph Decomposable graph object from `igraph` package.
 #'
 #' @export
 fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) {
@@ -603,12 +603,12 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #' @param k Integer between 1 and \eqn{d}. Component of the multivariate
-#' observations that is conditioned to be larger than the threshold \code{p}.
-#' If \code{NULL} (default), then an average over all \code{k} is returned.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' observations that is conditioned to be larger than the threshold `p`.
+#' If `NULL` (default), then an average over all `k` is returned.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
 #' variogram of the Huesler--Reiss distribution.
@@ -782,13 +782,13 @@ emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #'
 #' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
-#' for the \code{data}.
+#' for the `data`.
 #' @examples
 #' n <- 100
 #' d <- 2
@@ -844,12 +844,12 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' It represents a variogram matrix \eqn{\Gamma}.
 #'
 #' @param cens Boolean. If true, then censored log-likelihood is computed.
-#' By default, \code{cens = FALSE}.
+#' By default, `cens = FALSE`.
 #'
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale.
-#'  Else, `p` is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale.
+#'  Else, `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #'
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated
 #' log-likelihood, AIC, and BIC values.

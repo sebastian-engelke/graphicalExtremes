@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitting_estimation_functions.R
 \name{eglasso}
 \alias{eglasso}
-\title{Fitting extremal graphical lasso}
+\title{Fitting extremal graphical lasso (MH: DEPRECATED?)}
 \usage{
 eglasso(
   Gamma,

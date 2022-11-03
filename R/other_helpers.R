@@ -1,6 +1,6 @@
 #' Uniform margin
 #'
-#' Rescale the vector \code{x} empirically to uniform margin.
+#' Rescale the vector `x` empirically to uniform margin.
 #'
 #' @param x Numeric vector.
 #' @param na.rm Logical. If TRUE, missing values are removed. If FALSE, missing values are kept as such.
@@ -45,7 +45,7 @@ dim_Gamma <- function(Gamma) {
 
 #' Select edges to add to a graph
 #'
-#' This function selects all possible edges that can be added to the \code{graph}
+#' This function selects all possible edges that can be added to the `graph`
 #' while still remaining in the class of block graphs.
 #'
 #' @inheritParams complete_Gamma
@@ -98,12 +98,12 @@ select_edges <- function(graph) {
 
 #' Set graphical parameters
 #'
-#' Set graphical parameters to \code{graph} which is an object from the
-#' \code{igraph} package.
+#' Set graphical parameters to `graph` which is an object from the
+#' `igraph` package.
 #'
-#' @param graph Graph object from \code{igraph} package.
+#' @param graph Graph object from `igraph` package.
 #'
-#' @return Graph object from \code{igraph} package.
+#' @return Graph object from `igraph` package.
 #'
 #' @keywords internal
 set_graph_parameters <- function(graph) {
@@ -122,7 +122,7 @@ set_graph_parameters <- function(graph) {
 
 #' Censor dataset
 #'
-#' Censors each row of matrix \code{x} with vector \code{p}.
+#' Censors each row of matrix `x` with vector `p`.
 #'
 #' @param x Numeric matrix \eqn{n \times d}{n x d}.
 #' @param p Numeric vector with \eqn{d} elements.

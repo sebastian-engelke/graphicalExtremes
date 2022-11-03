@@ -137,7 +137,7 @@ getConnectedComponents <- function(g){
 #' such that the intersection of their edge sets
 #' is identical to the edgeset of the input graph.
 #' 
-#' @param graph Graph object from \code{igraph} package.
+#' @param graph Graph object from `igraph` package.
 #' @return List of decomposable graphs
 make_graph_list <- function(graph){
   d <- igraph::vcount(graph)

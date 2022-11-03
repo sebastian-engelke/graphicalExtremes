@@ -169,7 +169,7 @@ logdVK_HR <- function(x, K, par) {
 #' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
 #' It represents a variogram matrix \eqn{\Gamma}.
 #' @param cens Boolean. If true, then censored log-likelihood is computed.
-#' By default, \code{cens = FALSE}.
+#' By default, `cens = FALSE`.
 #'
 #' @return Numeric. The full censored log-likelihood of HR model.
 #'
@@ -225,43 +225,43 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' using (censored) likelihood estimation.
 #'
 #'
-#' If \code{graph = NULL}, then the parameters of a \eqn{d \times d}{d x d}
+#' If `graph = NULL`, then the parameters of a \eqn{d \times d}{d x d}
 #' parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
-#' If \code{graph} is provided, then the conditional independence
+#' If `graph` is provided, then the conditional independence
 #' structure of this graph is assumed and the parameters on the edges are fitted.
 #' In both cases the full likelihood is used and therefore this function should only
 #' be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
-#' fitting can be done separately on the cliques; see \code{\link{fmpareto_graph_HR}}.
+#' fitting can be done separately on the cliques; see [`fmpareto_graph_HR`].
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-#' it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-#' \code{p} is used as the probability in the function \code{\link{data2mpareto}}
-#' to standardize the \code{data}.
+#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [`data2mpareto`]
+#' to standardize the `data`.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, \code{cens = FALSE}.
+#' components below the threshold. By default, `cens = FALSE`.
 #' @param init Numeric vector. Initial parameter values in the optimization. If
-#' \code{graph} is given, then the entries should correspond to the edges of the \code{graph}.
+#' `graph` is given, then the entries should correspond to the edges of the `graph`.
 #' @param fixParams Numeric vector. Indices of the parameter vectors that are kept
 #' fixed during the optimization. Default is `integer(0)`.
 #' @param maxit Positive integer. The maximum number of iterations in the
 #' optimization.
-#' @param graph Graph object from \code{igraph} package or \code{NULL}.
-#' If provided, the \code{graph} must be an undirected block graph, i.e., a decomposable, connected
+#' @param graph Graph object from `igraph` package or `NULL`.
+#' If provided, the `graph` must be an undirected block graph, i.e., a decomposable, connected
 #' graph with singleton separator sets.
 #' @param method String. A valid optimization method used by the function
-#' \code{\link[stats]{optim}}. By default, \code{method = "BFGS"}.
+#' [`stats::optim`]. By default, `method = "BFGS"`.
 #'
 #' @return List consisting of:
 #' \itemize{
-#' \item \code{convergence}: Logical. Indicates whether the optimization converged or not.
-#' \item \code{par}: Numeric vector. Optimized parameters and fixed parameters.
-#' \item \code{par_opt}: Numeric. Optimized parameters.
-#' \item \code{Gamma}: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
+#' \item `convergence`: Logical. Indicates whether the optimization converged or not.
+#' \item `par`: Numeric vector. Optimized parameters and fixed parameters.
+#' \item `par_opt`: Numeric. Optimized parameters.
+#' \item `Gamma`: Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram
 #' matrix.
-#' \item \code{nllik}: Numeric. Optimized value of the negative log-likelihood function.
-#' \item \code{hessian}: Numeric matrix. Estimated Hessian matrix of the
+#' \item `nllik`: Numeric. Optimized value of the negative log-likelihood function.
+#' \item `hessian`: Numeric matrix. Estimated Hessian matrix of the
 #' estimated parameters.
 #' }
 #'
