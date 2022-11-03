@@ -158,7 +158,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'   \item{`Gamma`}{A list of numeric \eqn{d\times d}{d x d} estimated
 #'   variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
 #'   for each `rho` in `rholist`. If `complete_Gamma = FALSE` or the
-#'   underlying graph is not connected, it returns `NA`.}
+#'   underlying graph is not connected, it returns `NULL`.}
 #'   \item{`rholist`}{The list of penalty coefficients.}
 #'   \item{`graph_ic`}{A list of [igraph::graph] objects
 #'   representing the optimal graph
@@ -173,26 +173,23 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'
 #' @export
 #'
-eglearn <- function(data,
-                    p = NULL,
-                    rholist = c(0.1, 0.15, 0.19, 0.205),
-                    reg_method = c("ns", "glasso"),
-                    complete_Gamma = FALSE) {
-
+eglearn <- function(
+  data,
+  p = NULL,
+  rholist = c(0.1, 0.15, 0.19, 0.205),
+  reg_method = c("ns", "glasso"),
+  complete_Gamma = FALSE
+) {
   # Check arguments
   reg_method <- match.arg(reg_method)
-
   if (any(rholist < 0)) {
-    stop("The regularization parameters in `rholist` must be non-negative.",
-         call. = FALSE
-    )
+    stop("The regularization parameters in `rholist` must be non-negative.")
   }
 
   # Normalize data
   if (!is.null(p)) {
     data.std <- data2mpareto(data, p)
-  }
-  else {
+  } else {
     data.std <- data
   }
 
@@ -203,7 +200,7 @@ eglearn <- function(data,
   graphs <- list()
   Gammas <- list()
   rhos <- list()
-  r <- length(rholist)
+  nRho <- length(rholist)
   d <- ncol(Gamma)
 
   null.vote <- array(0, dim = c(d, d, length(rholist)))
@@ -216,7 +213,7 @@ eglearn <- function(data,
       gl.fit <- lapply(1:length(rholist), FUN = function(i) {
         glassoFast::glassoFast(S = Sk, rho = rholist[i], thr = 1e-8, maxIt = 100000)$wi
       })
-      gl.tmp <- array(unlist(gl.fit), dim = c(d - 1, d - 1, r))
+      gl.tmp <- array(unlist(gl.fit), dim = c(d - 1, d - 1, nRho))
       null.vote[-k, -k, ] <- null.vote[-k, -k, , drop = FALSE] +
         (abs(gl.tmp) <= 1e-5) ## make sure is consistent with default threshold value
     }
@@ -234,9 +231,8 @@ eglearn <- function(data,
   adj.ic.est <- (null.vote.ic / (ncol(null.vote.ic) - 2)) < 0.5
 
 
-
   # complete Gamma for rholist
-  for (j in 1:r) {
+  for (j in 1:nRho) {
     rho <- rholist[j]
     est_graph <- igraph::graph_from_adjacency_matrix(
       adj.est[, ,j], mode = "undirected", diag = FALSE)
@@ -260,18 +256,18 @@ eglearn <- function(data,
 
   if (reg_method == "ns") {
     for (l in seq_along(sel_methods)){
-
       est_graph <-  igraph::graph_from_adjacency_matrix(
-        adj.ic.est[, ,l], mode = "undirected", diag = FALSE)
+        adj.ic.est[, ,l], mode = "undirected", diag = FALSE
+      )
 
       if (complete_Gamma == FALSE) {
-
-        Gamma_curr <- NA
-      }
-      else {
-        Gamma_curr <- try_complete_Gamma(est_graph, Gamma,
-                                         key = "information criterion",
-                                         val = sel_methods[l])
+        Gamma_curr <- NULL
+      } else {
+        Gamma_curr <- try_complete_Gamma(
+          est_graph, Gamma,
+          key = "information criterion",
+          val = sel_methods[l]
+        )
       }
 
       graphs_ic[[l]] <- est_graph
@@ -279,12 +275,15 @@ eglearn <- function(data,
     }
   }
 
-  return(list(graph = graphs,
-              Gamma = Gammas,
-              rholist = rhos,
-              graph_ic = graphs_ic,
-              Gamma_ic = Gammas_ic))
+  return(list(
+    graph = graphs,
+    Gamma = Gammas,
+    rholist = rhos,
+    graph_ic = graphs_ic,
+    Gamma_ic = Gammas_ic
+  ))
 }
+
 
 #' Fitting extremal minimum spanning tree
 #'

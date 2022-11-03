@@ -624,3 +624,33 @@ bic <- function(n, p) log(n)
 # modified BIC of Wang & Leng, JRSSB 2009
 # it has a weird justification in the paper
 mbic <- function(n, p) log(n) * log(log(p))
+
+
+try_complete_Gamma <- function(graph, Gamma, key, val){
+  ## igraph numeric_matrix character double -> numeric_matrix | NA
+  ## tries to call `complete_Gamma`, if it fails returns NULL
+  if(!igraph::is.connected(graph)){
+    message(paste0(
+      'The estimated graph for ',
+      key, ' = ', val,
+      '} is not connected,  so it is not possible to complete `Gamma`.\n'
+    ))
+    return(NULL)
+  }
+
+  Gamma_comp <- complete_Gamma(graph = graph, Gamma = Gamma)
+  graph_comp <- Gamma2graph(Gamma_comp)
+
+  # Check if completed Gamma matches with given graph
+  if (!graphs_equal(graph_comp, graph)) {
+    message(paste0(
+      'The completed Gamma for ',
+      key, ' = ', val,
+      ' does not match the estimated graph.\n'
+    ))
+  }
+
+  # Return completed Gamma
+  return(Gamma_comp)
+}
+

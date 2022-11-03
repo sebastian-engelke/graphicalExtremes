@@ -20,9 +20,9 @@ complete_Gamma_general_mc <- function(
     return(igraph::ecount(g) < maxEcount)
   })
 
-  completedSubMatrices <- mapply(
-  # completedSubMatrices <- parallel::mcmapply(
-  #   mc.cores = mc.cores,
+  # completedSubMatrices <- mapply(
+  completedSubMatrices <- parallel::mcmapply(
+    mc.cores = mc.cores,
     complete_Gamma_general_sc,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],
