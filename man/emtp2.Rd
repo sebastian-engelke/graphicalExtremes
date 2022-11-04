@@ -16,9 +16,9 @@ emtp2(G, tol = 1e-06, verbose = TRUE, initial_point = TRUE)
 \item{initial_point}{if TRUE (default), the algorithm will construct an initial point before the iteration steps.}
 }
 \value{
-\code{G_emtp2} the optimal value of the variogram matrix
-
-\code{it} the number of iterations
+A list containing the entries
+\item{\code{G_emtp2}}{The optimal value of the variogram matrix}
+\item{\code{it}}{The number of iterations}
 }
 \description{
 This function implements a block descent algorithm to find the maximum of the

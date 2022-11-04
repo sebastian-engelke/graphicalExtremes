@@ -12,7 +12,7 @@ number of observations and \eqn{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+\code{p} is used as the probability in the function \link{data2mpareto}
 to standardize the \code{data}.}
 }
 \value{

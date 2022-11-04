@@ -21,7 +21,7 @@ number of observations and \eqn{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+\code{p} is used as the probability in the function \link{data2mpareto}
 to standardize the \code{data}.}
 
 \item{cens}{Logical. If true, then censored likelihood contributions are used for
@@ -41,7 +41,7 @@ If provided, the \code{graph} must be an undirected block graph, i.e., a decompo
 graph with singleton separator sets.}
 
 \item{method}{String. A valid optimization method used by the function
-\code{\link[stats:optim]{stats::optim}}. By default, \code{method = "BFGS"}.}
+\link[stats:optim]{stats::optim}. By default, \code{method = "BFGS"}.}
 }
 \value{
 List consisting of:
@@ -63,6 +63,6 @@ If \code{graph} is provided, then the conditional independence
 structure of this graph is assumed and the parameters on the edges are fitted.
 In both cases the full likelihood is used and therefore this function should only
 be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
-fitting can be done separately on the cliques; see \code{\link{fmpareto_graph_HR}}.
+fitting can be done separately on the cliques; see \link{fmpareto_graph_HR}.
 }
 \keyword{internal}

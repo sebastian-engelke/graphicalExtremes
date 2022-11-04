@@ -4,12 +4,16 @@
 #'
 #' This function implements a block descent algorithm to find the maximum of the 
 #' Gaussian log-likelihood under the constraint that the concentration matrix is a Laplacian matrix.
+#' 
 #' @param G conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.
 #' @param tol The convergence tolerance (default tol=1e-7). The algorithm terminates when the sum of absolute differences between two iterations is below `tol`.
 #' @param initial_point if TRUE (default), the algorithm will construct an initial point before the iteration steps.
 #' @param verbose if TRUE (default) the output will be printed.
-#' @return `G_emtp2` the optimal value of the variogram matrix
-#' @return `it` the number of iterations
+#' 
+#' @return A list containing the entries
+#' \item{`G_emtp2`}{The optimal value of the variogram matrix}
+#' \item{`it`}{The number of iterations}
+#' 
 #' @keywords block descent, concentration matrix, Laplacian matrix.
 #' @export
 emtp2 <- function(G,tol=1e-6, verbose = TRUE, initial_point = TRUE){

@@ -12,7 +12,7 @@ number of observations and \eqn{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \code{\link{data2mpareto}}
+\code{p} is used as the probability in the function \link{data2mpareto}
 to standardize the \code{data}.}
 
 \item{method}{One of \verb{"vario", "ML", "chi"}.
@@ -41,7 +41,6 @@ if \code{method = "ML"}. See \insertCite{eng2019;textual}{graphicalExtremes} for
 }
 \examples{
 ## Fitting a 4-dimensional HR minimum spanning tree
-
 my_graph <- igraph::graph_from_adjacency_matrix(
   rbind(
     c(0, 1, 0, 0),
