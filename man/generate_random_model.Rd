@@ -4,7 +4,7 @@
 \alias{generate_random_model}
 \title{Generate random Hüsler--Reiss Models}
 \usage{
-generate_random_model(d, graph_type = "tree", ...)
+generate_random_model(d, graph_type = "general", ...)
 }
 \arguments{
 \item{d}{Number of vertices in the graph}

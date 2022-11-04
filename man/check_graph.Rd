@@ -28,6 +28,7 @@ If the graph is not valid an error is thrown.
 \description{
 Checks that the input graph is a valid graph for an extremal graphical model.
 If necessary, converts the graph to an undirected graph.
+Removes vertex labels if present.
 }
 \seealso{
 Other Input checks: 

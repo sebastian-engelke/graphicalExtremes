@@ -4,7 +4,7 @@
 \alias{is_block_graph}
 \title{Check if a graph is a block graph}
 \usage{
-is_block_graph(graph)
+is_block_graph(graph, check_connected = TRUE)
 }
 \arguments{
 \item{graph}{An \link[igraph:make_graph]{igraph::graph} object}

@@ -105,12 +105,13 @@ is_block_graph <- function(graph, check_connected=TRUE){
 #' `NA` in the Gamma matrix
 #' @param graph_type Passed to [check_graph()].
 #'
-#' @return A list containing two named entries, `Gamma` and `graph` containing
-#' the input matrix and graph. Throws an error if the input is not valid.
+#' @return A list consisting of
+#' \item{`Gamma`}{The Gamma matrix given as input or implied by the input}
+#' \item{`graph`}{The graph given as input or implied by the input}
+#' Throws an error if the input is not valid.
 #'
 #' @family Input checks
 check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
-
   # make graph from Gamma if necessary
   if (is.null(graph) && is.matrix(Gamma)) {
     graph <- partialMatrixToGraph(Gamma)

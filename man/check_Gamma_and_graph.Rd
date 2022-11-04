@@ -16,8 +16,10 @@ of \code{graph}}
 \item{graph_type}{Passed to \code{\link[=check_graph]{check_graph()}}.}
 }
 \value{
-A list containing two named entries, \code{Gamma} and \code{graph} containing
-the input matrix and graph. Throws an error if the input is not valid.
+A list consisting of
+\item{\code{Gamma}}{The Gamma matrix given as input or implied by the input.}
+\item{\code{graph}}{The graph given as input or implied by the input.}
+Throws an error if the input is not valid.
 }
 \description{
 Checks and converts the (incomplete) Gamma matrix and graph given for a
