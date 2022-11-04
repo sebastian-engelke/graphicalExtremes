@@ -428,7 +428,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
   # loop through cliques and estimate Ghat:
   for(clique in cliques){
     # compute marginal pareto, on the nodes of the current clique
-    data.cli <- mparetomargins(data = data, set_indices = clique)
+    data.cli <- mparetomargins(data, set_indices = clique)
 
     # find Ghat-entries that are already fixed by a previous clique/separator:
     G.cli <- Ghat[clique, clique]
@@ -436,7 +436,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
     fixParams <- !is.na(par.cli)
 
     # get initial parameters, keeping the fixed ones:
-    G.est0 <- emp_vario(data = data.cli)
+    G.est0 <- emp_vario(data.cli)
     G.est <- replaceGammaSubMatrix(G.est0, G.cli)
     init.cli <- Gamma2par(G.est)
 

@@ -507,15 +507,18 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for censored HR
 
-    fmpareto_obj <- fmpareto_HR(data = data[, x],
-                                init = G_emp[x[1], x[2]],
-                                cens = cens)
+    fmpareto_obj <- fmpareto_HR(
+      data = data[, x],
+      init = G_emp[x[1], x[2]],
+      cens = cens
+    )
     par.est <- fmpareto_obj$par
-    llh_hr <- -(fmpareto_obj$nllik
-                - 2 * (sum(log(data[which(data[, x[1]] > 1), x[1]]))
-                       + sum(log(data[which(data[, x[2]] > 1), x[2]]))))
-    c(par = par.est, llh_hr = llh_hr)
-
+    llh_hr <- -(
+      fmpareto_obj$nllik
+      - 2 * (sum(log(data[which(data[, x[1]] > 1), x[1]]))
+      + sum(log(data[which(data[, x[2]] > 1), x[2]])))
+    )
+    return(c(par = par.est, llh_hr = llh_hr))
   }
 
   llh_uncens <- function(x, data, G_emp) {
@@ -527,11 +530,12 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
       cens = cens
     )$par
 
-    llh_hr <- logLH_HR(data = data[, x], Gamma = par2Gamma(par.est)) +
-      2 * (sum(log(data[, x[1]])) + sum(log(data[, x[2]])))
+    llh_hr <- (
+      logLH_HR(data = data[, x], Gamma = par2Gamma(par.est))
+      + 2 * (sum(log(data[, x[1]])) + sum(log(data[, x[2]])))
+    )
 
-    c(par = par.est, llh_hr = llh_hr)
-
+    return(c(par = par.est, llh_hr = llh_hr))
   }
 
   # Standardize data
