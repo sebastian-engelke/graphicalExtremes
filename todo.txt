@@ -4,3 +4,5 @@
 - consistent variable naming:
     - g / graph
     - G / Gamma
+- plotting function for river data
+

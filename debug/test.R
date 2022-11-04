@@ -13,7 +13,7 @@ cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 20
+d <- 30
 
 # g <- generate_random_connected_graph(d, p = 3/(d+1))
 g <- generate_random_connected_graph(d)
