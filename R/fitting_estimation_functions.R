@@ -72,13 +72,11 @@ eglearn <- function(
 
   # Normalize data
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
   # Initialize variables
-  Gamma <- emp_vario(data = data.std)
+  Gamma <- emp_vario(data)
   sel_methods <- c("aic", "bic", "mbic")
 
   graphs <- list()
@@ -101,8 +99,8 @@ eglearn <- function(
       null.vote[-k, -k, ] <- null.vote[-k, -k, , drop = FALSE] +
         (abs(gl.tmp) <= 1e-5) ## make sure is consistent with default threshold value
     } else if (reg_method == "ns") {
-      idx_k <- which(data.std[, k] > 1)
-      X <- log(data.std[idx_k, -k] / data.std[idx_k, k])
+      idx_k <- which(data[, k] > 1)
+      X <- log(data[idx_k, -k] / data[idx_k, k])
       gl.tmp <- glasso_mb(data = X, lambda = rholist)
       null.vote[-k, -k, ] <- null.vote[-k, -k, , drop = FALSE] + (!gl.tmp$adj.est)
       null.vote.ic[-k, -k, ] <- null.vote.ic[-k, -k, , drop = FALSE] + (!gl.tmp$adj.ic.est)
@@ -225,29 +223,27 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 
   # Check if you need to rescale data or not
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
   # Estimate weight matrix
   if (method == "ML") {
-    res <- ml_weight_matrix(data = data.std, cens = cens)
+    res <- ml_weight_matrix(data, cens = cens)
     weight_matrix <- res$llh_hr
     estimated_gamma <- res$est_gamma
 
   } else if (method == "vario") {
-    weight_matrix <- emp_vario(data = data.std)
+    weight_matrix <- emp_vario(data)
     estimated_gamma <- weight_matrix
 
   } else if (method == "chi") {
-    weight_matrix <- - emp_chi(data = data.std)
+    weight_matrix <- - emp_chi(data)
     estimated_gamma <- chi2Gamma(- weight_matrix)
 
   }
 
   # Estimate tree
-  graph.full <- igraph::make_full_graph(ncol(data.std))
+  graph.full <- igraph::make_full_graph(ncol(data))
   mst.tree <- igraph::mst(
     graph = graph.full,
     weights = weight_matrix[igraph::ends(graph.full, igraph::E(graph.full))],
@@ -512,13 +508,11 @@ emp_vario <- function(data, k = NULL, p = NULL) {
 
   d <- ncol(data)
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
   if (!is.null(k)) {
-    G <- G.fun(k, data.std)
+    G <- G.fun(k, data)
 
     if (any(is.na(G))) {
       warning(paste(
@@ -530,7 +524,7 @@ emp_vario <- function(data, k = NULL, p = NULL) {
 
     # take the average
     row_averages <- rowMeans(sapply(1:d, FUN = function(i) {
-      G.fun(i, data.std)
+      G.fun(i, data)
     }), na.rm = TRUE)
     G <- matrix(row_averages, nrow = d, ncol = d)
   }
@@ -604,15 +598,13 @@ emp_chi <- function(data, p = NULL) {
   }
 
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
-  n <- nrow(data.std)
-  d <- ncol(data.std)
+  n <- nrow(data)
+  d <- ncol(data)
 
-  ind <- data.std > 1
+  ind <- data > 1
   ind_mat <- matrix(colSums(ind), byrow = TRUE, ncol = d, nrow = d)
   crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
 }
@@ -690,16 +682,14 @@ emp_chi_multdim <- function(data, p = NULL) {
   data <- stats::na.omit(data)
 
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
 
 
-  rowmin <- apply(data.std, 1, min)
-  chi <- mean(sapply(1:ncol(data.std), FUN = function(i) {
-    mean(rowmin[which(data.std[, i] > 1)] > 1)
+  rowmin <- apply(data, 1, min)
+  chi <- mean(sapply(1:ncol(data), FUN = function(i) {
+    mean(rowmin[which(data[, i] > 1)] > 1)
   }), na.rm = TRUE)
   return(chi)
 }
@@ -734,13 +724,11 @@ emp_chi_multdim <- function(data, p = NULL) {
 loglik_HR <- function(data, p = NULL, graph, Gamma, cens = FALSE){
 
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
   loglik <- logLH_HR(
-    data = data.std,
+    data = data,
     Gamma = Gamma,
     cens = cens
   )

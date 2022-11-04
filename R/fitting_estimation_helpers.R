@@ -273,9 +273,6 @@ fmpareto_HR <- function(data,
   if (!is.null(p)) {
     # if p provided -> data not Pareto -> to convert
     data <- data2mpareto(data, p)
-  } else {
-    # if p not provided -> data already Pareto
-    data <- data
   }
 
   # censoring at 1 since data already normalized
@@ -539,21 +536,19 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
 
   # Standardize data
   if (!is.null(p)) {
-    data.std <- data2mpareto(data, p)
-  } else {
-    data.std <- data
+    data <- data2mpareto(data, p)
   }
 
   # Set up some variables
-  d <- ncol(data.std)
-  G_emp <- emp_vario(data = data.std)
+  d <- ncol(data)
+  G_emp <- emp_vario(data)
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
 
   # Fig loglikelihood
   if (cens) {
-    bivLLH <- apply(res[, 1:2], 1, llh_cens, data.std, G_emp)
+    bivLLH <- apply(res[, 1:2], 1, llh_cens, data, G_emp)
   } else {
-    bivLLH <- apply(res[, 1:2], 1, llh_uncens, data.std, G_emp)
+    bivLLH <- apply(res[, 1:2], 1, llh_uncens, data, G_emp)
   }
 
   bivLLH.mat <- -par2Gamma(bivLLH["llh_hr", ])
@@ -569,7 +564,7 @@ glasso_mb <- function(data, lambda){
 
   # Initialize variables
   dd <- ncol(data)
-  data_std <- scale(data)
+  data <- scale(data)
   adj.est <- array(NA, dim = c(dd, dd, length(lambda)))
   adj.ic.est <- array(NA, dim = c(dd, dd, 3))
   lambda_order <- order(lambda, decreasing = TRUE)
@@ -579,8 +574,8 @@ glasso_mb <- function(data, lambda){
 
   # Loop through variables
   for(i in (1:dd)){
-    X <- data_std[,-i]
-    Y <- data_std[,i]
+    X <- data[,-i]
+    Y <- data[,i]
     lasso_fit <- glmnet::glmnet(x = X, y = Y, family = "gaussian", lambda = lambda_dec)
     if(i==1){
       # ensures same lambda sequence is used for different lasso regressions
