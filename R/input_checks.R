@@ -2,6 +2,7 @@
 #'
 #' Checks that the input graph is a valid graph for an extremal graphical model.
 #' If necessary, converts the graph to an undirected graph.
+#' Removes vertex labels if present.
 #'
 #' @param graph An [igraph::graph] object
 #' @param graph_type `"general"`, `"decomposable"`, `"block"`, `"tree"`
@@ -31,13 +32,11 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
 
   # check if it is directed
   if (igraph::is_directed(graph)) {
-    warning("The given graph is directed. Converted to undirected.")
     graph <- igraph::as.undirected(graph)
   }
 
   if(!is.null(igraph::vertex_attr(graph)[['name']])){
-    warning("The vertex labels were removed.")
-    igraph::vertex_attr(graph)[['name']] <- NULL
+    graph <- igraph::remove.vertex.attribute(graph, 'name')
   }
 
   # check if it is connected
