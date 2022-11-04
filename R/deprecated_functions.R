@@ -1,3 +1,4 @@
+
 mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   # check if you need to rescale data or not

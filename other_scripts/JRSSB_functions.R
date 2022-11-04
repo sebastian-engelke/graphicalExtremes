@@ -312,9 +312,10 @@ vario.est <- function(data, k=NULL, p=NULL){
     xx <- 1/(1-apply(data, 2, unif))
     q <- quantile(xx[,1], p)
     data.std = xx[which(apply(xx, 1, max) > q),]/q
-  } # !!! replace data.std = data2mpareto(data, p)
-  else
+    # !!! replace data.std = data2mpareto(data, p)
+  } else{
     data.std = data
+  }
 
   if(!is.null(k)){
 

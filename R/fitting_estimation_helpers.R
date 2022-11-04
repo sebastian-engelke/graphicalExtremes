@@ -329,22 +329,19 @@ fmpareto_HR <- function(data,
                        x = as.list(data.frame(t(data.p)))[I],
                        K = L[I], MoreArgs = list(par = par)
           )
-        }
-        else {
+        } else {
           y1 <- 0
         }
         if (length(J) > 0) {
           y2 <- logdV_HR(x = data.p[J, ], par = par)
-        }
-        else {
+        } else {
           y2 <- 0
         }
         y <- sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, par = par))
         return(-y)
       }
     }
-  }
-  else {
+  } else {
     r <- nrow(data)
     L <- apply(data > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
 
@@ -374,8 +371,7 @@ fmpareto_HR <- function(data,
       } else {
         if (length(I) > 0) {
           y1 <- logdV_HR(x = data[I, ], par = par)
-        }
-        else {
+        } else {
           y1 <- 0
         }
         y <- sum(y1) - length(I) * log(V_HR(p, par = par))
