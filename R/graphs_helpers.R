@@ -97,6 +97,6 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
 }
 
 
-is_chordal <- function(graph){
+is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal
 }

@@ -64,7 +64,7 @@ fmpareto_graph_HR <- function(
   d <- ncol(data)
   graph <- check_graph(graph, nVertices = d)
 
-  if(is_chordal(graph)) {
+  if(is_decomposable_graph(graph)) {
 
     max_clique <- 2 #!!!
 

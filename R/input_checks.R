@@ -74,13 +74,16 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
 #' @return A `boolean` indicating if the graph is a glock graph
 #'
 #' @family Input checks
-is_block_graph <- function(graph){
-  if(!igraph::is_connected(graph) || !igraph::is_chordal(graph)$chordal){
+is_block_graph <- function(graph, check_connected=TRUE){
+  if(check_connected && !igraph::is_connected(graph)){
     return(FALSE)
   }
-  cliques <- igraph::max_cliques(graph)
+  if(!is_decomposable_graph(graph)){
+    return(FALSE)
+  }
 
   # Check that separators are size 1 or 0:
+  cliques <- igraph::max_cliques(graph)
   for(i in seq_along(cliques)){
     for(j in seq_len(i-1)){
       if(length(intersect(cliques[[i]], cliques[[j]])) > 1){

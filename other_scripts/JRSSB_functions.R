@@ -131,7 +131,7 @@ simu_px_dirichlet_mix <- function(no.simu, idx, N, weights, alpha, norm.alpha) {
 selectEdges = function(graph){
   d = vcount(graph)
   sel.edges = matrix(0, nrow=0, ncol=2)
-  for(i in 1:(d-1)) for(j in (i+1):d) if(is_chordal(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
+  for(i in 1:(d-1)) for(j in (i+1):d) if(is_decomposable_graph(add_edges(graph = graph, edges = c(i,j)))$chordal & length(as.vector(shortest_paths(graph, from=i, to=j)$vpath[[1]])) !=2) sel.edges = rbind(sel.edges,c(i,j))
   return(sel.edges)
 }
 
@@ -922,7 +922,7 @@ estGraph_HR = function(graph, data, q=NULL, thr=NULL, cens=TRUE, sel.edges=NULL)
         Ghat.tmp[[k]] = Ghat[[l]] # current temporary graph
         graph.tmp = igraph::add_edges(graph = graph.cur[[l]],
                                       edges = sel.edges[k,]) # add the current proposed edge to the graph
-        if(is_chordal(graph.tmp)$chordal){ # if the obtained graph is decomposable
+        if(is_decomposable_graph(graph.tmp)$chordal){ # if the obtained graph is decomposable
           cli = max_cliques(graph.tmp) # find list of max cliques
           ii = which(sapply(cli, FUN=function(x) length(intersect(x,
                                                                   sel.edges[k,]))==2)==TRUE)
