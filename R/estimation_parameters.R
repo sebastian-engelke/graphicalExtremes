@@ -50,7 +50,7 @@
 #' @references
 #'  \insertAllCited{}
 #' @export
-fmpareto_graph_HR <- function(
+fmpareto_graph_HR_OLD <- function(
   data,
   graph,
   p = NULL,
@@ -84,6 +84,45 @@ fmpareto_graph_HR <- function(
   }
 }
 
+fmpareto_graph_HR <- function(
+  data,
+  graph,
+  p = NULL,
+  method = c('ML', 'vario'),
+  handleCliques = c('full', 'average', 'sequential'),
+  fallback = FALSE,
+  cens = FALSE
+){
+  # match args
+  method <- match.arg(method)
+  handleCliques <- match.arg(handleCliques)
+  
+  # check inputs
+  if(handleCliques == 'sequential' && method == 'vario'){
+    stop('Arguments handleCliques="sequential" and method="vario" are incompatible!')
+  }
+  if(handleCliques == 'sequential' && !is_decomposable_graph(graph)){
+    stop('Argument handleCliques="sequential" only works with decomposable graphs!')
+  }
+  
+  # standardize data
+  if(!is.null(p)){
+    data <- data2mpareto(data, p)
+  }
+  
+  ## WIP:
+  ## - Do the computations
+  ## - Check result, fall back if necessary
+  ## - Return
+}
+
+
+fmpareto_graph_HR_clique_average <- function(
+  data,
+  graph #...
+){
+  ## WIP...
+}
 
 
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on non-decomposable graphs
@@ -180,7 +219,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
     init.cli <- Gamma2par(G.est)
 
     # estimate parameters
-    par.cli <- fmpareto_HR(
+    par.cli <- fmpareto_HR_MLE(
       data = data.cli,
       init = init.cli,
       fixParams = fixParams,

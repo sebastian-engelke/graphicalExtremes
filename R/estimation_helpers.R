@@ -262,16 +262,18 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
 #'
 #' @keywords internal
-fmpareto_HR <- function(data,
-                        p = NULL,
-                        cens = FALSE,
-                        init,
-                        fixParams = integer(0),
-                        maxit = 100,
-                        graph = NULL,
-                        method = "BFGS") {
+fmpareto_HR_MLE <- function(
+  data,
+  p = NULL,
+  cens = FALSE,
+  init,
+  fixParams = integer(0),
+  maxit = 100,
+  graph = NULL,
+  method = "BFGS"
+){
+  # if p provided -> data not Pareto -> to convert
   if (!is.null(p)) {
-    # if p provided -> data not Pareto -> to convert
     data <- data2mpareto(data, p)
   }
 
@@ -322,9 +324,10 @@ fmpareto_HR <- function(data,
         return(10^50)
       } else {
         if (length(I) > 0) {
-          y1 <- mapply(logdVK_HR,
-                       x = as.list(data.frame(t(data.p)))[I],
-                       K = L[I], MoreArgs = list(par = par)
+          y1 <- mapply(
+            logdVK_HR,
+            x = as.list(data.frame(t(data.p)))[I],
+            K = L[I], MoreArgs = list(par = par)
           )
         } else {
           y1 <- 0
@@ -439,7 +442,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for censored HR
 
-    fmpareto_obj <- fmpareto_HR(
+    fmpareto_obj <- fmpareto_HR_MLE(
       data = data[, x],
       init = G_emp[x[1], x[2]],
       cens = cens
@@ -457,7 +460,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for uncensored HR
 
-    par.est <- fmpareto_HR(
+    par.est <- fmpareto_HR_MLE(
       data = data[, x], init = G_emp[x[1], x[2]],
       cens = cens
     )$par
