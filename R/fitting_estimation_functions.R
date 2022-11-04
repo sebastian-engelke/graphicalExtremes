@@ -134,7 +134,7 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #'  it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#'  `p` is used as the probability in the function [`data2mpareto`]
+#'  `p` is used as the probability in the function [data2mpareto]
 #'  to standardize the `data`.
 #'
 #' @param rholist Numeric vector of non-negative regularization parameters
@@ -305,7 +305,7 @@ eglearn <- function(
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #' @param method One of `"vario", "ML", "chi"`.
 #' Default is `method = "vario"`.
@@ -404,7 +404,7 @@ emst <- function(data, p = NULL, method = c("vario", "ML", "chi"),
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
 #' @param method One of `"ML", "vario"`.
@@ -485,7 +485,7 @@ fmpareto_graph_HR <- function(data, graph, p = NULL, method = c("ML", "vario"),
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #' @param graph Connected graph object from `igraph` package.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
@@ -529,7 +529,7 @@ fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, `cens = FALSE`.
@@ -609,7 +609,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 #' If `NULL` (default), then an average over all `k` is returned.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
@@ -786,7 +786,7 @@ emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
 #' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
@@ -850,7 +850,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale.
-#'  Else, `p` is used as the probability in the function [`data2mpareto`]
+#'  Else, `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated

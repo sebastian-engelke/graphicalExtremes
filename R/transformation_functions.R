@@ -146,7 +146,7 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 #' If `full = TRUE`, then \eqn{\Sigma^{(k)}}{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
 #' matrix with `k`th row and column
 #' containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-#' This is the inverse of function of [`Gamma2Sigma`].
+#' This is the inverse of function of [Gamma2Sigma].
 #'
 #' @return Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
 #'
@@ -204,7 +204,7 @@ Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
 #' with parameter matrix `Gamma`. If `full = TRUE`, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional `k`th row and column
 #' that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-#' This is the inverse of function of [`Sigma2Gamma`].
+#' This is the inverse of function of [Sigma2Gamma].
 #'
 #' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
 #' `full = FALSE`, and of size \eqn{d \times d}{d x d} if `full = TRUE`.
@@ -358,7 +358,7 @@ Gamma2par <- function(Gamma) {
 #' The formula for transformation from `chi` to \eqn{\Gamma} that is applied element-wise is
 #' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
 #' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
-#' This is the inverse of [`Gamma2chi`].
+#' This is the inverse of [Gamma2chi].
 #'
 #' @export
 chi2Gamma <- function(chi) {
@@ -379,7 +379,7 @@ chi2Gamma <- function(chi) {
 #' The formula for transformation from `Gamma` to \eqn{\chi} that is applied element-wise is
 #' \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 #' where \eqn{\Phi} is the standard normal distribution function.
-#' This is the inverse of [`chi2Gamma`].
+#' This is the inverse of [chi2Gamma].
 #'
 #'
 #' @param Gamma Numeric or matrix, with positive entries.

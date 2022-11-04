@@ -231,13 +231,13 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' structure of this graph is assumed and the parameters on the edges are fitted.
 #' In both cases the full likelihood is used and therefore this function should only
 #' be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
-#' fitting can be done separately on the cliques; see [`fmpareto_graph_HR`].
+#' fitting can be done separately on the cliques; see [fmpareto_graph_HR].
 #'
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
 #' number of observations and \eqn{d} is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [`data2mpareto`]
+#' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, `cens = FALSE`.
@@ -251,7 +251,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' If provided, the `graph` must be an undirected block graph, i.e., a decomposable, connected
 #' graph with singleton separator sets.
 #' @param method String. A valid optimization method used by the function
-#' [`stats::optim`]. By default, `method = "BFGS"`.
+#' [stats::optim]. By default, `method = "BFGS"`.
 #'
 #' @return List consisting of:
 #' \item{`convergence`}{Logical. Indicates whether the optimization converged or not.}
