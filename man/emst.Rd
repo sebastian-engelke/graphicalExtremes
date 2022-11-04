@@ -33,8 +33,8 @@ corresponding to the fitted minimum spanning tree.
 \description{
 Fits an extremal minimum spanning tree, where the edge weights are:
 \itemize{
-\item negative maximized log-likelihoods of the bivariate Huesler--Reiss
-distributions, if \code{method = "ML"}. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
+\item negative maximized log-likelihoods of the bivariate Huesler--Reiss distributions,
+if \code{method = "ML"}. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 \item empirical extremal variogram, if \code{method = "vario"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 \item empirical extremal correlation, if \code{method = "chi"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 }
