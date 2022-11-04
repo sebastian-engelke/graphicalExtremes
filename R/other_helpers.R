@@ -95,52 +95,6 @@ select_edges <- function(graph) {
 }
 
 
-
-#' Set graphical parameters
-#'
-#' Set graphical parameters to `graph` which is an object from the
-#' `igraph` package.
-#'
-#' @param graph Graph object from `igraph` package.
-#'
-#' @return Graph object from `igraph` package.
-#'
-#' @keywords internal
-set_graph_parameters <- function(graph) {
-  # set parameters
-  igraph::V(graph)$color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 0.4)
-  igraph::V(graph)$frame.color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 1)
-  igraph::V(graph)$label.color <- "black"
-  igraph::V(graph)$size <- 15
-  igraph::E(graph)$width <- 2
-  igraph::E(graph)$color <- "darkgrey"
-
-  # return graph
-  return(graph)
-}
-
-
-#' Censor dataset
-#'
-#' Censors each row of matrix `x` with vector `p`.
-#'
-#' @param x Numeric matrix \eqn{n \times d}{n x d}.
-#' @param p Numeric vector with \eqn{d} elements.
-#'
-#' @return Numeric matrix \eqn{n \times d}{n x d}.
-#'
-#' @keywords internal
-censor <- function(x, p) {
-  f2 <- function(x, p) {
-    x_is_less <- x <= p
-    y <- x
-    y[x_is_less] <- p[x_is_less]
-    return(y)
-  }
-  return(t(apply(x, 1, f2, p)))
-}
-
-
 is_eq <- function(a, b) {
   tol <- .Machine$double.eps^0.5
   abs(a - b) < tol

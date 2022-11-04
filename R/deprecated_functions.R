@@ -489,3 +489,27 @@ eglasso <- function(Gamma, rholist= c(0.1, 0.15, 0.19, 0.205),
 
   return(list(graph = graphs, Gamma = Gammas, rholist = rhos))
 }
+
+
+#' Set graphical parameters
+#'
+#' Set graphical parameters to `graph` which is an object from the
+#' `igraph` package.
+#'
+#' @param graph Graph object from `igraph` package.
+#'
+#' @return Graph object from `igraph` package.
+#'
+#' @keywords internal
+set_graph_parameters <- function(graph) {
+  # set parameters
+  igraph::V(graph)$color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 0.4)
+  igraph::V(graph)$frame.color <- grDevices::adjustcolor(col = "#4477AA", alpha.f = 1)
+  igraph::V(graph)$label.color <- "black"
+  igraph::V(graph)$size <- 15
+  igraph::E(graph)$width <- 2
+  igraph::E(graph)$color <- "darkgrey"
+
+  # return graph
+  return(graph)
+}

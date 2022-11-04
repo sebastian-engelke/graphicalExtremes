@@ -32,6 +32,43 @@ order_cliques <- function(cliques) {
 }
 
 
+#' Get Cliques and Separators of a graph
+#'
+#' Finds all cliques, separators, and (recursively) separators of separators
+#' in a graph.
+#'
+#' @param graph An [igraph::graph] object
+#' @return A list of vertex sets that represent the cliques and (recursive)
+#' separators of `graph`
+#'
+#' @keywords internal
+get_cliques_and_separators <- function(graph){
+  # start with maximal cliques as new cliques:
+  newCliques <- igraph::max_cliques(graph)
+  cliques <- list()
+
+  while(length(newCliques)>0){
+    # compute all separators between the new cliques:
+    separators <- list()
+    for(i in seq_along(newCliques)){
+      for(j in seq_len(i-1)){
+        sep <- intersect(newCliques[[i]], newCliques[[j]])
+        if(length(sep)>1){
+          separators <- c(separators, list(sep))
+        }
+      }
+    }
+    # add new cliques to cliques-list:
+    # (separators are added after the next iteration)
+    cliques <- c(newCliques, cliques)
+
+    # use separators as new cliques:
+    newCliques <- setdiff(separators, cliques)
+  }
+
+  return(cliques)
+}
+
 #' Split graph into invariant subgraphs
 split_graph <- function(g){
   g <- setPids(g)

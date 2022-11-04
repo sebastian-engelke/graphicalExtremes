@@ -20,7 +20,7 @@
 #' generate_random_model(d, 'complete')
 #'
 #' @export
-generate_random_model <- function(d, graph_type='tree', ...){
+generate_random_model <- function(d, graph_type='general', ...){
   graph <- if(graph_type == 'tree'){
     generate_random_tree(d)
   } else if(graph_type == 'block'){
@@ -171,15 +171,15 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
   if(cMax < cMin || sMax < sMin || cMin < sMin || cMax <= sMin || cMin > d){
     stop('Inconsistent parameters')
   }
-  c0 <- floor(stats::runif(1, max(cMin, sMin+1), min(d, cMax)))
+  c0 <- rdunif(1, max(cMin, sMin+1), min(d, cMax))
   g <- without_igraph_params(igraph::make_full_graph(c0, directed = FALSE))
   missingVertices <- d - igraph::vcount(g)
   while(missingVertices > 0){
     cliques <- igraph::maximal.cliques(g)
     cliqueSizes <- sapply(cliques, length)
     cM <- max(cliqueSizes)
-    c1 <- floor(stats::runif(1, cMin, cMax))
-    s1 <- floor(stats::runif(1, sMin, sMax))
+    c1 <- rdunif(1, cMin, cMax)
+    s1 <- rdunif(1, sMin, sMax)
     dVertices <- c1 - s1
     if(dVertices <= 0 || s1 >= cM){
       next
@@ -225,18 +225,18 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #' @family Example generations
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
-  # Usually works for small d / large m:
+  # Usually works for small d / large m / large p:
   if(!is.null(m)){
     if(m < d-1){
       stop('m must be at least d-1!')
-    } else if(m == d-1){
+    }
+    if(m == d-1){
       return(generate_random_tree(d))
-    } else{
-      for(i in seq_len(maxTries)){
-        g <- without_igraph_params(igraph::sample_gnm(d, m))
-        if(igraph::is.connected(g)){
-          return(g)
-        }
+    }
+    for(i in seq_len(maxTries)){
+      g <- without_igraph_params(igraph::sample_gnm(d, m))
+      if(igraph::is.connected(g)){
+        return(g)
       }
     }
   } else{
@@ -250,7 +250,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 
   # Fall back to making a tree and adding m-(d-1) edges:
   if(is.null(m)){
-    m <- p*d
+    m <- round(p*d)
   }
   m <- fitInInterval(m, d-1, d*(d-1) / 2)
   g <- generate_random_tree(d)

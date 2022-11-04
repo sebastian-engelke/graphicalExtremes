@@ -406,95 +406,27 @@ fmpareto_HR <- function(data,
 }
 
 
-
-#' Get Cliques and Separators of a graph
+#' Censor dataset
 #'
-#' Finds all cliques, separators, and (recursively) separators of separators
-#' in a graph.
+#' Censors each row of matrix `x` with vector `p`.
 #'
-#' @param graph An [igraph::graph] object
-#' @return A list of vertex sets that represent the cliques and (recursive)
-#' separators of `graph`
+#' @param x Numeric matrix \eqn{n \times d}{n x d}.
+#' @param p Numeric vector with \eqn{d} elements.
+#'
+#' @return Numeric matrix \eqn{n \times d}{n x d}.
 #'
 #' @keywords internal
-get_cliques_and_separators <- function(graph){
-  # start with maximal cliques as new cliques:
-  newCliques <- igraph::max_cliques(graph)
-  cliques <- list()
-
-  while(length(newCliques)>0){
-    # compute all separators between the new cliques:
-    separators <- list()
-    for(i in seq_along(newCliques)){
-      for(j in seq_len(i-1)){
-        sep <- intersect(newCliques[[i]], newCliques[[j]])
-        if(length(sep)>1){
-          separators <- c(separators, list(sep))
-        }
-      }
-    }
-    # add new cliques to cliques-list:
-    # (separators are added after the next iteration)
-    cliques <- c(newCliques, cliques)
-
-    # use separators as new cliques:
-    newCliques <- setdiff(separators, cliques)
+censor <- function(x, p) {
+  f2 <- function(x, p) {
+    x_is_less <- x <= p
+    y <- x
+    y[x_is_less] <- p[x_is_less]
+    return(y)
   }
-
-  return(cliques)
+  return(t(apply(x, 1, f2, p)))
 }
 
 
-#' Experimental: Fit graph using empirical Theta matrix
-#'
-#' Fits a graph to an empirical Gamma matrix by computing the corresponding
-#' Theta matrix using [Gamma2Theta()] and greedily chooses `m` edges that
-#' correspond to high absolute values in Theta.
-#'
-#' @param data The (standardized) data from which to compute Gamma
-#' @param m The number of edges to add, defaults to the number of edges in a tree
-#' @param Gamma_emp The empirical Gamma matrix
-#' (can be `NULL` if `data` is given)
-#'
-#' @return A list containing an [igraph::graph] object and a fitted `Gamma` matrix
-#'
-#' @keywords internal
-fit_graph <- function(data, m=NULL, Gamma_emp=NULL){
-
-  if(is.null(Gamma_emp)){
-    Gamma_emp <- emp_vario(data)
-  }
-
-  Theta_emp <- Gamma2Theta(Gamma_emp)
-
-  d <- nrow(Gamma_emp)
-
-  if(is.null(m)){
-    m <- d-1
-  } else if(m < d-1){
-    stop('m must be at least d-1!')
-  }
-
-  g_c <- igraph::make_full_graph(d)
-  weights <- Theta_emp[igraph::as_edgelist(g_c)]
-  g <- igraph::mst(g_c, weights)
-
-  missing_edges <- igraph::as_edgelist(igraph::complementer(g))
-  missing_weights <- Theta_emp[missing_edges]
-
-  ord <- order(abs(missing_weights), decreasing = TRUE)
-
-  new_edges <- missing_edges[ord[seq_len(m - (d-1))],]
-
-  g <- igraph::add_edges(g, t(new_edges))
-
-  Gamma_g <- complete_Gamma(Gamma_emp, g, N=100000, tol=1e-6, check_tol=100)
-
-  return(list(
-    graph = g,
-    Gamma = Gamma_g
-  ))
-}
 
 ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
   ## numeric_matrix boolean numeric -> list
@@ -564,8 +496,8 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
   ))
 }
 
-glasso_mb <- function(data, lambda){
 
+glasso_mb <- function(data, lambda){
   # Initialize variables
   dd <- ncol(data)
   data <- scale(data)

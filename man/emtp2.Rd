@@ -16,7 +16,7 @@ emtp2(G, tol = 1e-06, verbose = TRUE, initial_point = TRUE)
 \item{initial_point}{if TRUE (default), the algorithm will construct an initial point before the iteration steps.}
 }
 \value{
-A list containing the entries
+A list consisting of:
 \item{\code{G_emtp2}}{The optimal value of the variogram matrix}
 \item{\code{it}}{The number of iterations}
 }

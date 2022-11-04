@@ -10,7 +10,7 @@
 #' @param initial_point if TRUE (default), the algorithm will construct an initial point before the iteration steps.
 #' @param verbose if TRUE (default) the output will be printed.
 #' 
-#' @return A list containing the entries
+#' @return A list consisting of:
 #' \item{`G_emtp2`}{The optimal value of the variogram matrix}
 #' \item{`it`}{The number of iterations}
 #' 
