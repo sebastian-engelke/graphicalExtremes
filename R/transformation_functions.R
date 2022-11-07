@@ -440,3 +440,23 @@ mparetomargins <- function(data, set_indices) {
   idx <- which(apply(data_sub, 1, max) > 1)
   return(data[idx, set_indices])
 }
+
+
+#' Uniform margin
+#'
+#' Rescale the vector `x` empirically to uniform margin.
+#'
+#' @param x Numeric vector.
+#' @param na.rm Logical. If TRUE, missing values are removed. If FALSE, missing values are kept as such.
+#'
+#' @return Numeric vector with entries rescaled to uniform margins
+#'
+#' @keywords internal
+unif <- function(x, na.rm=FALSE) {
+  if(na.rm){
+    na.last <- NA
+  } else{
+    na.last <- 'keep'
+  }
+  rank(x, ties.method = "first", na.last=na.last) / (sum(!is.na(x)) + 1)
+}

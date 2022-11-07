@@ -84,6 +84,18 @@ logdV_HR <- function(x, par) {
   return(logdv)
 }
 
+#' Fast computation of diag(y %*% M %*% t(y))
+#' 
+#' @param y Numeric matrix
+#' @param M Numeric matrix
+#' @return Numeric vector
+fast_diag <- function(y, M) {
+  n <- nrow(y)
+  sapply(1:n, function(i) {
+    u <- y[i, , drop = FALSE]
+    u %*% M %*% t(u)
+  })
+}
 
 
 

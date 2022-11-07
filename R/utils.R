@@ -90,3 +90,29 @@ upper.tri.val <- function(M, diag=FALSE){
   M[upper.tri(M, diag)]
 }
 
+
+DEFAULT_TOL <- .Machine$double.eps^0.5
+is_eq <- function(a, b, tol=NULL) {
+  if(is.null(tol)){
+    tol <- DEFAULT_TOL
+  }
+  abs(a - b) < tol
+}
+is_greater <- function(a, b, tol=NULL) {
+  if(is.null(tol)){
+    tol <- DEFAULT_TOL
+  }
+  a - b > tol
+}
+is_less <- function(a, b, tol=NULL) {
+  is_greater(b, a, tol)
+}
+is_leq <- function(a, b, tol=NULL) {
+  !is_greater(a, b, tol)
+}
+is_geq <- function(a, b, tol=NULL) {
+  !is_less(a, b, tol)
+}
+
+
+

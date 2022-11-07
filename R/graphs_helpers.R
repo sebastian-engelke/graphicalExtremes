@@ -100,3 +100,23 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
 is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal
 }
+
+
+#' Graph equality
+#' 
+#' Produce true if two graphs have same vertices and edges (labelled)
+#' 
+#' @param g1 `igraph::graph`
+#' @param g2 `igraph::graph`
+#' @return `logical` indicating if the graphs are equal
+graphs_equal <- function(g1, g2) {
+  
+  # Return early if graph sizes are different
+  if(igraph::vcount(g1) != igraph::vcount(g2)){
+    return(FALSE)
+  }
+  # Compare adjacency matrices
+  A1 <- igraph::as_adjacency_matrix(g1, sparse = FALSE)
+  A2 <- igraph::as_adjacency_matrix(g2, sparse = FALSE)
+  return(all(A1 == A2))
+}
