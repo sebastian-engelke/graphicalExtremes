@@ -1,11 +1,7 @@
 
-devtools::load_all('.')
+# devtools::load_all('.')
 library(igraph)
 library(tictoc)
-
-plotWithPid <- function(g, ...){
-    plot(g, vertex.label = getPids(g), ...)
-}
 
 newSeed <- floor(2^20 * runif(1))
 newSeed <- 494411
@@ -13,28 +9,18 @@ cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 30
+d <- 5
+n <- 100
 
 # g <- generate_random_connected_graph(d, p = 3/(d+1))
 g <- generate_random_connected_graph(d)
-G0 <- generate_random_Gamma(d)
-G0 <- ensure_symmetry(G0, Inf)
+G0 <- ensure_symmetry(generate_random_Gamma(d), Inf)
+par <- G0
 
-B <- getNonEdgeIndices(g)
-G <- G0
-G[B] <- NA
 
-# G2 <- edmcr::edmc(G, d = d)
+data <- rmpareto(n, 'HR', d, par)
 
-G1 <- complete_Gamma(G)
+init <- upper.tri.val(emp_vario(data))
 
-Theta1 <- Gamma2Theta(G1)
-
-print(is_sym_cnd(G1))
-
-g1 <- Gamma2graph(G1)
-print(graphs_equal(g1, g))
-print(max(abs(getEdgeEntries(G1 - G, g))))
-print(max(abs(getNonEdgeEntries(Theta1, g))))
-
+par2 <- fmpareto_HR_MLE_Gamma(data, init=init)
 

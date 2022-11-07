@@ -219,7 +219,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
     init.cli <- Gamma2par(G.est)
 
     # estimate parameters
-    par.cli <- fmpareto_HR_MLE(
+    par.cli <- fmpareto_HR_MLE_Gamma(
       data = data.cli,
       init = init.cli,
       fixParams = fixParams,

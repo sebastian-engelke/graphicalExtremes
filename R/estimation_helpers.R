@@ -49,37 +49,38 @@ V_HR <- function(x, par) {
 #'
 #' @keywords internal
 logdV_HR <- function(x, par) {
+  # Make sure x is positive
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
 
+  # Make sure x is a matrix
   if (is.vector(x)) {
-    d <- length(x)
-  }
-  if (is.matrix(x)) {
-    d <- ncol(x)
+    x <- matrix(x, nrow = 1)
   }
 
-  i <- 1
+  # Convert parameter-vector to Gamma matrix
+  d <- ncol(x)
   G <- par2Gamma(par)
-
   if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
 
-  S <- Gamma2Sigma(G, k = i)
-  cholS <- chol(S)
-  Sm1 <- chol2inv(cholS)
-  logdetS <- 2 * sum(log(diag(cholS)))
-  if (is.vector(x)) {
-    y <- (log(x / x[i]) + G[, i] / 2)[-i]
-    logdv <- -sum(log(x)) - log(x[i]) - ((d - 1) / 2) * log(2 * pi) -
-      1 / 2 * logdetS - 1 / 2 * t(y) %*% Sm1 %*% y
-  }
+  # Compute likelihood
+  k <- 1
+  Sigma_k <- Gamma2Sigma(G, k = k)
+  cholS <- chol(Sigma_k)
+  Theta_k <- chol2inv(cholS)
+  logdetSigma_k <- 2 * sum(log(diag(cholS)))
   if (is.matrix(x)) {
-    y <- (t(t(log(x / x[, i])) + G[, i] / 2))[, -i, drop = FALSE]
-    logdv <- -apply(log(x), 1, sum) - log(x[, i]) - ((d - 1) / 2) * log(2 * pi) -
-      1 / 2 * logdetS - 1 / 2 * fast_diag(y, Sm1)
+    yTilde_k <- (t(t(log(x / x[, k])) + G[, k] / 2))[, -k, drop = FALSE]
+    logdv <- (
+      (-1) * rowSums(log(x))
+      - log(x[, k])
+      - ((d - 1) / 2) * log(2 * pi)
+      - 1 / 2 * logdetSigma_k
+      - 1 / 2 * fast_diag(yTilde_k, Theta_k)
+    )
   }
   return(logdv)
 }
@@ -91,12 +92,14 @@ logdV_HR <- function(x, par) {
 #' @return Numeric vector
 fast_diag <- function(y, M) {
   n <- nrow(y)
-  sapply(1:n, function(i) {
+  if(n == 0){
+    return(numeric(0))
+  }
+  sapply(seq_len(n), function(i) {
     u <- y[i, , drop = FALSE]
     u %*% M %*% t(u)
   })
 }
-
 
 
 
@@ -273,7 +276,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
 #'
 #' @keywords internal
-fmpareto_HR_MLE <- function(
+fmpareto_HR_MLE_Gamma <- function(
   data,
   p = NULL,
   cens = FALSE,
@@ -289,11 +292,9 @@ fmpareto_HR_MLE <- function(
   }
 
   # censoring at 1 since data already normalized
-  p <- 1
   d <- ncol(data)
-  if (length(p) == 1) {
-    p <- rep(p, d)
-  }
+  n <- nrow(data)
+  oneVec <- rep(1, d)
 
   # convert vector of fixed parameters to logical if necessary
   if(!is.logical(fixParams)){
@@ -303,89 +304,79 @@ fmpareto_HR_MLE <- function(
   # negative log likelihood function
   if (cens) {
     # censor below the (multivariate) threshold
-    data.p <- censor(data, p)
-    r <- nrow(data.p)
+    data_cens <- censor(data, oneVec)
+    n_cens <- nrow(data_cens)
 
-    L <- apply(data.p > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
-
-    if (is.matrix(L)) {
-      L <- split(t(L), 1:r)
-    }
+    L <- lapply(seq_len(nrow(data_cens)), function(i) {
+      which(data_cens > 1)
+    })
 
     I <- which(lapply(L, length) > 0 & lapply(L, length) < d)
     J <- which(lapply(L, length) == d)
 
     nllik <- function(par) {
-      # combine par with fixed parameters
+      # Combine par with fixed parameters
       if(any(fixParams)){
         par_full <- init
         par_full[!fixParams] <- par
         par <- par_full
       }
 
+      # Complete parameters according to graph structure
       if (!is.null(graph)) {
         Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
         par <- Gtmp[upper.tri(Gtmp)]
       }
 
+      # Convert parameter vector to Gamma matrix
       G <- par2Gamma(par)
-      S <- Gamma2Sigma(G, k = 1)
 
-      if (any(par <= 0) | !matrixcalc::is.positive.definite(S)) {
+      # Compute likelihood
+      if (any(par <= 0) || !is_sym_cnd(G)) {
         return(10^50)
       } else {
         if (length(I) > 0) {
           y1 <- mapply(
             logdVK_HR,
-            x = as.list(data.frame(t(data.p)))[I],
+            x = as.list(data.frame(t(data_cens)))[I],
             K = L[I], MoreArgs = list(par = par)
           )
         } else {
           y1 <- 0
         }
         if (length(J) > 0) {
-          y2 <- logdV_HR(x = data.p[J, ], par = par)
+          y2 <- logdV_HR(x = data_cens[J, ], par = par)
         } else {
           y2 <- 0
         }
-        y <- sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, par = par))
+        y <- sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(oneVec, par = par))
         return(-y)
       }
     }
   } else {
-    r <- nrow(data)
-    L <- apply(data > matrix(p, ncol = d, nrow = r, byrow = TRUE), 1, which)
-
-    if (is.matrix(L)) {
-      L <- split(t(L), 1:r)
-    }
-
-    I <- which(lapply(L, length) > 0) # 1:r
     nllik <- function(par) {
-      # combine par with fixed parameters
+      # Combine par with fixed parameters
       if(any(fixParams)){
         par_full <- init
         par_full[!fixParams] <- par
         par <- par_full
       }
 
+      # Complete parameters according to graph structure
       if (!is.null(graph)) {
         Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
         par <- Gamma2par(Gtmp)
       }
 
+      # Convert parameter vector to Gamma matrix
       G <- par2Gamma(par)
-      S <- Gamma2Sigma(G, k = 1)
 
-      if (any(par <= 0) || !matrixcalc::is.positive.definite(S)) {
+      # Compute likelihood
+      if (any(par <= 0) || !is_sym_cnd(G)) {
         return(10^50)
       } else {
-        if (length(I) > 0) {
-          y1 <- logdV_HR(x = data[I, ], par = par)
-        } else {
-          y1 <- 0
-        }
-        y <- sum(y1) - length(I) * log(V_HR(p, par = par))
+        y1 <- logdV_HR(x = data, par = par)
+        y <- sum(y1) - n * log(V_HR(oneVec, par = par))
         return(-y)
       }
     }
@@ -453,7 +444,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for censored HR
 
-    fmpareto_obj <- fmpareto_HR_MLE(
+    fmpareto_obj <- fmpareto_HR_MLE_Gamma(
       data = data[, x],
       init = G_emp[x[1], x[2]],
       cens = cens
@@ -471,7 +462,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for uncensored HR
 
-    par.est <- fmpareto_HR_MLE(
+    par.est <- fmpareto_HR_MLE_Gamma(
       data = data[, x], init = G_emp[x[1], x[2]],
       cens = cens
     )$par
