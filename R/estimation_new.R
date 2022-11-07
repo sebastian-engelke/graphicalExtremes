@@ -30,7 +30,7 @@ fmpareto_HR_MLE_Theta <- function(
     Theta <- matrix(0, d, d)
     Theta[edgeIndices] <- par
     Theta <- Theta + t(Theta)
-    diag(Theta) <- rowSums(Theta)
+    diag(Theta) <- -rowSums(Theta)
     return(Theta)
   }
 
@@ -85,19 +85,21 @@ fmpareto_HR_MLE_Theta <- function(
     method = method
   )
 
+  # Prepare return values
   par <- init
   par[!fixParams] <- opt$par
   
   Theta <- parToTheta(par)
   Gamma <- Theta2Gamma(Theta)
 
-  ret <- list()
-  ret$convergence <- opt$convergence
-  ret$par <- par
-  ret$par_opt <- opt$par
-  ret$Theta <- Theta
-  ret$Gamma <- Gamma
-  ret$nllik <- opt$value
-  ret$hessian <- opt$hessian
+  ret <- list(
+    convergence = opt$convergence,
+    par = par,
+    par_opt = opt$par,
+    Theta = Theta,
+    Gamma = Gamma,
+    nllik = opt$value,
+    hessian = opt$hessian
+  )
   return(ret)
 }

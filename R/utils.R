@@ -1,3 +1,13 @@
+
+
+#' Fit value(s) in interval
+#' 
+#' Fit value(s) in interval, all arguments are recycled where necessary.
+#' 
+#' @param x Numeric vector
+#' @param xMin Numeric vector
+#' @param xMax Numeric vector
+#' @return Numeric vector
 fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
   if(any(xMax<xMin)){
     stop('Make sure that xMax>=xMin!')

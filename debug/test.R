@@ -22,8 +22,8 @@ data <- rmpareto(n, 'HR', d, par)
 
 init <- upper.tri.val(emp_vario(data))
 
-# cat('MLE Gamma...\n')
-# par2 <- fmpareto_HR_MLE_Gamma(data)
+cat('MLE Gamma...\n')
+par2 <- fmpareto_HR_MLE_Gamma(data)
 
 cat('MLE Theta...\n')
 par3 <- fmpareto_HR_MLE_Theta(data)
