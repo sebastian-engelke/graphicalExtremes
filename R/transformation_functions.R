@@ -304,11 +304,15 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #'
 #' @param par Numeric vector with \eqn{d} elements.
 #' Upper triangular part of a Gamma matrix.
+#' @param allowMatrix If `TRUE` and `par` is already a matrix, return it as is.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma matrix.
 #'
 #' @keywords internal
-par2Gamma <- function(par) {
+par2Gamma <- function(par, allowMatrix=FALSE) {
+  if(allowMatrix && is.matrix(par)){
+    return(par)
+  }
   d <- round(1 / 2 + sqrt(1 / 4 + 2 * length(par)))
   if (d*(d-1)/2 != length(par)) {
     stop("The length of par does not agree with any square matrix.")

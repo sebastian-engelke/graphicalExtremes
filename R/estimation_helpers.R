@@ -4,9 +4,9 @@
 #'
 #' @param x Numeric vector with \eqn{d} positive elements
 #' where the exponent measure is to be evaluated.
-#' @param par Numeric vector with
-#' \eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements.
-#' It represents the upper triangular portion of a
+#' @param par \eqn{d \times d}{d x d} variogram matrix, or numeric vector with
+#' \eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements,
+#' representing the upper triangular portion of a
 #' variogram matrix \eqn{\Gamma}.
 #'
 #' @return Numeric. The exponent measure of the HR distribution.
@@ -28,7 +28,7 @@ V_HR <- function(x, par) {
   }
 
   d <- length(x)
-  G <- par2Gamma(par)
+  G <- par2Gamma(par, TRUE)
 
   if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
@@ -61,7 +61,7 @@ logdV_HR <- function(x, par) {
 
   # Convert parameter-vector to Gamma matrix
   d <- ncol(x)
-  G <- par2Gamma(par)
+  G <- par2Gamma(par, TRUE)
   if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
@@ -280,7 +280,7 @@ fmpareto_HR_MLE_Gamma <- function(
   data,
   p = NULL,
   cens = FALSE,
-  init,
+  init = NULL,
   fixParams = integer(0),
   maxit = 100,
   graph = NULL,
@@ -296,13 +296,19 @@ fmpareto_HR_MLE_Gamma <- function(
   n <- nrow(data)
   oneVec <- rep(1, d)
 
+  # use emp_vario if no init provided
+  if(is.null(init)){
+    G0 <- emp_vario(data)
+    init <- getEdgeEntries(G0, graph, type = 'upper')
+  }
+
   # convert vector of fixed parameters to logical if necessary
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
   }
 
   # negative log likelihood function
-  if (cens) {
+  if(cens) {
     # censor below the (multivariate) threshold
     data_cens <- censor(data, oneVec)
     n_cens <- nrow(data_cens)
@@ -371,14 +377,15 @@ fmpareto_HR_MLE_Gamma <- function(
       # Convert parameter vector to Gamma matrix
       G <- par2Gamma(par)
 
-      # Compute likelihood
-      if (any(par <= 0) || !is_sym_cnd(G)) {
+      # Check if parameters are valid
+      if(any(par <= 0) || !is_sym_cnd(G)) {
         return(10^50)
-      } else {
-        y1 <- logdV_HR(x = data, par = par)
-        y <- sum(y1) - n * log(V_HR(oneVec, par = par))
-        return(-y)
       }
+
+      # Compute likelihood
+      y1 <- logdV_HR(x = data, par = par)
+      y <- sum(y1) - n * log(V_HR(oneVec, par = par))
+      return(-y)
     }
   }
 
@@ -396,18 +403,18 @@ fmpareto_HR_MLE_Gamma <- function(
   par <- init
   par[!fixParams] <- opt$par
 
-  z <- list()
-  z$convergence <- opt$convergence
-  z$par <- par
-  z$par_opt <- opt$par
+  ret <- list()
+  ret$convergence <- opt$convergence
+  ret$par <- par
+  ret$par_opt <- opt$par
   if (is.null(graph)) {
-    z$Gamma <- par2Gamma(z$par)
+    ret$Gamma <- par2Gamma(ret$par)
   } else {
-    z$Gamma <- complete_Gamma(graph = graph, Gamma = z$par)
+    ret$Gamma <- complete_Gamma(graph = graph, Gamma = ret$par)
   }
-  z$nllik <- opt$value
-  z$hessian <- opt$hessian
-  return(z)
+  ret$nllik <- opt$value
+  ret$hessian <- opt$hessian
+  return(ret)
 }
 
 

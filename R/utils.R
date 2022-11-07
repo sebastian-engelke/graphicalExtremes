@@ -85,6 +85,27 @@ is_sym_cnd <- function(M){
   return(matrixcalc::is.positive.definite(Sk))
 }
 
+is_valid_Theta <- function(M, tol=1e-9){
+  if(!matrixcalc::is.symmetric.matrix(M)){
+    return(FALSE)
+  }
+  d <- nrow(M)
+  if(d == 0){
+    return(TRUE)
+  }
+  if(d == 1){
+    return(abs(M[1,1]) < tol)
+  }
+  if(any(abs(rowSums(M)) > tol)){
+    return(FALSE)
+  }
+  eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
+  if(abs(eig[d]) > tol || abs(eig[d-1]) < tol){
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
 
 upper.tri.val <- function(M, diag=FALSE){
   M[upper.tri(M, diag)]
