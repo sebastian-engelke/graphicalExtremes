@@ -129,9 +129,14 @@ fast_diag <- function(y, M) {
 }
 
 
+#' Graph equality
+#' 
+#' Produce true if two graphs have same vertices and edges (labelled)
+#' 
+#' @param g1 `igraph::graph`
+#' @param g2 `igraph::graph`
+#' @return `logical` indicating if the graphs are equal
 graphs_equal <- function(g1, g2) {
-  ## graph graph -> boolean
-  ## produce true if two graphs have same edges
   
   # Return early if graph sizes are different
   if(igraph::vcount(g1) != igraph::vcount(g2)){

@@ -42,8 +42,7 @@ V_HR <- function(x, par) {
 #'
 #' Computes the exponent measure density of HR distribution.
 #'
-#' @param x Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d}
-#' elements.
+#' @param x Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.
 #' @inheritParams V_HR
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.

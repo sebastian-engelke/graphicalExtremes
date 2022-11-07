@@ -309,8 +309,8 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #'
 #' @keywords internal
 par2Gamma <- function(par) {
-  d <- 1 / 2 + sqrt(1 / 4 + 2 * length(par))
-  if (round(d) != d) {
+  d <- round(1 / 2 + sqrt(1 / 4 + 2 * length(par)))
+  if (d*(d-1)/2 != length(par)) {
     stop("The length of par does not agree with any square matrix.")
   }
   G <- matrix(0, nrow = d, ncol = d)
@@ -333,11 +333,10 @@ par2Gamma <- function(par) {
 #'
 #' @keywords internal
 Gamma2par <- function(Gamma) {
-  if (is.matrix(Gamma)) {
-    return(Gamma[upper.tri(Gamma)])
-  } else {
-    return(Gamma)
+  if(is.matrix(Gamma)) {
+    return(upper.tri.val(Gamma))
   }
+  return(Gamma)
 }
 
 

@@ -84,3 +84,9 @@ is_sym_cnd <- function(M){
   Sk <- Gamma2Sigma(M, k=1)
   return(matrixcalc::is.positive.definite(Sk))
 }
+
+
+upper.tri.val <- function(M, diag=FALSE){
+  M[upper.tri(M, diag)]
+}
+
