@@ -296,6 +296,17 @@ fmpareto_HR_MLE_Gamma <- function(
   n <- nrow(data)
   oneVec <- rep(1, d)
 
+  # Helper function to convert parameter vector to Theta matrix
+  edgeIndices <- getEdgeIndices(graph, 'upper')
+  parToPartialGamma <- function(par){
+    Gamma <- matrix(NA, d, d)
+    Gamma[edgeIndices] <- par
+    Gamma <- t(Gamma)
+    Gamma[edgeIndices] <- par
+    diag(Gamma) <- 0
+    return(Gamma)
+  }
+
   # use emp_vario if no init provided
   if(is.null(init)){
     G0 <- emp_vario(data)
@@ -328,14 +339,13 @@ fmpareto_HR_MLE_Gamma <- function(
         par <- par_full
       }
 
-      # Complete parameters according to graph structure
-      if (!is.null(graph)) {
-        Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
-        par <- Gtmp[upper.tri(Gtmp)]
+      # Convert to Gamma, completing matrix according to graph structure
+      if (is.null(graph)) {
+        G <- par2Gamma(par)
+      } else{
+        G_partial <- parToPartialGamma(par)
+        G <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
       }
-
-      # Convert parameter vector to Gamma matrix
-      G <- par2Gamma(par)
 
       # Compute likelihood
       if (any(par <= 0) || !is_sym_cnd(G)) {
@@ -368,14 +378,13 @@ fmpareto_HR_MLE_Gamma <- function(
         par <- par_full
       }
 
-      # Complete parameters according to graph structure
-      if (!is.null(graph)) {
-        Gtmp <- complete_Gamma(par, graph, allowed_graph_type = 'decomposable')
-        par <- Gamma2par(Gtmp)
+      # Convert to Gamma, completing matrix according to graph structure
+      if (is.null(graph)) {
+        G <- par2Gamma(par)
+      } else{
+        G_partial <- parToPartialGamma(par)
+        G <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
       }
-
-      # Convert parameter vector to Gamma matrix
-      G <- par2Gamma(par)
 
       # Check if parameters are valid
       if(any(par <= 0) || !is_sym_cnd(G)) {
@@ -383,8 +392,8 @@ fmpareto_HR_MLE_Gamma <- function(
       }
 
       # Compute likelihood
-      y1 <- logdV_HR(x = data, par = par)
-      y <- sum(y1) - n * log(V_HR(oneVec, par = par))
+      y1 <- logdV_HR(x = data, par = G)
+      y <- sum(y1) - n * log(V_HR(oneVec, par = G))
       return(-y)
     }
   }
@@ -402,16 +411,15 @@ fmpareto_HR_MLE_Gamma <- function(
 
   par <- init
   par[!fixParams] <- opt$par
+  
+  Gamma_partial <- parToPartialGamma(par)
+  Gamma <- complete_Gamma(Gamma_partial, graph, allowed_graph_type = 'decomposable')
 
   ret <- list()
   ret$convergence <- opt$convergence
   ret$par <- par
   ret$par_opt <- opt$par
-  if (is.null(graph)) {
-    ret$Gamma <- par2Gamma(ret$par)
-  } else {
-    ret$Gamma <- complete_Gamma(graph = graph, Gamma = ret$par)
-  }
+  ret$Gamma <- Gamma
   ret$nllik <- opt$value
   ret$hessian <- opt$hessian
   return(ret)
