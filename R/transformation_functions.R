@@ -305,19 +305,29 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #' @param par Numeric vector with \eqn{d} elements.
 #' Upper triangular part of a Gamma/Theta matrix.
 #' @param allowMatrix If `TRUE` and `par` is already a matrix, return it as is.
+#' @param allowNull If `TRUE` and `par` is NULL, return NULL.
 #' @param zeroRowSums If `TRUE` the diagonal is set to (-1) times the rowSums.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma/Theta matrix.
 #'
 #' @keywords internal
-par2Matrix <- function(par, allowMatrix = FALSE, zeroRowSums = FALSE){
+par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){
+  # Check for forbidden/trivial input
   if(allowMatrix && is.matrix(par)){
     return(par)
   }
+  if(is.null(par)){
+    if(allowNull){
+      return(NULL)
+    }
+    stop('`par` must not be NULL (unless allowNull=TRUE).')
+  }
+  # Compute dimension of matrix
   d <- round(1 / 2 + sqrt(1 / 4 + 2 * length(par)))
   if (d*(d-1)/2 != length(par)) {
     stop("The length of par does not agree with any square matrix.")
   }
+  # Create matrix
   M <- matrix(0, nrow = d, ncol = d)
   M[upper.tri(M)] <- par
   M <- M + t(M)
@@ -327,12 +337,12 @@ par2Matrix <- function(par, allowMatrix = FALSE, zeroRowSums = FALSE){
   return(M)  
 }
 #' @rdname par2Matrix
-par2Gamma <- function(par, allowMatrix=FALSE){
-  par2Matrix(par, allowMatrix, FALSE)
+par2Gamma <- function(par, allowMatrix = FALSE, allowNull = FALSE){
+  par2Matrix(par, allowMatrix, allowNull, zeroRowSums = FALSE)
 }
 #' @rdname par2Matrix
-par2Theta <- function(par, allowMatrix = FALSE){
-  par2Matrix(par, allowMatrix, TRUE)
+par2Theta <- function(par, allowMatrix = FALSE, allowNull = FALSE){
+  par2Matrix(par, allowMatrix, allowNull, zeroRowSums = TRUE)
 }
 
 

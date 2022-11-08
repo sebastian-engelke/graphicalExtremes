@@ -168,7 +168,7 @@ fmpareto_HR_MLE_Gamma <- function(
   n <- nrow(data)
   oneVec <- rep(1, d)
 
-  # Helper function to convert parameter vector to Theta matrix
+  # Helper function to convert parameter vector to Gamma matrix
   edgeIndices <- getEdgeIndices(graph, 'upper')
   parToPartialGamma <- function(par){
     Gamma <- matrix(NA, d, d)
@@ -260,10 +260,10 @@ fmpareto_HR_MLE_Gamma <- function(
 
       # Convert to Gamma, completing matrix according to graph structure
       if (is.null(graph)) {
-        G <- par2Gamma(par)
+        Gamma <- par2Gamma(par)
       } else{
         G_partial <- parToPartialGamma(par)
-        G <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
+        Gamma <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
       }
 
       # Check if parameters are valid
@@ -272,8 +272,8 @@ fmpareto_HR_MLE_Gamma <- function(
       }
 
       # Compute likelihood
-      y1 <- logdV_HR(x = data, par = G)
-      y <- sum(y1) - n * log(V_HR(oneVec, par = G))
+      y1 <- logdV_HR(x = data, Gamma = Gamma)
+      y <- sum(y1) - n * log(V_HR(oneVec, par = Gamma))
       return(-y)
     }
   }

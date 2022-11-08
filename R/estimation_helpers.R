@@ -4,38 +4,41 @@
 #'
 #' @param x Numeric vector with \eqn{d} positive elements
 #' where the exponent measure is to be evaluated.
-#' @param par \eqn{d \times d}{d x d} variogram matrix, or numeric vector with
-#' \eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements,
-#' representing the upper triangular portion of a
-#' variogram matrix \eqn{\Gamma}.
+#' @param Gamma d x d variogram matrix or numeric vector with d(d-1)/2 elements,
+#' containing the upper triangular part of a variogram matrix.
+#' @param Theta d x d precision matrix or numeric vector with d(d-1)/2 elements,
+#' containing the upper triangular part of a precision matrix.
+#' 
+#' @details Only `Gamma` is needed for the computation. `Theta` is only used to
+#' compute `Gamma` if necessary.
 #'
 #' @return Numeric. The exponent measure of the HR distribution.
 #'
 #' @keywords internal
 V_HR <- function(x, Gamma = NULL, Theta = NULL) {
-  # Check/convert parameters
+  # Convert Theta -> Gamma if necessary (Theta is ignored otherwise)
   if(is.null(Gamma)){
-    Theta <- par2Theta()
+    Theta <- par2Theta(Theta, TRUE)
     Gamma <- Theta2Gamma(Theta)
   } else{
     Gamma <- par2Gamma(Gamma, TRUE)
   }
+  d <- length(x)
   if (NROW(Gamma) != d) {
     stop("`par` must be a vector of length `d * (d - 1) / 2` or a d x d matrix.")
   }
 
-  d <- length(x)
-
   # helper function
-  f1 <- function(i, x) {
-    S <- Gamma2Sigma(Gamma, k = i)
-    return(1 / x[i] * mvtnorm::pmvnorm(
-      upper = (log(x / x[i]) + Gamma[, i] / 2)[-i],
-      mean = rep(0, d - 1), sigma = S
+  f1 <- function(k) {
+    Sk <- Gamma2Sigma(Gamma, k = k)
+    return(1 / x[k] * mvtnorm::pmvnorm(
+      upper = (log(x / x[k]) + Gamma[, k] / 2)[-k],
+      mean = rep(0, d - 1),
+      sigma = Sk
     )[1])
   }
 
-  return(sum(apply(cbind(1:d), 1, f1, x = x)))
+  return(sum(sapply(1:d, f1)))
 }
 
 
@@ -45,6 +48,9 @@ V_HR <- function(x, Gamma = NULL, Theta = NULL) {
 #'
 #' @param x Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.
 #' @inheritParams V_HR
+#' 
+#' @details Both `Gamma` and `Theta` are needed internally, but if one
+#' is missing it is computed from the other one.
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
@@ -59,30 +65,41 @@ logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
   if (is.vector(x)) {
     x <- matrix(x, nrow = 1)
   }
-
-  # Convert parameter-vector to Gamma matrix
   d <- ncol(x)
-  G <- par2Gamma(Gamma, TRUE)
-  if (NROW(G) != d) {
-    stop("The length of par must be d * (d - 1) / 2.")
+
+  # Check/convert parameters
+  k <- 1
+  Gamma <- par2Gamma(Gamma, allowMatrix = TRUE, allowNull = TRUE)
+  Theta <- par2Theta(Theta, allowMatrix = TRUE, allowNull = TRUE)
+  if(is.null(Gamma) && is.null(Theta)){
+    stop('Specify at least one of Gamma, Theta.')
+  }
+  if(is.null(Theta)){ # -> Gamma must be specified
+    Sigma_k <- Gamma2Sigma(Gamma, k = k)
+    cholS <- chol(Sigma_k)
+    Theta_k <- chol2inv(cholS)
+    logdetSigma_k <- 2 * sum(log(diag(cholS)))
+  } else{
+    Theta_k <- Theta[-k, -k, drop=FALSE]
+    tmp <- determinant(Theta_k, logarithm = TRUE)
+    logdetSigma_k <- (-1) * c(tmp$modulus) # `c()` removes attributes, tmp$sign is always +1
+  }
+  if(is.null(Gamma)){ # -> Theta must be specified
+    Gamma <- Theta2Gamma(Theta)
+  }
+  if (NROW(Gamma) != d) {
+    stop("`par` must be a vector of length `d * (d - 1) / 2` or a d x d matrix.")
   }
 
   # Compute likelihood
-  k <- 1
-  Sigma_k <- Gamma2Sigma(G, k = k)
-  cholS <- chol(Sigma_k)
-  Theta_k <- chol2inv(cholS)
-  logdetSigma_k <- 2 * sum(log(diag(cholS)))
-  if (is.matrix(x)) {
-    yTilde_k <- (t(t(log(x / x[, k])) + G[, k] / 2))[, -k, drop = FALSE]
-    logdv <- (
-      (-1) * rowSums(log(x))
-      - log(x[, k])
-      - ((d - 1) / 2) * log(2 * pi)
-      - 1 / 2 * logdetSigma_k
-      - 1 / 2 * fast_diag(yTilde_k, Theta_k)
-    )
-  }
+  yTilde_k <- (t(t(log(x / x[, k])) + Gamma[, k] / 2))[, -k, drop = FALSE]
+  logdv <- (
+    - rowSums(log(x))
+    - log(x[, k])
+    - ((d - 1) / 2) * log(2 * pi)
+    - 1 / 2 * logdetSigma_k
+    - 1 / 2 * fast_diag(yTilde_k, Theta_k)
+  )
   return(logdv)
 }
 
