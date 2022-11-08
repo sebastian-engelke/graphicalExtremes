@@ -12,26 +12,27 @@
 #' @return Numeric. The exponent measure of the HR distribution.
 #'
 #' @keywords internal
-V_HR <- function(x, par) {
-  # helper function ####
-  f1 <- function(i, x) {
-    S <- Gamma2Sigma(G, k = i)
-    return(1 / x[i] * mvtnorm::pmvnorm(
-      upper = (log(x / x[i]) + G[, i] / 2)[-i],
-      mean = rep(0, d - 1), sigma = S
-    )[1])
+V_HR <- function(x, Gamma = NULL, Theta = NULL) {
+  # Check/convert parameters
+  if(is.null(Gamma)){
+    Theta <- par2Theta()
+    Gamma <- Theta2Gamma(Theta)
+  } else{
+    Gamma <- par2Gamma(Gamma, TRUE)
   }
-
-  # function body ####
-  if (any(is_leq(x, 0))) {
-    stop("The elements of x must be positive.")
+  if (NROW(Gamma) != d) {
+    stop("`par` must be a vector of length `d * (d - 1) / 2` or a d x d matrix.")
   }
 
   d <- length(x)
-  G <- par2Gamma(par, TRUE)
 
-  if (NROW(G) != d) {
-    stop("The length of par must be d * (d - 1) / 2.")
+  # helper function
+  f1 <- function(i, x) {
+    S <- Gamma2Sigma(Gamma, k = i)
+    return(1 / x[i] * mvtnorm::pmvnorm(
+      upper = (log(x / x[i]) + Gamma[, i] / 2)[-i],
+      mean = rep(0, d - 1), sigma = S
+    )[1])
   }
 
   return(sum(apply(cbind(1:d), 1, f1, x = x)))
@@ -48,7 +49,7 @@ V_HR <- function(x, par) {
 #' @return Numeric. The censored exponent measure of the HR distribution.
 #'
 #' @keywords internal
-logdV_HR <- function(x, par) {
+logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
   # Make sure x is positive
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -61,7 +62,7 @@ logdV_HR <- function(x, par) {
 
   # Convert parameter-vector to Gamma matrix
   d <- ncol(x)
-  G <- par2Gamma(par, TRUE)
+  G <- par2Gamma(Gamma, TRUE)
   if (NROW(G) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
@@ -105,20 +106,32 @@ fast_diag <- function(y, M) {
 
 #' Compute censored exponent measure
 #'
-#' Computes the censored exponent measure density of HR distribution.
+#' Computes the (censored) exponent measure density of HR distribution.
 #'
-#' @param x Numeric vector with \eqn{d} positive elements
+#' @param x Numeric vector with `d` positive elements
 #' where the censored exponent measure is to be evaluated.
-#' @param K Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}}.
-#' The index set that is not censored.
+#' @param K Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}},
+#' the index set that is not censored.
+#' Or: Logical vector of length `d`, indicating entries that are not censored.
 #' @inheritParams V_HR
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.
+#' If no entries are censored, the result of `logdV_HR(x, par` is returned.
 #'
 #' @keywords internal
 logdVK_HR <- function(x, K, par) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
+  }
+  
+  # Convert logical K to numeric indices
+  if(is.logical(K)){
+    K <- which(K)
+  }
+
+  # return normal density, if no entries are censored
+  if(length(K) == length(x)){
+    return(logdV_HR(x, par))
   }
 
   d <- length(x)
@@ -245,6 +258,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #'
 #' @keywords internal
 censor <- function(x, p) {
+  # Todo: this can be expressed as a parallel minimum (`pmin`)?
   f2 <- function(x, p) {
     x_is_less <- x <= p
     y <- x

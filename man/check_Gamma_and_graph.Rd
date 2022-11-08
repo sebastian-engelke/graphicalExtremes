@@ -17,8 +17,8 @@ of \code{graph}}
 }
 \value{
 A list consisting of
-\item{\code{Gamma}}{The Gamma matrix given as input or implied by the input.}
-\item{\code{graph}}{The graph given as input or implied by the input.}
+\item{\code{Gamma}}{The Gamma matrix given as input or implied by the input}
+\item{\code{graph}}{The graph given as input or implied by the input}
 Throws an error if the input is not valid.
 }
 \description{

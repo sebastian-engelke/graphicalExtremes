@@ -297,19 +297,20 @@ Theta2Gamma <- function(Theta, k=NULL) {
 }
 
 
-#' Create \eqn{\Gamma} from vector
+#' Create Gamma or Theta from vector
 #'
 #' This function takes the parameters in the vector `par`
-#' (upper triangular Gamma matrix) and returns full Gamma.
+#' (upper triangular Gamma/Theta matrix) and returns the full Gamma/Theta.
 #'
 #' @param par Numeric vector with \eqn{d} elements.
-#' Upper triangular part of a Gamma matrix.
+#' Upper triangular part of a Gamma/Theta matrix.
 #' @param allowMatrix If `TRUE` and `par` is already a matrix, return it as is.
+#' @param zeroRowSums If `TRUE` the diagonal is set to (-1) times the rowSums.
 #'
-#' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma matrix.
+#' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma/Theta matrix.
 #'
 #' @keywords internal
-par2Gamma <- function(par, allowMatrix=FALSE) {
+par2Matrix <- function(par, allowMatrix = FALSE, zeroRowSums = FALSE){
   if(allowMatrix && is.matrix(par)){
     return(par)
   }
@@ -317,9 +318,21 @@ par2Gamma <- function(par, allowMatrix=FALSE) {
   if (d*(d-1)/2 != length(par)) {
     stop("The length of par does not agree with any square matrix.")
   }
-  G <- matrix(0, nrow = d, ncol = d)
-  G[upper.tri(G)] <- par
-  return(G + t(G))
+  M <- matrix(0, nrow = d, ncol = d)
+  M[upper.tri(M)] <- par
+  M <- M + t(M)
+  if(zeroRowSums){
+    diag(M) <- (-1) * rowSums(M)
+  }
+  return(M)  
+}
+#' @rdname par2Matrix
+par2Gamma <- function(par, allowMatrix=FALSE){
+  par2Matrix(par, allowMatrix, FALSE)
+}
+#' @rdname par2Matrix
+par2Theta <- function(par, allowMatrix = FALSE){
+  par2Matrix(par, allowMatrix, TRUE)
 }
 
 

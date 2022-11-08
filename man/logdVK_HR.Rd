@@ -7,21 +7,23 @@
 logdVK_HR(x, K, par)
 }
 \arguments{
-\item{x}{Numeric vector with \eqn{d} positive elements
+\item{x}{Numeric vector with \code{d} positive elements
 where the censored exponent measure is to be evaluated.}
 
-\item{K}{Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}}.
-The index set that is not censored.}
+\item{K}{Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}},
+the index set that is not censored.
+Or: Logical vector of length \code{d}, indicating entries that are not censored.}
 
-\item{par}{Numeric vector with
-\eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements.
-It represents the upper triangular portion of a
+\item{par}{\eqn{d \times d}{d x d} variogram matrix, or numeric vector with
+\eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements,
+representing the upper triangular portion of a
 variogram matrix \eqn{\Gamma}.}
 }
 \value{
 Numeric. The censored exponent measure of the HR distribution.
+If no entries are censored, the result of \verb{logdV_HR(x, par} is returned.
 }
 \description{
-Computes the censored exponent measure density of HR distribution.
+Computes the (censored) exponent measure density of HR distribution.
 }
 \keyword{internal}

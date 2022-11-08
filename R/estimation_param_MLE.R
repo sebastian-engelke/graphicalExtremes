@@ -192,16 +192,21 @@ fmpareto_HR_MLE_Gamma <- function(
 
   # negative log likelihood function
   if(cens) {
-    # censor below the (multivariate) threshold
+    # Since the data is standardized, censor below (1, 1, ...)
     data_cens <- censor(data, oneVec)
-    n_cens <- nrow(data_cens)
 
-    L <- lapply(seq_len(nrow(data_cens)), function(i) {
-      which(data_cens > 1)
-    })
+    # Check for each entry (of each observation) if it is censored
+    censored_entries <- (data_cens <= 1)
+    
+    # Make sure no observation is completely censored
+    obs_completely_censored <- apply(censored_entries, 1, all)
+    if(any(obs_completely_censored)){
+      stop('Make sure the data is properly standardized (i.e. Inf-norm > 1)!')
+    }
 
-    I <- which(lapply(L, length) > 0 & lapply(L, length) < d)
-    J <- which(lapply(L, length) == d)
+    # Get indices of (not) censored observations
+    obs_censored <- apply(censored_entries, 1, any)
+    obs_not_censored <- apply(!censored_entries, 1, all)
 
     nllik <- function(par) {
       # Combine par with fixed parameters
@@ -219,27 +224,30 @@ fmpareto_HR_MLE_Gamma <- function(
         G <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
       }
 
-      # Compute likelihood
-      if (any(par <= 0) || !is_sym_cnd(G)) {
+      # Check if parameters are valid
+      if(any(par <= 0) || !is_sym_cnd(G)) {
         return(10^50)
-      } else {
-        if (length(I) > 0) {
-          y1 <- mapply(
-            logdVK_HR,
-            x = as.list(data.frame(t(data_cens)))[I],
-            K = L[I], MoreArgs = list(par = par)
-          )
-        } else {
-          y1 <- 0
-        }
-        if (length(J) > 0) {
-          y2 <- logdV_HR(x = data_cens[J, ], par = par)
-        } else {
-          y2 <- 0
-        }
-        y <- sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(oneVec, par = par))
-        return(-y)
       }
+
+      ## Compute likelihood
+      # Compute censored densities
+      y_censored <- vapply(which(obs_censored), FUN.VALUE = 0, function(i){
+        logdVK_HR(
+          x = data_cens[i,],
+          K = which(!censored_entries[i,]),
+          par = par
+        )
+      })
+
+      # Compute uncensored densities (faster than using `logdVK_HR`)
+      y_not_censored <- logdV_HR(
+        x = data_cens[obs_not_censored, , drop=FALSE],
+        par = par
+      )
+      
+      # Compute combined likelihood
+      y <- sum(y_censored) + sum(y_not_censored) - n * log(V_HR(oneVec, par))
+      return(-y)
     }
   } else {
     nllik <- function(par) {

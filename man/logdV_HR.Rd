@@ -4,16 +4,10 @@
 \alias{logdV_HR}
 \title{Compute the exponent measure density of HR distribution}
 \usage{
-logdV_HR(x, par)
+logdV_HR(x, Gamma = NULL, Theta = NULL)
 }
 \arguments{
-\item{x}{Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d}
-elements.}
-
-\item{par}{Numeric vector with
-\eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements.
-It represents the upper triangular portion of a
-variogram matrix \eqn{\Gamma}.}
+\item{x}{Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.}
 }
 \value{
 Numeric. The censored exponent measure of the HR distribution.
