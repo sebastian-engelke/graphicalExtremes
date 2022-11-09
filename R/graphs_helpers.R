@@ -3,9 +3,9 @@
 # igraph_options(add.params = FALSE)
 # and resets this option afterwards
 without_igraph_params <- function(expr){
-  tmp <- igraph_options(add.params = FALSE)
+  tmp <- igraph::igraph_options(add.params = FALSE)
   ret <- eval(expr, parent.frame())
-  igraph_options(tmp)
+  igraph::igraph_options(tmp)
   return(ret)
 }
 

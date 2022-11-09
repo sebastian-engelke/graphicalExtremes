@@ -136,7 +136,7 @@ fast_diag <- function(y, M) {
 #' If no entries are censored, the result of `logdV_HR(x, par` is returned.
 #'
 #' @keywords internal
-logdVK_HR <- function(x, K, par) {
+logdVK_HR <- function(x, K, Gamma) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
@@ -148,32 +148,33 @@ logdVK_HR <- function(x, K, par) {
 
   # return normal density, if no entries are censored
   if(length(K) == length(x)){
-    return(logdV_HR(x, par))
+    return(logdV_HR(x, Gamma))
   }
+
 
   d <- length(x)
   k <- length(K)
   i <- min(K)
   idxK <- which(K == i)
-  G <- par2Gamma(par)
 
-  if (NROW(G) != d) {
+  Gamma <- par2Gamma(Gamma, allowMatrix = TRUE)
+  if (NROW(Gamma) != d) {
     stop("The length of par must be d * (d - 1) / 2.")
   }
 
-  S <- Gamma2Sigma(G, k = i, full = TRUE)
+  S <- Gamma2Sigma(Gamma, k = i, full = TRUE)
   if (k > 1) {
     SK <- S[K[-idxK], K[-idxK]]
     cholSK <- chol(SK)
     SKm1 <- chol2inv(cholSK)
     logdetSK <- 2 * sum(log(diag(cholSK)))
     idxK <- which(K == i)
-    yK <- (log(x[K] / x[i]) + G[K, i] / 2)[-idxK]
+    yK <- (log(x[K] / x[i]) + Gamma[K, i] / 2)[-idxK]
     logdvK <- -sum(log(x[K])) - log(x[i]) - ((k - 1) / 2) * log(2 * pi) - 1 / 2 * logdetSK - 1 / 2 * t(yK) %*% SKm1 %*% yK
     SnK <- S[-K, -K]
     SnKK <- S[-K, K[-idxK]]
     SKnK <- t(SnKK)
-    muCondK <- -G[-K, i] / 2 + SnKK %*% SKm1 %*% yK
+    muCondK <- -Gamma[-K, i] / 2 + SnKK %*% SKm1 %*% yK
     if (k < d - 1) {
       SCondK <- SnK - SnKK %*% SKm1 %*% SKnK
     }
@@ -187,13 +188,13 @@ logdVK_HR <- function(x, K, par) {
     logdvK <- -2 * log(x[i])
     if (d == 2) {
       logdvnK <- log(stats::pnorm(
-        q = c(log(x[-K] / x[i]) + G[-K, i] / 2),
+        q = c(log(x[-K] / x[i]) + Gamma[-K, i] / 2),
         sd = sqrt(S[-K, -K])
       ))
       names(logdvnK) <- "upper"
     } else {
       logdvnK <- log(mvtnorm::pmvnorm(
-        upper = c(log(x[-K] / x[i]) + G[-K, i] / 2),
+        upper = c(log(x[-K] / x[i]) + Gamma[-K, i] / 2),
         sigma = S[-K, -K]
       )[1])
     }

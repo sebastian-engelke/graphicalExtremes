@@ -160,7 +160,7 @@ fmpareto_HR_MLE_Gamma <- function(
   method = "BFGS"
 ){
   # if p provided -> data not Pareto -> to convert
-  if (!is.null(p)) {
+  if(!is.null(p)) {
     data <- data2mpareto(data, p)
   }
 
@@ -169,27 +169,25 @@ fmpareto_HR_MLE_Gamma <- function(
   n <- nrow(data)
   oneVec <- rep(1, d)
 
-  # Helper function to convert parameter vector to Gamma matrix
-  edgeIndices <- getEdgeIndices(graph, 'upper')
-  parToPartialGamma <- function(par){
-    Gamma <- matrix(NA, d, d)
-    Gamma[edgeIndices] <- par
-    Gamma <- t(Gamma)
-    Gamma[edgeIndices] <- par
-    diag(Gamma) <- 0
-    return(Gamma)
-  }
-
   # use emp_vario if no init provided
   if(is.null(init)){
-    G0 <- emp_vario(data)
-    init <- getEdgeEntries(G0, graph, type = 'upper')
+    M0 <- emp_vario(data)
+    if(useTheta){
+      M0 <- Gamma2Theta(M0)
+    }
+    init <- getEdgeEntries(M0, graph, type = 'upper')
   }
 
-  # convert vector of fixed parameters to logical if necessary
-  if(!is.logical(fixParams)){
-    fixParams <- seq_along(init) %in% fixParams
-  }
+  # Prepare helper functions to convert (partial) params to Gamma/Theta:
+  parToMatrices <- parToMatricesFactory(
+    d = d,
+    init = init,
+    fixParams = fixParams,
+    parIsTheta = useTheta,
+    forceGamma = cens,
+    graph = graph,
+    checkValidity = TRUE
+  )
 
   # negative log likelihood function
   if(cens) {
@@ -205,45 +203,35 @@ fmpareto_HR_MLE_Gamma <- function(
       stop('Make sure the data is properly standardized (i.e. Inf-norm > 1)!')
     }
 
-    # Get indices of (not) censored observations
+    # Get indices of (non-) censored observations
     obs_censored <- apply(censored_entries, 1, any)
     obs_not_censored <- apply(!censored_entries, 1, all)
 
     nllik <- function(par) {
-      # Combine par with fixed parameters
-      if(any(fixParams)){
-        par_full <- init
-        par_full[!fixParams] <- par
-        par <- par_full
-      }
-
-      # Convert to Gamma, completing matrix according to graph structure
-      if (is.null(graph)) {
-        G <- par2Gamma(par)
-      } else{
-        G_partial <- parToPartialGamma(par)
-        G <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
-      }
-
-      # Check if parameters are valid
-      if(any(par <= 0) || !is_sym_cnd(G)) {
+      # Convert to Gamma/Theta.
+      # - Is NULL if par implies an invalid matrix.
+      # - Guaranteed to contain Gamma because cens==TRUE.
+      # - Might contain Theta (if useTheta==TRUE).
+      Matrices <- parToMatrices(par)
+      if(is.null(Matrices)){
         return(10^50)
       }
-
+      
       ## Compute likelihood
       # Compute censored densities
       y_censored <- vapply(which(obs_censored), FUN.VALUE = 0, function(i){
         logdVK_HR(
           x = data_cens[i,],
           K = which(!censored_entries[i,]),
-          par = par
+          Gamma = Matrices$Gamma
         )
       })
 
       # Compute uncensored densities (faster than using `logdVK_HR`)
       y_not_censored <- logdV_HR(
         x = data_cens[obs_not_censored, , drop=FALSE],
-        par = par
+        Gamma = Matrices$Gamma,
+        Theta = Matrices$Theta
       )
       
       # Compute combined likelihood
@@ -252,33 +240,23 @@ fmpareto_HR_MLE_Gamma <- function(
     }
   } else {
     nllik <- function(par) {
-      # Combine par with fixed parameters
-      if(any(fixParams)){
-        par_full <- init
-        par_full[!fixParams] <- par
-        par <- par_full
-      }
-
-      # Convert to Gamma, completing matrix according to graph structure
-      if (is.null(graph)) {
-        Gamma <- par2Gamma(par)
-      } else{
-        G_partial <- parToPartialGamma(par)
-        Gamma <- complete_Gamma(G_partial, graph, allowed_graph_type = 'decomposable')
-      }
-
-      # Check if parameters are valid
-      if(any(par <= 0) || !is_sym_cnd(G)) {
+      # Convert to Gamma/Theta.
+      # - Is NULL if par implies an invalid matrix.
+      # - Otherwise contains (at least) one of Gamma, Theta (depends on useTheta)
+      Matrices <- parToMatrices(par)
+      if(is.null(Matrices)){
         return(10^50)
       }
 
       # Compute likelihood
-      y1 <- logdV_HR(x = data, Gamma = Gamma)
+      y1 <- logdV_HR(x = data, Gamma = Matrices$Gamma, Theta = Matrices$Theta)
       y <- sum(y1) - n * log(V_HR(oneVec, par = Gamma))
       return(-y)
     }
   }
 
+  ## Actual optimization
+  # initial (non-fixed) params
   init_opt <- init[!fixParams]
 
   # optimize likelihood
@@ -309,25 +287,106 @@ fmpareto_HR_MLE_Gamma <- function(
 
 
 
-
-parToGammaThetaFactory <- function(
+# Creates a helper function to convert parameter vector to Gamma/Theta matrix
+parToMatricesFactory <- function(
   d,
   init = NULL,
   fixParams = integer(0),
-  useTheta = FALSE,
-  graph = NULL
+  parIsTheta = FALSE,
+  forceTheta = FALSE,
+  forceGamma = FALSE,
+  graph = NULL,
+  checkValidity = TRUE
 ){
-  # Helper function to convert parameter vector to Theta matrix
+  ## Make helper function to fill fixed params
+  # Make sure fixParams is boolean
+  if(!is.logical(fixParams)){
+    fixParams <- seq_along(init) %in% fixParams
+  }
+  # Make param-filler function
+  fillFixedParams <- function(par){
+    fullPar <- init
+    fullPar[!fixParams] <- par
+    return(fullPar)
+  }
+  
+  # Ignore graph if it's the complete graph
+  if(igraph::ecount(graph) == d*(d-1)/2){
+    graph <- NULL
+  }
+
+  # Get indices of par in returned matrix
   if(is.null(graph)){
     edgeIndices <- which(upper.tri(matrix(NA, d, d)))
   } else{
     edgeIndices <- getEdgeIndices(graph, 'upper')
   }
-  parToTheta <- function(par){
-    Theta <- matrix(0, d, d)
-    Theta[edgeIndices] <- par
-    Theta <- Theta + t(Theta)
-    diag(Theta) <- -rowSums(Theta)
-    return(Theta)
+  # Create vector of edgeIndices in the lower triangular part, such that they
+  # are ordered the same as the indices for the upper triangular part:
+  transposedEdgeIndices <- t(matrix(seq_len(d*d), d, d))[edgeIndices]
+  
+  if(parIsTheta){
+    parToMatrices <- function(par){
+      # Fill fixed params
+      par <- fillFixedParams(par)
+      
+      ## Make Theta
+      Theta <- matrix(0, d, d)
+      Theta[edgeIndices] <- par
+      Theta[transposedEdgeIndices] <- par
+      diag(Theta) <- (-1)*rowSums(Theta)
+      
+      # Return NULL if par implies an invalid Theta
+      if(checkValidity && !is_valid_Theta(Theta)){
+        return(NULL)
+      }
+
+      # Compute Gamma if specified
+      if(forceGamma){
+        Gamma <- Theta2Gamma(Theta)
+      } else{
+        Gamma <- NULL
+      }
+
+      return(list(Gamma = Gamma, Theta = Theta))
+    }
+  } else{
+    parToMatrices <- function(par){
+      # Fill fixed params
+      par <- fillFixedParams(par)
+      
+      # Return NULL if par is non-positive (cheap check before making Gamma)
+      if(checkValidity && any(par <= 0)){
+        return(NULL)
+      }
+
+      # Compute (partial) Gamma:
+      Gamma <- matrix(NA, d, d)    
+      Gamma[edgeIndices] <- par
+      Gamma[transposedEdgeIndices] <- par
+      diag(Gamma) <- 0
+
+      # Complete according go graph:
+      if(!is.null(graph)){
+        Gamma <- complete_Gamma(Gamma, graph)
+      }
+      
+      # Return NULL if par implies an invalid Gamma
+      if(checkValidity && !is_sym_cnd(Gamma)){
+        return(NULL)
+      }
+      
+      # Compute Theta if specified
+      if(forceTheta){
+        Theta <- Gamma2Theta(Gamma)
+      } else{
+        Theta <- NULL
+      }
+      
+      return(list(Gamma = Gamma, Theta = Theta))
+    }
   }
+
+  return(parToMatrices)
 }
+
