@@ -154,6 +154,7 @@ fmpareto_HR_MLE_Gamma <- function(
   cens = FALSE,
   init = NULL,
   fixParams = integer(0),
+  useTheta = FALSE,
   maxit = 100,
   graph = NULL,
   method = "BFGS"
@@ -303,4 +304,30 @@ fmpareto_HR_MLE_Gamma <- function(
   ret$nllik <- opt$value
   ret$hessian <- opt$hessian
   return(ret)
+}
+
+
+
+
+
+parToGammaThetaFactory <- function(
+  d,
+  init = NULL,
+  fixParams = integer(0),
+  useTheta = FALSE,
+  graph = NULL
+){
+  # Helper function to convert parameter vector to Theta matrix
+  if(is.null(graph)){
+    edgeIndices <- which(upper.tri(matrix(NA, d, d)))
+  } else{
+    edgeIndices <- getEdgeIndices(graph, 'upper')
+  }
+  parToTheta <- function(par){
+    Theta <- matrix(0, d, d)
+    Theta[edgeIndices] <- par
+    Theta <- Theta + t(Theta)
+    diag(Theta) <- -rowSums(Theta)
+    return(Theta)
+  }
 }
