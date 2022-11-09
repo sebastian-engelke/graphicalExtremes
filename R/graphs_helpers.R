@@ -78,6 +78,13 @@ getNonEdgeEntries <- function(M, g = NULL, type = c('both', 'upper', 'lower')){
   return(M[A])
 }
 
+# Creates vector of "transposed indices" in the sense
+# m[ind] = t(m)[getTransposedIndices(d, ind)]
+# where dim(m) == c(5, 5)
+getTransposedIndices <- function(d, ind){
+  t(matrix(seq_len(d*d), d, d))[ind]
+}
+
 #' Get the submatrix corresponding to a subgraph
 #' 
 #' Both the graph and subgraph need to have persistent IDs

@@ -171,25 +171,26 @@ fmpareto_HR_MLE_Gamma <- function(
 
   # use emp_vario if no init provided
   if(is.null(init)){
-    M0 <- emp_vario(data)
+    Gamma0 <- emp_vario(data)
     if(useTheta){
-      M0 <- Gamma2Theta(M0)
+      Theta0 <- Gamma2Theta(Gamma0)
+      init <- getEdgeEntries(Theta0, graph, type = 'upper')
+    } else{
+      init <- getEdgeEntries(Gamma0, graph, type = 'upper')
     }
-    init <- getEdgeEntries(M0, graph, type = 'upper')
   }
 
-  # Prepare helper functions to convert (partial) params to Gamma/Theta:
+  # Prepare helper function to convert (partial) params to Gamma/Theta:
   parToMatrices <- parToMatricesFactory(
     d = d,
     init = init,
     fixParams = fixParams,
     parIsTheta = useTheta,
-    forceGamma = cens,
     graph = graph,
     checkValidity = TRUE
   )
 
-  # negative log likelihood function
+  # Create negative log likelihood function, maybe using censoring
   if(cens) {
     # Since the data is standardized, censor below (1, 1, ...)
     data_cens <- censor(data, oneVec)
@@ -203,17 +204,16 @@ fmpareto_HR_MLE_Gamma <- function(
       stop('Make sure the data is properly standardized (i.e. Inf-norm > 1)!')
     }
 
-    # Get indices of (non-) censored observations
+    # Get indices of (non-)censored observations
     obs_censored <- apply(censored_entries, 1, any)
     obs_not_censored <- apply(!censored_entries, 1, all)
 
     nllik <- function(par) {
       # Convert to Gamma/Theta.
       # - Is NULL if par implies an invalid matrix.
-      # - Guaranteed to contain Gamma because cens==TRUE.
-      # - Might contain Theta (if useTheta==TRUE).
-      Matrices <- parToMatrices(par)
-      if(is.null(Matrices)){
+      # - Guaranteed to contain Gamma, might contain Theta (if useTheta==TRUE).
+      matrices <- parToMatrices(par, forceGamma = TRUE)
+      if(is.null(matrices)){
         return(10^50)
       }
       
@@ -223,15 +223,15 @@ fmpareto_HR_MLE_Gamma <- function(
         logdVK_HR(
           x = data_cens[i,],
           K = which(!censored_entries[i,]),
-          Gamma = Matrices$Gamma
+          Gamma = matrices$Gamma
         )
       })
 
       # Compute uncensored densities (faster than using `logdVK_HR`)
       y_not_censored <- logdV_HR(
         x = data_cens[obs_not_censored, , drop=FALSE],
-        Gamma = Matrices$Gamma,
-        Theta = Matrices$Theta
+        Gamma = matrices$Gamma,
+        Theta = matrices$Theta
       )
       
       # Compute combined likelihood
@@ -243,23 +243,24 @@ fmpareto_HR_MLE_Gamma <- function(
       # Convert to Gamma/Theta.
       # - Is NULL if par implies an invalid matrix.
       # - Otherwise contains (at least) one of Gamma, Theta (depends on useTheta)
-      Matrices <- parToMatrices(par)
-      if(is.null(Matrices)){
+      matrices <- parToMatrices(par)
+      if(is.null(matrices)){
         return(10^50)
       }
 
       # Compute likelihood
-      y1 <- logdV_HR(x = data, Gamma = Matrices$Gamma, Theta = Matrices$Theta)
+      y1 <- logdV_HR(
+        x = data,
+        Gamma = matrices$Gamma,
+        Theta = matrices$Theta
+      )
       y <- sum(y1) - n * log(V_HR(oneVec, par = Gamma))
       return(-y)
     }
   }
 
-  ## Actual optimization
-  # initial (non-fixed) params
+  # Actual optimization
   init_opt <- init[!fixParams]
-
-  # optimize likelihood
   opt <- stats::optim(
     init_opt,
     nllik,
@@ -268,23 +269,32 @@ fmpareto_HR_MLE_Gamma <- function(
     method = method
   )
 
-  par <- init
-  par[!fixParams] <- opt$par
-  
-  Gamma_partial <- parToPartialGamma(par)
-  Gamma <- complete_Gamma(Gamma_partial, graph, allowed_graph_type = 'decomposable')
+  # Interpret results
+  par <- fillFixedParams(opt$par, init, fixParams)
+  matrices <- parToMatrices(opt$par, forceGamma = TRUE, forceTheta = TRUE)
+  convergence <- opt$convergence && !is.null(matrices)
 
-  ret <- list()
-  ret$convergence <- opt$convergence
-  ret$par <- par
-  ret$par_opt <- opt$par
-  ret$Gamma <- Gamma
-  ret$nllik <- opt$value
-  ret$hessian <- opt$hessian
+  ret <- list(
+    convergence = convergence,
+    Gamma = matrices$Gamma,
+    Theta = matrices$Theta,
+    par = par,
+    par_opt = opt$par,
+    nllik = opt$value,
+    hessian = opt$hessian
+  )
   return(ret)
 }
 
 
+#' Helper function to combine par with fixed params (in init)
+fillFixedParams <- function(par, init, fixParams){
+  if(!is.logical(fixParams)){
+    fixParams <- seq_along(init) %in% fixParams
+  }
+  init[!fixParams] <- par
+  return(init)
+}
 
 
 # Creates a helper function to convert parameter vector to Gamma/Theta matrix
@@ -293,42 +303,38 @@ parToMatricesFactory <- function(
   init = NULL,
   fixParams = integer(0),
   parIsTheta = FALSE,
-  forceTheta = FALSE,
-  forceGamma = FALSE,
+  defaultForceTheta = FALSE,
+  defaultForceGamma = FALSE,
   graph = NULL,
   checkValidity = TRUE
 ){
-  ## Make helper function to fill fixed params
-  # Make sure fixParams is boolean
-  if(!is.logical(fixParams)){
-    fixParams <- seq_along(init) %in% fixParams
-  }
-  # Make param-filler function
-  fillFixedParams <- function(par){
-    fullPar <- init
-    fullPar[!fixParams] <- par
-    return(fullPar)
-  }
-  
   # Ignore graph if it's the complete graph
   if(igraph::ecount(graph) == d*(d-1)/2){
     graph <- NULL
   }
 
-  # Get indices of par in returned matrix
+  # Make sure fixParams is boolean
+  if(!is.logical(fixParams)){
+    fixParams <- seq_along(init) %in% fixParams
+  }
+
+  # Get indices of par in the matrix (according to edges in the graph)
   if(is.null(graph)){
     edgeIndices <- which(upper.tri(matrix(NA, d, d)))
   } else{
     edgeIndices <- getEdgeIndices(graph, 'upper')
   }
-  # Create vector of edgeIndices in the lower triangular part, such that they
-  # are ordered the same as the indices for the upper triangular part:
-  transposedEdgeIndices <- t(matrix(seq_len(d*d), d, d))[edgeIndices]
+  transposedEdgeIndices <- getTransposedIndices(edgeIndices)
   
+  # Create parToMatrices(), depending on whether par represents Theta or Gamma
   if(parIsTheta){
-    parToMatrices <- function(par){
+    parToMatrices <- function(
+      par,
+      forceGamma = defaultForceGamma,
+      forceTheta = defaultForceTheta
+    ){
       # Fill fixed params
-      par <- fillFixedParams(par)
+      par <- fillFixedParams(par, init, fixParams)
       
       ## Make Theta
       Theta <- matrix(0, d, d)
@@ -351,9 +357,13 @@ parToMatricesFactory <- function(
       return(list(Gamma = Gamma, Theta = Theta))
     }
   } else{
-    parToMatrices <- function(par){
+    parToMatrices <- function(
+      par,
+      forceGamma = defaultForceGamma,
+      forceTheta = defaultForceTheta
+    ){
       # Fill fixed params
-      par <- fillFixedParams(par)
+      par <- fillFixedParams(par, init, fixParams)
       
       # Return NULL if par is non-positive (cheap check before making Gamma)
       if(checkValidity && any(par <= 0)){
