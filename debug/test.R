@@ -29,11 +29,19 @@ init <- upper.tri.val(emp_vario(data))
 
 tic()
 cat('MLE Gamma...\n')
-par2 <- fmpareto_HR_MLE(data, graph = g, useTheta = FALSE, cens = TRUE, p = 0.9)
+par2 <- fmpareto_HR_MLE(
+    data,
+    init = init,
+    fixParams = 1,
+    graph = g,
+    useTheta = FALSE,
+    cens = FALSE,
+    p = NULL
+)
 toc()
 
-tic()
-cat('MLE Theta...\n')
-par3 <- fmpareto_HR_MLE(data, graph = g, useTheta = TRUE, cens = TRUE, p = 0.9)
-toc()
+# tic()
+# cat('MLE Theta...\n')
+# par3 <- fmpareto_HR_MLE(data, graph = g, useTheta = TRUE, cens = TRUE, p = 0.9)
+# toc()
 

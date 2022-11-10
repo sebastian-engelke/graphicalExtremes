@@ -21,15 +21,12 @@
 #' to standardize the `data`.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
 #' components below the threshold. By default, `cens = FALSE`.
-#' @param init Numeric vector. Initial parameter values in the optimization. If
+#' @param init Numeric vector or numeric matrix. Initial parameter values in the optimization. If
 #' `graph` is given, then the entries should correspond to the edges of the `graph`.
-#' @param fixParams Numeric vector. Indices of the parameter vectors that are kept
+#' @param fixParams Numeric or logical vector. Indices of the parameter vectors that are kept
 #' fixed during the optimization. Default is `integer(0)`.
-#' @param maxit Positive integer. The maximum number of iterations in the
-#' optimization.
-#' @param graph Graph object from `igraph` package or `NULL`.
-#' If provided, the `graph` must be an undirected block graph, i.e., a decomposable, connected
-#' graph with singleton separator sets.
+#' @param maxit Positive integer. The maximum number of iterations in the optimization.
+#' @param graph Graph object from `igraph` package or `NULL` (implying the complete graph).
 #' @param method String. A valid optimization method used by the function
 #' [stats::optim]. By default, `method = "BFGS"`.
 #'
@@ -58,10 +55,15 @@ fmpareto_HR_MLE <- function(
     data <- data2mpareto(data, p)
   }
 
-  # censoring at 1 since data already normalized
+  # Read dimensions of data
   d <- ncol(data)
   n <- nrow(data)
   oneVec <- rep(1, d)
+  
+  # if graph is not specified, use the full graph
+  if(!is.null(graph)){
+    graph <- igraph::make_full_graph(d)
+  }
 
   # use emp_vario if no init provided
   if(is.null(init)){
@@ -72,6 +74,10 @@ fmpareto_HR_MLE <- function(
     } else{
       init <- getEdgeEntries(Gamma0, graph, type = 'upper')
     }
+  } else if(is.matrix(init)){
+    init <- getEdgeEntries(init, graph, type = 'upper')
+  } else if(length(init) != igraph::ecount(graph)){
+    stop('The length of `init` must be identical to the number of edges in `graph`.')
   }
 
   # Make sure fixParams is boolean
@@ -81,17 +87,17 @@ fmpareto_HR_MLE <- function(
 
   # Prepare helper function to convert (partial) params to Gamma/Theta:
   parToMatrices <- parToMatricesFactory(
-    d = d,
+    graph = graph,
     init = init,
     fixParams = fixParams,
     parIsTheta = useTheta,
-    graph = graph,
     checkValidity = TRUE
   )
 
   # If censoring is used, censor the data
   if(cens) {
     # Since the data is standardized, censor below (1, 1, ...)
+    # censoring at 1 since data already normalized
     data <- censor(data, oneVec)
 
     # Check for each entry (of each observation) if it is censored
@@ -191,13 +197,12 @@ fillFixedParams <- function(par, init, fixParams){
 
 #' Factory: parToMatrices
 #' 
-#' Creates a helper function to convert a parameter vector to a Gamma and/or Theta matrix.
+#' Creates a helper function to convert a parameter vector `par` to a Gamma and/or Theta matrix.
 #'
-#' @param d The dimension of Gamma/Theta is `d x d`.
+#' @param graph `par` represents entries corresponding to the edges of `graph`.
 #' @param init The values used for fixed parameters
 #' @param fixParams The indices (logical or numeric) of fixed parameters
 #' @param parIsTheta `TRUE` if `par` represents entries in Theta (otherwise Gamma)
-#' @param graph If not `NULL`, then `par` represents entries corresponding to the edges of `graph`.
 #' @param checkValidity Whether to check if the implied Gamma/Theta is a valid parameter matrix.
 #' 
 #' @return A function `parToMatrices(par, forceGamma=FALSE, forceTheta=FALSE)`,
@@ -205,27 +210,22 @@ fillFixedParams <- function(par, init, fixParams){
 #' The function returns `NULL` if `checkValidity==TRUE` and `par` implies an invalid matrix.
 #' Otherwise, depending on `parIsTheta`, `forceTheta`, and `forceGamma`, one or both of
 #' `Gamma` and `Theta` are matrices implied by `par`.
+#' 
+#' @keywords internal
+#' 
 parToMatricesFactory <- function(
-  d,
+  graph,
   init = NULL,
   fixParams = integer(0),
   parIsTheta = FALSE,
-  graph = NULL,
   checkValidity = TRUE
 ){
-  # Ignore graph if it's the complete graph
-  if(igraph::ecount(graph) == d*(d-1)/2){
-    graph <- NULL
-  }
-
   # Get indices of par in the matrix (according to edges in the graph)
-  if(is.null(graph)){
-    edgeIndices <- which(upper.tri(matrix(NA, d, d)))
-  } else{
-    edgeIndices <- getEdgeIndices(graph, 'upper')
-  }
+  d <- igraph::vcount(graph)
+  isCompleteGraph <- (igraph::ecount(graph) == d*(d-1)/2)
+  edgeIndices <- getEdgeIndices(graph, 'upper')
   transposedEdgeIndices <- getTransposedIndices(d, edgeIndices)
-
+  
   # Create parToMatrices(), depending on whether par represents Theta or Gamma
   if(parIsTheta){
     parToMatrices <- function(
@@ -277,7 +277,7 @@ parToMatricesFactory <- function(
       diag(Gamma) <- 0
 
       # Complete according go graph:
-      if(!is.null(graph)){
+      if(!isCompleteGraph){
         Gamma <- complete_Gamma(Gamma, graph)
       }
 
