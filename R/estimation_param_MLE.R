@@ -180,6 +180,11 @@ fmpareto_HR_MLE_Gamma <- function(
     }
   }
 
+  # Make sure fixParams is boolean
+  if(!is.logical(fixParams)){
+    fixParams <- seq_along(init) %in% fixParams
+  }
+
   # Prepare helper function to convert (partial) params to Gamma/Theta:
   parToMatrices <- parToMatricesFactory(
     d = d,
@@ -218,24 +223,25 @@ fmpareto_HR_MLE_Gamma <- function(
       }
       
       ## Compute likelihood
+      logdV <- numeric(n)
       # Compute censored densities
-      y_censored <- vapply(which(obs_censored), FUN.VALUE = 0, function(i){
+      logdV[obs_censored] <- vapply(which(obs_censored), FUN.VALUE = 0, function(i){
         logdVK_HR(
           x = data_cens[i,],
           K = which(!censored_entries[i,]),
           Gamma = matrices$Gamma
         )
       })
-
-      # Compute uncensored densities (faster than using `logdVK_HR`)
-      y_not_censored <- logdV_HR(
+      # Compute uncensored densities all at once (faster than using `logdVK_HR`)
+      logdV[obs_not_censored] <- logdV_HR(
         x = data_cens[obs_not_censored, , drop=FALSE],
         Gamma = matrices$Gamma,
         Theta = matrices$Theta
       )
       
       # Compute combined likelihood
-      y <- sum(y_censored) + sum(y_not_censored) - n * log(V_HR(oneVec, par))
+      logV1 <- log(V_HR(oneVec, Gamma = matrices$Gamma, Theta = matrices$Theta))
+      y <- sum(logdV_censored) + sum(logdV_not_censored) - n * logV1
       return(-y)
     }
   } else {
@@ -249,12 +255,13 @@ fmpareto_HR_MLE_Gamma <- function(
       }
 
       # Compute likelihood
-      y1 <- logdV_HR(
+      logdV <- logdV_HR(
         x = data,
         Gamma = matrices$Gamma,
         Theta = matrices$Theta
       )
-      y <- sum(y1) - n * log(V_HR(oneVec, par = Gamma))
+      logV1 <- log(V_HR(oneVec, Gamma = matrices$Gamma, Theta = matrices$Theta))
+      y <- sum(logdV) - n * logV1
       return(-y)
     }
   }
@@ -311,11 +318,6 @@ parToMatricesFactory <- function(
   # Ignore graph if it's the complete graph
   if(igraph::ecount(graph) == d*(d-1)/2){
     graph <- NULL
-  }
-
-  # Make sure fixParams is boolean
-  if(!is.logical(fixParams)){
-    fixParams <- seq_along(init) %in% fixParams
   }
 
   # Get indices of par in the matrix (according to edges in the graph)
