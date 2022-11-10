@@ -96,7 +96,7 @@ fmpareto_graph_HR <- function(
   # match args
   method <- match.arg(method)
   handleCliques <- match.arg(handleCliques)
-  
+
   # check inputs
   if(handleCliques == 'sequential' && method == 'vario'){
     stop('Arguments handleCliques="sequential" and method="vario" are incompatible!')
@@ -104,12 +104,12 @@ fmpareto_graph_HR <- function(
   if(handleCliques == 'sequential' && !is_decomposable_graph(graph)){
     stop('Argument handleCliques="sequential" only works with decomposable graphs!')
   }
-  
+
   # standardize data
   if(!is.null(p)){
     data <- data2mpareto(data, p)
   }
-  
+
   ## WIP:
   ## - Do the computations
   ## - Check result, fall back if necessary

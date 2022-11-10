@@ -140,7 +140,7 @@ logdVK_HR <- function(x, K, Gamma) {
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
   }
-  
+
   # Convert logical K to numeric indices
   if(is.logical(K)){
     K <- which(K)

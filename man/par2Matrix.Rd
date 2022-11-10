@@ -6,17 +6,19 @@
 \alias{par2Theta}
 \title{Create Gamma or Theta from vector}
 \usage{
-par2Matrix(par, allowMatrix = FALSE, zeroRowSums = FALSE)
+par2Matrix(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE)
 
-par2Gamma(par, allowMatrix = FALSE)
+par2Gamma(par, allowMatrix = FALSE, allowNull = FALSE)
 
-par2Theta(par, allowMatrix = FALSE)
+par2Theta(par, allowMatrix = FALSE, allowNull = FALSE)
 }
 \arguments{
 \item{par}{Numeric vector with \eqn{d} elements.
 Upper triangular part of a Gamma/Theta matrix.}
 
 \item{allowMatrix}{If \code{TRUE} and \code{par} is already a matrix, return it as is.}
+
+\item{allowNull}{If \code{TRUE} and \code{par} is NULL, return NULL.}
 
 \item{zeroRowSums}{If \code{TRUE} the diagonal is set to (-1) times the rowSums.}
 }

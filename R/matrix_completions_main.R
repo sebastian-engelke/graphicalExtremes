@@ -183,7 +183,7 @@ complete_Gamma_general_demo <- function(Gamma, graph = NULL, N = 1000, tol=0, gL
       break
     }
   }
-  
+
   ret$iterations <- iterations
 
   return(ret)
@@ -272,7 +272,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   vB <- seq_len(nB) + nA + nC # remaining nB entries
   k0 <- vC[1] # condition on first entry in vC.
   vC_Sigma <- vC[-1]
-  
+
   if(nC == 1){
     ## Separator of size 1 -> use additive property of block matrix completion
     GammaAB <- outer(Gamma[vA, k0], Gamma[k0, vB], `+`)

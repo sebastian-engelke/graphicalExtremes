@@ -4,7 +4,7 @@
 \alias{logdVK_HR}
 \title{Compute censored exponent measure}
 \usage{
-logdVK_HR(x, K, par)
+logdVK_HR(x, K, Gamma)
 }
 \arguments{
 \item{x}{Numeric vector with \code{d} positive elements
@@ -14,10 +14,8 @@ where the censored exponent measure is to be evaluated.}
 the index set that is not censored.
 Or: Logical vector of length \code{d}, indicating entries that are not censored.}
 
-\item{par}{\eqn{d \times d}{d x d} variogram matrix, or numeric vector with
-\eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements,
-representing the upper triangular portion of a
-variogram matrix \eqn{\Gamma}.}
+\item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a variogram matrix.}
 }
 \value{
 Numeric. The censored exponent measure of the HR distribution.

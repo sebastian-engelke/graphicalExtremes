@@ -1,110 +1,4 @@
 
-fmpareto_HR_MLE_Theta <- function(
-  data,
-  p = NULL,
-  cens = FALSE,
-  init = NULL,
-  fixParams = integer(0),
-  maxit = 100,
-  graph = NULL,
-  method = "BFGS"
-){
-  # if p provided -> data not Pareto -> to convert
-  if (!is.null(p)) {
-    data <- data2mpareto(data, p)
-  }
-
-  # censoring at 1 since data already normalized
-  d <- ncol(data)
-  n <- nrow(data)
-  oneVec <- rep(1, d)
-
-  # no graph => complete graph (does not incur much computational cost here)
-  if(is.null(graph)){
-    graph <- igraph::make_full_graph(d)
-  }
-  
-  # Helper function to convert parameter vector to Theta matrix
-  edgeIndices <- getEdgeIndices(graph, 'upper')
-  parToTheta <- function(par){
-    Theta <- matrix(0, d, d)
-    Theta[edgeIndices] <- par
-    Theta <- Theta + t(Theta)
-    diag(Theta) <- -rowSums(Theta)
-    return(Theta)
-  }
-
-  # use emp_vario if no init provided
-  if(is.null(init)){
-    G0 <- emp_vario(data)
-    Theta0 <- ensure_symmetry(Gamma2Theta(G0))
-    init <- getEdgeEntries(Theta0, graph, type = 'upper')
-  }
-
-  # convert vector of fixed parameters to logical if necessary
-  if(!is.logical(fixParams)){
-    fixParams <- seq_along(init) %in% fixParams
-  }
-  
-  if(cens){
-    # TODO!
-    stop('Censoring not implemented yet!')
-  } else{
-    nllik <- function(par){
-      # Combine par with fixed parameters
-      if(any(fixParams)){
-        par_full <- init
-        par_full[!fixParams] <- par
-        par <- par_full
-      }
-
-      # Complete parameters according to graph structure
-      Theta <- parToTheta(par)
-      
-      # Check if parameters are valid
-      if(!is_valid_Theta(Theta)){
-        return(10^50)
-      }
-      
-      # Compute likelihood
-      G <- Theta2Gamma(Theta)
-      y1 <- logdV_HR(x = data, par = G)
-      y <- sum(y1) - n * log(V_HR(oneVec, par = G))
-      return(-y)
-    }
-  }
-
-  init_opt <- init[!fixParams]
-
-  # optimize likelihood
-  opt <- stats::optim(
-    init_opt,
-    nllik,
-    hessian = TRUE,
-    control = list(maxit = maxit),
-    method = method
-  )
-
-  # Prepare return values
-  par <- init
-  par[!fixParams] <- opt$par
-  
-  Theta <- parToTheta(par)
-  Gamma <- Theta2Gamma(Theta)
-
-  ret <- list(
-    convergence = opt$convergence,
-    par = par,
-    par_opt = opt$par,
-    Theta = Theta,
-    Gamma = Gamma,
-    nllik = opt$value,
-    hessian = opt$hessian
-  )
-  return(ret)
-}
-
-
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
 #'
 #' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
@@ -195,75 +89,66 @@ fmpareto_HR_MLE <- function(
     checkValidity = TRUE
   )
 
-  # Create negative log likelihood function, maybe using censoring
+  # If censoring is used, censor the data
   if(cens) {
     # Since the data is standardized, censor below (1, 1, ...)
-    data_cens <- censor(data, oneVec)
+    data <- censor(data, oneVec)
 
     # Check for each entry (of each observation) if it is censored
-    censored_entries <- (data_cens <= 1)
-    
+    censored_entries <- (data <= 1)
+
     # Make sure no observation is completely censored
     obs_completely_censored <- apply(censored_entries, 1, all)
     if(any(obs_completely_censored)){
-      stop('Make sure the data is properly standardized (i.e. Inf-norm > 1)!')
+      stop('Make sure the data is properly standardized (i.e. row-wise Inf-norm > 1)!')
     }
 
-    # Get indices of (non-)censored observations
+    # Get indices of censored observations
     obs_censored <- apply(censored_entries, 1, any)
-    obs_not_censored <- apply(!censored_entries, 1, all)
 
-    nllik <- function(par) {
-      # Convert to Gamma/Theta.
-      # - Is NULL if par implies an invalid matrix.
-      # - Guaranteed to contain Gamma, might contain Theta (if useTheta==TRUE).
-      matrices <- parToMatrices(par, forceGamma = TRUE)
-      if(is.null(matrices)){
-        return(10^50)
-      }
-      
-      ## Compute likelihood
-      logdV <- numeric(n)
-      # Compute censored densities
+    # Update the value of `cens` (in case nothing gets censored)
+    cens <- any(obs_censored)
+  } else{
+    # No censoring -> no observation is censored
+    obs_censored <- logical(n) # i.e. FALSE
+  }
+  obs_not_censored <- !obs_censored
+
+  # Create actual likelihood function
+  nllik <- function(par) {
+    # Convert to Gamma/Theta.
+    # - Is NULL if par implies an invalid matrix.
+    # - Guaranteed to contain Gamma, might contain Theta (if useTheta==TRUE).
+    matrices <- parToMatrices(par, forceGamma = TRUE)
+    if(is.null(matrices)){
+      return(10^50)
+    }
+
+    ## Compute likelihood
+    logdV <- numeric(n)
+
+    # Compute censored densities
+    if(cens){
       logdV[obs_censored] <- vapply(which(obs_censored), FUN.VALUE = 0, function(i){
         logdVK_HR(
-          x = data_cens[i,],
+          x = data[i,],
           K = which(!censored_entries[i,]),
           Gamma = matrices$Gamma
         )
       })
-      # Compute uncensored densities all at once (faster than using `logdVK_HR`)
-      logdV[obs_not_censored] <- logdV_HR(
-        x = data_cens[obs_not_censored, , drop=FALSE],
-        Gamma = matrices$Gamma,
-        Theta = matrices$Theta
-      )
-      
-      # Compute combined likelihood
-      logV1 <- log(V_HR(oneVec, Gamma = matrices$Gamma, Theta = matrices$Theta))
-      y <- sum(logdV_censored) + sum(logdV_not_censored) - n * logV1
-      return(-y)
     }
-  } else {
-    nllik <- function(par) {
-      # Convert to Gamma/Theta.
-      # - Is NULL if par implies an invalid matrix.
-      # - Otherwise contains (at least) one of Gamma, Theta (depends on useTheta)
-      matrices <- parToMatrices(par)
-      if(is.null(matrices)){
-        return(10^50)
-      }
 
-      # Compute likelihood
-      logdV <- logdV_HR(
-        x = data,
-        Gamma = matrices$Gamma,
-        Theta = matrices$Theta
-      )
-      logV1 <- log(V_HR(oneVec, Gamma = matrices$Gamma, Theta = matrices$Theta))
-      y <- sum(logdV) - n * logV1
-      return(-y)
-    }
+    # Compute uncensored densities (all at once is faster than using `logdVK_HR` for each)
+    logdV[obs_not_censored] <- logdV_HR(
+      x = data[obs_not_censored, , drop=FALSE],
+      Gamma = matrices$Gamma,
+      Theta = matrices$Theta
+    )
+
+    # Compute combined likelihood
+    logV1 <- log(V_HR(oneVec, Gamma = matrices$Gamma, Theta = matrices$Theta))
+    y <- sum(logdV) - n * logV1
+    return(-y)
   }
 
   # Actual optimization
@@ -304,14 +189,27 @@ fillFixedParams <- function(par, init, fixParams){
 }
 
 
-# Creates a helper function to convert parameter vector to Gamma/Theta matrix
+#' Factory: parToMatrices
+#' 
+#' Creates a helper function to convert a parameter vector to a Gamma and/or Theta matrix.
+#'
+#' @param d The dimension of Gamma/Theta is `d x d`.
+#' @param init The values used for fixed parameters
+#' @param fixParams The indices (logical or numeric) of fixed parameters
+#' @param parIsTheta `TRUE` if `par` represents entries in Theta (otherwise Gamma)
+#' @param graph If not `NULL`, then `par` represents entries corresponding to the edges of `graph`.
+#' @param checkValidity Whether to check if the implied Gamma/Theta is a valid parameter matrix.
+#' 
+#' @return A function `parToMatrices(par, forceGamma=FALSE, forceTheta=FALSE)`,
+#' which takes a parameter vector and returns either `NULL` or a list with entries `Gamma`, `Theta`.
+#' The function returns `NULL` if `checkValidity==TRUE` and `par` implies an invalid matrix.
+#' Otherwise, depending on `parIsTheta`, `forceTheta`, and `forceGamma`, one or both of
+#' `Gamma` and `Theta` are matrices implied by `par`.
 parToMatricesFactory <- function(
   d,
   init = NULL,
   fixParams = integer(0),
   parIsTheta = FALSE,
-  defaultForceTheta = FALSE,
-  defaultForceGamma = FALSE,
   graph = NULL,
   checkValidity = TRUE
 ){
@@ -327,23 +225,23 @@ parToMatricesFactory <- function(
     edgeIndices <- getEdgeIndices(graph, 'upper')
   }
   transposedEdgeIndices <- getTransposedIndices(d, edgeIndices)
-  
+
   # Create parToMatrices(), depending on whether par represents Theta or Gamma
   if(parIsTheta){
     parToMatrices <- function(
       par,
-      forceGamma = defaultForceGamma,
-      forceTheta = defaultForceTheta
+      forceGamma = FALSE,
+      forceTheta = FALSE
     ){
       # Fill fixed params
       par <- fillFixedParams(par, init, fixParams)
-      
+
       ## Make Theta
       Theta <- matrix(0, d, d)
       Theta[edgeIndices] <- par
       Theta[transposedEdgeIndices] <- par
       diag(Theta) <- (-1)*rowSums(Theta)
-      
+
       # Return NULL if par implies an invalid Theta
       if(checkValidity && !is_valid_Theta(Theta)){
         return(NULL)
@@ -361,12 +259,12 @@ parToMatricesFactory <- function(
   } else{
     parToMatrices <- function(
       par,
-      forceGamma = defaultForceGamma,
-      forceTheta = defaultForceTheta
+      forceGamma = FALSE,
+      forceTheta = FALSE
     ){
       # Fill fixed params
       par <- fillFixedParams(par, init, fixParams)
-      
+
       # Return NULL if par is non-positive (cheap check before making Gamma)
       if(checkValidity && any(par <= 0)){
         return(NULL)
@@ -382,19 +280,19 @@ parToMatricesFactory <- function(
       if(!is.null(graph)){
         Gamma <- complete_Gamma(Gamma, graph)
       }
-      
+
       # Return NULL if par implies an invalid Gamma
       if(checkValidity && !is_sym_cnd(Gamma)){
         return(NULL)
       }
-      
+
       # Compute Theta if specified
       if(forceTheta){
         Theta <- Gamma2Theta(Gamma)
       } else{
         Theta <- NULL
       }
-      
+
       return(list(Gamma = Gamma, Theta = Theta))
     }
   }

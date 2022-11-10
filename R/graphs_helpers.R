@@ -117,7 +117,7 @@ is_decomposable_graph <- function(graph){
 #' @param g2 `igraph::graph`
 #' @return `logical` indicating if the graphs are equal
 graphs_equal <- function(g1, g2) {
-  
+
   # Return early if graph sizes are different
   if(igraph::vcount(g1) != igraph::vcount(g2)){
     return(FALSE)

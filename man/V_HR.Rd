@@ -10,15 +10,20 @@ V_HR(x, Gamma = NULL, Theta = NULL)
 \item{x}{Numeric vector with \eqn{d} positive elements
 where the exponent measure is to be evaluated.}
 
-\item{par}{\eqn{d \times d}{d x d} variogram matrix, or numeric vector with
-\eqn{\frac{d(d - 1)}{2}}{d x (d - 1) / 2} elements,
-representing the upper triangular portion of a
-variogram matrix \eqn{\Gamma}.}
+\item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a variogram matrix.}
+
+\item{Theta}{d x d precision matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a precision matrix.}
 }
 \value{
 Numeric. The exponent measure of the HR distribution.
 }
 \description{
 Computes the exponent measure of HR distribution.
+}
+\details{
+Only \code{Gamma} is needed for the computation. \code{Theta} is only used to
+compute \code{Gamma} if necessary.
 }
 \keyword{internal}

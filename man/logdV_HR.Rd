@@ -8,11 +8,21 @@ logdV_HR(x, Gamma = NULL, Theta = NULL)
 }
 \arguments{
 \item{x}{Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.}
+
+\item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a variogram matrix.}
+
+\item{Theta}{d x d precision matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a precision matrix.}
 }
 \value{
 Numeric. The censored exponent measure of the HR distribution.
 }
 \description{
 Computes the exponent measure density of HR distribution.
+}
+\details{
+Both \code{Gamma} and \code{Theta} are needed internally, but if one
+is missing it is computed from the other one.
 }
 \keyword{internal}

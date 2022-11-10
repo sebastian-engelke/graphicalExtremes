@@ -64,7 +64,7 @@ devtools::install_github("sebastian-engelke/graphicalExtremes")
 danube = graphicalExtremes::danube
 
 X = danube$data
-  
+
 ggplot(X %>% as_tibble()) +
   geom_point(aes(x = X1, y = X2))
 ggplot(X %>% as_tibble()) +
@@ -589,10 +589,10 @@ Below, we provide a helper functions that you might use to plot an `igraph::grap
 plot_connections <- function(graph, airports) {
   ## igraph tibble -> ggplot
   ## plots the given `graph` on the US map
-  
+
   # name the graph nodes
   igraph::V(graph)$name <- airports$IATA_CODE[airports$ID == igraph::V(graph)]
-  
+
   # write flight connections
   flights_connections_est <- igraph::get.edgelist(graph) %>%
   as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
@@ -602,7 +602,7 @@ plot_connections <- function(graph, airports) {
   select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
          LATITUDE.origin, LONGITUDE.origin,
          LATITUDE.dest, LONGITUDE.dest)
-  
+
   # plot connections
   ggplot() +
   geom_polygon(data = map_data("usa"),
@@ -615,8 +615,8 @@ plot_connections <- function(graph, airports) {
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .4, curvature = 0)
-  
-  
+
+
 }
 
 # Plot an igraph object
