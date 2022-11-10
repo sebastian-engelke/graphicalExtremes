@@ -80,8 +80,8 @@ getNonEdgeEntries <- function(M, g = NULL, type = c('both', 'upper', 'lower')){
 
 # Creates vector of "transposed indices" in the sense
 # m[ind] = t(m)[getTransposedIndices(d, ind)]
-# where dim(m) == c(5, 5)
-getTransposedIndices <- function(d, ind){
+# where dim(m) == c(d, d)
+getTransposedIndices <- function(d, ind = seq_len(d*d)){
   t(matrix(seq_len(d*d), d, d))[ind]
 }
 

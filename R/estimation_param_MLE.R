@@ -148,7 +148,7 @@ fmpareto_HR_MLE_Theta <- function(
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
 #'
 #' @keywords internal
-fmpareto_HR_MLE_Gamma <- function(
+fmpareto_HR_MLE <- function(
   data,
   p = NULL,
   cens = FALSE,
@@ -299,7 +299,7 @@ fillFixedParams <- function(par, init, fixParams){
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
   }
-  init[!fixParams] <- par
+  init[!fixParams] <- par # init is copied by R, not modified in place
   return(init)
 }
 
@@ -326,7 +326,7 @@ parToMatricesFactory <- function(
   } else{
     edgeIndices <- getEdgeIndices(graph, 'upper')
   }
-  transposedEdgeIndices <- getTransposedIndices(edgeIndices)
+  transposedEdgeIndices <- getTransposedIndices(d, edgeIndices)
   
   # Create parToMatrices(), depending on whether par represents Theta or Gamma
   if(parIsTheta){

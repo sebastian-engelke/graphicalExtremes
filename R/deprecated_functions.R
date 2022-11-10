@@ -18,7 +18,7 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
   res <- which(upper.tri(matrix(nrow = d, ncol = d)), arr.ind = TRUE)
   if (cens) {
     bivLLH <- apply(res[, 1:2], 1, function(x) {
-      fmpareto_obj <- fmpareto_HR_MLE_Gamma(data = data.std[, x],
+      fmpareto_obj <- fmpareto_HR_MLE(data = data.std[, x],
                                   init = G.emp[x[1], x[2]],
                                   cens = cens)
       par.est <- fmpareto_obj$par
@@ -32,7 +32,7 @@ mst_HR <- function(data, p = NULL, cens = FALSE) {
 
   if (!cens) {
     bivLLH <- apply(res[, 1:2], 1, function(x) {
-      par.est <- fmpareto_HR_MLE_Gamma(
+      par.est <- fmpareto_HR_MLE(
         data = data.std[, x], init = G.emp[x[1], x[2]],
         cens = cens
       )$par
@@ -155,7 +155,7 @@ fmpareto_graph_HR_add_edges <- function(data, graph, p = NULL, cens = FALSE,
 
     G.est <- emp_vario(data = data.cli)
     init <- Gamma2par(G.est)
-    Ghat[[l]][cli.idx, cli.idx] <- fmpareto_HR_MLE_Gamma(
+    Ghat[[l]][cli.idx, cli.idx] <- fmpareto_HR_MLE(
       data = data.cli,
       init = init, cens = cens
     )$Gamma
@@ -238,7 +238,7 @@ fmpareto_graph_HR_add_edges <- function(data, graph, p = NULL, cens = FALSE,
 
             G.est <- emp_vario(data = data.cli)
             init <- Gamma2par(G.est)
-            Ghat.tmp[[k]][cli.idx, cli.idx] <- fmpareto_HR_MLE_Gamma(
+            Ghat.tmp[[k]][cli.idx, cli.idx] <- fmpareto_HR_MLE(
               data = data.cli,
               init = init, cens = cens
             )$Gamma

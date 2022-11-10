@@ -100,7 +100,7 @@ complete_Gamma <- function(
   # Compute initial non-graphical completion if necessary:
   if(any(is.na(Gamma))){
     A <- 1*!is.na(Gamma)
-    tmp <- edmcr::npf(G, A, d = NROW(Gamma)-1)
+    tmp <- edmcr::npf(Gamma, A, d = NROW(Gamma)-1)
     Gamma <- tmp$D
     if(!is_sym_cnd(Gamma)){
       stop('Did not find an initial non-graphical completion (using edmcr::npf)!')

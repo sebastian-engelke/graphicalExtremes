@@ -1,5 +1,5 @@
 
-if(!length(Sys.getenv('VSCODE_DEBUG_SESSION'))){
+if(!nchar(Sys.getenv('VSCODE_DEBUG_SESSION'))){
     devtools::load_all('.')
 }
 library(igraph)
@@ -16,8 +16,8 @@ n <- 100
 
 # g <- generate_random_connected_graph(d, p = 3/(d+1))
 # g <- generate_random_connected_graph(d)
-# g <- igraph::make_ring(d)
-g <- generate_random_tree(d)
+g <- igraph::make_ring(d)
+# g <- generate_random_tree(d)
 G0 <- ensure_symmetry(generate_random_graphical_Gamma(g))
 # G0 <- ensure_symmetry(generate_random_Gamma(d), Inf)
 par <- G0
@@ -29,11 +29,11 @@ init <- upper.tri.val(emp_vario(data))
 
 tic()
 cat('MLE Gamma...\n')
-par2 <- fmpareto_HR_MLE_Gamma(data, graph = g)
+par2 <- fmpareto_HR_MLE(data, graph = g, useTheta = FALSE)
 toc()
 
 tic()
 cat('MLE Theta...\n')
-par3 <- fmpareto_HR_MLE_Theta(data, graph = g)
+par3 <- fmpareto_HR_MLE(data, graph = g, useTheta = TRUE)
 toc()
 

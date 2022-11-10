@@ -299,7 +299,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for censored HR
 
-    fmpareto_obj <- fmpareto_HR_MLE_Gamma(
+    fmpareto_obj <- fmpareto_HR_MLE(
       data = data[, x],
       init = G_emp[x[1], x[2]],
       cens = cens
@@ -317,7 +317,7 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     ## numeric_vector numeric_matrix numeric_matrix -> numeric_vector
     ## produce parameter estimates and loglikelihood value for uncensored HR
 
-    par.est <- fmpareto_HR_MLE_Gamma(
+    par.est <- fmpareto_HR_MLE(
       data = data[, x], init = G_emp[x[1], x[2]],
       cens = cens
     )$par
