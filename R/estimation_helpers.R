@@ -137,13 +137,15 @@ fast_diag <- function(y, M) {
 #'
 #' @keywords internal
 logdVK_HR <- function(x, K, Gamma) {
-  if (any(is_leq(x, 0))) {
-    stop("The elements of x must be positive.")
-  }
+  ## TODO: this function can probably be optimized by allowing calls with multiple observations
 
   # Convert logical K to numeric indices
   if(is.logical(K)){
     K <- which(K)
+  }
+
+  if (any(is_leq(x, 0))) {
+    stop("The elements of x must be positive.")
   }
 
   # return normal density, if no entries are censored

@@ -17,29 +17,25 @@ fmpareto_HR_MLE(
 )
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric matrix with d columns (one per dimension) and n rows with one observation each.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \link{data2mpareto}
-to standardize the \code{data}.}
+\code{p} is used as the probability in the function \link{data2mpareto} to standardize the data.}
 
 \item{cens}{Logical. If true, then censored likelihood contributions are used for
-components below the threshold. By default, \code{cens = FALSE}.}
+components below the threshold. This is computationally expensive and by default \code{cens = FALSE}.}
 
-\item{init}{Numeric vector. Initial parameter values in the optimization. If
-\code{graph} is given, then the entries should correspond to the edges of the \code{graph}.}
+\item{init}{Numeric vector or numeric matrix. Initial parameter values in the optimization.
+If \code{NULL}, the empirical variogram is used instead. Otherwise should be a numeric
+vector with one entry per edge in \code{graph}, or a complete variogram/precision matrix.}
 
-\item{fixParams}{Numeric vector. Indices of the parameter vectors that are kept
-fixed during the optimization. Default is \code{integer(0)}.}
+\item{fixParams}{Numeric or logical vector. Indices of the parameter vectors that are kept
+fixed (identical to \code{init}) during the optimization. Default is \code{integer(0)}.}
 
-\item{maxit}{Positive integer. The maximum number of iterations in the
-optimization.}
+\item{maxit}{Positive integer. The maximum number of iterations in the optimization.}
 
-\item{graph}{Graph object from \code{igraph} package or \code{NULL}.
-If provided, the \code{graph} must be an undirected block graph, i.e., a decomposable, connected
-graph with singleton separator sets.}
+\item{graph}{Graph object from \code{igraph} package or \code{NULL} (implying the complete graph).}
 
 \item{method}{String. A valid optimization method used by the function
 \link[stats:optim]{stats::optim}. By default, \code{method = "BFGS"}.}
@@ -47,23 +43,22 @@ graph with singleton separator sets.}
 \value{
 List consisting of:
 \item{\code{convergence}}{Logical. Indicates whether the optimization converged or not.}
-\item{\code{par}}{Numeric vector. Optimized parameters and fixed parameters.}
-\item{\code{par_opt}}{Numeric. Optimized parameters.}
-\item{\code{Gamma}}{Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram #' matrix.}
-\item{\code{nllik}}{Numeric. Optimized value of the negative log-likelihood function.}
-\item{\code{hessian}}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
+\item{\code{Gamma}}{Numeric \verb{d x d} matrix. Fitted variogram matrix.}
+\item{\code{Theta}}{Numeric \verb{d x d} matrix. Fitted precision matrix.}
+\item{\code{par}}{Numeric vector. Optimal parameters, including fixed parameters.}
+\item{\code{par_opt}}{Numeric. Optimal parameters, excluding fixed parameters.}
+\item{\code{nllik}}{Numeric. Optimal value of the negative log-likelihood function.}
+\item{\code{hessian}}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 }
 \description{
 Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
-using (censored) likelihood estimation.
+using (censored) maximum likelihood estimation.
 }
 \details{
-If \code{graph = NULL}, then the parameters of a \eqn{d \times d}{d x d}
-parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
-If \code{graph} is provided, then the conditional independence
-structure of this graph is assumed and the parameters on the edges are fitted.
-In both cases the full likelihood is used and therefore this function should only
-be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
-fitting can be done separately on the cliques; see \link{fmpareto_graph_HR}.
+Only the parameters corresponding to edges in \code{graph} are optimized, the remaining
+entries are implied by the graphical structure. If \code{graph} is \code{NULL}, the complete graph is used.
+The optimization is done either in terms of the variogram (Gamma) or precision matrix (Theta),
+depending on the value of \code{useTheta}. If \code{graph} is non-decomposable,
+\code{useTheta=TRUE} is significantly faster, otherwise they are similar in performance.
 }
 \keyword{internal}

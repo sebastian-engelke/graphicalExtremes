@@ -103,6 +103,33 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
   return(sgIds)
 }
 
+is_tree_graph <- function(graph){
+  igraph::is_tree(graph, 'all', details = FALSE)
+}
+
+#' Check if a graph is a block graph
+#'
+#' @param graph An [igraph::graph] object
+#' @return A `boolean` indicating if the graph is a glock graph
+is_block_graph <- function(graph, check_connected=TRUE){
+  if(check_connected && !igraph::is_connected(graph)){
+    return(FALSE)
+  }
+  if(!is_decomposable_graph(graph)){
+    return(FALSE)
+  }
+  # Check that separators are size 1 or 0:
+  cliques <- igraph::max_cliques(graph)
+  for(i in seq_along(cliques)){
+    for(j in seq_len(i-1)){
+      if(length(intersect(cliques[[i]], cliques[[j]])) > 1){
+        return(FALSE)
+      }
+    }
+  }
+  return(TRUE)
+}
+
 
 is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal

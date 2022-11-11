@@ -6,6 +6,13 @@
 \usage{
 fillFixedParams(par, init, fixParams)
 }
+\arguments{
+\item{par}{Numeric vector. The parameters that are optimized}
+
+\item{init}{Numeric vector. The initial parameters (including the ones optimized over)}
+
+\item{fixParams}{Numeric or logical vector. Positions of fixed parameters in the full parameter vector.}
+}
 \description{
 Helper function to combine par with fixed params (in init)
 }

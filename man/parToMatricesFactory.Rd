@@ -5,24 +5,21 @@
 \title{Factory: parToMatrices}
 \usage{
 parToMatricesFactory(
-  d,
+  graph,
   init = NULL,
   fixParams = integer(0),
   parIsTheta = FALSE,
-  graph = NULL,
   checkValidity = TRUE
 )
 }
 \arguments{
-\item{d}{The dimension of Gamma/Theta is \verb{d x d}.}
+\item{graph}{\code{par} represents entries corresponding to the edges of \code{graph}.}
 
 \item{init}{The values used for fixed parameters}
 
-\item{fixParams}{The indices (logical or numeric) of fixed parameters}
+\item{fixParams}{The indices (logical or numeric) of fixed parameters in the full parameter vector.}
 
 \item{parIsTheta}{\code{TRUE} if \code{par} represents entries in Theta (otherwise Gamma)}
-
-\item{graph}{If not \code{NULL}, then \code{par} represents entries corresponding to the edges of \code{graph}.}
 
 \item{checkValidity}{Whether to check if the implied Gamma/Theta is a valid parameter matrix.}
 }
@@ -34,5 +31,6 @@ Otherwise, depending on \code{parIsTheta}, \code{forceTheta}, and \code{forceGam
 \code{Gamma} and \code{Theta} are matrices implied by \code{par}.
 }
 \description{
-Creates a helper function to convert a parameter vector to a Gamma and/or Theta matrix.
+Creates a helper function to convert a parameter vector \code{par} to a Gamma and/or Theta matrix.
 }
+\keyword{internal}

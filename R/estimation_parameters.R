@@ -91,18 +91,15 @@ fmpareto_graph_HR <- function(
   method = c('ML', 'vario'),
   handleCliques = c('full', 'average', 'sequential'),
   fallback = FALSE,
-  cens = FALSE
+  ...
 ){
   # match args
   method <- match.arg(method)
   handleCliques <- match.arg(handleCliques)
 
   # check inputs
-  if(handleCliques == 'sequential' && method == 'vario'){
-    stop('Arguments handleCliques="sequential" and method="vario" are incompatible!')
-  }
-  if(handleCliques == 'sequential' && !is_decomposable_graph(graph)){
-    stop('Argument handleCliques="sequential" only works with decomposable graphs!')
+  if(handleCliques == 'sequential' && (method != 'ML' || !is_decomposable_graph(graph))){
+    stop('Arguments handleCliques="sequential" only works with decomposable graphs and method="ML"!')
   }
 
   # standardize data
@@ -116,10 +113,54 @@ fmpareto_graph_HR <- function(
   ## - Return
 }
 
-
 fmpareto_graph_HR_clique_average <- function(
   data,
-  graph #...
+  graph,
+  method = c('ML', 'vario'),
+  cens = FALSE,
+  ...
+){
+  method <- match.arg(method)
+  
+  graph <- check_graph(graph)
+  cliques <- igraph::max_cliques(graph)
+  # Todo: use mclapply here
+  if(method == 'vario'){
+    subGammas <- lapply(cliques, function(cli){
+      emp_vario(data[,cli])
+    })
+  } else {
+    subGammas <- lapply(cliques, function(cli){
+      fmpareto_HR_MLE(
+        data[,cli],
+        ...
+      )
+    })
+  }
+  Gamma_partial <- combine_clique_estimates_by_averaging(cliques, subGammas)
+  Gamma <- complete_Gamma(Gamma_partial, graph)
+  return(Gamma)
+}
+
+
+combine_clique_estimates_by_averaging <- function(cliques, subGammas){
+  d <- do.call(max, cliques)
+  Gamma <- matrix(0, d, d)
+  overlaps <- matrix(0, d, d)
+  for(i in seq_along(cliques)){
+    cli <- cliques[[i]]
+    Gamma[cli, cli] <- Gamma[cli, cli] + subGammas[[i]]
+    overlaps[cli, cli] <- overlaps[cli, cli] + 1
+  }
+  Gamma[overlaps == 0] <- NA
+  Gamma <- Gamma / overlaps
+  return(Gamma)
+}
+
+fmpareto_graph_HR_clique_sequential <- function(
+  data,
+  graph,
+  cens = FALSE
 ){
   ## WIP...
 }
