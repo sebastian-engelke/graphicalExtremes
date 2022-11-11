@@ -64,12 +64,13 @@
 #'  \insertAllCited{}
 #'
 #' @export
-rmpareto <- function(n,
-                     model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
-                     d, par) {
-
-  # methods
-  model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
+rmpareto <- function(
+  n,
+  model = c("HR", "logistic", "neglogistic", "dirichlet"),
+  d,
+  par
+){
+  model <- match.arg(model)
 
   # check arguments ####
   if (d != round(d) | d < 1) {
@@ -78,13 +79,6 @@ rmpareto <- function(n,
 
   if (n != round(n) | n < 1) {
     stop("The argument n must be a positive integer.")
-  }
-
-  if (!(model %in% model_nms)) {
-    stop(paste("The model must be one of ", paste(model_nms, collapse = ", "),
-      ".",
-      sep = ""
-    ))
   }
 
   if (model == "HR") {

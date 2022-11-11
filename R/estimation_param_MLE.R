@@ -58,7 +58,7 @@ fmpareto_HR_MLE <- function(
   oneVec <- rep(1, d)
   
   # if graph is not specified, use the full graph
-  if(!is.null(graph)){
+  if(is.null(graph)){
     graph <- igraph::make_full_graph(d)
   }
 

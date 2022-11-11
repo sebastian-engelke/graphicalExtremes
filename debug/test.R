@@ -13,50 +13,20 @@ set.seed(newSeed)
 
 d <- 5
 n <- 100
+graphType <- c('general', 'decomposable', 'tree')[1]
 
-# g <- generate_random_connected_graph(d, p = 3/(d+1))
-# g <- generate_random_connected_graph(d)
-# g <- igraph::make_ring(d)
-g <- generate_random_tree(d)
-G0 <- ensure_symmetry(generate_random_graphical_Gamma(g))
-# G0 <- ensure_symmetry(generate_random_Gamma(d), Inf)
-par <- G0
+m <- generate_random_model(d, graphType)
 
+G0 <- m$Gamma
+graph <- m$graph
 
-data <- rmpareto(n, 'HR', d, par)
+data <- rmpareto(n, 'HR', d, G0)
 
-G_emp <- emp_vario(data)
-
-init <- upper.tri.val(G_emp)
-
-tic()
-cat('MLE Gamma (fix)...\n')
-par2f <- fmpareto_HR_MLE(
+ret <- fmpareto_graph_HR(
     data,
-    init = init,
-    fixParams = 1,
-    graph = g,
-    useTheta = FALSE,
-    cens = FALSE,
-    p = NULL
+    graph,
+    method = 'ML',
+    handleCliques = 'average'
 )
-toc()
 
-tic()
-cat('MLE Gamma...\n')
-par2 <- fmpareto_HR_MLE(
-    data,
-    init = init,
-    graph = g,
-    useTheta = FALSE,
-    cens = FALSE,
-    p = NULL
-)
-toc()
-
-
-# tic()
-# cat('MLE Theta...\n')
-# par3 <- fmpareto_HR_MLE(data, graph = g, useTheta = TRUE, cens = TRUE, p = 0.9)
-# toc()
 

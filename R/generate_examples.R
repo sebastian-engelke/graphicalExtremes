@@ -35,7 +35,10 @@ generate_random_model <- function(d, graph_type='general', ...){
     stop('Invalid graph_type!')
   }
 
-  Gamma <- generate_random_graphical_Gamma(graph, ...)
+  Gamma <- ensure_symmetry(
+    generate_random_graphical_Gamma(graph, ...),
+    tol = Inf
+  )
 
   return(list(
     graph = graph,

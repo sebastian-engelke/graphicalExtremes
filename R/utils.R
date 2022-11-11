@@ -101,10 +101,11 @@ ensure_symmetry <- function(M, tol=1e-6){
   (M + t(M))/2
 }
 
-is_sym_cnd <- function(M){
-  if(!matrixcalc::is.symmetric.matrix(M)){
+is_sym_cnd <- function(M, tol=1e-12){
+  if(max(abs(M - t(M))) > tol){
     return(FALSE)
   }
+  M <- ensure_symmetry(M, Inf)
   Sk <- Gamma2Sigma(M, k=1)
   return(matrixcalc::is.positive.definite(Sk))
 }

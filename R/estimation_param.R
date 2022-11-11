@@ -153,14 +153,20 @@ fmpareto_graph_HR_clique_average <- function(
   # Todo: use mclapply here
   if(method == 'vario'){
     subGammas <- lapply(cliques, function(cli){
-      emp_vario(data[,cli])
+      data.cli <- mparetomargins(data, cli)
+      emp_vario(data.cli)
     })
   } else {
     subGammas <- lapply(cliques, function(cli){
-      fmpareto_HR_MLE(
-        mparetomargins(data, cli),
+      data.cli <- mparetomargins(data, cli)
+      tmp <- fmpareto_HR_MLE(
+        data.cli,
         ...
       )
+      if(is.null(tmp$Gamma)){
+        stop('MLE did not find a valid Gamma for clique: ', paste0(cli, collapse = ','))
+      }
+      return(tmp$Gamma)
     })
   }
   Gamma_partial <- combine_clique_estimates_by_averaging(cliques, subGammas)
