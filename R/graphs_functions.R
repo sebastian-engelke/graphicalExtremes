@@ -42,22 +42,14 @@ order_cliques <- function(cliques) {
 #' separators of `graph`
 #'
 #' @keywords internal
-get_cliques_and_separators <- function(graph){
+get_cliques_and_separators_OLD <- function(graph){
   # start with maximal cliques as new cliques:
   newCliques <- igraph::max_cliques(graph)
   cliques <- list()
 
   while(length(newCliques)>0){
     # compute all separators between the new cliques:
-    separators <- list()
-    for(i in seq_along(newCliques)){
-      for(j in seq_len(i-1)){
-        sep <- intersect(newCliques[[i]], newCliques[[j]])
-        if(length(sep)>1){
-          separators <- c(separators, list(sep))
-        }
-      }
-    }
+    separators <- get_separators(newCliques)
     # add new cliques to cliques-list:
     # (separators are added after the next iteration)
     cliques <- c(newCliques, cliques)
@@ -68,6 +60,79 @@ get_cliques_and_separators <- function(graph){
 
   return(cliques)
 }
+
+
+#' Get Cliques and Separators of a graph
+#'
+#' Finds all cliques, separators, and (recursively) separators of separators
+#' in a graph.
+#'
+#' @param graph An [igraph::graph] object
+#' @return A list of vertex sets that represent the cliques and (recursive)
+#' separators of `graph`, ordered such that separators come before cliques they separate.
+#'
+#' @keywords internal
+get_cliques_and_separators <- function(graph, sortIntoLayers = FALSE, includeSingletons = FALSE){
+  # start with maximal cliques of graph
+  newCliques <- lapply(igraph::max_cliques(graph), as.numeric)
+  allCliques <- newCliques
+
+  while(length(newCliques) > 0){
+    # compute all separators
+    separators <- get_separators(allCliques, includeSingletons)
+    # check which are actually new cliques
+    newCliques <- setdiff(separators, allCliques)
+    # add to list of cliques
+    allCliques <- c(newCliques, allCliques)
+  }
+  if(!sortIntoLayers){
+    return(allCliques)
+  }
+  layers <- sort_cliques_and_separators(allCliques)
+  return(layers)
+}
+
+#' Sort a set of cliques and separators into layers, such that the separator
+#' of two cliques/separators is contained in a previous layer
+sort_cliques_and_separators <- function(cliques){
+  # Compute matrix indicating whether clique[[i]] is a subset of clique[[j]]
+  subsetMat <- matrix(FALSE, length(cliques), length(cliques))
+  for(i in seq_along(cliques)){
+    for(j in seq_along(cliques)){
+      if(i != j){
+        subsetMat[i,j] <- all(cliques[[i]] %in% cliques[[j]])
+      }
+    }
+  }
+  # Make layers
+  layers <- list()
+  while(nrow(subsetMat) > 0){
+    isSmallest <- apply(subsetMat, 2, function(v) !any(v))
+    if(!any(isSmallest)){
+      stop('hae?')
+    }
+    layers <- c(layers, list(cliques[isSmallest]))
+    subsetMat <- subsetMat[!isSmallest, !isSmallest, drop=FALSE]
+    cliques <- cliques[!isSmallest]
+  }
+  return(layers)
+}
+
+# Get all separators (non-recursive) between a set of cliques
+get_separators <- function(cliques, includeSingletons = FALSE){
+  separators <- list()
+  for(i in seq_along(cliques)){
+    for(j in seq_len(i-1)){
+      sep <- sort(intersect(cliques[[i]], cliques[[j]]))
+      if(length(sep)>1 || (includeSingletons && length(sep) == 1)){
+        separators <- c(separators, list(sep))
+      }
+    }
+  }
+  separators <- unique(separators)
+  return(separators)
+}
+
 
 #' Split graph into invariant subgraphs
 split_graph <- function(g){

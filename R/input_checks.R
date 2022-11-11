@@ -15,10 +15,12 @@
 #' @family Input checks
 check_graph <- function(
   graph,
-  graph_type = c('general', 'decomposable', 'block', 'tree')
+  graph_type = c('general', 'decomposable', 'block', 'tree'),
   check_connected = TRUE,
   nVertices = NULL
 ){
+  graph_type <- match.arg(graph_type)
+
   # check that graph is actually a graph object
   if(!igraph::is.igraph(graph)){
     stop('The given object is not an igraph-graph.')
@@ -48,7 +50,6 @@ check_graph <- function(
     stop("The given graph is not connected.")
   }
 
-  graph_type <- match.arg(graph_type)
   if(graph_type == 'tree'){
     if(!is_tree_graph(graph)){
       stop("The given graph is not a tree.")
