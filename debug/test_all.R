@@ -115,6 +115,12 @@ for(i in seq_along(solvers)){
     results[[i]] <- ret
 }
 
+for(i in seq_along(results)){
+    if(is.matrix(results[[i]]$Gamma)){
+        results[[i]]$Theta <- Gamma2Theta(results[[i]]$Gamma)
+    }
+}
+
 # tic()
 # cat('MLE Gamma (fix)...\n')
 # par2f <- fmpareto_HR_MLE(
