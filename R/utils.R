@@ -18,13 +18,18 @@ fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
 }
 
 
-# replaces a principal submatrix of a Gamma matrix, keeping definiteness
-# zeros (instead of NAs) on the diagonal of G.fix indicate which principal submatrix to replace
+# Replaces a principal submatrix of a Gamma matrix, preserving definiteness.
+# Other entries are kept "heuristically similar".
+# Zeros (instead of NAs) on the diagonal of G.fix indicate which principal submatrix to replace.
+# If not the entire submatrix in G.fix is specified, [complete_Gamma_decomposable] is used
 replaceGammaSubMatrix <- function(G.est, G.fix){
   # check which are fixed
   ind <- which(!is.na(diag(G.fix)))
   if(length(ind)==0){
     return(G.est)
+  }
+  if(any(is.na(G.fix[ind, ind]))){
+    G.fix[ind, ind] <- complete_Gamma(G.fix[ind, ind], allowed_graph_type = 'decomposable')
   }
   if(length(ind) == ncol(G.est)){
     return(G.fix)
@@ -32,7 +37,7 @@ replaceGammaSubMatrix <- function(G.est, G.fix){
   
   # naive attempt:
   G1 <- G.est
-  G1[ind, ind] <- G.fix
+  G1[ind, ind] <- G.fix[ind, ind]
   if(is_sym_cnd(G1)){
     return(G1)
   }
@@ -90,28 +95,37 @@ rdunif <- function(n, a, b){
 
 ensure_symmetry <- function(M, tol=1e-6){
   if(max(abs(M - t(M))) > tol){
-    warning(paste0(
-      'Matrix not symmetric (up to tolerance: ',
-      max(abs(M - t(M))),
-      ' > ',
-      tol,
-      ')!'
-    ))
+    warning('Matrix not symmetric (up to tolerance: ', tol, ')!')
   }
   (M + t(M))/2
 }
 
-is_sym_cnd <- function(M, tol=1e-12){
-  if(max(abs(M - t(M))) > tol){
+is_symmetric <- function(M, tol=1e-12){
+  max(M - t(M)) < tol
+}
+
+is_cnd <- function(M, tol=1e-12){
+  d <- nrow(M)
+  if(d == 0){
+    return(TRUE)
+  }
+  if(d == 1){
+    return(abs(M[1,1]) < tol)
+  }
+  if(any(upper.tri.val(M) <= 0)){
     return(FALSE)
   }
-  M <- ensure_symmetry(M, Inf)
   Sk <- Gamma2Sigma(M, k=1)
-  return(matrixcalc::is.positive.definite(Sk))
+  eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
+  return(abs(eig[d-1]) > 0)
+}
+
+is_sym_cnd <- function(M, tol=1e-12){
+  is_symmetric(M, tol) && is_cnd(M, tol)
 }
 
 is_valid_Theta <- function(M, tol=1e-9){
-  if(!matrixcalc::is.symmetric.matrix(M)){
+  if(!is_symmetric(M, tol)){
     return(FALSE)
   }
   d <- nrow(M)

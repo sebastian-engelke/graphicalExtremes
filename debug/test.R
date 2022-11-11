@@ -26,7 +26,7 @@ ret <- fmpareto_graph_HR(
     data,
     graph,
     method = 'ML',
-    handleCliques = 'average'
+    handleCliques = 'sequential'
 )
 
-
+Theta <- Gamma2Theta(ret)

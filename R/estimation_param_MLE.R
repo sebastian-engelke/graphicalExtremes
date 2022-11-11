@@ -154,8 +154,13 @@ fmpareto_HR_MLE <- function(
     return(-y)
   }
 
-  # Actual optimization
+  # Check that initial parameters are actually valid
   init_opt <- init[!fixParams]
+  if(is.null(parToMatrices(init_opt))){
+    stop('Invalid initial parameters!')
+  }
+
+  # Actual optimization
   opt <- stats::optim(
     init_opt,
     nllik,

@@ -196,6 +196,12 @@ fmpareto_graph_HR_clique_sequential <- function(
 ){
   ## TODO: use mclapply
   
+  # Check that not `useTheta=TRUE`
+  argsMLE <- list(...)
+  if(!is.null(argsMLE$useTheta) && argsMLE$useTheta){
+    stop('Sequential handling of cliques only works when optimizing on Gamma-level!')
+  }
+  
   # check inputs
   d <- ncol(data)
   graph <- check_graph(graph, graph_type = 'decomposable', nVertices = d)
@@ -226,9 +232,10 @@ fmpareto_graph_HR_clique_sequential <- function(
         data = data.cli,
         init = init.cli,
         fixParams = fixParams.cli,
+        useTheta = FALSE,
         ...
       )
-      if(!opt$convergence){
+      if(is.null(opt$Gamma)){
         stop('MLE did not converge for clique: ', cli)
       }
       return(opt$Gamma)

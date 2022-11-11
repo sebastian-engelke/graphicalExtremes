@@ -6,7 +6,7 @@ library(igraph)
 library(tictoc)
 
 newSeed <- floor(2^20 * runif(1))
-newSeed <- 494411
+newSeed <- 12489
 cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
@@ -120,35 +120,4 @@ for(i in seq_along(results)){
         results[[i]]$Theta <- Gamma2Theta(results[[i]]$Gamma)
     }
 }
-
-# tic()
-# cat('MLE Gamma (fix)...\n')
-# par2f <- fmpareto_HR_MLE(
-#     data,
-#     init = init,
-#     fixParams = 1,
-#     graph = graph,
-#     useTheta = FALSE,
-#     cens = FALSE,
-#     p = NULL
-# )
-# toc()
-
-# tic()
-# cat('MLE Gamma...\n')
-# par2 <- fmpareto_HR_MLE(
-#     data,
-#     init = init,
-#     graph = graph,
-#     useTheta = FALSE,
-#     cens = FALSE,
-#     p = NULL
-# )
-# toc()
-
-
-# # tic()
-# # cat('MLE Theta...\n')
-# # par3 <- fmpareto_HR_MLE(data, graph = g, useTheta = TRUE, cens = TRUE, p = 0.9)
-# # toc()
 
