@@ -2,29 +2,25 @@
 #' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
 #'
 #' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
-#' using (censored) likelihood estimation.
+#' using (censored) maximum likelihood estimation.
 #'
+#' Only the parameters corresponding to edges in `graph` are optimized, the remaining
+#' entries are implied by the graphical structure. If `graph` is `NULL`, the complete graph is used.
+#' The optimization is done either in terms of the variogram (Gamma) or precision matrix (Theta),
+#' depending on the value of `useTheta`. If `graph` is non-decomposable,
+#' `useTheta=TRUE` is significantly faster, otherwise they are similar in performance.
 #'
-#' If `graph = NULL`, then the parameters of a \eqn{d \times d}{d x d}
-#' parameter matrix \eqn{\Gamma} of a Huesler--Reiss Pareto distribution are fitted.
-#' If `graph` is provided, then the conditional independence
-#' structure of this graph is assumed and the parameters on the edges are fitted.
-#' In both cases the full likelihood is used and therefore this function should only
-#' be used for small dimensions, say, \eqn{d<5}. For models in higher dimensions
-#' fitting can be done separately on the cliques; see [fmpareto_graph_HR].
-#'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' @param data Numeric matrix with d columns (one per dimension) and n rows with one observation each.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
-#' to standardize the `data`.
+#' `p` is used as the probability in the function [data2mpareto] to standardize the data.
 #' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, `cens = FALSE`.
-#' @param init Numeric vector or numeric matrix. Initial parameter values in the optimization. If
-#' `graph` is given, then the entries should correspond to the edges of the `graph`.
+#' components below the threshold. This is computationally expensive and by default `cens = FALSE`.
+#' @param init Numeric vector or numeric matrix. Initial parameter values in the optimization.
+#' If `NULL`, the empirical variogram is used instead. Otherwise should be a numeric
+#' vector with one entry per edge in `graph`, or a complete variogram/precision matrix.
 #' @param fixParams Numeric or logical vector. Indices of the parameter vectors that are kept
-#' fixed during the optimization. Default is `integer(0)`.
+#' fixed (identical to `init`) during the optimization. Default is `integer(0)`.
 #' @param maxit Positive integer. The maximum number of iterations in the optimization.
 #' @param graph Graph object from `igraph` package or `NULL` (implying the complete graph).
 #' @param method String. A valid optimization method used by the function
@@ -32,11 +28,12 @@
 #'
 #' @return List consisting of:
 #' \item{`convergence`}{Logical. Indicates whether the optimization converged or not.}
-#' \item{`par`}{Numeric vector. Optimized parameters and fixed parameters.}
-#' \item{`par_opt`}{Numeric. Optimized parameters.}
-#' \item{`Gamma`}{Numeric matrix \eqn{d \times d}{d x d}. Fitted variogram #' matrix.}
-#' \item{`nllik`}{Numeric. Optimized value of the negative log-likelihood function.}
-#' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the #' estimated parameters.}
+#' \item{`Gamma`}{Numeric `d x d` matrix. Fitted variogram matrix.}
+#' \item{`Theta`}{Numeric `d x d` matrix. Fitted precision matrix.}
+#' \item{`par`}{Numeric vector. Optimal parameters, including fixed parameters.}
+#' \item{`par_opt`}{Numeric. Optimal parameters, excluding fixed parameters.}
+#' \item{`nllik`}{Numeric. Optimal value of the negative log-likelihood function.}
+#' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 #'
 #' @keywords internal
 fmpareto_HR_MLE <- function(
@@ -186,6 +183,10 @@ fmpareto_HR_MLE <- function(
 
 
 #' Helper function to combine par with fixed params (in init)
+#' 
+#' @param par Numeric vector. The parameters that are optimized
+#' @param init Numeric vector. The initial parameters (including the ones optimized over)
+#' @param fixParams Numeric or logical vector. Positions of fixed parameters in the full parameter vector.
 fillFixedParams <- function(par, init, fixParams){
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
@@ -201,7 +202,7 @@ fillFixedParams <- function(par, init, fixParams){
 #'
 #' @param graph `par` represents entries corresponding to the edges of `graph`.
 #' @param init The values used for fixed parameters
-#' @param fixParams The indices (logical or numeric) of fixed parameters
+#' @param fixParams The indices (logical or numeric) of fixed parameters in the full parameter vector.
 #' @param parIsTheta `TRUE` if `par` represents entries in Theta (otherwise Gamma)
 #' @param checkValidity Whether to check if the implied Gamma/Theta is a valid parameter matrix.
 #' 
