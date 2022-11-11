@@ -132,7 +132,7 @@ fmpareto_graph_HR_clique_average <- function(
   } else {
     subGammas <- lapply(cliques, function(cli){
       fmpareto_HR_MLE(
-        data[,cli],
+        mparetomargins(data, cli),
         ...
       )
     })
@@ -162,7 +162,56 @@ fmpareto_graph_HR_clique_sequential <- function(
   graph,
   cens = FALSE
 ){
-  ## WIP...
+  ## TODO: use mclapply
+  
+  # check inputs
+  d <- ncol(data)
+  graph <- check_graph(graph, graph_type = 'decomposable', nVertices = d)
+  
+  # Compute cliques and (recursive) separators
+  layers <- get_cliques_and_separators(graph, sortIntoLayers = TRUE)
+  
+  # Estimate entries corresponding to separators/cliques
+  Ghat <- matrix(NA, d, d)
+  for(cliques in layers){
+    # Compute estimate for each new clique/separator
+    subGammas <- lapply(cliques, function(cli){
+      # get margins data
+      data.cli <- mparetomargins(data, cli)
+      
+      # find (already) fixed entries
+      G.cli <- Ghat[cli, cli]
+      par.cli <- Gamma2par(G.cli)
+      fixParams.cli <- !is.na(par.cli)
+      
+      # get initial parameters that agree with the fixed ones (heuristic, close to empirical variogram):
+      G0 <- emp_vario(data.cli)
+      G1 <- replaceGammaSubMatrix(G0, G.cli)
+      init.cli <- Gamma2par(G1)
+      
+      # estimate parameters
+      opt <- fmpareto_HR_MLE(
+        data = data.cli,
+        init = init.cli,
+        fixParams = fixParams.cli,
+        cens = cens
+      )
+      if(!opt$convergence){
+        stop('MLE did not converge for clique: ', cli)
+      }
+      return(opt$Gamma)
+    })
+
+    # Fill newly computed entries in Ghat
+    for(i in seq_along(cliques)){
+      cli <- cliques[[i]]
+      Ghat[cli, cli] <- subGammas[[i]]
+    }
+  }
+  
+  # Complete non-edge entries
+  G_comp <- complete_Gamma(Ghat, graph)
+  return(G_comp)
 }
 
 
@@ -242,7 +291,6 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 
   # initialize variables:
   Ghat <- matrix(NA, d, d)
-  fixParams <- logical(d)
 
   # loop through cliques and estimate Ghat:
   for(clique in cliques){

@@ -18,12 +18,26 @@ fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
 }
 
 
-# replaces part of a Gamma matrix, keeping definiteness
+# replaces a principal submatrix of a Gamma matrix, keeping definiteness
+# zeros (instead of NAs) on the diagonal of G.fix indicate which principal submatrix to replace
 replaceGammaSubMatrix <- function(G.est, G.fix){
+  # check which are fixed
   ind <- which(!is.na(diag(G.fix)))
   if(length(ind)==0){
     return(G.est)
   }
+  if(length(ind) == ncol(G.est)){
+    return(G.fix)
+  }
+  
+  # naive attempt:
+  G1 <- G.est
+  G1[ind, ind] <- G.fix
+  if(is_sym_cnd(G1)){
+    return(G1)
+  }
+
+  # heuristic, but safe solution:
   k <- ind[1]
   M.est <- Gamma2Sigma(G.est, k)
   M.fix <- Gamma2Sigma(G.fix, k)
