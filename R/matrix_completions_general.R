@@ -3,11 +3,11 @@
 complete_Gamma_general_mc <- function(
   Gamma,
   graph,
-  N = 1000,
-  tol = 0,
+  N = 10000,
+  tol = 1e-12,
   check_tol = 100,
   mc.cores = 1,
-  final_tol = -1
+  final_tol = 1e-9
 ){
   # wip
   graph <- setPids(graph)
@@ -20,7 +20,6 @@ complete_Gamma_general_mc <- function(
     return(igraph::ecount(g) < maxEcount)
   })
 
-  # completedSubMatrices <- mapply(
   completedSubMatrices <- parallel::mcmapply(
     mc.cores = mc.cores,
     complete_Gamma_general_sc,
@@ -57,13 +56,14 @@ complete_Gamma_general_mc <- function(
   return(Gamma)
 }
 
-complete_Gamma_general_sc <- function(Gamma, graph, N=1000, tol=0, check_tol=100){
+complete_Gamma_general_sc <- function(Gamma, graph, N=10000, tol=1e-12, check_tol=100){
+  
+  if(is_complete_graph(graph)){
+    return(Gamma)
+  }
 
   detailedSepList <- make_sep_list(graph)
 
-  if(length(detailedSepList) == 0){
-    N <- 0
-  }
   nonEdgeIndices <- getNonEdgeIndices(graph, 'upper', doWhich = TRUE)
 
   GammaComp <- iterateIndList(Gamma, detailedSepList, nonEdgeIndices, N, tol, check_tol)
@@ -131,3 +131,83 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   return(Gamma)
 }
 
+
+
+
+
+
+#' Completion of non-decomposable Gamma matrices (demo-version)
+#'
+#' Given a `graph` and variogram matrix `Gamma`, returns the full `Gamma`
+#' matrix implied by the conditional independencies.
+#' This function uses a convergent iterative algorithm.
+#' DEMO VERSION: Returns a lot of details and allows specifying the graph list
+#' that is used. Is way slower than `complete_Gamma_general`.
+#'
+#' @param Gamma A complete variogram matrix (without any graphical structure)
+#' @param graph An [igraph::graph] object
+#' @param N The maximal number of iterations of the algorithm
+#' @param tol The tolerance to use when checking for zero entries in `Theta`
+#'
+#' @return A nested list, containing the following details: TODO!!!
+#' 
+#' The corresponding \eqn{\Theta} matrix produced by [Gamma2Theta] has values
+#' close to zero in the remaining entries (how close depends on the input
+#' and the number of iterations).
+#'
+#' @family Matrix completions
+complete_Gamma_general_demo <- function(Gamma, graph = NULL, N = 1000, tol=0, gList=NULL) {
+  # Compute gList if not provided:
+  if(is.null(gList)){
+    sepDetails <- make_sep_list(graph, details=TRUE)
+    gList <- lapply(sepDetails, function(dets) dets$graph)
+  }
+  m <- length(gList)
+
+  # Initialize ret-list with initial Gamma, Theta, etc.:
+  Theta <- Gamma2Theta(Gamma)
+  iterations <- list()
+  ret <- list(
+    graph = graph,
+    Gamma0 = Gamma,
+    Theta0 = Theta,
+    err0 = max(abs(getNonEdgeEntries(Theta, graph))),
+    gList = gList,
+    tol = tol,
+    N = N
+  )
+
+  # Iterate over gList:
+  n <- 0
+  while(n < N) {
+    n <- n + 1
+    t <- (n - 1) %% m + 1
+    g <- gList[[t]]
+    Gamma <- complete_Gamma_decomposable(Gamma, g)
+
+    GammaList <- c(GammaList, list(Gamma))
+
+    # Compute Theta
+    Theta <- Gamma2Theta(Gamma)
+    err <- max(abs(getNonEdgeEntries(Theta, graph)))
+
+    # Store results
+    iterations <- c(iterations, list(list(
+      n = n,
+      t = t,
+      g = g,
+      Gamma = Gamma,
+      Theta = Theta,
+      err = err
+    )))
+
+    # Check if tolerance has been reached
+    if(err <= tol){
+      break
+    }
+  }
+
+  ret$iterations <- iterations
+
+  return(ret)
+}

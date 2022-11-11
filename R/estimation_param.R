@@ -90,34 +90,60 @@ fmpareto_graph_HR <- function(
   p = NULL,
   method = c('ML', 'vario'),
   handleCliques = c('full', 'average', 'sequential'),
-  fallback = FALSE,
   ...
 ){
   # match args
   method <- match.arg(method)
   handleCliques <- match.arg(handleCliques)
 
-  # check inputs
-  if(handleCliques == 'sequential' && (method != 'ML' || !is_decomposable_graph(graph))){
-    stop('Arguments handleCliques="sequential" only works with decomposable graphs and method="ML"!')
-  }
-
   # standardize data
   if(!is.null(p)){
     data <- data2mpareto(data, p)
   }
-
-  ## WIP:
-  ## - Do the computations
-  ## - Check result, fall back if necessary
-  ## - Return
+  
+  # call other functions, depending on handleCliques and method
+  if(handleCliques == 'full'){
+    # Estimate the entire parameter matrix at once
+    if(method == 'ML'){
+      Gamma <- fmpareto_HR_MLE(
+        data,
+        graph = graph,
+        ...
+      )
+    } else{ # method == 'vario'
+      variogram <- emp_vario(data)
+      Gamma <- complete_Gamma(variogram, graph)
+    }
+  } else if(handleCliques == 'sequential'){
+    # Estimate one clique after the other, fixing previously estimated entries.
+    # Works only with MLE on decomposable graphs
+    if(method != 'ML' || !is_decomposable_graph(graph)){
+      stop('Arguments handleCliques="sequential" only works with decomposable graphs and method="ML"!')
+    }
+    Gamma <- fmpareto_graph_HR_clique_sequential(
+      data,
+      graph,
+      ...
+    )
+  } else { # handleCliques == 'average'
+    # Estimate each clique separately, taking the average on separators
+    Gamma <- fmpareto_graph_HR_clique_average(
+      data,
+      graph,
+      method,
+      ...
+    )
+    if(!is_sym_cnd(Gamma)){
+      stop('Averaging on the separators did not yield a valid variogram matrix!')
+    }
+  }
+  return(Gamma)
 }
 
 fmpareto_graph_HR_clique_average <- function(
   data,
   graph,
   method = c('ML', 'vario'),
-  cens = FALSE,
   ...
 ){
   method <- match.arg(method)
@@ -160,7 +186,7 @@ combine_clique_estimates_by_averaging <- function(cliques, subGammas){
 fmpareto_graph_HR_clique_sequential <- function(
   data,
   graph,
-  cens = FALSE
+  ...
 ){
   ## TODO: use mclapply
   
@@ -194,7 +220,7 @@ fmpareto_graph_HR_clique_sequential <- function(
         data = data.cli,
         init = init.cli,
         fixParams = fixParams.cli,
-        cens = cens
+        ...
       )
       if(!opt$convergence){
         stop('MLE did not converge for clique: ', cli)
@@ -248,7 +274,7 @@ fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
   completed_graph <- Gamma2graph(Gamma_graph, to_plot = FALSE)
 
   if (!(graphs_equal(completed_graph, graph))) {
-    message(paste0("The completed Gamma", " does not match the given graph.\n"))
+    message(paste0("The completed Gamm does not match the given graph.\n"))
   }
 
   return(list(

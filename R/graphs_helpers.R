@@ -135,6 +135,10 @@ is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal
 }
 
+is_complete_graph <- function(graph){
+  d <- igraph::vcount(graph)
+  return(igraph::ecount(graph) == d*(d-1)/2)
+}
 
 #' Graph equality
 #' 
