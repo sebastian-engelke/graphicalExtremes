@@ -27,7 +27,6 @@ HR graphical model.
 }
 \seealso{
 Other Input checks: 
-\code{\link{check_graph}()},
-\code{\link{is_block_graph}()}
+\code{\link{check_graph}()}
 }
 \concept{Input checks}

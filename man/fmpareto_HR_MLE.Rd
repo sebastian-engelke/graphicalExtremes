@@ -10,7 +10,7 @@ fmpareto_HR_MLE(
   cens = FALSE,
   init = NULL,
   fixParams = integer(0),
-  useTheta = FALSE,
+  useTheta = TRUE,
   maxit = 100,
   graph = NULL,
   method = "BFGS"
