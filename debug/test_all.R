@@ -116,8 +116,12 @@ for(i in seq_along(solvers)){
 }
 
 for(i in seq_along(results)){
-    if(is.matrix(results[[i]]$Gamma)){
-        results[[i]]$Theta <- Gamma2Theta(results[[i]]$Gamma)
+    Gamma <- results[[i]]$Gamma
+    if(is.matrix(Gamma)){
+        Theta <- Gamma2Theta(Gamma)
+        results[[i]]$Theta <- Theta
+        results[[i]]$maxGammaDiff <- max(abs(getEdgeEntries(Gamma - G0, graph)))
+        results[[i]]$maxThetaDiff <- max(abs(getNonEdgeEntries(Theta, graph)))
     }
 }
 
