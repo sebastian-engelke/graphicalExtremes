@@ -2,31 +2,24 @@
 if(!nchar(Sys.getenv('VSCODE_DEBUG_SESSION'))){
     devtools::load_all('.')
 }
-library(igraph)
-library(tictoc)
+# library(igraph)
+# library(tictoc)
 
-newSeed <- floor(2^20 * runif(1))
-newSeed <- 494411
-cat('Seed:', newSeed, '\n')
-set.seed(newSeed)
+load('debug/graph.Rdata')
+load('debug/variogram.Rdata')
+
+# loads:
+vario_emp
+vario_emp <- ensure_symmetry(vario_emp)
+graph
 
 
-d <- 5
-n <- 100
-graphType <- c('general', 'decomposable', 'tree')[1]
+G1 <- complete_Gamma_general_sc(vario_emp, graph, N=100000)
 
-m <- generate_random_model(d, graphType)
+T1 <- Gamma2Theta(G1)
 
-G0 <- m$Gamma
-graph <- m$graph
+max(abs(getNonEdgeEntries(T1, graph)))
 
-data <- rmpareto(n, 'HR', d, G0)
+# g1 <- Gamma2graph(G1, tol = 1e-3)
 
-ret <- fmpareto_graph_HR(
-    data,
-    graph,
-    method = 'ML',
-    handleCliques = 'sequential'
-)
 
-Theta <- Gamma2Theta(ret)

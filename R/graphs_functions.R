@@ -152,7 +152,7 @@ split_graph <- function(g){
         next # cli not fully contained in g
       }
       cli <- getIds(g, pCli)
-      if(!is.separator(g, cli)){
+      if(!igraph::is.separator(g, cli)){
         newGraphs <- c(newGraphs, list(g))
         next # cli not a separator in g
       }
@@ -408,6 +408,8 @@ findVsep <- function(graph, v0, v1){
   useSecondVertex <- (eSep[,1] %in% c(v0, v1))
   vSep <- eSep[,1]
   vSep[useSecondVertex] <- eSep[useSecondVertex,2]
+  
+  vSep <- unique(vSep)
 
   return(vSep)
 }
@@ -427,7 +429,7 @@ check_split_by_sep <- function(graph, sep, edgeMat){
   }
 
   # Compute distances after removing `sep`:
-  g2 <- delete.vertices(graph, sep)
+  g2 <- igraph::delete.vertices(graph, sep)
   dists <- igraph::distances(g2)
 
   # Convert vertex ids in original graph to ids in split graph:
