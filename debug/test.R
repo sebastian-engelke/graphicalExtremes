@@ -18,8 +18,14 @@ G1 <- complete_Gamma_general_sc(vario_emp, graph, N=100000)
 
 T1 <- Gamma2Theta(G1)
 
+# Check Theta-zeros in non-edge entries:
 max(abs(getNonEdgeEntries(T1, graph)))
 
-# g1 <- Gamma2graph(G1, tol = 1e-3)
+# Check unchanged Gamma in edge entries:
+max(abs(getEdgeEntries(G1 - vario_emp, graph)))
+
+# Check that G1 is valid:
+is_sym_cnd(G1)
+
 
 
