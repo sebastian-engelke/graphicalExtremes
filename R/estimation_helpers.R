@@ -235,8 +235,8 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 
   # if cens = FALSE (default)
   if (!cens) {
-    return(-n * log(V_HR(x = rep(1, times = d), par = par))
-           + sum(logdV_HR(x = data, par = par)))
+    return(-n * log(V_HR(x = rep(1, times = d), Gamma = Gamma))
+           + sum(logdV_HR(x = data, Gamma = Gamma)))
   }
 
   # if cens = TRUE

@@ -609,8 +609,8 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
 #' observations following a multivariate HR Pareto distribution.
 #'
-#' @param graph An [igraph::graph] object. The `graph` must be undirected and
-#' connected
+#' @param graph An [igraph::graph] object or `NULL`. The `graph` must be undirected and
+#' connected. If no graph is specified, the complete graph is used.
 #'
 #' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
 #' It represents a variogram matrix \eqn{\Gamma}.
@@ -627,7 +627,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' log-likelihood, AIC, and BIC values.
 #'
 #' @export
-loglik_HR <- function(data, p = NULL, graph, Gamma, cens = FALSE){
+loglik_HR <- function(data, p = NULL, graph = NULL, Gamma, cens = FALSE){
   # Todo:
   # change log(n) to log(n_edges)
   # explain in help file how we compute bic, aic
@@ -641,8 +641,13 @@ loglik_HR <- function(data, p = NULL, graph, Gamma, cens = FALSE){
     cens = cens
   )
 
+  if(is.null(graph)){
+    d <- ncol(data)
+    n_edges <- d*(d-1)/2
+  } else{
+    n_edges <-  igraph::ecount(graph)
+  }
   n <- nrow(data)
-  n_edges <-  igraph::ecount(graph)
 
   aic <- 2 * n_edges - 2 * loglik
 
