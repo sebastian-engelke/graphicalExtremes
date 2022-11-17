@@ -21,6 +21,19 @@
 
 #' Flights delay data
 #' 
-#' TODO: Details
+#' TODO: Details, add licenses!
+#' 
+#' Data (.asc files in .zip files):
+#' - https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time
+#' 
+#' Fields/Forms:
+#' - https://esubmit.rita.dot.gov/On-Time-Form1.aspx
+#' - https://esubmit.rita.dot.gov/On-Time-Form2A.aspx
+#' - https://esubmit.rita.dot.gov/On-Time-Form2B.aspx
+#' - https://esubmit.rita.dot.gov/On-Time-Form3A.aspx
+#' - https://esubmit.rita.dot.gov/On-Time-Form3B.aspx
+#' 
+#' Airports:
+#' - https://openflights.org/data.html
 #' 
 "flights"
