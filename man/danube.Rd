@@ -3,7 +3,7 @@
 \docType{data}
 \name{danube}
 \alias{danube}
-\title{Upper Danube basin dataset.}
+\title{Upper Danube basin dataset}
 \format{
 An object of class \code{list} of length 4.
 }

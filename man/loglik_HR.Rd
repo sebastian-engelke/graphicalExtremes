@@ -4,7 +4,7 @@
 \alias{loglik_HR}
 \title{Compute Huesler--Reiss log-likelihood, AIC, and BIC}
 \usage{
-loglik_HR(data, p = NULL, graph, Gamma, cens = FALSE)
+loglik_HR(data, p = NULL, graph = NULL, Gamma, cens = FALSE)
 }
 \arguments{
 \item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
@@ -15,8 +15,8 @@ it is assumed that the \code{data} are already on multivariate Pareto scale.
 Else, \code{p} is used as the probability in the function \link{data2mpareto}
 to standardize the \code{data}.}
 
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object. The \code{graph} must be undirected and
-connected}
+\item{graph}{An \link[igraph:make_graph]{igraph::graph} object or \code{NULL}. The \code{graph} must be undirected and
+connected. If no graph is specified, the complete graph is used.}
 
 \item{Gamma}{Numeric matrix \eqn{n\times d}{n x d}.
 It represents a variogram matrix \eqn{\Gamma}.}

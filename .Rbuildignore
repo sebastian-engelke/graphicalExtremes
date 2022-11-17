@@ -10,3 +10,9 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^debug$
+^\.vscode$
+\.pdf$
+\.txt$
+\.md$
+^tests$
