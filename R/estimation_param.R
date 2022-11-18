@@ -1,94 +1,56 @@
 
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on block graphs
-#'
-#' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution using (censored) likelihood estimation.
-#' See \insertCite{eng2019;textual}{graphicalExtremes} for details.
-#'
+
+#' Parameter fitting for Huesler--Reiss graphical models
+#' 
+#' Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
+#' with a given graphical structure, using maximum-likelihood estimation
+#' or the empirical variogram.
+#' 
 #' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' number of observations and \eqn{d} is the number of dimensions.
 #'
-#' @param graph Undirected graph object from `igraph` package with `d` vertices.
+#' @param graph Undirected, connected [igraph::graph] object with `d` vertices,
+#' representing the graphical structure of the fitted Huesler--Reiss model.
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
-#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
+#' it is assumed that the `data` is already on a multivariate Pareto scale.
+#' Else, `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
-#' @param method One of `"ML", "vario"`.
-#' Default is `method = "ML"`.
-#'
-#' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, `cens = FALSE`.
-#'
-#' @return List consisting of:
-#' \item{`graph`}{An [igraph::graph()] object.}
-#' \item{`Gamma`}{Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}.}
-#'
-#' @examples
-#' ## Fitting a 4-dimensional HR distribution
-#'
-#' my_graph <- igraph::graph_from_adjacency_matrix(
-#'   rbind(
-#'     c(0, 1, 0, 0),
-#'     c(1, 0, 1, 1),
-#'     c(0, 1, 0, 0),
-#'     c(0, 1, 0, 0)
-#'   ),
-#'   mode = "undirected"
-#' )
-#' n <- 100
-#' Gamma_vec <- c(.5, 1.4, .8)
-#' complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
-#' edges_to_add <- rbind(c(1, 3), c(1, 4), c(3, 4))
-#'
-#' set.seed(123)
-#' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
-#' my_fit <- fmpareto_graph_HR(my_data,
-#'   graph = my_graph, method = "ML",
-#'   p = NULL, cens = FALSE
-#' )
-#' @references
-#'  \insertAllCited{}
+#' @param method One of `c('vario', 'ML')`, with `'vario'` as default, indicating
+#' the method to be used for parameter estimation. See details.
+#' 
+#' @param handleCliques How to handle cliques and separators in the graph.
+#' See details.
+#' 
+#' @param ... Arguments passed to [fmpareto_HR_MLE()]. Currently `cens`, `maxit`,
+#' `optMethod`, and `useTheta` are supported.
+#' 
+#' @details
+#' If `handleCliques='full'`, first the full parameter matrix is estimated using the
+#' specified `method` and then the non-edge entries are adjusted such that the
+#' final parameter matrix has the graphical structure indicated by `graph`.
+#' 
+#' If `handleCliques='average'`, the marginal parameter matrix is estimated for
+#' each maximal clique of the `graph` and then combined into a partial parameter
+#' matrix by taking the average of entries from overlapping cliques. Lastly,
+#' the full parameter matrix is computed using [complete_Gamma].
+#' 
+#' If `handleCliques='sequential'`, `graph` must be decomposable, and
+#' `method='ML'` must be specified. The parameter matrix is first estimated on
+#' the (recursive) separators and then on the rest of the cliques, keeping
+#' previously estimated entries fixed.
+#' 
+#' If `method='ML'`, the computational cost is mostly influenced by the total size
+#' of the graph (if `handleCliques='full'`) or the size of the cliques,
+#' and can already take a significant amount of time for modest dimensions (e.g. `d=3`).
+#' 
 #' @export
-fmpareto_graph_HR_OLD <- function(
-  data,
-  graph,
-  p = NULL,
-  method = c("ML", "vario"),
-  cens = FALSE
-){
-  # Check arguments
-  method <- match.arg(method)
-
-  # Check graph
-  d <- ncol(data)
-  graph <- check_graph(graph, nVertices = d)
-
-  if(is_decomposable_graph(graph)) {
-
-    max_clique <- 2 #!!!
-
-    if (max_clique > 3) {
-      method <- "vario"
-      warning("The maximal clique size is larger than 3. Forced to use empirical variogram.")
-    }
-
-    if (method == "ML") {
-      fmpareto_graph_HR_decomposable(data, graph, p, cens)
-    } else {
-      fmpareto_graph_HR_general(data, graph, p)
-    }
-
-  } else {
-    fmpareto_graph_HR_general(data, graph, p)
-  }
-}
-
 fmpareto_graph_HR <- function(
   data,
   graph,
   p = NULL,
-  method = c('ML', 'vario'),
+  method = c('vario', 'ML'),
   handleCliques = c('full', 'average', 'sequential'),
   ...
 ){

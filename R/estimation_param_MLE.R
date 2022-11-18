@@ -45,7 +45,7 @@ fmpareto_HR_MLE <- function(
   useTheta = TRUE,
   maxit = 100,
   graph = NULL,
-  method = "BFGS"
+  optMethod = "BFGS"
 ){
   # if p provided -> data not Pareto -> to convert
   if(!is.null(p)) {
@@ -166,7 +166,7 @@ fmpareto_HR_MLE <- function(
     nllik,
     hessian = TRUE,
     control = list(maxit = maxit),
-    method = method
+    method = optMethod
   )
 
   # Interpret results
