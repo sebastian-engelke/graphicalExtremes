@@ -11,6 +11,26 @@ An object of class \code{list} of length 4.
 flights
 }
 \description{
-TODO: Details
+TODO: Details, add licenses!
+}
+\details{
+Data (.asc files in .zip files):
+\itemize{
+\item https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time
+}
+
+Fields/Forms:
+\itemize{
+\item https://esubmit.rita.dot.gov/On-Time-Form1.aspx
+\item https://esubmit.rita.dot.gov/On-Time-Form2A.aspx
+\item https://esubmit.rita.dot.gov/On-Time-Form2B.aspx
+\item https://esubmit.rita.dot.gov/On-Time-Form3A.aspx
+\item https://esubmit.rita.dot.gov/On-Time-Form3B.aspx
+}
+
+Airports:
+\itemize{
+\item https://openflights.org/data.html
+}
 }
 \keyword{datasets}
