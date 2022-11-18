@@ -6,6 +6,17 @@
 \title{Flights delay data}
 \format{
 A named \code{list} with four entries:
+
+\code{flightCounts} is a three dimensional array, containing the number of flights in the dataset
+between each pair of airports, aggregated on a yearly basis.
+Each entry is the total number of flights between the departure airport (row)
+and destination airport (column) in a given year (dimension 3).
+
+\code{arrivalDelays} and \code{departureDelays} are integer matrices containing the
+total positive delays, in minutes, of incoming and outgoing flights respectively.
+Each column corresponds to an airport in the dataset and each row corresponds
+to a day.
+
 \code{airports} is a \code{data.frame} containing the following information about a number of US airports:
 \describe{
 \item{\code{IATA}}{3-letter IATA code}
@@ -25,34 +36,36 @@ Either 'A' (US/Canada), 'N' (None) or NA.
 }
 }
 \source{
-Data (.asc files in .zip files):
+Raw delays data:
 \itemize{
-\item https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time
+\item \url{https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time}
 }
 
-Fields/Forms:
+Fields/Forms used in the raw data:
 \itemize{
-\item https://esubmit.rita.dot.gov/ViewReports.aspx
-\itemize{
-\item https://esubmit.rita.dot.gov/On-Time-Form1.aspx
-\item https://esubmit.rita.dot.gov/On-Time-Form2A.aspx
-\item https://esubmit.rita.dot.gov/On-Time-Form2B.aspx
-\item https://esubmit.rita.dot.gov/On-Time-Form3A.aspx
-\item https://esubmit.rita.dot.gov/On-Time-Form3B.aspx
-}
+\item \url{https://esubmit.rita.dot.gov/ViewReports.aspx}
+\item \url{https://esubmit.rita.dot.gov/On-Time-Form1.aspx}
+\item \url{https://esubmit.rita.dot.gov/On-Time-Form3A.aspx}
 }
 
 Airports:
 \itemize{
-\item https://openflights.org/data.html
+\item \url{https://openflights.org/data.html}
 }
 }
 \usage{
 flights
 }
 \description{
-TODO: Details, add licenses!
-TODO: convert Timezone to numeric, DST: "U"->NA
-TODO: see paper
+TODO:
+\itemize{
+\item add licenses
+\item convert Timezone to numeric
+\item in DST: "U" -> NA
+\item see R-code in paper-project
+}
+}
+\details{
+A dataset containing daily total delays of major airlines in the USA.
 }
 \keyword{datasets}

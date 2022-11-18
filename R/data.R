@@ -21,11 +21,26 @@
 
 #' Flights delay data
 #' 
-#' TODO: Details, add licenses!
-#' TODO: convert Timezone to numeric, DST: "U"->NA
-#' TODO: see paper
+#' TODO:
+#' - add licenses
+#' - convert Timezone to numeric
+#' - in DST: "U" -> NA
+#' - see R-code in paper-project
+#' 
+#' A dataset containing daily total delays of major airlines in the USA.
 #' 
 #' @format A named `list` with four entries:
+#' 
+#' `flightCounts` is a three dimensional array, containing the number of flights in the dataset
+#' between each pair of airports, aggregated on a yearly basis. 
+#' Each entry is the total number of flights between the departure airport (row)
+#' and destination airport (column) in a given year (dimension 3).
+#' 
+#' `arrivalDelays` and `departureDelays` are integer matrices containing the 
+#' total positive delays, in minutes, of incoming and outgoing flights respectively.
+#' Each column corresponds to an airport in the dataset and each row corresponds
+#' to a day.
+#' 
 #' `airports` is a `data.frame` containing the following information about a number of US airports:
 #' \describe{
 #'  \item{`IATA`}{3-letter IATA code}
@@ -45,18 +60,15 @@
 #' }
 #' 
 #' @source
-#' Data (.asc files in .zip files):
-#' - https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time
+#' Raw delays data:
+#' - <https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time>
 #' 
-#' Fields/Forms:
-#' - https://esubmit.rita.dot.gov/ViewReports.aspx
-#'   - https://esubmit.rita.dot.gov/On-Time-Form1.aspx
-#'   - https://esubmit.rita.dot.gov/On-Time-Form2A.aspx
-#'   - https://esubmit.rita.dot.gov/On-Time-Form2B.aspx
-#'   - https://esubmit.rita.dot.gov/On-Time-Form3A.aspx
-#'   - https://esubmit.rita.dot.gov/On-Time-Form3B.aspx
+#' Fields/Forms used in the raw data:
+#' - <https://esubmit.rita.dot.gov/ViewReports.aspx>
+#' - <https://esubmit.rita.dot.gov/On-Time-Form1.aspx>
+#' - <https://esubmit.rita.dot.gov/On-Time-Form3A.aspx>
 #' 
 #' Airports:
-#' - https://openflights.org/data.html
+#' - <https://openflights.org/data.html>
 #' 
 "flights"
