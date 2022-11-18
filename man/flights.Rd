@@ -5,15 +5,26 @@
 \alias{flights}
 \title{Flights delay data}
 \format{
-An object of class \code{list} of length 4.
+A named \code{list} with four entries:
+\code{airports} is a \code{data.frame} containing the following information about a number of US airports:
+\describe{
+\item{\code{IATA}}{3-letter IATA code}
+\item{\code{Name}}{name of the airport}
+\item{\code{City}}{main city served by the airport}
+\item{\code{Country}}{country or territory where the airport is located (mostly "United States")}
+\item{\code{ICAO}}{4-letter ICAO code}
+\item{\code{Latitude}}{latitude of the airport, in decimal degrees}
+\item{\code{Longitude}}{longitude of the airport, in decimal degrees}
+\item{\code{Altitude}}{altitude of the airport, in feet}
+\item{\code{Timezone}}{timezone of the airport, in hours offset from UTC}
+\item{\code{DST}}{
+Daylight savings time used at the airport.
+Either 'A' (US/Canada), 'N' (None) or NA.
 }
-\usage{
-flights
+\item{\code{Timezone2}}{name of the timezone of the airport}
 }
-\description{
-TODO: Details, add licenses!
 }
-\details{
+\source{
 Data (.asc files in .zip files):
 \itemize{
 \item https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time
@@ -21,16 +32,27 @@ Data (.asc files in .zip files):
 
 Fields/Forms:
 \itemize{
+\item https://esubmit.rita.dot.gov/ViewReports.aspx
+\itemize{
 \item https://esubmit.rita.dot.gov/On-Time-Form1.aspx
 \item https://esubmit.rita.dot.gov/On-Time-Form2A.aspx
 \item https://esubmit.rita.dot.gov/On-Time-Form2B.aspx
 \item https://esubmit.rita.dot.gov/On-Time-Form3A.aspx
 \item https://esubmit.rita.dot.gov/On-Time-Form3B.aspx
 }
+}
 
 Airports:
 \itemize{
 \item https://openflights.org/data.html
 }
+}
+\usage{
+flights
+}
+\description{
+TODO: Details, add licenses!
+TODO: convert Timezone to numeric, DST: "U"->NA
+TODO: see paper
 }
 \keyword{datasets}

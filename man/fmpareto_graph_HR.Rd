@@ -34,6 +34,9 @@ See details.}
 \item{...}{Arguments passed to \code{\link[=fmpareto_HR_MLE]{fmpareto_HR_MLE()}}. Currently \code{cens}, \code{maxit},
 \code{optMethod}, and \code{useTheta} are supported.}
 }
+\value{
+The estiamted parameter matrix.
+}
 \description{
 Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
 with a given graphical structure, using maximum-likelihood estimation
@@ -43,12 +46,18 @@ or the empirical variogram.
 If \code{handleCliques='full'}, first the full parameter matrix is estimated using the
 specified \code{method} and then the non-edge entries are adjusted such that the
 final parameter matrix has the graphical structure indicated by \code{graph}.
-For \code{method='ML'} and \code{d>3} this can be computationally expensive.
 
 If \code{handleCliques='average'}, the marginal parameter matrix is estimated for
 each maximal clique of the \code{graph} and then combined into a partial parameter
 matrix by taking the average of entries from overlapping cliques. Lastly,
 the full parameter matrix is computed using \link{complete_Gamma}.
 
-If \code{h}
+If \code{handleCliques='sequential'}, \code{graph} must be decomposable, and
+\code{method='ML'} must be specified. The parameter matrix is first estimated on
+the (recursive) separators and then on the rest of the cliques, keeping
+previously estimated entries fixed.
+
+If \code{method='ML'}, the computational cost is mostly influenced by the total size
+of the graph (if \code{handleCliques='full'}) or the size of the cliques,
+and can already take a significant amount of time for modest dimensions (e.g. \code{d=3}).
 }
