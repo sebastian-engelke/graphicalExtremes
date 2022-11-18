@@ -26,6 +26,8 @@
 #' @param ... Arguments passed to [fmpareto_HR_MLE()]. Currently `cens`, `maxit`,
 #' `optMethod`, and `useTheta` are supported.
 #' 
+#' @return The estiamted parameter matrix.
+#' 
 #' @details
 #' If `handleCliques='full'`, first the full parameter matrix is estimated using the
 #' specified `method` and then the non-edge entries are adjusted such that the
