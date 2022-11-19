@@ -21,32 +21,38 @@
 
 #' Flights delay data
 #' 
+#' A dataset containing daily total delays of major airlines in the USA.
 #' TODO:
 #' - add licenses
 #' - add interface functions?
 #'   - nFlights -> connection-list?
 #' - add plot function
 #' 
-#' A dataset containing daily total delays of major airlines in the USA.
+#' @format A named `list` with three entries:
+#' \describe{
+#'  \item{`airports`}{A `data.frame` containing information about US airports}
+#'  \item{`delays`}{Daily aggregated delays at US airports}
+#'  \item{`flightCounts`}{An array containing yearly number of flights between US airports}
+#' }
 #' 
-#' @format A named `list` with four entries:
-#' 
-#' `flightCounts` is a three dimensional array, containing the number of flights in the dataset
+#' @details
+#' `flightCounts` is a three-dimensional array, containing the number of flights in the dataset
 #' between each pair of airports, aggregated on a yearly basis. 
 #' Each entry is the total number of flights between the departure airport (row)
 #' and destination airport (column) in a given year (dimension 3).
 #' 
-#' `arrivalDelays` and `departureDelays` are integer matrices containing the 
-#' total positive delays, in minutes, of incoming and outgoing flights respectively.
+#' `delays` is a three-dimensional array containing daily total positive delays,
+#' in minutes, of incoming and outgoing flights respectively.
 #' Each column corresponds to an airport in the dataset and each row corresponds
-#' to a day.
+#' to a day. The third dimension has two entries `'arrival'` containing delays of
+#' incoming flights and `'departure'` containing delays of outgoing flights.
 #' 
-#' `airports` is a `data.frame` containing the following information about a number of US airports:
+#' `airports` is a data frame containing the following information about a number of US airports:
 #' \describe{
 #'  \item{`IATA`}{3-letter IATA code}
 #'  \item{`Name`}{name of the airport}
 #'  \item{`City`}{main city served by the airport}
-#'  \item{`Country`}{country or territory where the airport is located (mostly "United States")}
+#'  \item{`Country`}{country or territory where the airport is located (mostly `"United States"`)}
 #'  \item{`ICAO`}{4-letter ICAO code}
 #'  \item{`Latitude`}{latitude of the airport, in decimal degrees}
 #'  \item{`Longitude`}{longitude of the airport, in decimal degrees}
@@ -58,6 +64,13 @@
 #'  }
 #'  \item{`Timezone2`}{name of the timezone of the airport}
 #' }
+#' 
+#' @examples 
+#' # Get total number of flights in the dataset:
+#' totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
+#' 
+#' # Get total delays (arriving + departing):
+#' totalDelays <- apply(flights$delays, c(1,2), sum)
 #' 
 #' @source
 #' Raw delays data:

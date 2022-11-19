@@ -5,34 +5,11 @@
 \alias{flights}
 \title{Flights delay data}
 \format{
-A named \code{list} with four entries:
-
-\code{flightCounts} is a three dimensional array, containing the number of flights in the dataset
-between each pair of airports, aggregated on a yearly basis.
-Each entry is the total number of flights between the departure airport (row)
-and destination airport (column) in a given year (dimension 3).
-
-\code{arrivalDelays} and \code{departureDelays} are integer matrices containing the
-total positive delays, in minutes, of incoming and outgoing flights respectively.
-Each column corresponds to an airport in the dataset and each row corresponds
-to a day.
-
-\code{airports} is a \code{data.frame} containing the following information about a number of US airports:
+A named \code{list} with three entries:
 \describe{
-\item{\code{IATA}}{3-letter IATA code}
-\item{\code{Name}}{name of the airport}
-\item{\code{City}}{main city served by the airport}
-\item{\code{Country}}{country or territory where the airport is located (mostly "United States")}
-\item{\code{ICAO}}{4-letter ICAO code}
-\item{\code{Latitude}}{latitude of the airport, in decimal degrees}
-\item{\code{Longitude}}{longitude of the airport, in decimal degrees}
-\item{\code{Altitude}}{altitude of the airport, in feet}
-\item{\code{Timezone}}{timezone of the airport, in hours offset from UTC}
-\item{\code{DST}}{
-Daylight savings time used at the airport.
-Either 'A' (US/Canada), 'N' (None) or NA.
-}
-\item{\code{Timezone2}}{name of the timezone of the airport}
+\item{\code{airports}}{A \code{data.frame} containing information about US airports}
+\item{\code{delays}}{Daily aggregated delays at US airports}
+\item{\code{flightCounts}}{An array containing yearly number of flights between US airports}
 }
 }
 \source{
@@ -57,6 +34,7 @@ Airports:
 flights
 }
 \description{
+A dataset containing daily total delays of major airlines in the USA.
 TODO:
 \itemize{
 \item add licenses
@@ -68,6 +46,41 @@ TODO:
 }
 }
 \details{
-A dataset containing daily total delays of major airlines in the USA.
+\code{flightCounts} is a three-dimensional array, containing the number of flights in the dataset
+between each pair of airports, aggregated on a yearly basis.
+Each entry is the total number of flights between the departure airport (row)
+and destination airport (column) in a given year (dimension 3).
+
+\code{delays} is a three-dimensional array containing daily total positive delays,
+in minutes, of incoming and outgoing flights respectively.
+Each column corresponds to an airport in the dataset and each row corresponds
+to a day. The third dimension has two entries \code{'arrival'} containing delays of
+incoming flights and \code{'departure'} containing delays of outgoing flights.
+
+\code{airports} is a data frame containing the following information about a number of US airports:
+\describe{
+\item{\code{IATA}}{3-letter IATA code}
+\item{\code{Name}}{name of the airport}
+\item{\code{City}}{main city served by the airport}
+\item{\code{Country}}{country or territory where the airport is located (mostly \code{"United States"})}
+\item{\code{ICAO}}{4-letter ICAO code}
+\item{\code{Latitude}}{latitude of the airport, in decimal degrees}
+\item{\code{Longitude}}{longitude of the airport, in decimal degrees}
+\item{\code{Altitude}}{altitude of the airport, in feet}
+\item{\code{Timezone}}{timezone of the airport, in hours offset from UTC}
+\item{\code{DST}}{
+Daylight savings time used at the airport.
+Either 'A' (US/Canada), 'N' (None) or NA.
+}
+\item{\code{Timezone2}}{name of the timezone of the airport}
+}
+}
+\examples{
+# Get total number of flights in the dataset:
+totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
+
+# Get total delays (arriving + departing):
+totalDelays <- apply(flights$delays, c(1,2), sum)
+
 }
 \keyword{datasets}
