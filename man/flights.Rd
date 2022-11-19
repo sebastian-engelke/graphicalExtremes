@@ -79,6 +79,9 @@ Either 'A' (US/Canada), 'N' (None) or NA.
 # Get total number of flights in the dataset:
 totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
 
+# Get number of flights for specific years in the dataset:
+flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), sum)
+
 # Get total delays (arriving + departing):
 totalDelays <- apply(flights$delays, c(1,2), sum)
 
