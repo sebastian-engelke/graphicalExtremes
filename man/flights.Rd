@@ -60,9 +60,11 @@ flights
 TODO:
 \itemize{
 \item add licenses
-\item convert Timezone to numeric
-\item in DST: "U" -> NA
-\item see R-code in paper-project
+\item add interface functions?
+\itemize{
+\item nFlights -> connection-list?
+}
+\item add plot function
 }
 }
 \details{

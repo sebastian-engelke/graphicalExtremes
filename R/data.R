@@ -23,9 +23,9 @@
 #' 
 #' TODO:
 #' - add licenses
-#' - convert Timezone to numeric
-#' - in DST: "U" -> NA
-#' - see R-code in paper-project
+#' - add interface functions?
+#'   - nFlights -> connection-list?
+#' - add plot function
 #' 
 #' A dataset containing daily total delays of major airlines in the USA.
 #' 
