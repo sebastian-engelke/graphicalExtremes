@@ -54,8 +54,8 @@ and destination airport (column) in a given year (dimension 3).
 \code{delays} is a three-dimensional array containing daily total positive delays,
 in minutes, of incoming and outgoing flights respectively.
 Each column corresponds to an airport in the dataset and each row corresponds
-to a day. The third dimension has two entries \code{'arrival'} containing delays of
-incoming flights and \code{'departure'} containing delays of outgoing flights.
+to a day. The third dimension has length two, \code{'arrivals'} containing delays of
+incoming flights and \code{'departures'} containing delays of outgoing flights.
 
 \code{airports} is a data frame containing the following information about a number of US airports:
 \describe{
@@ -68,10 +68,7 @@ incoming flights and \code{'departure'} containing delays of outgoing flights.
 \item{\code{Longitude}}{longitude of the airport, in decimal degrees}
 \item{\code{Altitude}}{altitude of the airport, in feet}
 \item{\code{Timezone}}{timezone of the airport, in hours offset from UTC}
-\item{\code{DST}}{
-Daylight savings time used at the airport.
-Either 'A' (US/Canada), 'N' (None) or NA.
-}
+\item{\code{DST}}{Daylight savings time used at the airport. 'A'=US/Canada, 'N'=None.}
 \item{\code{Timezone2}}{name of the timezone of the airport}
 }
 }
