@@ -5,7 +5,20 @@
 \alias{danube}
 \title{Upper Danube basin dataset}
 \format{
-An object of class \code{list} of length 4.
+A named \code{list} with four entries
+\describe{
+\item{\code{data}}{A matrix, containing ??ly discharge data for each gauging station}
+\item{\code{info}}{Information about each gauging station}
+\item{\code{flow_edges}}{
+A two-column numeric matrix. Each row contains the indices (in \code{info})
+of a pair of gauging stations that are directly connected by a river.
+}
+\item{\code{coords_to_plot}}{
+A two-column matrix, containing X-Y-coordinates which can be used
+to arrange the gauging stations in a flow graph.
+TODO?: move this to \code{info}?
+}
+}
 }
 \source{
 Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
@@ -15,5 +28,26 @@ danube
 }
 \description{
 A dataset containing river discharge data for tributaries of Danube.
+}
+\details{
+\code{data}: How was this data obtained? Why are all the rownames duplicates?
+This should be fixed?
+
+\code{info} is a data frame containing containing the following information for
+each of the gauging stations.
+TODO: check these somewhere.
+\describe{
+\item{\code{RivNames}}{Name of the river at the gauging station}
+\item{\code{Lat}}{Latitude of the gauging station}
+\item{\code{Long}}{Longitude of the gauging station}
+\item{\code{AveVol}}{??}
+\item{\code{Lat_Center}}{Latitude of the center of the catchment corresponding to the gauging station}
+\item{\code{Long_Center}}{Longitude of the center of the catchment corresponding to the gauging station}
+\item{\code{Alt}}{Altitude of the gauging station}
+\item{\code{Area}}{Area of the catchment corresponding to the gauging station}
+\item{\code{Chos}}{??}
+\item{\code{Density}}{??}
+\item{\code{Slope}}{??}
+}
 }
 \keyword{datasets}

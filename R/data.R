@@ -1,6 +1,42 @@
 #' Upper Danube basin dataset
 #'
 #' A dataset containing river discharge data for tributaries of Danube.
+#' 
+#' @format A named `list` with four entries
+#' \describe{
+#'  \item{`data`}{A matrix, containing ??ly discharge data for each gauging station}
+#'  \item{`info`}{Information about each gauging station}
+#'  \item{`flow_edges`}{
+#'    A two-column numeric matrix. Each row contains the indices (in `info`)
+#'    of a pair of gauging stations that are directly connected by a river.
+#'  }
+#'  \item{`coords_to_plot`}{
+#'    A two-column matrix, containing X-Y-coordinates which can be used
+#'    to arrange the gauging stations in a flow graph.
+#'    TODO?: move this to `info`?
+#'  }
+#' }
+#' 
+#' @details
+#' `data`: How was this data obtained? Why are all the rownames duplicates?
+#' This should be fixed?
+#' 
+#' `info` is a data frame containing containing the following information for
+#' each of the gauging stations.
+#' TODO: check these somewhere.
+#' \describe{
+#'  \item{`RivNames`}{Name of the river at the gauging station}
+#'  \item{`Lat`}{Latitude of the gauging station}
+#'  \item{`Long`}{Longitude of the gauging station}
+#'  \item{`AveVol`}{??}
+#'  \item{`Lat_Center`}{Latitude of the center of the catchment corresponding to the gauging station}
+#'  \item{`Long_Center`}{Longitude of the center of the catchment corresponding to the gauging station}
+#'  \item{`Alt`}{Altitude of the gauging station}
+#'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
+#'  \item{`Chos`}{??}
+#'  \item{`Density`}{??}
+#'  \item{`Slope`}{??}
+#' }
 #'
 #' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.
 #'
@@ -14,7 +50,7 @@
 #' Arizona, Utah, and Texas.
 #' 
 #' This dataset was called `flights` in earlier development versions of this package
-#' and is is superseded by the new dataset now called `flights`.
+#' and is is superseded by the new dataset now called [`flights`].
 #'
 #' @source U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics <https://www.bts.gov/>.
 "flights_old"
@@ -40,14 +76,20 @@
 #' between each pair of airports, aggregated on a yearly basis. 
 #' Each entry is the total number of flights between the departure airport (row)
 #' and destination airport (column) in a given year (dimension 3).
+#' This array does not contain any `NA`s, even if an airport did not operate
+#' at all in a given year, which is simply indicated by zeros.
 #' 
 #' `delays` is a three-dimensional array containing daily total positive delays,
 #' in minutes, of incoming and outgoing flights respectively.
 #' Each column corresponds to an airport in the dataset and each row corresponds
 #' to a day. The third dimension has length two, `'arrivals'` containing delays of
 #' incoming flights and `'departures'` containing delays of outgoing flights.
+#' Zeros indicate that there were flights arriving/departing at that airport
+#' on a given day, but none of them had delays. `NA`s indicate that there were
+#' no flights arriving/departing at that airport on that day at all.
 #' 
-#' `airports` is a data frame containing the following information about a number of US airports:
+#' `airports` is a data frame containing the following information about a number of US airports.
+#' Some entries are missing, which is indicated by `NA`s.
 #' \describe{
 #'  \item{`IATA`}{3-letter IATA code}
 #'  \item{`Name`}{name of the airport}

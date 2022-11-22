@@ -37,7 +37,7 @@ flights
 A dataset containing daily total delays of major airlines in the USA.
 TODO:
 \itemize{
-\item add licenses
+\item add license(s)?
 \item add interface functions?
 \itemize{
 \item nFlights -> connection-list?
@@ -50,14 +50,20 @@ TODO:
 between each pair of airports, aggregated on a yearly basis.
 Each entry is the total number of flights between the departure airport (row)
 and destination airport (column) in a given year (dimension 3).
+This array does not contain any \code{NA}s, even if an airport did not operate
+at all in a given year, which is simply indicated by zeros.
 
 \code{delays} is a three-dimensional array containing daily total positive delays,
 in minutes, of incoming and outgoing flights respectively.
 Each column corresponds to an airport in the dataset and each row corresponds
 to a day. The third dimension has length two, \code{'arrivals'} containing delays of
 incoming flights and \code{'departures'} containing delays of outgoing flights.
+Zeros indicate that there were flights arriving/departing at that airport
+on a given day, but none of them had delays. \code{NA}s indicate that there were
+no flights arriving/departing at that airport on that day at all.
 
-\code{airports} is a data frame containing the following information about a number of US airports:
+\code{airports} is a data frame containing the following information about a number of US airports.
+Some entries are missing, which is indicated by \code{NA}s.
 \describe{
 \item{\code{IATA}}{3-letter IATA code}
 \item{\code{Name}}{name of the airport}
