@@ -7,9 +7,11 @@
 \format{
 A named \code{list} with three entries:
 \describe{
-\item{\code{airports}}{A \code{data.frame} containing information about US airports}
-\item{\code{delays}}{Daily aggregated delays at US airports}
-\item{\code{flightCounts}}{An array containing yearly number of flights between US airports}
+\item{\code{airports}}{A \code{data.frame}, containing information about US airports}
+\item{\code{delays}}{A numeric matrix, containing daily aggregated delays at the airports in the dataset}
+\item{\code{flightCounts}}{
+A numeric array, containing yearly flight numbers between airports in the dataset
+}
 }
 }
 \source{
@@ -35,7 +37,7 @@ flights
 }
 \description{
 A dataset containing daily total delays of major airlines in the USA.
-TODO:
+\strong{TODO}:
 \itemize{
 \item add license(s)?
 \item add interface functions?

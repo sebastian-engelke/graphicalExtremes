@@ -1,19 +1,18 @@
 #' Upper Danube basin dataset
 #'
-#' A dataset containing river discharge data for tributaries of Danube.
+#' A dataset containing river discharge data for tributaries of the Danube.
 #' 
 #' @format A named `list` with four entries
 #' \describe{
-#'  \item{`data`}{A matrix, containing discharge data for each gauging station}
-#'  \item{`info`}{Information about each gauging station}
+#'  \item{`data`}{A numeric matrix, containing discharge data for each gauging station}
+#'  \item{`info`}{A data frame, containing information about each gauging station}
 #'  \item{`flow_edges`}{
 #'    A two-column numeric matrix. Each row contains the indices (in `info`)
 #'    of a pair of gauging stations that are directly connected by a river.
 #'  }
 #'  \item{`coords_to_plot`}{
-#'    A two-column matrix, containing X-Y-coordinates which can be used
+#'    A two-column numeric matrix, containing X-Y-coordinates which can be used
 #'    to arrange the gauging stations when plotting a flow graph.
-#'    TODO?: move this to `info`?
 #'  }
 #' }
 #' 
@@ -24,25 +23,29 @@
 #' the non-unique rownames indicate which year an observation is from.
 #' Each column corresponds to one of the gauging stations,
 #' with column indices in `data` corresponding to row indices in `info`.
-#' See TODO: `ref` for details on the preprocessing and declustering.
+#' See Asadi et al. (2015) for details on the preprocessing and declustering.
 #' 
 #' `info` is a data frame containing the following information for
 #' each of the gauging stations or its corresponding catchment area.
-#' TODO: Verify/Delete these.
+#' **TODO**: Verify/Delete these.
 #' \describe{
 #'  \item{`RivNames`}{Name of the river at the gauging station}
 #'  \item{`Lat`, `Long`}{Coordinates of the gauging station}
-#'  \item{`AveVol`}{?? Delete?: Some kind of average flow volume, I suppose...}
+#'  \item{`AveVol`}{**TODO**: Delete?: Some kind of average flow volume, I suppose...}
 #'  \item{`Lat_Center`, `Long_Center`}{Coordinates of the center of the catchment corresponding to the gauging station}
 #'  \item{`Alt`}{Mean altitude of the catchment}
 #'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
-#'  \item{`Chos`}{?? Delete?: Indices in some larger list of stations.}
-#'  \item{`Density`}{?? Delete?: Suggestion by Christina:
+#'  \item{`Chos`}{**TODO**: Delete?: Indices in some larger list of stations.}
+#'  \item{`Density`}{**TODO**: Delete?: Suggestion by Christina:
 #'    "Discharge density means the volume of effluent discharged per unit of time,
 #'    per unit area of land available to assimilate the discharge"
 #'  }
 #'  \item{`Slope`}{Mean slope of the catchment}
 #' }
+#' 
+#' @references
+#' Peiman Asadi, Anthony C. Davison, Sebastian Engelke. "Extremes on river networks."
+#' The Annals of Applied Statistics, 9(4) 2023-2050 December 2015. <https://doi.org/10.1214/15-AOAS863>.
 #'
 #' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.
 #'
@@ -64,7 +67,7 @@
 #' Flights delay data
 #' 
 #' A dataset containing daily total delays of major airlines in the USA.
-#' TODO:
+#' **TODO**:
 #' - add license(s)?
 #' - add interface functions?
 #'   - nFlights -> connection-list?
@@ -72,9 +75,11 @@
 #' 
 #' @format A named `list` with three entries:
 #' \describe{
-#'  \item{`airports`}{A `data.frame` containing information about US airports}
-#'  \item{`delays`}{Daily aggregated delays at US airports}
-#'  \item{`flightCounts`}{An array containing yearly number of flights between US airports}
+#'  \item{`airports`}{A `data.frame`, containing information about US airports}
+#'  \item{`delays`}{A numeric matrix, containing daily aggregated delays at the airports in the dataset}
+#'  \item{`flightCounts`}{
+#'    A numeric array, containing yearly flight numbers between airports in the dataset
+#'  }
 #' }
 #' 
 #' @details
