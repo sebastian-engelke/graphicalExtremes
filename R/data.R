@@ -4,7 +4,7 @@
 #' 
 #' @format A named `list` with four entries
 #' \describe{
-#'  \item{`data`}{A matrix, containing ??ly discharge data for each gauging station}
+#'  \item{`data`}{A matrix, containing discharge data for each gauging station}
 #'  \item{`info`}{Information about each gauging station}
 #'  \item{`flow_edges`}{
 #'    A two-column numeric matrix. Each row contains the indices (in `info`)
@@ -12,30 +12,36 @@
 #'  }
 #'  \item{`coords_to_plot`}{
 #'    A two-column matrix, containing X-Y-coordinates which can be used
-#'    to arrange the gauging stations in a flow graph.
+#'    to arrange the gauging stations when plotting a flow graph.
 #'    TODO?: move this to `info`?
 #'  }
 #' }
 #' 
 #' @details
-#' `data`: How was this data obtained? Why are all the rownames duplicates?
-#' This should be fixed?
+#' To obtain the matrix `data`, daily discharge data from the summer months of
+#' 1960 to 2010 was declustered, yielding between seven and ten observations per year.
+#' Each row corresponds to one observation from this declustered time series,
+#' the non-unique rownames indicate which year an observation is from.
+#' Each column corresponds to one of the gauging stations,
+#' with column indices in `data` corresponding to row indices in `info`.
+#' See TODO: `ref` for details on the preprocessing and declustering.
 #' 
-#' `info` is a data frame containing containing the following information for
-#' each of the gauging stations.
-#' TODO: check these somewhere.
+#' `info` is a data frame containing the following information for
+#' each of the gauging stations or its corresponding catchment area.
+#' TODO: Verify/Delete these.
 #' \describe{
 #'  \item{`RivNames`}{Name of the river at the gauging station}
-#'  \item{`Lat`}{Latitude of the gauging station}
-#'  \item{`Long`}{Longitude of the gauging station}
-#'  \item{`AveVol`}{??}
-#'  \item{`Lat_Center`}{Latitude of the center of the catchment corresponding to the gauging station}
-#'  \item{`Long_Center`}{Longitude of the center of the catchment corresponding to the gauging station}
-#'  \item{`Alt`}{Altitude of the gauging station}
+#'  \item{`Lat`, `Long`}{Coordinates of the gauging station}
+#'  \item{`AveVol`}{?? Delete?: Some kind of average flow volume, I suppose...}
+#'  \item{`Lat_Center`, `Long_Center`}{Coordinates of the center of the catchment corresponding to the gauging station}
+#'  \item{`Alt`}{Mean altitude of the catchment}
 #'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
-#'  \item{`Chos`}{??}
-#'  \item{`Density`}{??}
-#'  \item{`Slope`}{??}
+#'  \item{`Chos`}{?? Delete?: Indices in some larger list of stations.}
+#'  \item{`Density`}{?? Delete?: Suggestion by Christina:
+#'    "Discharge density means the volume of effluent discharged per unit of time,
+#'    per unit area of land available to assimilate the discharge"
+#'  }
+#'  \item{`Slope`}{Mean slope of the catchment}
 #' }
 #'
 #' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.

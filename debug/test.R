@@ -39,7 +39,14 @@ lineData <- lapply(seq_len(nrow(loc1)), function(i){
 locLines <- do.call(rbind, lineData)
 
 plot(loc1, xlim = xLim, ylim = yLim)
-lines(locEdges)
+# lines(locEdges)
+arrows(
+    c(NA, locEdges[,1]),
+    c(NA, locEdges[,2]),
+    c(locEdges[,1], NA),
+    c(locEdges[,2], NA),
+    length = 0.1
+)
 points(loc2, col='red')
 lines(locLines, col='red', lty=2)
 
