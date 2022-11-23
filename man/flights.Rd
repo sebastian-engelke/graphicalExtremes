@@ -91,4 +91,7 @@ flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), s
 totalDelays <- apply(flights$delays, c(1,2), sum)
 
 }
+\seealso{
+\code{\link{danube}}
+}
 \keyword{datasets}

@@ -59,4 +59,7 @@ per unit area of land available to assimilate the discharge"
 Peiman Asadi, Anthony C. Davison, Sebastian Engelke. "Extremes on river networks."
 The Annals of Applied Statistics, 9(4) 2023-2050 December 2015. \url{https://doi.org/10.1214/15-AOAS863}.
 }
+\seealso{
+\code{\link{flights}}
+}
 \keyword{datasets}

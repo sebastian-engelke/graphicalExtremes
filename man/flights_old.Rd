@@ -22,4 +22,7 @@ Arizona, Utah, and Texas.
 This dataset was called \code{flights} in earlier development versions of this package
 and is is superseded by the new dataset now called \code{\link{flights}}.
 }
+\seealso{
+\code{\link{flights}}, \code{\link{danube}}
+}
 \keyword{datasets}
