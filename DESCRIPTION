@@ -39,11 +39,9 @@ Imports:
     stats (>= 3.6.0),
     utils,
     corpcor,
-    glasso,
     osqp,
     glmnet,
     glassoFast,
-    glue,
     edmcr
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
