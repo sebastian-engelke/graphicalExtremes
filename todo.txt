@@ -14,3 +14,8 @@
 - tests?
 - travis?
 - update vignettes
+- readme
+    - find out how Rmd->md is compiled
+    - update reference list
+    - individual citations in help pages?
+
