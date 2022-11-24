@@ -92,6 +92,6 @@ totalDelays <- apply(flights$delays, c(1,2), sum)
 
 }
 \seealso{
-\code{\link{danube}}
+\code{\link{danube}} \link{flightCountMatrixToConnectionList}
 }
 \keyword{datasets}

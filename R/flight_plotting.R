@@ -5,14 +5,14 @@ plotFlights <- function(
   airportIndices = NULL,
   airports_sel = NULL,
   connections_sel = NULL,
-  useAirportNFlights = FALSE,
-  useConenctionNFlights = FALSE,
-  minNFlights = 0,
   graph = NULL,
-  map = 'state',
   plotAirports = TRUE,
   plotConnections = TRUE,
   returnGGPlot = FALSE,
+  useAirportNFlights = FALSE,
+  useConnectionNFlights = FALSE,
+  minNFlights = 0,
+  map = 'state',
   vertexColors = NULL,
   vertexShapes = NULL,
   xyRatio = NULL,
@@ -20,12 +20,17 @@ plotFlights <- function(
   useLatex = FALSE,
   edgeAlpha = 0.2
 ) {
+  # Make sure ggplot2 is installed
+  ggplotAvailable <- require('ggplot2')
+  if(!ggplotAvailable){
+    stop('ggplot2 needs to be installed')
+  }
 
+  ## Fill unspecified inputs
   # Use all airports, conenctions if not specified
   if(is.null(airports_sel)){
     airports_sel <- flights$airports
   }
-
   # Use airportIndices from graph, if not specified:
   if(!is.null(graph)){
     vNames <- igraph::V(graph)$name
@@ -33,19 +38,17 @@ plotFlights <- function(
       airportIndices <- vNames
     }
   }
-  
   # Set map to NULL if not specified:
   if(is.null(map) || is.na(map) || nchar(map) == 0){
     map <- NULL
   }
-
   # Make selection of airports:
   if(!is.null(airportIndices)){
     airports_sel <- airports_sel[airportIndices,]
   }
   IATAS <- airports_sel[,'IATA']
   
-  # If necessary, compute connections and flight counts
+  ## If necessary, compute connections and flight counts
   computeConnections <- is.null(connections_sel) && plotConnections
   computeNFlights <- is.null(airports_sel$nFlights) && useAirportNFlights && plotAirports
   if(computeConnections || computeNFlights){
@@ -54,27 +57,12 @@ plotFlights <- function(
   }
   # Make connections list if not given
   if(computeConnections){
-    connections_sel <- nFlightMatrixToConnectionList(nFlightMat)
+    connections_sel <- flightCountMatrixToConnectionList(nFlightMat)
   }
-  # Compute flight counts per airport, if necessary
+  # Compute flight counts per airport
   if(computeNFlights){
-    airports_sel$nFlights <- rowSums(nFlightMat) + colSums(nFlightMat) # add arriving and departing flights
-  }
-  
-  if(!is.null(vertexColors)){
-    airports_sel[,'vertexColor'] <- vertexColors[IATAS]
-    aesVertexColor <- 'vertexColor'
-  } else{
-    airports_sel[,'vertexColor'] <- NA
-    aesVertexColor <- NULL
-  }
-  
-  if(!is.null(vertexShapes)){
-    airports_sel[,'vertexShape'] <- as.character(vertexShapes[IATAS])
-    aesVertexShape <- 'vertexShape'
-  } else{
-    airports_sel[,'vertexShape'] <- NA
-    aesVertexShape <- NULL
+    # add arriving and departing flights
+    airports_sel$nFlights <- rowSums(nFlightMat) + colSums(nFlightMat)
   }
 
   # Make sure number of graph vertices and selected airports match:
@@ -90,14 +78,32 @@ plotFlights <- function(
     }
   }
 
+  # Add vertex colors to data frame if specified
+  aesVertexColor <- NULL
+  if(!is.null(vertexColors)){
+    aesVertexColor <- 'vertexColor'
+    airports_sel$vertexColor <- vertexColors[IATAS]
+  }
+
+  # Add vertex shapes to data frame if specified
+  aesVertexShape <- NULL
+  if(!is.null(vertexShapes)){
+    aesVertexShape <- 'vertexShape'
+    airports_sel$vertexShape <- as.character(vertexShapes[IATAS])
+  }
+
   # Prepare connections plotting:
   if(plotConnections){
     # Make selection of connections:
     if(is.null(graph)){
       # Select all connections, that are between selected airports
+      # and with >= minNFlights flights:
       ind <- (
-        connections_sel$departureAirport %in% IATAS
-        | connections_sel$arrivalAirport %in% IATAS
+        (
+          connections_sel$departureAirport %in% IATAS
+          | connections_sel$arrivalAirport %in% IATAS
+        )
+        & connections_sel$nFlights >= minNFlights
       )
       connections_sel <- connections_sel[ind,]
     } else{
@@ -108,27 +114,37 @@ plotFlights <- function(
       colnames(connections_graph) <- airportColNames
 
       # Read nFlights per connection from connections_sel
-      if(useConenctionNFlights){
+      rownames(connections_sel) <- paste0(
+        connections_sel$departureAirport, '_', connections_sel$arrivalAirport 
+      )
+      rownames(connections_graph) <- paste0(
+        connections_graph$departureAirport, '_', connections_graph$arrivalAirport 
+      )
+      if(useConnectionNFlights){
         connections_graph$nFlights <- 0
-        for(i in seq_len(nrow(connections_graph))){
-          ap1 <- connections_graph$departureAirport[i]
-          ap2 <- connections_graph$arrivalAirport[i]
-          connections_graph$nFlights[i] <- sum(connections_sel$nFlights[
-            connections_sel$departureAirport %in% c(ap1, ap2)
-            & connections_sel$arrivalAirport %in% c(ap1, ap2)
-          ], na.rm = TRUE)
-        }
+        connections_graph$nFlights <- connections_sel[
+          rownames(connections_graph),
+          'nFlights'
+        ]
+        connections_graph$nFlights[is.na(connections_graph$nFlights)] <- 1
+        # for(i in seq_len(nrow(connections_graph))){
+        #   ap1 <- connections_graph$departureAirport[i]
+        #   ap2 <- connections_graph$arrivalAirport[i]
+        #   connections_graph$nFlights[i] <- sum(connections_sel$nFlights[
+        #     connections_sel$departureAirport %in% c(ap1, ap2)
+        #     & connections_sel$arrivalAirport %in% c(ap1, ap2)
+        #   ], na.rm = TRUE)
+        # }
       }
+      connections_sel <- connections_graph
     }
+
 
     # Add coordinates to selected connections:
     connections_sel$x0 <- airports_sel[connections_sel$departureAirport, 'Longitude']
     connections_sel$y0 <- airports_sel[connections_sel$departureAirport, 'Latitude']
     connections_sel$x1 <- airports_sel[connections_sel$arrivalAirport, 'Longitude']
     connections_sel$y1 <- airports_sel[connections_sel$arrivalAirport, 'Latitude']
-
-    # Filter out connections with <minNFlights flights:
-    connections_sel <- connections_sel[connections_sel$nFlights >= minNFlights,]
   }
   
   # Specify whether to size vertices/edges by nFlights:
@@ -137,7 +153,7 @@ plotFlights <- function(
   if(useAirportNFlights){
     aesSizeNodes <- 'nFlights'
   }
-  if(useConenctionNFlights){
+  if(useConnectionNFlights){
     aesSizeEdges <- 'nFlights'
   }
 
@@ -228,7 +244,21 @@ plotFlights <- function(
 }
 
 
-nFlightMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){
+#' Convert flight counts to connection list
+#' 
+#' Convert a numeric matrix containing flight counts between ariports to a data
+#' frame containing a list of connections.
+#' 
+#' @param nFlightsPerConnection A square, numeric matrix with identical column- and row-names.
+#' Each entry represents the number of flights from the airport indexing the row to
+#' the airport indexing the column in some arbitrary time period.
+#' @param directed Logical scalar. Whether flights A->B and B->A should be considered separately.
+#' 
+#' @return A data frame with columns `departureAirport`, `arrivalAirport`, `nFlights`.
+#' Each row represents one connection with >=1 flights in the input matrix.
+#' 
+#' @export
+flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){
   # order rows/columns:
   perm <- order(colnames(nFlightsPerConnection))
   nFlightsPerConnection <- nFlightsPerConnection[perm, perm]
@@ -256,6 +286,7 @@ nFlightMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){
   return(df)
 }
 
+#' Helper function to format (coordinate) degrees used as axis labels
 formatDegrees <- function(decDeg, direction = 'NS', latex=TRUE){
   dir <- 1 + (decDeg < 0)
   dirStrings <- substring(direction, dir, dir)
@@ -294,6 +325,9 @@ formatDegrees2 <- function(decDeg, dirStrings, degString){
   return(x)
 }
 
+#' Helper function to compute the axis limits of a plot
+#' with given x, y data and optionally a fixed x-y-ratio and
+#' correcting the latitude/longitude scale at different latitudes
 computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE){
   xRange <- range(xData)
   yRange <- range(yData)

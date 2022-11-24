@@ -129,7 +129,7 @@
 #' # Get total delays (arriving + departing):
 #' totalDelays <- apply(flights$delays, c(1,2), sum)
 #' 
-#' @seealso [`danube`]
+#' @seealso [`danube`] [flightCountMatrixToConnectionList]
 #' 
 #' @source
 #' Raw delays data:
