@@ -1,21 +1,27 @@
 
 - consistent symmetry checks/fixes
-    - tol in option?
+    - tol in option? -> auch in eglearn
     - custom is.pos.def function?
 - consistent variable naming:
     - g / graph
     - G / Gamma
+    -> immer ausschreiben
 - plotting function for river data
+    - no, but examples with normal plotting functions
 - make parallelization optional?
     - nCores option?
-- fix TODOs in danube documentation
-- clean up documentation
+- fix TODOs in danube documentation -> raus oder durch raw data
+- clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?
-- tests?
-- travis?
+    - also remove flights_old
+    - other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
+- tests? muss nicht
+- travis? mit nico klaeren
 - update vignettes
 - readme
     - find out how Rmd->md is compiled
     - update reference list
-    - individual citations in help pages?
-
+    - individual citations in help pages -> geht, genauer gucken
+- danube data
+    - tagesdaten rein?
+    - coords_to_plot in station info
