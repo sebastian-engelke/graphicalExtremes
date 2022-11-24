@@ -73,8 +73,6 @@
 #' A dataset containing daily total delays of major airlines in the USA.
 #' **TODO**:
 #' - add license(s)?
-#' - add interface functions?
-#'   - nFlights -> connection-list?
 #' - add plot function
 #' 
 #' @format A named `list` with three entries:
@@ -126,10 +124,14 @@
 #' # Get number of flights for specific years in the dataset:
 #' flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), sum)
 #' 
+#' # Get list of connections:
+#' connections <- flightCountMatrixToConnectionList(flights$flightCounts)
+#' connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008'])
+#' 
 #' # Get total delays (arriving + departing):
 #' totalDelays <- apply(flights$delays, c(1,2), sum)
 #' 
-#' @seealso [`danube`] [flightCountMatrixToConnectionList]
+#' @seealso [`danube`], [`flightCountMatrixToConnectionList`], [`plotFlights`]
 #' 
 #' @source
 #' Raw delays data:

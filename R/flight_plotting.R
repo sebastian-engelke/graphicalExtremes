@@ -3,8 +3,8 @@
 
 #' Plot flight data
 #'
-#' This is a plotting function to plot the flight connections from `flights`.
-#' It requires the package `ggplot2` to be installed.
+#' Plotting function to visualize the flight connections from the [`flights`] dataset.
+#' This function requires the package `ggplot2` to be installed.
 #'
 #' @param airportIndices The indices of the airports (w.r.t. `airports_sel`) to include.
 #' @param airports_sel The airports to plot. Might be further subset by arguments `airportIndeices`, `graph`.
@@ -161,14 +161,6 @@ plotFlights <- function(
           'nFlights'
         ]
         connections_graph$nFlights[is.na(connections_graph$nFlights)] <- 1
-        # for(i in seq_len(nrow(connections_graph))){
-        #   ap1 <- connections_graph$departureAirport[i]
-        #   ap2 <- connections_graph$arrivalAirport[i]
-        #   connections_graph$nFlights[i] <- sum(connections_sel$nFlights[
-        #     connections_sel$departureAirport %in% c(ap1, ap2)
-        #     & connections_sel$arrivalAirport %in% c(ap1, ap2)
-        #   ], na.rm = TRUE)
-        # }
       }
       connections_sel <- connections_graph
     }
@@ -293,6 +285,10 @@ plotFlights <- function(
 #' 
 #' @export
 flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){
+  # sum up over years if necessary
+  if(length(dim(nFlightsPerConnection))){
+    nFlightsPerConnection <- apply(nFlightsPerConnection, c(1,2), sum)
+  }
   # order rows/columns:
   perm <- order(colnames(nFlightsPerConnection))
   nFlightsPerConnection <- nFlightsPerConnection[perm, perm]

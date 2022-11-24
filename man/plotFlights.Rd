@@ -41,7 +41,7 @@ or be named with the corresponding IATA codes of the airports they represent.}
 
 \item{plotConnections}{Logical. Whether to plot the connections specified.}
 
-\item{returnGGPlot}{If \code{TRUE}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot}} is returned and not plotted immediately.}
+\item{returnGGPlot}{If \code{TRUE}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot}} object is returned and not plotted immediately.}
 
 \item{useAirportNFlights}{Logical. Whether to vary the size of the circles representing airports in the plot,
 according to the number of flights at that airport.}
@@ -69,8 +69,8 @@ according to the number of flights on that connection.}
 If \code{returnGGPlot} is \code{TRUE}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot}} object, otherwise \code{NULL}.
 }
 \description{
-This is a plotting function to plot the flight connections from \code{flights}.
-It requires the package \code{ggplot2} to be installed.
+Plotting function to visualize the flight connections from the \code{\link{flights}} dataset.
+This function requires the package \code{ggplot2} to be installed.
 }
 \examples{
 # TODO
