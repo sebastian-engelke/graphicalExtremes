@@ -1,8 +1,16 @@
 
 - consistent symmetry checks/fixes
     - tol in option?
+    - custom is.pos.def function?
 - consistent variable naming:
     - g / graph
     - G / Gamma
 - plotting function for river data
-
+- make parallelization optional?
+    - nCores option?
+- fix TODOs in danube documentation
+- clean up documentation
+- remove "./R/deprecated_functions.R", "./other_scripts"?
+- tests?
+- travis?
+- update vignettes
