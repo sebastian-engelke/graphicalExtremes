@@ -1,5 +1,39 @@
 
 
+
+#' Plot flight data
+#'
+#' This is a plotting function to plot the flight connections from `flights`.
+#' It requires the package `ggplot2` to be installed.
+#'
+#' @param airportIndices The indices of the airports (w.r.t. `airports_sel`) to include.
+#' @param airports_sel The airports to plot. Might be further subset by arguments `airportIndeices`, `graph`.
+#' If `NULL`, then [`flights`]`$aiports` will be used.
+#' @param connections_sel A three columns data frame as output by [flightCountMatrixToConnectionList()].
+#' If `NULL`, then [`flights`]$`nFlights` will be used to construct one.
+#' @param graph An optional [`igraph::graph`] object, containing a flight graph to plot.
+#' Vertices should either match the selected airports in number and order,
+#' or be named with the corresponding IATA codes of the airports they represent.
+#' @param plotAirports Logical. Whether to plot the airports specified.
+#' @param plotConnections Logical. Whether to plot the connections specified.
+#' @param returnGGPlot If `TRUE`, a [`ggplot2::ggplot`] object is returned and not plotted immediately.
+#' @param useAirportNFlights Logical. Whether to vary the size of the circles representing airports in the plot,
+#' according to the number of flights at that airport.
+#' @param useConnectionNFlights Logical. Whether to vary the size of the edges representing connections in the plot,
+#' according to the number of flights on that connection.
+#' @param minNFlights Numeric scalar. Only plot connections with at least this many flights.
+#' @param map String or `NULL`. What map to use as the background image. Is passed to `ggplot2::map_data()`.
+#' @param vertexColors Optional vector, named with IATA codes, to be used as colors for the vertices/airports.
+#' @param vertexShapes Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to `character`.
+#' @param xyRatio Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.
+#' @param clipMap Whether to ignore the map image when determining the axis limits of the plot.
+#' @param useLatex Whether to format numbers etc. as latex code (useful when plotting to tikz).
+#' @param edgeAlpha Numeric scalar between 0 and 1. The alpha value to be used when plotting edges/connections.
+#'
+#' @return If `returnGGPlot` is `TRUE`, a [`ggplot2::ggplot`] object, otherwise `NULL`.
+#' @examples
+#' # TODO
+#' 
 #' @export
 plotFlights <- function(
   airportIndices = NULL,
