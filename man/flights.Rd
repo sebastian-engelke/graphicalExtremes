@@ -27,7 +27,7 @@ Fields/Forms used in the raw data:
 \item \url{https://esubmit.rita.dot.gov/On-Time-Form3A.aspx}
 }
 
-Airports:
+Airports (includes license information):
 \itemize{
 \item \url{https://openflights.org/data.html}
 }

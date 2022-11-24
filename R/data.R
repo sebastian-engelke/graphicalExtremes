@@ -71,9 +71,6 @@
 #' Flights delay data
 #' 
 #' A dataset containing daily total delays of major airlines in the USA.
-#' **TODO**:
-#' - add license(s)?
-#' - add plot function
 #' 
 #' @format A named `list` with three entries:
 #' \describe{
@@ -142,7 +139,7 @@
 #' - <https://esubmit.rita.dot.gov/On-Time-Form1.aspx>
 #' - <https://esubmit.rita.dot.gov/On-Time-Form3A.aspx>
 #' 
-#' Airports:
+#' Airports (includes license information):
 #' - <https://openflights.org/data.html>
 #' 
 "flights"
