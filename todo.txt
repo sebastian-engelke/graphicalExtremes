@@ -23,6 +23,6 @@
     - update reference list
     - individual citations in help pages -> geht, genauer gucken
 - danube data
-    - tagesdaten rein -> yes
-    - coords_to_plot in station info -> yes
+    x- tagesdaten rein -> yes
+    x- coords_to_plot in station info -> yes
     - rename `data` to `clusteredData` etc.?

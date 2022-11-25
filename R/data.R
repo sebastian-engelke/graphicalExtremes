@@ -11,10 +11,6 @@
 #'    A two-column numeric matrix. Each row contains the indices (in `info`)
 #'    of a pair of gauging stations that are directly connected by a river.
 #'  }
-#'  \item{`coords_to_plot`}{
-#'    A two-column numeric matrix, containing X-Y-coordinates which can be used
-#'    to arrange the gauging stations when plotting a flow graph.
-#'  }
 #' }
 #' 
 #' @details
@@ -27,21 +23,17 @@
 #' See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 #' 
 #' `info` is a data frame containing the following information for
-#' each of the gauging stations or its corresponding catchment area.
-#' **TODO**: Verify/Delete these.
+#' each of the gauging stations or its corresponding catchment area:
 #' \describe{
 #'  \item{`RivNames`}{Name of the river at the gauging station}
 #'  \item{`Lat`, `Long`}{Coordinates of the gauging station}
-#'  \item{`AveVol`}{**TODO**: Delete?: Some kind of average flow volume, I suppose...}
 #'  \item{`Lat_Center`, `Long_Center`}{Coordinates of the center of the catchment corresponding to the gauging station}
 #'  \item{`Alt`}{Mean altitude of the catchment}
 #'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
-#'  \item{`Chos`}{**TODO**: Delete?: Indices in some larger list of stations.}
-#'  \item{`Density`}{**TODO**: Delete?: Suggestion by Christina:
-#'    "Discharge density means the volume of effluent discharged per unit of time,
-#'    per unit area of land available to assimilate the discharge"
-#'  }
 #'  \item{`Slope`}{Mean slope of the catchment}
+#'  \item{`PlotCoordX`, `PlotCoordY`}{
+#'    X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
+#'  }
 #' }
 #' 
 #' @seealso [`flights`]

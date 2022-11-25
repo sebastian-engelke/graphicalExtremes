@@ -14,10 +14,6 @@ A named \code{list} with four entries
 A two-column numeric matrix. Each row contains the indices (in \code{info})
 of a pair of gauging stations that are directly connected by a river.
 }
-\item{\code{coords_to_plot}}{
-A two-column numeric matrix, containing X-Y-coordinates which can be used
-to arrange the gauging stations when plotting a flow graph.
-}
 }
 }
 \source{
@@ -39,21 +35,17 @@ with column indices in \code{data} corresponding to row indices in \code{info}.
 See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 
 \code{info} is a data frame containing the following information for
-each of the gauging stations or its corresponding catchment area.
-\strong{TODO}: Verify/Delete these.
+each of the gauging stations or its corresponding catchment area:
 \describe{
 \item{\code{RivNames}}{Name of the river at the gauging station}
 \item{\code{Lat}, \code{Long}}{Coordinates of the gauging station}
-\item{\code{AveVol}}{\strong{TODO}: Delete?: Some kind of average flow volume, I suppose...}
 \item{\code{Lat_Center}, \code{Long_Center}}{Coordinates of the center of the catchment corresponding to the gauging station}
 \item{\code{Alt}}{Mean altitude of the catchment}
 \item{\code{Area}}{Area of the catchment corresponding to the gauging station}
-\item{\code{Chos}}{\strong{TODO}: Delete?: Indices in some larger list of stations.}
-\item{\code{Density}}{\strong{TODO}: Delete?: Suggestion by Christina:
-"Discharge density means the volume of effluent discharged per unit of time,
-per unit area of land available to assimilate the discharge"
-}
 \item{\code{Slope}}{Mean slope of the catchment}
+\item{\code{PlotCoordX}, \code{PlotCoordY}}{
+X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
+}
 }
 }
 \references{
