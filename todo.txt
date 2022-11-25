@@ -20,7 +20,7 @@
 - update vignettes
 - readme
     - find out how Rmd->md is compiled
-    - update reference list
+    x?- update reference list
     - individual citations in help pages -> geht, genauer gucken
 - danube data
     x- tagesdaten rein -> yes

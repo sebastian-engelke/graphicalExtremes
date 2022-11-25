@@ -36,6 +36,8 @@
 #'  }
 #' }
 #' 
+#' @examples # TODO
+#' 
 #' @seealso [`flights`]
 #' 
 #' @references

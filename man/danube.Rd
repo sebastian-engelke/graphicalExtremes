@@ -48,6 +48,10 @@ X-Y-coordinates which can be used to arrange the gauging stations when plotting 
 }
 }
 }
+\examples{
+# TODO
+
+}
 \references{
 \insertAllCited{}
 }
