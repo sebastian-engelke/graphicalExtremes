@@ -21,7 +21,7 @@ but does not have any influence on the completion algorithm.}
 is not decomposable}
 }
 \value{
-Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
+Completed \dxd{} \code{Gamma} matrix.
 }
 \description{
 Given a \code{graph} and \code{Gamma} matrix specified (at least) on the

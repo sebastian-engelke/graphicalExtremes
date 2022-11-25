@@ -184,7 +184,7 @@ Sigma2Gamma <- function(Sigma, k = NULL, full = FALSE) {
 
 
 
-#' Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
+#' Transformation of \eGamma{} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
 #'
 #' Transforms the `Gamma` matrix from the definition of a
 #' Huesler--Reiss distribution to the corresponding

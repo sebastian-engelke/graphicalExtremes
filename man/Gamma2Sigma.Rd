@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
+\title{Transformation of \eGamma{} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
 \usage{
 Gamma2Sigma(Gamma, k = NULL, full = FALSE)
 }

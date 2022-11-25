@@ -25,7 +25,7 @@
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
-#' @return Completed \eqn{d \times d}{d x d} `Gamma` matrix.
+#' @return Completed \dxd{} `Gamma` matrix.
 #'
 #' @details
 #' For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
