@@ -2,15 +2,16 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
+\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
 \usage{
 Gamma2Sigma(Gamma, k = NULL, full = FALSE)
 }
 \arguments{
 \item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
 
-\item{k}{Integer between \code{1} (the default value) and \code{d}.
-Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.}
+\item{k}{\code{NULL} (default) or an integer between \code{1} and \code{d}.
+Indicates which matrix \eqn{\Sigma}, or \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+should be produced.}
 
 \item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 are included and the function returns a \eqn{d \times d}{d x d} matrix.
@@ -22,7 +23,8 @@ Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
+Huesler--Reiss distribution to the corresponding
+\eqn{\Sigma} or \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
 }
 \details{
 Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
@@ -32,8 +34,9 @@ for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^{(k)}}{\S
 contains the graph structure corresponding to the Huesler--Reiss distribution
 with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
-that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-This is the inverse of function of \link{Sigma2Gamma}.
+that contain zeros.
+For details see \insertCite{eng2019;textual}{graphicalExtremes} and
+\insertCite{hen2022;textual}{graphicalExtremes}.
 }
 \examples{
 Gamma <- cbind(
@@ -43,7 +46,15 @@ Gamma <- cbind(
   c(2, 1.5, 1.5, 0)
 )
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
+
 }
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other MatrixTransformations: 
+\code{\link{Gamma2Theta}()},
+\code{\link{Sigma2Gamma}()},
+\code{\link{Theta2Gamma}()}
+}
+\concept{MatrixTransformations}

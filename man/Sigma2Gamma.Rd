@@ -2,22 +2,22 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Sigma2Gamma}
 \alias{Sigma2Gamma}
-\title{Transformation of \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix to \eqn{\Gamma} matrix}
+\title{Transformation of \eqn{\Sigma} matrix to \eqn{\Gamma} matrix}
 \usage{
-Sigma2Gamma(S, k = NULL, full = FALSE)
+Sigma2Gamma(Sigma, k = NULL, full = FALSE)
 }
 \arguments{
-\item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-from the definition of a Huesler--Reiss distribution.
-Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
-parameter.}
-
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
 Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} is represented by \code{S}.}
 
 \item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 are included and the function returns a \eqn{d \times d}{d x d} matrix.
 By default, \code{full = FALSE}.}
+
+\item{S}{Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+from the definition of a Huesler--Reiss distribution.
+Numeric \eqn{d \times d}{d x d} covariance matrix if \code{full = TRUE}, see \code{full}
+parameter.}
 }
 \value{
 Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
@@ -44,7 +44,15 @@ Sigma1 <- rbind(
   c(1, 1, 2)
 )
 Sigma2Gamma(Sigma1, k = 1, full = FALSE)
+
 }
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other MatrixTransformations: 
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2Theta}()},
+\code{\link{Theta2Gamma}()}
+}
+\concept{MatrixTransformations}

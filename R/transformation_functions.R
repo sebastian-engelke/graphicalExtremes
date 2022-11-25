@@ -122,7 +122,7 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 }
 
 
-#' Transformation of \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix to \eqn{\Gamma} matrix
+#' Transformation of \eqn{\Sigma} matrix to \eqn{\Gamma} matrix
 #'
 #' Transforms the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix from the definition of a
 #' Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
@@ -157,19 +157,21 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 #'   c(1, 1, 2)
 #' )
 #' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
-#' @references
-#'  \insertAllCited{}
+#' 
+#' @references \insertAllCited{}
+#' 
+#' @family MatrixTransformations
 #'
 #' @export
-Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
+Sigma2Gamma <- function(Sigma, k = NULL, full = FALSE) {
   if (full || is.null(k)) {
-    # S is already d x d
-    S_full <- S
+    # Sigma is already d x d
+    S_full <- Sigma
   } else {
     # S is (d-1) x (d-1) => fill up with zeros
-    d <- NROW(S) + 1
+    d <- NROW(Sigma) + 1
     S_full <- matrix(0, d, d)
-    S_full[-k ,-k] <- S
+    S_full[-k ,-k] <- Sigma
   }
 
   # compute Gamma
@@ -182,15 +184,16 @@ Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
 
 
 
-#' Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
+#' Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
 #'
 #' Transforms the `Gamma` matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
-#'
+#' Huesler--Reiss distribution to the corresponding
+#' \eqn{\Sigma} or \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
-#' @param k Integer between `1` (the default value) and `d`.
-#' Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.
+#' @param k `NULL` (default) or an integer between `1` and `d`.
+#' Indicates which matrix \eqn{\Sigma}, or \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+#' should be produced.
 #' @param full Logical. If true, then the `k`th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' are included and the function returns a \eqn{d \times d}{d x d} matrix.
 #' By default, `full = FALSE`.
@@ -203,8 +206,9 @@ Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
 #' contains the graph structure corresponding to the Huesler--Reiss distribution
 #' with parameter matrix `Gamma`. If `full = TRUE`, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
 #' is returned as a \eqn{d \times d}{d x d} matrix with additional `k`th row and column
-#' that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-#' This is the inverse of function of [Sigma2Gamma].
+#' that contain zeros.
+#' For details see \insertCite{eng2019;textual}{graphicalExtremes} and
+#' \insertCite{hen2022;textual}{graphicalExtremes}.
 #'
 #' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
 #' `full = FALSE`, and of size \eqn{d \times d}{d x d} if `full = TRUE`.
@@ -217,8 +221,10 @@ Sigma2Gamma <- function(S, k = NULL, full = FALSE) {
 #'   c(2, 1.5, 1.5, 0)
 #' )
 #' Gamma2Sigma(Gamma, k = 1, full = FALSE)
-#' @references
-#'  \insertAllCited{}
+#' 
+#' @references \insertAllCited{}
+#' 
+#' @family MatrixTransformations
 #'
 #' @export
 Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
@@ -238,12 +244,16 @@ Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
 
 #' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
 #'
-#' Transforms the `Gamma` matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \eqn{\Theta} matrix.
+#' Transforms the variogram matrix (\eqn{\Gamma}) from the definition of a
+#' Huesler--Reiss distribution to the corresponding precision matrix
+#' (\eqn{\Theta} or \eqn{\Theta^k}).
 #'
 #'
 #' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
-#'
+#' @param k `NULL` or integer between 1 and d. If this is `NULL`, the
+#' \eqn{d \times d}{d x d} matrix \eqn{\Theta} is produced, otherwise
+#' the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eqn{\Theta^k}.
+#' 
 #' @details
 #' Every \eqn{d \times d}{d x d} `Gamma` matrix in the definition of a
 #' Huesler--Reiss distribution can be transformed into a
@@ -261,35 +271,49 @@ Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
 #'   c(1.5, 2, 0, 1.5),
 #'   c(2, 1.5, 1.5, 0)
 #' )
-#' Gamma2Sigma(Gamma, k = 1, full = FALSE)
-#' @references
-#'  \insertAllCited{}
+#' Gamma2Theta(Gamma)
+#' 
+#' @references \insertAllCited{}
+#' 
+#' @family MatrixTransformations
 #'
 #' @export
 Gamma2Theta <- function(Gamma, k=NULL) {
+  d <- ncol(Gamma)
   if(is.null(k)){
-    d <- ncol(Gamma)
     ID <- diag(d) - matrix(1/d, d, d)
     S <- ID %*% (-1/2 * Gamma) %*% ID
     Theta <- corpcor::pseudoinverse(S)
     return(Theta)
-  } else{
-    Sigma_k <- Gamma2Sigma(Gamma, k)
-    Theta_k <- chol2inv(chol(Sigma_k))
-    return(Theta_k)
   }
+  Sigma_k <- Gamma2Sigma(Gamma, k)
+  Theta_k <- chol2inv(chol(Sigma_k))
+  return(Theta_k)
 }
 
 #' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
-#'
+#' 
+#' Transforms a precision matrix (\eqn{\Theta} or \eqn{\Theta^k})
+#' to the corresponding variogram matrix.
+#' 
+#' @param Theta Numeric \eqn{d \times d}{d x d} matrix (if `k` is `NULL`)
+#' or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if `k` is a number).
+#' @param k `NULL` or integer between 1 and d.
+#' If this is `NULL` the input `Theta` is interpreted as a \eqn{d \times d}{d x d}
+#' precision matrix \eqn{\Theta}, otherwise as \eqn{\Theta^k}.
+#' 
+#' @return The \eqn{d \times d}{d x d} variogram matrix implied by `Theta`.
+#' 
+#' @family MatrixTransformations
+#' 
 #' @export
 Theta2Gamma <- function(Theta, k=NULL) {
   if(is.null(k)){
     d <- nrow(Theta)
-    id <- matrix(1, d)
-    S <- corpcor::pseudoinverse(Theta)
-    dS <- diag(S)
-    return(id %*% t(dS) + dS %*% t(id) - 2*S)
+    id <- matrix(1, d, 1)
+    Sigma <- corpcor::pseudoinverse(Theta)
+    diagSigma <- diag(Sigma)
+    return(id %*% t(diagSigma) + diagSigma %*% t(id) - 2*Sigma)
   } else{
     Sigma_k <- chol2inv(chol(Theta))
     return(Sigma2Gamma(Sigma_k, k))
@@ -309,6 +333,8 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #' @param zeroRowSums If `TRUE` the diagonal is set to (-1) times the rowSums.
 #'
 #' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma/Theta matrix.
+#' 
+#' @name par2Matrix
 #'
 #' @keywords internal
 par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){

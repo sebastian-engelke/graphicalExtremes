@@ -37,11 +37,10 @@ flights
 }
 \description{
 A dataset containing daily total delays of major airlines in the USA.
-\strong{TODO}:
-\itemize{
-\item add license(s)?
-\item add plot function
-}
+The raw data was obtained from the U.S.
+\href{https://www.bts.dot.gov/}{Bureau of Transportation Statistics},
+and pre-processed as described in
+\insertCite{hen2022;textual}{graphicalExtremes}.
 }
 \details{
 \code{flightCounts} is a three-dimensional array, containing the number of flights in the dataset
@@ -90,6 +89,9 @@ connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008
 # Get total delays (arriving + departing):
 totalDelays <- apply(flights$delays, c(1,2), sum)
 
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 \code{\link{danube}}, \code{\link{flightCountMatrixToConnectionList}}, \code{\link{plotFlights}}

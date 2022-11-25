@@ -3,7 +3,9 @@
 #'
 #' Given a `graph` and `Gamma` matrix specified (at least) on the
 #' edges of `graph`, returns the full `Gamma` matrix implied
-#' by the conditional independencies.
+#' by the conditional independencies. For results on the existence and
+#' uniqueness of this completion, see
+#' \insertCite{hen2022;textual}{graphicalExtremes}.
 #'
 #' If `graph` is decomposable, `Gamma` only needs to be specified on
 #' the edges of the graph and the graph structure can be implied by setting
@@ -75,8 +77,7 @@
 #' complete_Gamma(G, g)
 #'
 #'
-#' @references
-#'  \insertAllCited{}
+#' @references \insertAllCited{}
 #'
 #' @seealso [Gamma2Theta()]
 #' @family Matrix completions

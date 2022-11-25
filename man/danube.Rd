@@ -7,7 +7,8 @@
 \format{
 A named \code{list} with four entries
 \describe{
-\item{\code{data}}{A numeric matrix, containing discharge data for each gauging station}
+\item{\code{data}}{A numeric matrix, containing pre-processed discharge data for each gauging station}
+\item{\code{dailyData}}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 \item{\code{info}}{A data frame, containing information about each gauging station}
 \item{\code{flow_edges}}{
 A two-column numeric matrix. Each row contains the indices (in \code{info})
@@ -29,13 +30,13 @@ danube
 A dataset containing river discharge data for tributaries of the Danube.
 }
 \details{
-To obtain the matrix \code{data}, daily discharge data from the summer months of
-1960 to 2010 was declustered, yielding between seven and ten observations per year.
+To obtain the matrix \code{data}, the daily discharge data from the summer months of
+1960 to 2010, given in \code{dailyData}, was declustered, yielding between seven and ten observations per year.
 Each row corresponds to one observation from this declustered time series,
 the non-unique rownames indicate which year an observation is from.
 Each column corresponds to one of the gauging stations,
 with column indices in \code{data} corresponding to row indices in \code{info}.
-See Asadi et al. (2015) for details on the preprocessing and declustering.
+See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 
 \code{info} is a data frame containing the following information for
 each of the gauging stations or its corresponding catchment area.
@@ -56,8 +57,7 @@ per unit area of land available to assimilate the discharge"
 }
 }
 \references{
-Peiman Asadi, Anthony C. Davison, Sebastian Engelke. "Extremes on river networks."
-The Annals of Applied Statistics, 9(4) 2023-2050 December 2015. \url{https://doi.org/10.1214/15-AOAS863}.
+\insertAllCited{}
 }
 \seealso{
 \code{\link{flights}}

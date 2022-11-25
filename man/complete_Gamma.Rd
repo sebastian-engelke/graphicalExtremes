@@ -26,7 +26,9 @@ Completed \eqn{d \times d}{d x d} \code{Gamma} matrix.
 \description{
 Given a \code{graph} and \code{Gamma} matrix specified (at least) on the
 edges of \code{graph}, returns the full \code{Gamma} matrix implied
-by the conditional independencies.
+by the conditional independencies. For results on the existence and
+uniqueness of this completion, see
+\insertCite{hen2022;textual}{graphicalExtremes}.
 }
 \details{
 If \code{graph} is decomposable, \code{Gamma} only needs to be specified on

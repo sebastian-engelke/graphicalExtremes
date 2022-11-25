@@ -4,7 +4,8 @@
 #' 
 #' @format A named `list` with four entries
 #' \describe{
-#'  \item{`data`}{A numeric matrix, containing discharge data for each gauging station}
+#'  \item{`data`}{A numeric matrix, containing pre-processed discharge data for each gauging station}
+#'  \item{`dailyData`}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 #'  \item{`info`}{A data frame, containing information about each gauging station}
 #'  \item{`flow_edges`}{
 #'    A two-column numeric matrix. Each row contains the indices (in `info`)
@@ -17,13 +18,13 @@
 #' }
 #' 
 #' @details
-#' To obtain the matrix `data`, daily discharge data from the summer months of
-#' 1960 to 2010 was declustered, yielding between seven and ten observations per year.
+#' To obtain the matrix `data`, the daily discharge data from the summer months of
+#' 1960 to 2010, given in `dailyData`, was declustered, yielding between seven and ten observations per year.
 #' Each row corresponds to one observation from this declustered time series,
 #' the non-unique rownames indicate which year an observation is from.
 #' Each column corresponds to one of the gauging stations,
 #' with column indices in `data` corresponding to row indices in `info`.
-#' See Asadi et al. (2015) for details on the preprocessing and declustering.
+#' See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 #' 
 #' `info` is a data frame containing the following information for
 #' each of the gauging stations or its corresponding catchment area.
@@ -46,8 +47,7 @@
 #' @seealso [`flights`]
 #' 
 #' @references
-#' Peiman Asadi, Anthony C. Davison, Sebastian Engelke. "Extremes on river networks."
-#' The Annals of Applied Statistics, 9(4) 2023-2050 December 2015. <https://doi.org/10.1214/15-AOAS863>.
+#' \insertAllCited{}
 #'
 #' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.
 #'
@@ -71,6 +71,10 @@
 #' Flights delay data
 #' 
 #' A dataset containing daily total delays of major airlines in the USA.
+#' The raw data was obtained from the U.S.
+#' [Bureau of Transportation Statistics](https://www.bts.dot.gov/),
+#' and pre-processed as described in
+#' \insertCite{hen2022;textual}{graphicalExtremes}.
 #' 
 #' @format A named `list` with three entries:
 #' \describe{
@@ -113,6 +117,8 @@
 #'  \item{`DST`}{Daylight savings time used at the airport. 'A'=US/Canada, 'N'=None.}
 #'  \item{`Timezone2`}{name of the timezone of the airport}
 #' }
+#' 
+#' @references \insertAllCited{}
 #' 
 #' @examples 
 #' # Get total number of flights in the dataset:
