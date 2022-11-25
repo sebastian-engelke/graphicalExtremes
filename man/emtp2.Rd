@@ -23,6 +23,10 @@ A list consisting of:
 \description{
 This function implements a block descent algorithm to find the maximum of the
 Gaussian log-likelihood under the constraint that the concentration matrix is a Laplacian matrix.
+See \insertCite{roe2021;textual}{graphicalExtremes} for details.
+}
+\references{
+\insertAllCited{}
 }
 \keyword{Laplacian}
 \keyword{block}
