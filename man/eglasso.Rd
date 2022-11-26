@@ -13,8 +13,8 @@ eglasso(
 )
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{n\times d}{n x d}.
-It represents a variogram matrix \eqn{\Gamma}.}
+\item{Gamma}{Numeric \nxd matrix.
+It represents a variogram matrix \eGamma.}
 
 \item{rholist}{Numeric vector of non-negative regularization parameters
 for the lasso. For details see \link[glasso:glassopath]{glasso::glassopath}.}
@@ -33,8 +33,8 @@ List made of:
 \describe{
 \item{\code{graph}}{A list of \link[igraph:make_graph]{igraph::graph} objects representing the
 fitted graphs for each \code{rho} in \code{rholist}.}
-\item{\code{Gamma}}{A list of numeric \eqn{d\times d}{d x d} estimated
-variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+\item{\code{Gamma}}{A list of numeric \dxd estimated
+variogram matrices \eGamma corresponding to the fitted graphs,
 for each \code{rho} in \code{rholist}.}
 \item{\code{rholist}}{The list of penalty coefficients.}
 }

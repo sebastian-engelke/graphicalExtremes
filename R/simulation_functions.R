@@ -14,14 +14,14 @@
 #' distribution.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix, if `model = HR`.
+#'   \item \eGamma, numeric \dxd variogram matrix, if `model = HR`.
 #'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
 #'   \item \eqn{\theta > 0}, if `model = neglogistic`.
 #'   \item \eqn{\alpha}, numeric vector of size `d` with positive entries, if `model = dirichlet`.
 #' }
 #'
 #' @return
-#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' Numeric \nxd matrix of simulations of the
 #' multivariate Pareto distribution.
 #'
 #' @details
@@ -213,12 +213,12 @@ rmpareto <- function(
 #' undirected graph that is connected and has no cycles.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#'   \item \eGamma, numeric \dxd variogram matrix,
 #'     where only the entries corresponding to the edges of the `tree` are used,
 #'     if `model = HR`. Alternatively, can be a vector of
-#'     length \eqn{d - 1} containing the entries of the variogram corresponding
+#'     length `d-1` containing the entries of the variogram corresponding
 #'     to the edges of the given `tree`.
-#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length `d-1`
 #'     containing the logistic parameters corresponding
 #'     to the edges of the given `tree`, if `model = logistic`.
 #'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
@@ -227,7 +227,7 @@ rmpareto <- function(
 #' }
 #'
 #' @return
-#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' Numeric \nxd matrix of simulations of the
 #' multivariate Pareto distribution.
 #'
 #' @details
@@ -463,14 +463,14 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' distribution.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix, if `model = HR`.
+#'   \item \eGamma, numeric \dxd variogram matrix, if `model = HR`.
 #'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, if `model = logistic`.
 #'   \item \eqn{\theta > 0}, if `model = neglogistic`.
 #'   \item \eqn{\alpha}, numeric vector of size `d` with positive entries, if `model = dirichlet`.
 #' }
 #'
 #' @return
-#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' Numeric \nxd matrix of simulations of the
 #' multivariate max-stable distribution.
 #'
 #' @details
@@ -677,12 +677,12 @@ rmstable <- function(n,
 #' undirected graph that is connected and has no cycles.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
-#'   \item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+#'   \item \eGamma, numeric \dxd variogram matrix,
 #'     where only the entries corresponding to the edges of the `tree` are used,
 #'     if `model = HR`. Alternatively, can be a vector of
-#'     length \eqn{d - 1} containing the entries of the variogram corresponding
+#'     length `d-1` containing the entries of the variogram corresponding
 #'     to the edges of the given `tree`.
-#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+#'   \item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length `d-1`
 #'     containing the logistic parameters corresponding
 #'     to the edges of the given `tree`, if `model = logistic`.
 #'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
@@ -691,7 +691,7 @@ rmstable <- function(n,
 #' }
 #'
 #' @return
-#' Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+#' Numeric \nxd matrix of simulations of the
 #' multivariate max-stable distribution.
 #'
 #' @details

@@ -7,7 +7,7 @@
 logdV_HR(x, Gamma = NULL, Theta = NULL)
 }
 \arguments{
-\item{x}{Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.}
+\item{x}{Numeric \nxd matrix or vector with \code{d} elements.}
 
 \item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,
 containing the upper triangular part of a variogram matrix.}

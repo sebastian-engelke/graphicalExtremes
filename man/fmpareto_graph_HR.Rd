@@ -14,8 +14,8 @@ fmpareto_graph_HR(
 )
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the number of dimensions.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the number of dimensions.}
 
 \item{graph}{Undirected, connected \link[igraph:make_graph]{igraph::graph} object with \code{d} vertices,
 representing the graphical structure of the fitted Huesler--Reiss model.}

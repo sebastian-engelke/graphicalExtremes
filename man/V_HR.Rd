@@ -7,7 +7,7 @@
 V_HR(x, Gamma = NULL, Theta = NULL)
 }
 \arguments{
-\item{x}{Numeric vector with \eqn{d} positive elements
+\item{x}{Numeric vector with \code{d} positive elements
 where the exponent measure is to be evaluated.}
 
 \item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,

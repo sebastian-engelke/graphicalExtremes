@@ -6,8 +6,8 @@
 #' with a given graphical structure, using maximum-likelihood estimation
 #' or the empirical variogram.
 #' 
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the number of dimensions.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the number of dimensions.
 #'
 #' @param graph Undirected, connected [igraph::graph] object with `d` vertices,
 #' representing the graphical structure of the fitted Huesler--Reiss model.
@@ -222,8 +222,8 @@ fmpareto_graph_HR_clique_sequential <- function(
 #'
 #' Works by computing an empirical Gamma matrix and then fitting this to the given `graph`.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
 #' `p` is used as the probability in the function [data2mpareto]
@@ -266,8 +266,8 @@ fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
 #' * Works with any decomposable graph, not just block graphs
 #' * Does not support `edges_to_add`
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
 #' `p` is used as the probability in the function [data2mpareto]
@@ -338,13 +338,13 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 
 
 
-#' Estimation of the variogram matrix \eqn{\Gamma} of the Huesler--Reiss distribution
+#' Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution
 #'
 #' Estimates the variogram of the Huesler--Reiss distribution empirically.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
-#' @param k Integer between 1 and \eqn{d}. Component of the multivariate
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
+#' @param k Integer between 1 and `d`. Component of the multivariate
 #' observations that is conditioned to be larger than the threshold `p`.
 #' If `NULL` (default), then an average over all `k` is returned.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
@@ -352,8 +352,7 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 #' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
 #'
-#' @return Numeric matrix \eqn{d \times d}{d x d}. The estimated
-#' variogram of the Huesler--Reiss distribution.
+#' @return Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
 #' @export
 emp_vario <- function(data, k = NULL, p = NULL) {
 
@@ -436,13 +435,13 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
 }
 
 
-#' Empirical estimation of extremal correlation matrix \eqn{\chi}
+#' Empirical estimation of extremal correlation matrix \eChi
 #'
-#' Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
+#' Estimates empirically the matrix of bivariate extremal correlation coefficients \eChi.
 #'
 #' @inheritParams emp_chi_multdim
 #'
-#' @return Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
+#' @return Numeric matrix \dxd. The matrix contains the
 #' bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 #' @examples
 #' n <- 100
@@ -514,18 +513,17 @@ emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
 
 
 
-#' Empirical estimation of extremal correlation \eqn{\chi}
+#' Empirical estimation of extremal correlation \eChi
 #'
-#' Estimates the \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi} empirically.
+#' Estimates the `d`-dimensional extremal correlation coefficient \eChi empirically.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
-#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
+#' @param p Numeric scalar between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
-#' to standardize the `data`.
+#' `p` is used as the probability in [data2mpareto()] to standardize the `data`.
 #'
-#' @return Numeric. The empirical \eqn{d}-dimensional extremal correlation coefficient \eqn{\chi}
+#' @return Numeric scalar. The empirical `d`-dimensional extremal correlation coefficient \eChi
 #' for the `data`.
 #' @examples
 #' n <- 100
@@ -570,14 +568,14 @@ emp_chi_multdim <- function(data, p = NULL) {
 #'
 #' Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.
 #'
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
+#' @param data Numeric \nxd matrix. It contains
 #' observations following a multivariate HR Pareto distribution.
 #'
 #' @param graph An [igraph::graph] object or `NULL`. The `graph` must be undirected and
 #' connected. If no graph is specified, the complete graph is used.
 #'
-#' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
-#' It represents a variogram matrix \eqn{\Gamma}.
+#' @param Gamma Numeric \nxd matrix.
+#' It represents a variogram matrix \eGamma.
 #'
 #' @param cens Boolean. If true, then censored log-likelihood is computed.
 #' By default, `cens = FALSE`.

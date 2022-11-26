@@ -14,7 +14,7 @@ generate_random_integer_Gamma(d, b = 2, b_step = 1)
 \item{b_step}{By how much \code{b} is increased in each iteration}
 }
 \value{
-A \eqn{d \times d}{d x d} variogram matrix with integer entries
+A numeric \dxd variogram matrix with integer entries
 }
 \description{
 Generates a random variogram Matrix by producing a

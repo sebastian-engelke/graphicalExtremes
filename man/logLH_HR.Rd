@@ -7,11 +7,10 @@
 logLH_HR(data, Gamma, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
+\item{data}{Numeric \nxd matrix, containing
 observations following a multivariate HR Pareto distribution.}
 
-\item{Gamma}{Numeric matrix \eqn{n\times d}{n x d}.
-It represents a variogram matrix \eqn{\Gamma}.}
+\item{Gamma}{Numeric \dxd matrix, representing a variogram matrix \eGamma.}
 
 \item{cens}{Boolean. If true, then censored log-likelihood is computed.
 By default, \code{cens = FALSE}.}

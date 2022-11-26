@@ -15,7 +15,7 @@
 #' variogram matrix `Gamma` and the graph structure needs to be explicitly
 #' provided in `graph`.
 #'
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param Gamma Numeric \dxd variogram matrix.
 #' @param graph Graph object from `igraph` package.
 #' The `graph` must be a connected, undirected graph.
 #' Can also be implied by `NA` entries in `Gamma` if decomposable.
@@ -25,7 +25,7 @@
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
-#' @return Completed \dxd{} `Gamma` matrix.
+#' @return Completed \dxd `Gamma` matrix.
 #'
 #' @details
 #' For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
@@ -125,7 +125,7 @@ complete_Gamma <- function(
 #'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries
 #' corresponding to edges in `graph` and the diagonals.
-#' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
+#' The corresponding \eTheta matrix pdocued by [Gamma2Theta()] has zeros
 #' in the remaining entries.
 #'
 #' @family Matrix completions
@@ -175,7 +175,7 @@ complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
 #'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries
 #' corresponding to edges in `graph` and the diagonals.
-#' The corresponding \eqn{\Theta} matrix pdocued by [Gamma2Theta] has zeros
+#' The corresponding \eTheta matrix produced by [Gamma2Theta()] has zeros
 #' in the remaining entries.
 #'
 #' @family Matrix completions

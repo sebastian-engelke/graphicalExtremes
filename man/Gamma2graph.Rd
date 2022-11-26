@@ -2,12 +2,12 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2graph}
 \alias{Gamma2graph}
-\title{Transformation of \eqn{\Gamma} matrix to graph object}
+\title{Transformation of \eGamma matrix to graph object}
 \usage{
 Gamma2graph(Gamma, tol = 1e-06)
 }
 \arguments{
-\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
+\item{Gamma}{Numeric \dxd variogram matrix.}
 
 \item{tol}{Numeric scalar, entries in the precision matrix with absolute value
 smaller than this are considered to be zero.}
@@ -23,7 +23,7 @@ and plots it (optionally).
 \details{
 The variogram uniquely determines the extremal graph structure of the
 corresponding Huesler--Reiss distribution. The conditional independencies
-can be identified from the inverses of the matrices \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+can be identified from the inverses of the matrices \eSigmaK
 defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 }
 \examples{

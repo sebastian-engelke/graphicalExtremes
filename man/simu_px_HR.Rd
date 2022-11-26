@@ -17,11 +17,11 @@ the extremal function is simulated.}
 
 \item{trend}{Numeric. Trend corresponding to the variable \code{idx}.}
 
-\item{chol_mat}{Numeric matrix \eqn{d\times d}{d x d}.
+\item{chol_mat}{Numeric matrix \dxd.
 Cholesky decomposition of the desired covariance matrix.}
 }
 \value{
-Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+Numeric \nxd matrix. Simulated data.
 }
 \description{
 Simulates the Huessler--Reiss extremal functions

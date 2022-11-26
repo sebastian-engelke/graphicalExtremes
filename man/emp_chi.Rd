@@ -2,25 +2,24 @@
 % Please edit documentation in R/estimation_param.R
 \name{emp_chi}
 \alias{emp_chi}
-\title{Empirical estimation of extremal correlation matrix \eqn{\chi}}
+\title{Empirical estimation of extremal correlation matrix \eChi}
 \usage{
 emp_chi(data, p = NULL)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
-\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+\item{p}{Numeric scalar between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \link{data2mpareto}
-to standardize the \code{data}.}
+\code{p} is used as the probability in \code{\link[=data2mpareto]{data2mpareto()}} to standardize the \code{data}.}
 }
 \value{
-Numeric matrix \eqn{d\times d}{d x d}. The matrix contains the
+Numeric matrix \dxd. The matrix contains the
 bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 }
 \description{
-Estimates empirically the matrix of bivariate extremal correlation coefficients \eqn{\chi}.
+Estimates empirically the matrix of bivariate extremal correlation coefficients \eChi.
 }
 \examples{
 n <- 100

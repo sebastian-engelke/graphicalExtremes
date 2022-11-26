@@ -16,7 +16,7 @@ non-empty separator set}
 \value{
 A complete variogram matrix that agrees with \code{Gamma} on the entries
 corresponding to edges in \code{graph} and the diagonals.
-The corresponding \eqn{\Theta} matrix pdocued by \link{Gamma2Theta} has zeros
+The corresponding \eTheta matrix produced by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has zeros
 in the remaining entries.
 }
 \description{

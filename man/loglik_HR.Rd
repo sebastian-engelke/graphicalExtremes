@@ -7,7 +7,7 @@
 loglik_HR(data, p = NULL, graph = NULL, Gamma, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. It contains
+\item{data}{Numeric \nxd matrix. It contains
 observations following a multivariate HR Pareto distribution.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
@@ -18,8 +18,8 @@ to standardize the \code{data}.}
 \item{graph}{An \link[igraph:make_graph]{igraph::graph} object or \code{NULL}. The \code{graph} must be undirected and
 connected. If no graph is specified, the complete graph is used.}
 
-\item{Gamma}{Numeric matrix \eqn{n\times d}{n x d}.
-It represents a variogram matrix \eqn{\Gamma}.}
+\item{Gamma}{Numeric \nxd matrix.
+It represents a variogram matrix \eGamma.}
 
 \item{cens}{Boolean. If true, then censored log-likelihood is computed.
 By default, \code{cens = FALSE}.}

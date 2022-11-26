@@ -7,12 +7,12 @@
 censor(x, p)
 }
 \arguments{
-\item{x}{Numeric matrix \eqn{n \times d}{n x d}.}
+\item{x}{Numeric \nxd matrix.}
 
-\item{p}{Numeric vector with \eqn{d} elements.}
+\item{p}{Numeric vector with \code{d} elements.}
 }
 \value{
-Numeric matrix \eqn{n \times d}{n x d}.
+Numeric \nxd matrix.
 }
 \description{
 Censors each row of matrix \code{x} with vector \code{p}.

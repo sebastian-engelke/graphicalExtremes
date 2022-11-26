@@ -2,15 +2,15 @@
 % Please edit documentation in R/estimation_param.R
 \name{emp_vario}
 \alias{emp_vario}
-\title{Estimation of the variogram matrix \eqn{\Gamma} of the Huesler--Reiss distribution}
+\title{Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution}
 \usage{
 emp_vario(data, k = NULL, p = NULL)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
-\item{k}{Integer between 1 and \eqn{d}. Component of the multivariate
+\item{k}{Integer between 1 and \code{d}. Component of the multivariate
 observations that is conditioned to be larger than the threshold \code{p}.
 If \code{NULL} (default), then an average over all \code{k} is returned.}
 
@@ -20,8 +20,7 @@ it is assumed that the \code{data} are already on multivariate Pareto scale. Els
 to standardize the \code{data}.}
 }
 \value{
-Numeric matrix \eqn{d \times d}{d x d}. The estimated
-variogram of the Huesler--Reiss distribution.
+Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
 }
 \description{
 Estimates the variogram of the Huesler--Reiss distribution empirically.

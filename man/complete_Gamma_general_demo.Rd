@@ -24,7 +24,7 @@ complete_Gamma_general_demo(
 \value{
 A nested list, containing the following details: TODO!!!
 
-The corresponding \eqn{\Theta} matrix produced by \link{Gamma2Theta} has values
+The corresponding \eTheta matrix produced by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has values
 close to zero in the remaining entries (how close depends on the input
 and the number of iterations).
 }

@@ -7,8 +7,8 @@
 fmpareto_graph_HR_decomposable(data, graph, p = NULL, cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
 \item{graph}{Decomposable graph object from \code{igraph} package.}
 

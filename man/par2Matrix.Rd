@@ -13,7 +13,7 @@ par2Gamma(par, allowMatrix = FALSE, allowNull = FALSE)
 par2Theta(par, allowMatrix = FALSE, allowNull = FALSE)
 }
 \arguments{
-\item{par}{Numeric vector with \eqn{d} elements.
+\item{par}{Numeric vector with \code{d} elements.
 Upper triangular part of a Gamma/Theta matrix.}
 
 \item{allowMatrix}{If \code{TRUE} and \code{par} is already a matrix, return it as is.}
@@ -23,7 +23,7 @@ Upper triangular part of a Gamma/Theta matrix.}
 \item{zeroRowSums}{If \code{TRUE} the diagonal is set to (-1) times the rowSums.}
 }
 \value{
-Numeric matrix \eqn{d \times d}{d x d}. Full Gamma/Theta matrix.
+Numeric matrix \dxd. Full Gamma/Theta matrix.
 }
 \description{
 This function takes the parameters in the vector \code{par}

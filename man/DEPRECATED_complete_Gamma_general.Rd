@@ -26,7 +26,7 @@ DEPRECATED_complete_Gamma_general(
 \value{
 A matrix that agrees with \code{Gamma} on the entries corresponding to
 edges in \code{graph} and the diagonals.
-The corresponding \eqn{\Theta} matrix produced by \link{Gamma2Theta} has values
+The corresponding \eTheta matrix produced by \link{Gamma2Theta} has values
 close to zero in the remaining entries (how close depends on the input
 and the number of iterations).
 }

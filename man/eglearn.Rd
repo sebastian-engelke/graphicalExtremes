@@ -13,8 +13,8 @@ eglearn(
 )
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
@@ -42,8 +42,8 @@ A list of \link[igraph:make_graph]{igraph::graph} objects representing the
 fitted graphs for each \code{rho} in \code{rholist}.
 }
 \item{\code{Gamma}}{
-A list of numeric \eqn{d\times d}{d x d} estimated
-variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+A list of numeric estimated \dxd
+variogram matrices \eGamma corresponding to the fitted graphs,
 for each \code{rho} in \code{rholist}. If \code{complete_Gamma = FALSE} or the
 underlying graph is not connected, it returns \code{NULL}.
 }
@@ -57,8 +57,8 @@ according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, it returns a list of \code{NA}.
 }
 \item{\code{Gamma_ic}}{
-A list of numeric \eqn{d\times d}{d x d} estimated
-variogram matrices \eqn{\Gamma} corresponding
+A list of numeric \dxd estimated
+variogram matrices \eGamma corresponding
 to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, \code{complete_Gamma = FALSE}, or the underlying
 graph is not connected, it returns a list of \code{NA}.

@@ -2,23 +2,23 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Theta2Gamma}
 \alias{Theta2Gamma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix}
+\title{Transformation of \eGamma matrix to \eTheta matrix}
 \usage{
 Theta2Gamma(Theta, k = NULL)
 }
 \arguments{
-\item{Theta}{Numeric \eqn{d \times d}{d x d} matrix (if \code{k} is \code{NULL})
+\item{Theta}{Numeric \dxd matrix (if \code{k} is \code{NULL})
 or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if \code{k} is a number).}
 
 \item{k}{\code{NULL} or integer between 1 and d.
-If this is \code{NULL} the input \code{Theta} is interpreted as a \eqn{d \times d}{d x d}
-precision matrix \eqn{\Theta}, otherwise as \eqn{\Theta^k}.}
+If this is \code{NULL} the input \code{Theta} is interpreted as a \dxd
+precision matrix \eTheta, otherwise as \eThetaK.}
 }
 \value{
-The \eqn{d \times d}{d x d} variogram matrix implied by \code{Theta}.
+The \dxd variogram matrix implied by \code{Theta}.
 }
 \description{
-Transforms a precision matrix (\eqn{\Theta} or \eqn{\Theta^k})
+Transforms a precision matrix (\eTheta or \eThetaK)
 to the corresponding variogram matrix.
 }
 \seealso{

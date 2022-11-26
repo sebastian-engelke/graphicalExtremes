@@ -302,7 +302,7 @@ emp_chi_deprecated <- function(data, p) {
 #'
 #' @return A matrix that agrees with `Gamma` on the entries corresponding to
 #' edges in `graph` and the diagonals.
-#' The corresponding \eqn{\Theta} matrix produced by [Gamma2Theta] has values
+#' The corresponding \eTheta matrix produced by [Gamma2Theta] has values
 #' close to zero in the remaining entries (how close depends on the input
 #' and the number of iterations).
 #'
@@ -370,8 +370,8 @@ DEPRECATED_complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, che
 #'
 #' Fits an extremal minimum spanning tree
 #'
-#' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
-#' It represents a variogram matrix \eqn{\Gamma}.
+#' @param Gamma Numeric \nxd matrix.
+#' It represents a variogram matrix \eGamma.
 #'
 #' @param rholist Numeric vector of non-negative regularization parameters
 #' for the lasso. For details see [glasso::glassopath].
@@ -390,8 +390,8 @@ DEPRECATED_complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, che
 #' \describe{
 #'   \item{`graph`}{A list of [igraph::graph] objects representing the
 #'   fitted graphs for each `rho` in `rholist`.}
-#'   \item{`Gamma`}{A list of numeric \eqn{d\times d}{d x d} estimated
-#'   variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+#'   \item{`Gamma`}{A list of numeric \dxd estimated
+#'   variogram matrices \eGamma corresponding to the fitted graphs,
 #'   for each `rho` in `rholist`.}
 #'   \item{`rholist`}{The list of penalty coefficients.}
 #' }

@@ -7,7 +7,7 @@
 complete_Gamma(Gamma, graph = NULL, allowed_graph_type = "general", ...)
 }
 \arguments{
-\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
+\item{Gamma}{Numeric \dxd variogram matrix.}
 
 \item{graph}{Graph object from \code{igraph} package.
 The \code{graph} must be a connected, undirected graph.
@@ -21,7 +21,7 @@ but does not have any influence on the completion algorithm.}
 is not decomposable}
 }
 \value{
-Completed \dxd{} \code{Gamma} matrix.
+Completed \dxd \code{Gamma} matrix.
 }
 \description{
 Given a \code{graph} and \code{Gamma} matrix specified (at least) on the

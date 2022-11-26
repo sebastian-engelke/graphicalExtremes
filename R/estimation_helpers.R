@@ -2,7 +2,7 @@
 #'
 #' Computes the exponent measure of HR distribution.
 #'
-#' @param x Numeric vector with \eqn{d} positive elements
+#' @param x Numeric vector with `d` positive elements
 #' where the exponent measure is to be evaluated.
 #' @param Gamma d x d variogram matrix or numeric vector with d(d-1)/2 elements,
 #' containing the upper triangular part of a variogram matrix.
@@ -46,7 +46,7 @@ V_HR <- function(x, Gamma = NULL, Theta = NULL) {
 #'
 #' Computes the exponent measure density of HR distribution.
 #'
-#' @param x Numeric matrix \eqn{n\times d}{n x d} or vector with \eqn{d} elements.
+#' @param x Numeric \nxd matrix or vector with `d` elements.
 #' @inheritParams V_HR
 #' 
 #' @details Both `Gamma` and `Theta` are needed internally, but if one
@@ -211,10 +211,9 @@ logdVK_HR <- function(x, K, Gamma) {
 #'
 #' Computes the full (censored) log-likelihood of HR model.
 #'
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. It contains
+#' @param data Numeric \nxd matrix, containing
 #' observations following a multivariate HR Pareto distribution.
-#' @param Gamma Numeric matrix \eqn{n\times d}{n x d}.
-#' It represents a variogram matrix \eqn{\Gamma}.
+#' @param Gamma Numeric \dxd matrix, representing a variogram matrix \eGamma.
 #' @param cens Boolean. If true, then censored log-likelihood is computed.
 #' By default, `cens = FALSE`.
 #'
@@ -271,10 +270,10 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #'
 #' Censors each row of matrix `x` with vector `p`.
 #'
-#' @param x Numeric matrix \eqn{n \times d}{n x d}.
-#' @param p Numeric vector with \eqn{d} elements.
+#' @param x Numeric \nxd matrix.
+#' @param p Numeric vector with `d` elements.
 #'
-#' @return Numeric matrix \eqn{n \times d}{n x d}.
+#' @return Numeric \nxd matrix.
 #'
 #' @keywords internal
 censor <- function(x, p) {

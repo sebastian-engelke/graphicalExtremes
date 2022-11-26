@@ -7,8 +7,8 @@
 emst(data, p = NULL, method = c("vario", "ML", "chi"), cens = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
@@ -26,7 +26,7 @@ components below the threshold. By default, \code{cens = FALSE}.}
 List consisting of:
 \item{\code{graph}}{An \code{\link[igraph:make_graph]{igraph::graph()}} object. The fitted minimum spanning tree.}
 \item{\code{Gamma}}{
-Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+Numeric \dxd estimated variogram matrix \eGamma
 corresponding to the fitted minimum spanning tree.
 }
 }

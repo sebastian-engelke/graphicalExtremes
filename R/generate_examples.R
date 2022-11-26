@@ -1,4 +1,4 @@
-#' Generate random Hüsler--Reiss Models
+#' Generate random Huesler--Reiss Models
 #'
 #' Generates a random connected graph and Gamma matrix with conditional independence
 #' structure corresponding to that graph.
@@ -96,7 +96,7 @@ generate_random_Gamma <- function(d, ...){
 #' @param b Initial `b` used in the algorithm described above
 #' @param b_step By how much `b` is increased in each iteration
 #'
-#' @return A \eqn{d \times d}{d x d} variogram matrix with integer entries
+#' @return A numeric \dxd variogram matrix with integer entries
 #'
 #' @family Example generations
 #'
@@ -125,8 +125,8 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 
 #' Generate a random symmetric positive definite matrix
 #'
-#' Generates a random \eqn{d \times d}{dxd} symmetric positive definite matrix.
-#' This is done by generating a random \eqn{d \times d}{dxd} matrix `B`,
+#' Generates a random \dxd symmetric positive definite matrix.
+#' This is done by generating a random \dxd matrix `B`,
 #' then computing `B %*% t(B)`,
 #' and then normalizing the matrix to approximately single digit entries.
 #'

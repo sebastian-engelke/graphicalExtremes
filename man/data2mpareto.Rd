@@ -7,8 +7,8 @@
 data2mpareto(data, p, na.rm = FALSE)
 }
 \arguments{
-\item{data}{Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-number of observations and \eqn{d} is the dimension.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1. Probability used for the quantile to
 threshold the data.}
@@ -16,7 +16,7 @@ threshold the data.}
 \item{na.rm}{Logical. If rows containing NAs should be removed.}
 }
 \value{
-Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
+Numeric \eXTimesY{m}{d} matrix, where \code{m} is the number
 of rows in the original \code{data} matrix that are above the threshold.
 }
 \description{

@@ -4,27 +4,27 @@
 #' (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 #' (see \insertCite{friedman2008;textual}{graphicalExtremes}).
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#'  number of observations and \eqn{d} is the dimension.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
-#'  it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#'  `p` is used as the probability in the function [data2mpareto]
-#'  to standardize the `data`.
+#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
+#' `p` is used as the probability in the function [data2mpareto]
+#' to standardize the `data`.
 #'
 #' @param rholist Numeric vector of non-negative regularization parameters
-#'  for the lasso.
-#'  Default is `rholist = c(0.1, 0.15, 0.19, 0.205)`.
-#'  For details see [glasso::glassopath].
+#' for the lasso.
+#' Default is `rholist = c(0.1, 0.15, 0.19, 0.205)`.
+#' For details see [glasso::glassopath].
 #'
 #' @param reg_method One of `"ns", "glasso"`, for neighborhood selection and
-#'  graphical lasso, respectively.
-#'  Default is `reg_method = "ns"`.
-#'  For details see \insertCite{meins2006;textual}{graphicalExtremes},
-#'  \insertCite{friedman2008;textual}{graphicalExtremes}.
+#' graphical lasso, respectively.
+#' Default is `reg_method = "ns"`.
+#' For details see \insertCite{meins2006;textual}{graphicalExtremes},
+#' \insertCite{friedman2008;textual}{graphicalExtremes}.
 #'
 #' @param complete_Gamma Whether you want to try fto complete Gamma matrix.
-#'  Default is `complete_Gamma = FALSE`.
+#' Default is `complete_Gamma = FALSE`.
 #'
 #' @return List made of:
 #' \item{`graph`}{
@@ -32,8 +32,8 @@
 #'   fitted graphs for each `rho` in `rholist`.
 #' }
 #' \item{`Gamma`}{
-#'   A list of numeric \eqn{d\times d}{d x d} estimated
-#'   variogram matrices \eqn{\Gamma} corresponding to the fitted graphs,
+#'   A list of numeric estimated \dxd
+#'   variogram matrices \eGamma corresponding to the fitted graphs,
 #'   for each `rho` in `rholist`. If `complete_Gamma = FALSE` or the
 #'   underlying graph is not connected, it returns `NULL`.
 #' }
@@ -47,8 +47,8 @@
 #'   If `reg_method = "glasso"`, it returns a list of `NA`.
 #' }
 #' \item{`Gamma_ic`}{
-#'   A list of numeric \eqn{d\times d}{d x d} estimated
-#'   variogram matrices \eqn{\Gamma} corresponding
+#'   A list of numeric \dxd estimated
+#'   variogram matrices \eGamma corresponding
 #'   to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
 #'   graph is not connected, it returns a list of `NA`.
@@ -172,8 +172,8 @@ eglearn <- function(
 #' - empirical extremal variogram, if `method = "vario"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 #' - empirical extremal correlation, if `method = "chi"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
 #' `p` is used as the probability in the function [data2mpareto]
@@ -187,7 +187,7 @@ eglearn <- function(
 #' @return List consisting of:
 #' \item{`graph`}{An [igraph::graph()] object. The fitted minimum spanning tree.}
 #' \item{`Gamma`}{
-#'   Numeric \eqn{d\times d}{d x d} estimated variogram matrix \eqn{\Gamma}
+#'   Numeric \dxd estimated variogram matrix \eGamma
 #'   corresponding to the fitted minimum spanning tree.
 #' }
 #'

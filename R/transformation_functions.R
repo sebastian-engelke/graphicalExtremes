@@ -1,11 +1,11 @@
 
-#' Transformation of \eqn{\Gamma} matrix to graph object
+#' Transformation of \eGamma matrix to graph object
 #'
 #' Transforms `Gamma` matrix to an `igraph` object for
 #' the corresponding Huesler--Reiss extremal graphical model,
 #' and plots it (optionally).
 #'
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param Gamma Numeric \dxd variogram matrix.
 #' @param tol Numeric scalar, entries in the precision matrix with absolute value
 #' smaller than this are considered to be zero.
 #'
@@ -14,7 +14,7 @@
 #' @details
 #' The variogram uniquely determines the extremal graph structure of the
 #' corresponding Huesler--Reiss distribution. The conditional independencies
-#' can be identified from the inverses of the matrices \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+#' can be identified from the inverses of the matrices \eSigmaK
 #' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
@@ -65,13 +65,13 @@ partialMatrixToGraph <- function(Matrix){
 #'
 #' Transforms the `data` matrix empirically to the multivariate Pareto scale.
 #'
-#' @param data Numeric matrix of size \eqn{n\times d}{n x d}, where \eqn{n} is the
-#' number of observations and \eqn{d} is the dimension.
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the dimension.
 #' @param p Numeric between 0 and 1. Probability used for the quantile to
 #' threshold the data.
 #' @param na.rm Logical. If rows containing NAs should be removed.
 #'
-#' @return Numeric matrix \eqn{m \times d}{m x d}, where \eqn{m} is the number
+#' @return Numeric \eXTimesY{m}{d} matrix, where `m` is the number
 #' of rows in the original `data` matrix that are above the threshold.
 #'
 #' @details
@@ -122,33 +122,32 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 }
 
 
-#' Transformation of \eqn{\Sigma} matrix to \eqn{\Gamma} matrix
+#' Transformation of \eSigma and \eSigmaK matrix to \eGamma matrix
 #'
-#' Transforms the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \eqn{\Gamma} matrix.
+#' Transforms the \eSigmaK matrix from the definition of a
+#' Huesler--Reiss distribution to the corresponding \eGamma matrix.
 #'
-#' @param S Numeric \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} covariance matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+#' @param S Numeric \d1xd1 covariance matrix \eSigmaK
 #' from the definition of a Huesler--Reiss distribution.
-#' Numeric \eqn{d \times d}{d x d} covariance matrix if `full = TRUE`, see `full`
-#' parameter.
+#' Numeric \dxd covariance matrix if `full = TRUE`, see `full` parameter.
 #' @param k Integer between `1` (the default value) and `d`.
-#' Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} is represented by `S`.
-#' @param full Logical. If true, then the `k`th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-#' are included and the function returns a \eqn{d \times d}{d x d} matrix.
+#' Indicates which matrix \eSigmaK is given as `S`.
+#' @param full Logical. If true, then the `k`th row and column in \eSigmaK
+#' are included and the function returns a \dxd matrix.
 #' By default, `full = FALSE`.
 #'
 #' @details
 #' For any `k` from `1` to `d`,
-#' the \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)}
+#' the \eSigmaK matrix of size \d1xd1
 #' in the definition of a
 #' Huesler--Reiss distribution can be transformed into a the
-#' corresponding \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
-#' If `full = TRUE`, then \eqn{\Sigma^{(k)}}{\Sigma^(k)} must be a \eqn{d \times d}{d x d}
+#' corresponding \dxd \eGamma matrix.
+#' If `full = TRUE`, then \eSigmaK must be a \dxd
 #' matrix with `k`th row and column
 #' containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
 #' This is the inverse of function of [Gamma2Sigma].
 #'
-#' @return Numeric \eqn{d \times d}{d x d} \eqn{\Gamma} matrix.
+#' @return Numeric \dxd \eGamma matrix.
 #'
 #' @examples
 #' Sigma1 <- rbind(
@@ -184,34 +183,34 @@ Sigma2Gamma <- function(Sigma, k = NULL, full = FALSE) {
 
 
 
-#' Transformation of \eGamma{} matrix to \eqn{\Sigma}, \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix
+#' Transformation of \eGamma matrix to \eSigma or \eSigmaK matrix
 #'
 #' Transforms the `Gamma` matrix from the definition of a
 #' Huesler--Reiss distribution to the corresponding
-#' \eqn{\Sigma} or \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
+#' \eSigma or \eSigmaK matrix.
 #'
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param Gamma Numeric \dxd variogram matrix.
 #' @param k `NULL` (default) or an integer between `1` and `d`.
-#' Indicates which matrix \eqn{\Sigma}, or \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+#' Indicates which matrix \eSigma, or \eSigmaK
 #' should be produced.
-#' @param full Logical. If true, then the `k`th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-#' are included and the function returns a \eqn{d \times d}{d x d} matrix.
+#' @param full Logical. If true, then the `k`th row and column in \eSigmaK
+#' are included and the function returns a \dxd matrix.
 #' By default, `full = FALSE`.
 #'
 #' @details
-#' Every \eqn{d \times d}{d x d} `Gamma` matrix in the definition of a
+#' Every \dxd `Gamma` matrix in the definition of a
 #' Huesler--Reiss distribution can be transformed into a
-#' \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix,
-#' for any `k` from `1` to `d`. The inverse of \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+#' \d1xd1 \eSigmaK matrix,
+#' for any `k` from `1` to `d`. The inverse of \eSigmaK
 #' contains the graph structure corresponding to the Huesler--Reiss distribution
-#' with parameter matrix `Gamma`. If `full = TRUE`, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-#' is returned as a \eqn{d \times d}{d x d} matrix with additional `k`th row and column
+#' with parameter matrix `Gamma`. If `full = TRUE`, then \eSigmaK
+#' is returned as a \dxd matrix with additional `k`th row and column
 #' that contain zeros.
 #' For details see \insertCite{eng2019;textual}{graphicalExtremes} and
 #' \insertCite{hen2022;textual}{graphicalExtremes}.
 #'
-#' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-#' `full = FALSE`, and of size \eqn{d \times d}{d x d} if `full = TRUE`.
+#' @return Numeric \eSigmaK matrix of size \d1xd1 if
+#' `full = FALSE`, and \eSigma of size \dxd if `full = TRUE`.
 #'
 #' @examples
 #' Gamma <- cbind(
@@ -242,27 +241,27 @@ Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
 }
 
 
-#' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+#' Transformation of \eGamma matrix to \eTheta matrix
 #'
-#' Transforms the variogram matrix (\eqn{\Gamma}) from the definition of a
+#' Transforms the variogram matrix (\eGamma) from the definition of a
 #' Huesler--Reiss distribution to the corresponding precision matrix
-#' (\eqn{\Theta} or \eqn{\Theta^k}).
+#' (\eTheta or \eThetaK).
 #'
 #'
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param Gamma Numeric \dxd variogram matrix.
 #' @param k `NULL` or integer between 1 and d. If this is `NULL`, the
-#' \eqn{d \times d}{d x d} matrix \eqn{\Theta} is produced, otherwise
-#' the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eqn{\Theta^k}.
+#' \dxd matrix \eTheta is produced, otherwise
+#' the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eThetaK.
 #' 
 #' @details
-#' Every \eqn{d \times d}{d x d} `Gamma` matrix in the definition of a
+#' Every \dxd `Gamma` matrix in the definition of a
 #' Huesler--Reiss distribution can be transformed into a
-#' \eqn{d \times d}{d x d} \eqn{\Theta} matrix, which
+#' \dxd \eTheta matrix, which
 #' contains the graph structure corresponding to the Huesler--Reiss distribution
 #' with parameter matrix `Gamma`.
 #'
-#' @return Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-#' `full = FALSE`, and of size \eqn{d \times d}{d x d} if `full = TRUE`.
+#' @return Numeric \eSigmaK matrix of size \d1xd1 if
+#' `full = FALSE`, and of size \dxd if `full = TRUE`.
 #'
 #' @examples
 #' Gamma <- cbind(
@@ -291,18 +290,18 @@ Gamma2Theta <- function(Gamma, k=NULL) {
   return(Theta_k)
 }
 
-#' Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+#' Transformation of \eGamma matrix to \eTheta matrix
 #' 
-#' Transforms a precision matrix (\eqn{\Theta} or \eqn{\Theta^k})
+#' Transforms a precision matrix (\eTheta or \eThetaK)
 #' to the corresponding variogram matrix.
 #' 
-#' @param Theta Numeric \eqn{d \times d}{d x d} matrix (if `k` is `NULL`)
+#' @param Theta Numeric \dxd matrix (if `k` is `NULL`)
 #' or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if `k` is a number).
 #' @param k `NULL` or integer between 1 and d.
-#' If this is `NULL` the input `Theta` is interpreted as a \eqn{d \times d}{d x d}
-#' precision matrix \eqn{\Theta}, otherwise as \eqn{\Theta^k}.
+#' If this is `NULL` the input `Theta` is interpreted as a \dxd
+#' precision matrix \eTheta, otherwise as \eThetaK.
 #' 
-#' @return The \eqn{d \times d}{d x d} variogram matrix implied by `Theta`.
+#' @return The \dxd variogram matrix implied by `Theta`.
 #' 
 #' @family MatrixTransformations
 #' 
@@ -326,13 +325,13 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #' This function takes the parameters in the vector `par`
 #' (upper triangular Gamma/Theta matrix) and returns the full Gamma/Theta.
 #'
-#' @param par Numeric vector with \eqn{d} elements.
+#' @param par Numeric vector with `d` elements.
 #' Upper triangular part of a Gamma/Theta matrix.
 #' @param allowMatrix If `TRUE` and `par` is already a matrix, return it as is.
 #' @param allowNull If `TRUE` and `par` is NULL, return NULL.
 #' @param zeroRowSums If `TRUE` the diagonal is set to (-1) times the rowSums.
 #'
-#' @return Numeric matrix \eqn{d \times d}{d x d}. Full Gamma/Theta matrix.
+#' @return Numeric matrix \dxd. Full Gamma/Theta matrix.
 #' 
 #' @name par2Matrix
 #'
@@ -373,15 +372,15 @@ par2Theta <- function(par, allowMatrix = FALSE, allowNull = FALSE){
 
 
 
-#' Extract upper triangular part of \eqn{\Gamma}
+#' Extract upper triangular part of \eGamma
 #'
 #' This function returns a vector containing the upper triangular part
 #' of the matrix `Gamma`. If `Gamma` is already a vector, it returns
 #' it as it is.
 #'
-#' @param Gamma Numeric \eqn{d \times d}{d x d} variogram matrix.
+#' @param Gamma Numeric \dxd variogram matrix.
 #'
-#' @return Numeric vector with \eqn{d} elements.
+#' @return Numeric vector with `d` elements.
 #' The upper triangular part of the given `Gamma` matrix.
 #'
 #' @keywords internal
@@ -394,20 +393,20 @@ Gamma2par <- function(Gamma) {
 
 
 
-#' Transformation of extremal correlation \eqn{\chi} to the Huesler--Reiss variogram \eqn{\Gamma}
+#' Transformation of extremal correlation \eChi to the Huesler--Reiss variogram \eGamma
 #'
-#' Transforms the extremal correlation \eqn{\chi} into the `Gamma` matrix
+#' Transforms the extremal correlation \eChi into the `Gamma` matrix
 #' from the definition of a Huesler--Reiss
 #' distribution.
 #'
 #' @param chi Numeric or matrix, with entries
 #' between 0 and 1.
 #'
-#' @return Numeric or matrix. The \eqn{\Gamma} parameters in the Huesler--Reiss
+#' @return Numeric or matrix. The \eGamma parameters in the Huesler--Reiss
 #' distribution.
 #'
 #' @details
-#' The formula for transformation from `chi` to \eqn{\Gamma} that is applied element-wise is
+#' The formula for transformation from `chi` to \eGamma that is applied element-wise is
 #' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
 #' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
 #' This is the inverse of [Gamma2chi].
@@ -422,13 +421,13 @@ chi2Gamma <- function(chi) {
 }
 
 
-#' Transformation of the Huesler--Reiss variogram \eqn{\Gamma} to extremal correlation \eqn{\chi}
+#' Transformation of the Huesler--Reiss variogram \eGamma to extremal correlation \eChi
 #'
 #' Transforms the `Gamma` matrix from the definition of a Huesler--Reiss
-#' distribution into the corresponding extremal correlation \eqn{\chi}.
+#' distribution into the corresponding extremal correlation \eChi.
 #'
 #' @details
-#' The formula for transformation from `Gamma` to \eqn{\chi} that is applied element-wise is
+#' The formula for transformation from `Gamma` to \eChi that is applied element-wise is
 #' \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 #' where \eqn{\Phi} is the standard normal distribution function.
 #' This is the inverse of [chi2Gamma].
@@ -447,13 +446,13 @@ Gamma2chi <- function(Gamma) {
 
 
 
-#' Compute theoretical \eqn{\chi} in 3D
+#' Compute theoretical \eChi in 3D
 #'
-#' Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
+#' Computes the theoretical \eChi coefficient in 3 dimensions.
 #'
-#' @param Gamma Numeric matrix \eqn{3\times 3}{3 x 3}.
+#' @param Gamma Numeric \eXTimesY{3}{3} matrix.
 #'
-#' @return The 3-dimensional \eqn{\chi} coefficient, i.e.,
+#' @return The 3-dimensional \eChi coefficient, i.e.,
 #' the extremal correlation coefficient for the HR distribution. Note that
 #' \eqn{0 \leq \chi \leq 1}.
 #'
@@ -478,13 +477,13 @@ Gamma2chi_3D <- function(Gamma) {
 #' Marginalize a multivariate Pareto dataset `data` with respect to the
 #' variables in `set_indices`.
 #'
-#' @param data Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
+#' @param data Numeric \nxd matrix. A dataset containing
 #' observations following a multivariate Pareto distribution.
-#' @param set_indices Numeric vector with at most \eqn{d} different elements in
-#' 1, ..., \eqn{d}. The variables with respect to which to marginalize
+#' @param set_indices Numeric vector with at most `d` different elements in
+#' 1, ..., `d`. The variables with respect to which to marginalize
 #' the multivariate distribution.
 #'
-#' @return Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length
+#' @return Numeric \eXTimesY{n}{m} matrix, where `m` is the length
 #' of `set_indices`. Marginalized multivariate Pareto data.
 #'
 #' @keywords internal
