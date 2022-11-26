@@ -1,0 +1,48 @@
+
+{
+    "d x d": {
+        "prefix": "dxd",
+        "body": "\\eqn{d \\times d}{d x d}",
+        "description": "R help: d x d"
+    },
+    "d-1 x d-1": {
+        "prefix": "dxd1",
+        "body": "\\eqn{(d-1) \\times (d-1)}{(d-1) x (d-1)}",
+        "description": "R help: (d-1) x (d-1)"
+    },
+    "Theta": {
+        "prefix": "Theta",
+        "body": "\\eqn{\\Theta}",
+        "description": "R help: Theta"
+    },
+    "ThetaK": {
+        "prefix": "ThetaK",
+        "body": "\\eqn{\\Theta^k}",
+        "description": "R help: ThetaK"
+    },
+    "Sigma": {
+        "prefix": "Sigma",
+        "body": "\\eqn{\\Sigma}",
+        "description": "R help: Sigma"
+    },
+    "SigmaK": {
+        "prefix": "SigmaK",
+        "body": "\\eqn{\\Sigma^K}",
+        "description": "R help: SigmaK"
+    },
+    "cite": {
+        "prefix": "cite",
+        "body": "\\insertCite{$1}{graphicalExtremes}",
+        "description": "R help: citation"
+    },
+    "citet": {
+        "prefix": "citet",
+        "body": "\\insertCite{$1;textual}{graphicalExtremes}",
+        "description": "R help: citation textual"
+    },
+    "refAllCited": {
+        "prefix": "@refAllCited",
+        "body": "@references \\insertAllCited{}",
+        "description": "R help: reference all cited"
+    }
+}

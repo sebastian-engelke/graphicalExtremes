@@ -8,7 +8,7 @@ docs
 inst/doc
 *.log
 
-.vscode
+# .vscode
 build.R
 .Rprofile
 

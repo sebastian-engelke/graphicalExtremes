@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "R-Debugger",
+            "name": "Launch R-Workspace",
+            "request": "launch",
+            "debugMode": "workspace",
+            "workingDirectory": "${workspaceFolder}",
+            "loadPackages": ["."]
+        },
+        {
+            "type": "R-Debugger",
+            "name": "Debug test.R",
+            "request": "launch",
+            "debugMode": "file",
+            "workingDirectory": "${workspaceFolder}",
+            "file": "${workspaceFolder}/debug/test.R",
+            "loadPackages": [
+                "."
+            ],
+            "allowGlobalDebugging": true
+        },
+        {
+            "type": "R-Debugger",
+            "name": "Debug file",
+            "request": "launch",
+            "debugMode": "file",
+            "workingDirectory": "${workspaceFolder}",
+            "file": "${file}",
+            "loadPackages": [
+                "."
+            ],
+            "allowGlobalDebugging": true
+        },
+        {
+            "type": "R-Debugger",
+            "name": "Attach",
+            "request": "attach"
+        }
+    ]
+}
