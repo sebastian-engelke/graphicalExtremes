@@ -127,9 +127,8 @@ fast_diag <- function(y, M) {
 #'
 #' @param x Numeric vector with `d` positive elements
 #' where the censored exponent measure is to be evaluated.
-#' @param K Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}},
-#' the index set that is not censored.
-#' Or: Logical vector of length `d`, indicating entries that are not censored.
+#' @param K Integer vector, subset of 1, ..., `d`, the index set that is not censored.
+#' Or logical vector of length `d`, indicating entries that are not censored.
 #' @inheritParams V_HR
 #'
 #' @return Numeric. The censored exponent measure of the HR distribution.

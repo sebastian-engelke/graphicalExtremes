@@ -19,7 +19,7 @@
 #' 
 #' @keywords block descent, concentration matrix, Laplacian matrix.
 #' @export
-emtp2 <- function(G,tol=1e-6, verbose = TRUE, initial_point = TRUE){
+emtp2 <- function(G, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
   d <- nrow(G)
   if (verbose==TRUE){
     cat("** The function maximizes the log-likelihood function under Laplacian matrix constraints.\n")

@@ -10,11 +10,12 @@
 #' depending on the value of `useTheta`. If `graph` is non-decomposable,
 #' `useTheta=TRUE` is significantly faster, otherwise they are similar in performance.
 #'
-#' @param data Numeric matrix with d columns (one per dimension) and n rows with one observation each.
-#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
-#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto] to standardize the data.
-#' @param cens Logical. If true, then censored likelihood contributions are used for
+#' @param data Numeric \nxd matrix, where `n` is the
+#' number of observations and `d` is the number of dimensions.
+#' @param p Numeric scalar between 0 and 1 or `NULL`. If `NULL` (default),
+#' it is assumed that the `data` is already on a multivariate Pareto scale. Else,
+#' `p` is used as the probability in [data2mpareto()] to standardize the data.
+#' @param cens Logical scalar. If true, then censored likelihood contributions are used for
 #' components below the threshold. This is computationally expensive and by default `cens = FALSE`.
 #' @param init Numeric vector or numeric matrix. Initial parameter values in the optimization.
 #' If `NULL`, the empirical variogram is used instead. Otherwise should be a numeric
