@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimation_param.R
 \name{emp_chi}
 \alias{emp_chi}
+\alias{emp_chi_pairwise}
 \title{Empirical estimation of extremal correlation matrix \eChi}
 \usage{
 emp_chi(data, p = NULL)
+
+emp_chi_pairwise(data, p = NULL, verbose = FALSE)
 }
 \arguments{
 \item{data}{Numeric \nxd matrix, where \code{n} is the
@@ -13,6 +16,8 @@ number of observations and \code{d} is the dimension.}
 \item{p}{Numeric scalar between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 \code{p} is used as the probability in \code{\link[=data2mpareto]{data2mpareto()}} to standardize the \code{data}.}
+
+\item{verbose}{Print verbose progress information}
 }
 \value{
 Numeric matrix \dxd. The matrix contains the
@@ -20,6 +25,10 @@ bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
 }
 \description{
 Estimates empirically the matrix of bivariate extremal correlation coefficients \eChi.
+}
+\details{
+\code{emp_chi_pairwise} calls \code{emp_chi} for each pair of observations.
+This is more robust if the data contains many \code{NA}s, but can take rather long.
 }
 \examples{
 n <- 100
@@ -35,4 +44,5 @@ Gamma <- cbind(
 set.seed(123)
 my_data <- rmstable(n, "HR", d = d, par = Gamma)
 emp_chi(my_data, p)
+
 }

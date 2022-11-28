@@ -16,3 +16,6 @@ build.R
 *.temp
 tmp.*
 temp.*
+
+*.tar.gz
+*.Rcheck

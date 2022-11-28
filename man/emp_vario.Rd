@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimation_param.R
 \name{emp_vario}
 \alias{emp_vario}
+\alias{emp_vario_pairwise}
 \title{Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution}
 \usage{
 emp_vario(data, k = NULL, p = NULL)
+
+emp_vario_pairwise(data, k = NULL, p = NULL, verbose = FALSE)
 }
 \arguments{
 \item{data}{Numeric \nxd matrix, where \code{n} is the
@@ -18,10 +21,16 @@ If \code{NULL} (default), then an average over all \code{k} is returned.}
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
 \code{p} is used as the probability in the function \link{data2mpareto}
 to standardize the \code{data}.}
+
+\item{verbose}{Print verbose progress information}
 }
 \value{
 Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
 }
 \description{
 Estimates the variogram of the Huesler--Reiss distribution empirically.
+}
+\details{
+\code{emp_vario_pairwise} calls \code{emp_vario} for each pair of observations.
+This is more robust if the data contains many \code{NA}s, but can take rather long.
 }

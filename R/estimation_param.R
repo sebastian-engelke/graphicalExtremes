@@ -351,7 +351,12 @@ fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) 
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
 #' `p` is used as the probability in the function [data2mpareto]
 #' to standardize the `data`.
+#' 
+#' @details
+#' `emp_vario_pairwise` calls `emp_vario` for each pair of observations.
+#' This is more robust if the data contains many `NA`s, but can take rather long.
 #'
+#' @rdname emp_vario
 #' @return Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
 #' @export
 emp_vario <- function(data, k = NULL, p = NULL) {
@@ -401,6 +406,9 @@ emp_vario <- function(data, k = NULL, p = NULL) {
   return(G)
 }
 
+
+#' @param verbose Print verbose progress information
+#' @rdname emp_vario
 #' @export
 emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
   vcat <- function(...){
@@ -443,6 +451,12 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
 #'
 #' @return Numeric matrix \dxd. The matrix contains the
 #' bivariate extremal coefficients \eqn{\chi_{ij}}, for \eqn{i, j = 1, ..., d}.
+#' 
+#' 
+#' @details
+#' `emp_chi_pairwise` calls `emp_chi` for each pair of observations.
+#' This is more robust if the data contains many `NA`s, but can take rather long.
+#'
 #' @examples
 #' n <- 100
 #' d <- 4
@@ -457,6 +471,8 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = Gamma)
 #' emp_chi(my_data, p)
+#' 
+#' @rdname emp_chi
 #' @export
 emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
@@ -478,6 +494,8 @@ emp_chi <- function(data, p = NULL) {
   crossprod(ind, ind) / (1 / 2 * (ind_mat + t(ind_mat)))
 }
 
+#' @param verbose Print verbose progress information
+#' @rdname emp_chi
 #' @export
 emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
   vcat <- function(...){
