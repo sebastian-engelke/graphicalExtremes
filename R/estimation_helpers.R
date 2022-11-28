@@ -142,6 +142,7 @@ logdVK_HR <- function(x, K, Gamma) {
   if(is.logical(K)){
     K <- which(K)
   }
+  K <- unique(K)
 
   if (any(is_leq(x, 0))) {
     stop("The elements of x must be positive.")
@@ -160,7 +161,7 @@ logdVK_HR <- function(x, K, Gamma) {
 
   Gamma <- par2Gamma(Gamma, allowMatrix = TRUE)
   if (NROW(Gamma) != d) {
-    stop("The length of par must be d * (d - 1) / 2.")
+    stop("The length of Gamma must be d * (d - 1) / 2.")
   }
 
   S <- Gamma2Sigma(Gamma, k = i, full = TRUE)
@@ -247,20 +248,21 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
   J <- which(lapply(L, length) == d)
 
   if (length(I) > 0) {
-    y1 <- mapply(logdVK_HR,
-                 x = as.list(data.frame(t(data.p)))[I], K = L[I],
-                 MoreArgs = list(par = par)
+    y1 <- mapply(
+      logdVK_HR,
+      x = as.list(data.frame(t(data.p)))[I], K = L[I],
+      MoreArgs = list(Gamma = par)
     )
   } else {
     y1 <- 0
   }
 
   if (length(J) > 0) {
-    y2 <- logdV_HR(x = data.p[J, ], par = par)
+    y2 <- logdV_HR(x = data.p[J, ], Gamma = par)
   } else {
     y2 <- 0
   }
-  return(sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, par = par)))
+  return(sum(y1) + sum(y2) - (length(I) + length(J)) * log(V_HR(p, Gamma = par)))
 }
 
 

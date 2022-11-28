@@ -463,10 +463,10 @@ Gamma2chi_3D <- function(Gamma) {
   if (d != 3) {
     stop("Gamma must be a 3 x 3 matrix.")
   }
-  res <- 3 - V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(1, 2), c(1, 2)])) -
-    V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(1, 3), c(1, 3)])) -
-    V_HR(x = rep(1, times = 2), par = Gamma2par(Gamma[c(2, 3), c(2, 3)])) +
-    V_HR(x = rep(1, times = 3), par = Gamma2par(Gamma))
+  res <- 3 - V_HR(x = rep(1, times = 2), Gamma = Gamma[c(1, 2), c(1, 2)]) -
+    V_HR(x = rep(1, times = 2), Gamma = Gamma[c(1, 3), c(1, 3)]) -
+    V_HR(x = rep(1, times = 2), Gamma = Gamma[c(2, 3), c(2, 3)]) +
+    V_HR(x = rep(1, times = 3), Gamma = Gamma)
   return(res)
 }
 
