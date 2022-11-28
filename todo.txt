@@ -20,7 +20,7 @@
 - travis? mit nico klaeren
 - update vignettes
 - readme
-    - find out how Rmd->md is compiled
+    - find out how Rmd->md in readme is compiled
     x?- update reference list
     - individual citations in help pages -> geht, genauer gucken
 - danube data
