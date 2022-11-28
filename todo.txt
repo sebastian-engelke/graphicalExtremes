@@ -1,5 +1,5 @@
 
-- consistent symmetry checks/fixes
+x- consistent symmetry checks/fixes
     x- custom is.pos.def function?
 - consistent variable naming:
     - g / graph
@@ -16,17 +16,18 @@
 - fix TODOs in danube documentation -> raus oder durch raw data
 - clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?
-    - also remove flights_old
-    - other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
-- tests? muss nicht
-- travis? mit nico klaeren
-    - remove badges from description
-    - remove .travis.yml
+    - also remove flights_old?
+    x- other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
+    - sind raus -> sebastian fragen
+x- tests? muss nicht
+x- travis? mit nico klaeren
+    x- remove badges from description
+    x- remove .travis.yml
 - update vignettes
 - readme
-    - find out how Rmd->md in readme is compiled
+    x- find out how Rmd->md in readme is compiled
     x?- update reference list
-    - individual citations in help pages -> geht, genauer gucken
+    x- individual citations in help pages -> geht, genauer gucken
 - danube data
     x- tagesdaten rein -> yes
     x- coords_to_plot in station info -> yes
