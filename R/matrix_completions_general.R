@@ -1,13 +1,37 @@
 
 
-complete_Gamma_general_mc <- function(
+
+#' Non-decomposable completion of variogram matrices
+#'
+#' Given a non-decomposable `graph`, and (non-graphical) variogram matrix `Gamma`,
+#' modifies `Gamma` in non-edge entries, such that the resulting matrix is a
+#' variogram matrix with graphical structure described by `graph`.
+#' Does so by splitting `graph` at complete separators into smaller subgraphs,
+#' and calling `complete_Gamma_general` for each subgraph/submatrix,
+#' using multiple cores if available.
+#'
+#' @param Gamma Numeric \dxd variogram matrix.
+#' @param graph `igraph::graph()` object.
+#' @param N Maximum number of iterations.
+#' @param sub_tol Numeric scalar. Tolerance to be used when completing submatrices.
+#' @param check_tol Numeric/integer scalar. How often to check the tolerance when completing submatrices.
+#' @param mc_cores_overwrite `NULL` or numeric/integer scalar. Maximal number of cores to use.
+#' @param final_tol Numeric scalar. Check convergence of the final result with this tolerance.
+#' Skipped if this value is < 0.
+#'
+#' @return A completed \dxd variogram matrix.
+#' 
+#' @family Matrix completions
+#' 
+#' @export
+complete_Gamma_general_split <- function(
   Gamma,
   graph,
   N = 10000,
-  tol = 1e-12,
+  sub_tol = final_tol * 1e-3,
   check_tol = 100,
   mc_cores_overwrite = NULL,
-  final_tol = 1e-9
+  final_tol = get_tol()
 ){
   # Check/find mc_cores
   mc_cores <- get_mc_cores(mc_cores_overwrite)
@@ -24,12 +48,12 @@ complete_Gamma_general_mc <- function(
 
   completedSubMatrices <- parallel::mcmapply(
     mc.cores = mc_cores,
-    complete_Gamma_general_sc,
+    complete_Gamma_general,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],
     MoreArgs = list(
       N = N,
-      tol = tol,
+      tol = sub_tol,
       check_tol = check_tol
     ),
     SIMPLIFY = FALSE,
@@ -50,7 +74,7 @@ complete_Gamma_general_mc <- function(
   if(final_tol >= 0){
     Theta <- Gamma2Theta(Gamma)
     err <- max(abs(getNonEdgeEntries(Theta, graph)))
-    if(err > tol){
+    if(err > sub_tol){
       warning('Matrix completion did not converge (err = ', err, ')')
     }
   }
@@ -58,7 +82,25 @@ complete_Gamma_general_mc <- function(
   return(Gamma)
 }
 
-complete_Gamma_general_sc <- function(Gamma, graph, N=10000, tol=1e-12, check_tol=100){
+
+#' Non-decomposable completion of variogram matrices
+#'
+#' Given a non-decomposable `graph`, and (non-graphical) variogram matrix `Gamma`,
+#' modifies `Gamma` in non-edge entries, such that the resulting matrix is a
+#' variogram matrix with graphical structure described by `graph`.
+#'
+#' @param Gamma Numeric \dxd variogram matrix.
+#' @param graph `igraph::graph()` object.
+#' @param N Maximum number of iterations.
+#' @param tol Numeric scalar. Tolerance to be used when completing submatrices.
+#' @param check_tol Numeric/integer scalar. How often to check the tolerance when completing submatrices.
+#'
+#' @return A completed \dxd variogram matrix.
+#' 
+#' @family Matrix completions
+#' 
+#' @export
+complete_Gamma_general <- function(Gamma, graph, N=10000, tol=1e-12, check_tol=100){
   
   if(is_complete_graph(graph)){
     return(Gamma)
@@ -73,6 +115,7 @@ complete_Gamma_general_sc <- function(Gamma, graph, N=10000, tol=1e-12, check_to
   return(GammaComp)
 }
 
+#' Workhorse of `complete_Gamma_general()`
 iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   m <- length(sepList)
   n <- 0
@@ -138,27 +181,38 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
 
 
 
-#' Completion of non-decomposable Gamma matrices (demo-version)
+#' DEMO-VERSION: Completion of non-decomposable Gamma matrices
 #'
 #' Given a `graph` and variogram matrix `Gamma`, returns the full `Gamma`
 #' matrix implied by the conditional independencies.
-#' This function uses a convergent iterative algorithm.
 #' DEMO VERSION: Returns a lot of details and allows specifying the graph list
-#' that is used. Is way slower than `complete_Gamma_general`.
+#' that is used. Is way slower than other functions.
 #'
-#' @param Gamma A complete variogram matrix (without any graphical structure)
-#' @param graph An [igraph::graph] object
-#' @param N The maximal number of iterations of the algorithm
-#' @param tol The tolerance to use when checking for zero entries in `Theta`
+#' @param Gamma A complete variogram matrix (without any graphical structure).
+#' @param graph An [igraph::graph] object.
+#' @param N The maximal number of iterations of the algorithm.
+#' @param tol The tolerance to use when checking for zero entries in `Theta`.
+#' @param gList A list of graphs to ge used instead of the output from [make_sep_list()].
 #'
-#' @return A nested list, containing the following details: TODO!!!
+#' @return A nested list, containing the following details.
+#' The "error term" is the maximal absolute value of `Theta` in a non-edge entry.
+#' \item{graph, N, tol}{As in the input}
+#' \item{gList}{As in the input or computed by [make_sep_list()].}
+#' \item{Gamma0, Theta0, err0}{Initial `Gamma`, `Theta`, and error term.}
+#' \item{iterations}{
+#'  A nested list, containing the following infos for each performed iteration:
+#'  \describe{
+#'    \item{`n`}{Number of the iteration}
+#'    \item{`t`}{Corresponding index in `gList`}
+#'    \item{`g`}{The graph used}
+#'    \item{`Gamma`, `Theta`, `err`}{The value of `Gamma`, `Theta`, and error term after the iteration}
+#'  }
+#' }
 #' 
-#' The corresponding \eTheta matrix produced by [Gamma2Theta()] has values
-#' close to zero in the remaining entries (how close depends on the input
-#' and the number of iterations).
-#'
 #' @family Matrix completions
-complete_Gamma_general_demo <- function(Gamma, graph = NULL, N = 1000, tol=0, gList=NULL) {
+#' 
+#' @export
+complete_Gamma_general_demo <- function(Gamma, graph, N = 1000, tol=0, gList=NULL) {
   # Compute gList if not provided:
   if(is.null(gList)){
     sepDetails <- make_sep_list(graph, details=TRUE)

@@ -111,6 +111,7 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
     }
     G <- matrix(NA, d, d)
     edgeList <- igraph::as_edgelist(graph)
+    diag(G) <- 0 # diagonal = 0
     G[edgeList] <- Gamma # upper tri
     G[edgeList[,c(2,1)]] <- Gamma # lower tri
     Gamma <- G

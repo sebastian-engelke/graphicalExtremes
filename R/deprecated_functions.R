@@ -306,7 +306,6 @@ emp_chi_deprecated <- function(data, p) {
 #' close to zero in the remaining entries (how close depends on the input
 #' and the number of iterations).
 #'
-#' @family Matrix completions
 #' @export
 DEPRECATED_complete_Gamma_general <- function(Gamma, graph, N = 1000, tol=0, check_tol=100) {
 

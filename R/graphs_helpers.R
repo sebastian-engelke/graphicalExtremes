@@ -103,10 +103,6 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
   return(sgIds)
 }
 
-is_tree_graph <- function(graph){
-  igraph::is_tree(graph, 'all', details = FALSE)
-}
-
 #' Check if a graph is a block graph
 #'
 #' @param graph An [igraph::graph] object
@@ -130,6 +126,9 @@ is_block_graph <- function(graph, check_connected=TRUE){
   return(TRUE)
 }
 
+is_tree_graph <- function(graph){
+  igraph::is_tree(graph, 'all', details = FALSE)
+}
 
 is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal

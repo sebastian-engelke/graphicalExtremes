@@ -1,36 +1,27 @@
 
 #' Completion of Gamma matrices
-#'
-#' Given a `graph` and `Gamma` matrix specified (at least) on the
-#' edges of `graph`, returns the full `Gamma` matrix implied
-#' by the conditional independencies. For results on the existence and
-#' uniqueness of this completion, see
+#' 
+#' Given a `graph` and a (partial) variogram matrix `Gamma`, returns a full
+#' variogram matrix that agrees with `Gamma` in entries corresponding to edges
+#' of `graph` and whose corresponding precision matrix, obtained by
+#' [Gamma2Theta()], has zeros in entries corresponding to non-edges of `graph`.
+#' For results on the existence and uniqueness of this completion, see
 #' \insertCite{hen2022;textual}{graphicalExtremes}.
-#'
-#' If `graph` is decomposable, `Gamma` only needs to be specified on
-#' the edges of the graph and the graph structure can be implied by setting
-#' the remaining entries to `NA`.
-#'
-#' If `graph` is not decomposable, the algorithm requires a fully specified
-#' variogram matrix `Gamma` and the graph structure needs to be explicitly
-#' provided in `graph`.
-#'
+#' 
 #' @param Gamma Numeric \dxd variogram matrix.
-#' @param graph Graph object from `igraph` package.
-#' The `graph` must be a connected, undirected graph.
-#' Can also be implied by `NA` entries in `Gamma` if decomposable.
-#' @param allowed_graph_type Is passed as `graph_type` to [check_graph()].
-#' Can be used to throw an error if `graph` is not of the specified type,
-#' but does not have any influence on the completion algorithm.
+#' @param graph `NULL` or [`igraph::graph`] object. If `NULL`, the graph
+#' is implied by non-edge entries in `Gamma` being `NA`. Must be connected, undirected.
 #' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
 #' is not decomposable
 #'
 #' @return Completed \dxd `Gamma` matrix.
 #'
 #' @details
-#' For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
-#' distribution within the cliques of the `graph`, the remaining entries are implied
-#' by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+#' If `graph` is decomposable, `Gamma` only needs to be specified on
+#' the edges of the graph, other entries are ignored.
+#' If `graph` is not decomposable, the graphical completion algorithm requires
+#' a fully specified (but non-graphical) variogram matrix `Gamma` to begin with.
+#' If necessary, this initial completion is computed using [edmcr::npf()].
 #'
 #' @examples
 #' ## Block graph:
@@ -81,15 +72,14 @@
 #'
 #' @seealso [Gamma2Theta()]
 #' @family Matrix completions
-#' @export
 #'
+#' @export
 complete_Gamma <- function(
   Gamma,
   graph = NULL,
-  allowed_graph_type = 'general',
   ...
 ){
-  tmp <- check_Gamma_and_graph(Gamma, graph, graph_type = allowed_graph_type)
+  tmp <- check_Gamma_and_graph(Gamma, graph)
   Gamma <- tmp$Gamma
   graph <- tmp$graph
 
@@ -109,7 +99,7 @@ complete_Gamma <- function(
   }
 
   # Compute non-decomposable completion
-  return(complete_Gamma_general_mc(Gamma, graph, ...))
+  return(complete_Gamma_general_split(Gamma, graph, ...))
 }
 
 
@@ -120,15 +110,19 @@ complete_Gamma <- function(
 #' returns the full `Gamma` matrix implied by the conditional independencies.
 #'
 #' @param Gamma A variogram matrix that is specified on the edges of `graph`
-#' and the diagonals. All other entries are ignored.
-#' @param graph A decomposable [igraph::graph] object
+#' and the diagonals. All other entries are ignored (if `graph` is specified),
+#' or should be `NA` to indicate non-edges in `graph`.
+#' @param graph `NULL` or a decomposable [igraph::graph] object. If `NULL`, the
+#' structure of `NA` entries in `Gamma` is used instead.
 #'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries
 #' corresponding to edges in `graph` and the diagonals.
-#' The corresponding \eTheta matrix pdocued by [Gamma2Theta()] has zeros
+#' The corresponding \eTheta matrix produced by [Gamma2Theta()] has zeros
 #' in the remaining entries.
 #'
 #' @family Matrix completions
+#'
+#' @export
 complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
   # Compute graph if not specified
   if(is.null(graph)){
@@ -157,7 +151,7 @@ complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
 
     oldVertices <- union(oldVertices, newVertices)
   }
-  Gamma <- ensure_symmetry(Gamma) # todo: set tolerance = Inf?
+  Gamma <- ensure_symmetry(Gamma)
   return(Gamma)
 }
 

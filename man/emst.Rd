@@ -24,7 +24,7 @@ components below the threshold. By default, \code{cens = FALSE}.}
 }
 \value{
 List consisting of:
-\item{\code{graph}}{An \code{\link[igraph:make_graph]{igraph::graph()}} object. The fitted minimum spanning tree.}
+\item{\code{graph}}{An \code{\link[igraph:make_graph]{igraph::graph}} object. The fitted minimum spanning tree.}
 \item{\code{Gamma}}{
 Numeric \dxd estimated variogram matrix \eGamma
 corresponding to the fitted minimum spanning tree.

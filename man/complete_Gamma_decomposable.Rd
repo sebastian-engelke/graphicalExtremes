@@ -8,14 +8,16 @@ complete_Gamma_decomposable(Gamma, graph = NULL)
 }
 \arguments{
 \item{Gamma}{A variogram matrix that is specified on the edges of \code{graph}
-and the diagonals. All other entries are ignored.}
+and the diagonals. All other entries are ignored (if \code{graph} is specified),
+or should be \code{NA} to indicate non-edges in \code{graph}.}
 
-\item{graph}{A decomposable \link[igraph:make_graph]{igraph::graph} object}
+\item{graph}{\code{NULL} or a decomposable \link[igraph:make_graph]{igraph::graph} object. If \code{NULL}, the
+structure of \code{NA} entries in \code{Gamma} is used instead.}
 }
 \value{
 A complete variogram matrix that agrees with \code{Gamma} on the entries
 corresponding to edges in \code{graph} and the diagonals.
-The corresponding \eTheta matrix pdocued by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has zeros
+The corresponding \eTheta matrix produced by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has zeros
 in the remaining entries.
 }
 \description{
@@ -26,6 +28,8 @@ returns the full \code{Gamma} matrix implied by the conditional independencies.
 Other Matrix completions: 
 \code{\link{DEPRECATED_complete_Gamma_general}()},
 \code{\link{complete_Gamma_general_demo}()},
+\code{\link{complete_Gamma_general_split}()},
+\code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_one_step}()},
 \code{\link{complete_Gamma}()}
 }

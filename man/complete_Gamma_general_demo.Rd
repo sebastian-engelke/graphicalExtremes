@@ -2,43 +2,49 @@
 % Please edit documentation in R/matrix_completions_general.R
 \name{complete_Gamma_general_demo}
 \alias{complete_Gamma_general_demo}
-\title{Completion of non-decomposable Gamma matrices (demo-version)}
+\title{DEMO-VERSION: Completion of non-decomposable Gamma matrices}
 \usage{
-complete_Gamma_general_demo(
-  Gamma,
-  graph = NULL,
-  N = 1000,
-  tol = 0,
-  gList = NULL
-)
+complete_Gamma_general_demo(Gamma, graph, N = 1000, tol = 0, gList = NULL)
 }
 \arguments{
-\item{Gamma}{A complete variogram matrix (without any graphical structure)}
+\item{Gamma}{A complete variogram matrix (without any graphical structure).}
 
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object}
+\item{graph}{An \link[igraph:make_graph]{igraph::graph} object.}
 
-\item{N}{The maximal number of iterations of the algorithm}
+\item{N}{The maximal number of iterations of the algorithm.}
 
-\item{tol}{The tolerance to use when checking for zero entries in \code{Theta}}
+\item{tol}{The tolerance to use when checking for zero entries in \code{Theta}.}
+
+\item{gList}{A list of graphs to ge used instead of the output from \code{\link[=make_sep_list]{make_sep_list()}}.}
 }
 \value{
-A nested list, containing the following details: TODO!!!
-
-The corresponding \eTheta matrix produced by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has values
-close to zero in the remaining entries (how close depends on the input
-and the number of iterations).
+A nested list, containing the following details.
+The "error term" is the maximal absolute value of \code{Theta} in a non-edge entry.
+\item{graph, N, tol}{As in the input}
+\item{gList}{As in the input or computed by \code{\link[=make_sep_list]{make_sep_list()}}.}
+\item{Gamma0, Theta0, err0}{Initial \code{Gamma}, \code{Theta}, and error term.}
+\item{iterations}{
+A nested list, containing the following infos for each performed iteration:
+\describe{
+\item{\code{n}}{Number of the iteration}
+\item{\code{t}}{Corresponding index in \code{gList}}
+\item{\code{g}}{The graph used}
+\item{\code{Gamma}, \code{Theta}, \code{err}}{The value of \code{Gamma}, \code{Theta}, and error term after the iteration}
+}
+}
 }
 \description{
 Given a \code{graph} and variogram matrix \code{Gamma}, returns the full \code{Gamma}
 matrix implied by the conditional independencies.
-This function uses a convergent iterative algorithm.
 DEMO VERSION: Returns a lot of details and allows specifying the graph list
-that is used. Is way slower than \code{complete_Gamma_general}.
+that is used. Is way slower than other functions.
 }
 \seealso{
 Other Matrix completions: 
 \code{\link{DEPRECATED_complete_Gamma_general}()},
 \code{\link{complete_Gamma_decomposable}()},
+\code{\link{complete_Gamma_general_split}()},
+\code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_one_step}()},
 \code{\link{complete_Gamma}()}
 }

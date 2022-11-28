@@ -4,18 +4,13 @@
 \alias{complete_Gamma}
 \title{Completion of Gamma matrices}
 \usage{
-complete_Gamma(Gamma, graph = NULL, allowed_graph_type = "general", ...)
+complete_Gamma(Gamma, graph = NULL, ...)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
 
-\item{graph}{Graph object from \code{igraph} package.
-The \code{graph} must be a connected, undirected graph.
-Can also be implied by \code{NA} entries in \code{Gamma} if decomposable.}
-
-\item{allowed_graph_type}{Is passed as \code{graph_type} to \code{\link[=check_graph]{check_graph()}}.
-Can be used to throw an error if \code{graph} is not of the specified type,
-but does not have any influence on the completion algorithm.}
+\item{graph}{\code{NULL} or \code{\link[igraph:make_graph]{igraph::graph}} object. If \code{NULL}, the graph
+is implied by non-edge entries in \code{Gamma} being \code{NA}. Must be connected, undirected.}
 
 \item{...}{Further arguments passed to \code{\link[=complete_gamma_general]{complete_gamma_general()}} if \code{graph}
 is not decomposable}
@@ -24,24 +19,19 @@ is not decomposable}
 Completed \dxd \code{Gamma} matrix.
 }
 \description{
-Given a \code{graph} and \code{Gamma} matrix specified (at least) on the
-edges of \code{graph}, returns the full \code{Gamma} matrix implied
-by the conditional independencies. For results on the existence and
-uniqueness of this completion, see
+Given a \code{graph} and a (partial) variogram matrix \code{Gamma}, returns a full
+variogram matrix that agrees with \code{Gamma} in entries corresponding to edges
+of \code{graph} and whose corresponding precision matrix, obtained by
+\code{\link[=Gamma2Theta]{Gamma2Theta()}}, has zeros in entries corresponding to non-edges of \code{graph}.
+For results on the existence and uniqueness of this completion, see
 \insertCite{hen2022;textual}{graphicalExtremes}.
 }
 \details{
 If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
-the edges of the graph and the graph structure can be implied by setting
-the remaining entries to \code{NA}.
-
-If \code{graph} is not decomposable, the algorithm requires a fully specified
-variogram matrix \code{Gamma} and the graph structure needs to be explicitly
-provided in \code{graph}.
-
-For a decomposable graph it suffices to specify the dependence parameters of the Huesler--Reiss
-distribution within the cliques of the \code{graph}, the remaining entries are implied
-by the conditional independence properties. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
+the edges of the graph, other entries are ignored.
+If \code{graph} is not decomposable, the graphical completion algorithm requires
+a fully specified (but non-graphical) variogram matrix \code{Gamma} to begin with.
+If necessary, this initial completion is computed using \code{\link[edmcr:npf]{edmcr::npf()}}.
 }
 \examples{
 ## Block graph:
@@ -99,6 +89,8 @@ Other Matrix completions:
 \code{\link{DEPRECATED_complete_Gamma_general}()},
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_demo}()},
+\code{\link{complete_Gamma_general_split}()},
+\code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_one_step}()}
 }
 \concept{Matrix completions}
