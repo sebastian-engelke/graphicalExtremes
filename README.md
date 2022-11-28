@@ -1,34 +1,37 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd, using `rmarkdown::render()`. Please edit that file -->
+<!-- ```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```-->
 
 # graphicalExtremes
 
-<!-- badges: start -->
+An implementation of the statistical methodology paper Engelke and Hitz
+(2020) for sparse multivariate extreme value models. Includes exact
+simulation algorithms and statistical inference methods for multivariate
+Pareto distributions on graphical structures.
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis build
-status](https://api.travis-ci.org/sebastian-engelke/graphicalExtremes.svg?branch=master)](https://travis-ci.org/sebastian-engelke/graphicalExtremes)
-[![codecov](https://codecov.io/gh/sebastian-engelke/graphicalExtremes/branch/master/graph/badge.svg)](https://codecov.io/gh/sebastian-engelke/graphicalExtremes)
-<!-- badges: end -->
-
-The goal of graphicalExtremes is to provide an implementation of the
-statistical methodology paper Engelke and Hitz (2020) for sparse
-multivariate extreme value models. This includes exact simulation
-algorithms and statistical inference methods for multivariate Pareto
-distributions on graphical structures.
+Furthermore contains implementations of statistical methods from Engelke
+and Volgushev (2020), Röttger, Engelke, and Zwiernik (2021), and
+Hentschel, Engelke, and Segers (2022).
 
 ## Installation
 
-<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
+The latest [CRAN](https://cran.r-project.org/package=graphicalExtremes)
+version can be installed using:
 
-<!-- ``` r -->
+``` r
+install.packages("graphicalExtremes")
+```
 
-<!-- install.packages("graphicalExtremes") -->
-
-<!-- ``` -->
-
-You can install the development version of graphicalExtremes from
-[GitHub](https://github.com/) with:
+The latest
+[GitHub](https://github.com/sebastian-engelke/graphicalExtremes) version
+can be installed using:
 
 ``` r
 # install.packages("devtools")
@@ -37,12 +40,35 @@ devtools::install_github("sebastian-engelke/graphicalExtremes")
 
 # References
 
-<div id="refs" class="references">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-eng2019">
+<div id="ref-eng2019" class="csl-entry">
 
 Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with
 Discussion).” *J. R. Stat. Soc. Ser. B Stat. Methodol.* 82: 871–932.
+
+</div>
+
+<div id="ref-eng2020" class="csl-entry">
+
+Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal
+Tree Models.” <https://arxiv.org/abs/2012.06179>.
+
+</div>
+
+<div id="ref-hen2022" class="csl-entry">
+
+Hentschel, Manuel, Sebastian Engelke, and Johan Segers. 2022.
+“Statistical Inference for Hüsler-Reiss Graphical Models Through Matrix
+Completions.” arXiv. <https://doi.org/10.48550/ARXIV.2210.14292>.
+
+</div>
+
+<div id="ref-roe2021" class="csl-entry">
+
+Röttger, Frank, Sebastian Engelke, and Piotr Zwiernik. 2021. “Total
+Positivity in Multivariate Extremes.” arXiv.
+<https://doi.org/10.48550/ARXIV.2112.14727>.
 
 </div>
 

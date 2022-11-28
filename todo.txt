@@ -10,7 +10,9 @@
 - options:
     x- nCores
     x- tolerance: implemented as "permissive" machine tolerance
-    - check in eglearn() !
+    - check in eglearn() ! -> talk to sebastian!
+        1e-5 ~= truncation threshold in Theta
+        1e-8 == some tuning parameter of the glassoFast algorithm
 - fix TODOs in danube documentation -> raus oder durch raw data
 - clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?
