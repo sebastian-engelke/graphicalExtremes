@@ -238,7 +238,7 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' complete_Gamma(Gamma = Gamma_vec, graph = my_graph) ## full Gamma matrix
 #'
 #' set.seed(123)
-#' my_data <- rmpareto_tree(n, "HR", tree = my_graph, Gamma = Gamma_vec)
+#' my_data <- rmpareto_tree(n, "HR", tree = my_graph, par = Gamma_vec)
 #' my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 #' @references
 #'  \insertAllCited{}

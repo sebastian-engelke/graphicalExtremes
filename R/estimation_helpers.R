@@ -322,7 +322,8 @@ ml_weight_matrix <- function(data, cens = FALSE, p = NULL){
     par.est <- fmpareto_HR_MLE(
       data = data[, x],
       init = G_emp[x[1], x[2]],
-      cens = cens
+      cens = cens,
+      useTheta = FALSE
     )$par
 
     llh_hr <- (

@@ -21,6 +21,7 @@ Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: bzip2
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

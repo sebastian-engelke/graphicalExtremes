@@ -35,6 +35,12 @@
                 "install package"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "R CMD build + check",
+            "type":"shell",
+            "command": ".\\R_CMD_build_check.cmd",
+            "problemMatcher": []
         }
     ]
 }

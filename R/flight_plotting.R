@@ -59,6 +59,9 @@ plotFlights <- function(
   if(!ggplotAvailable){
     stop('ggplot2 needs to be installed')
   }
+  
+  # This makes sure `flights` is available, even if the package was not called with `library()`
+  flights <- graphicalExtremes::flights
 
   ## Fill unspecified inputs
   # Use all airports, conenctions if not specified
@@ -197,7 +200,7 @@ plotFlights <- function(
     dmap <- ggplot2::map_data(map)
     ggp <- ggp + ggplot2::geom_polygon(
       data = dmap,
-      ggplot2::aes(x = long, y = lat, group = group),
+      ggplot2::aes_string(x = 'long', y = 'lat', group = 'group'),
       color = "grey65",
       fill = "#f9f9f9",
       size = 0.2
@@ -211,7 +214,7 @@ plotFlights <- function(
     xData <- airports_sel$Longitude
     yData <- airports_sel$Latitude
     if(!clipMap && !is.null(map)){
-      m <- map_data(map)
+      m <- ggplot2::map_data(map)
       xData <- c(xData, range(m$long))
       yData <- c(yData, range(m$lat))
     }
