@@ -18,7 +18,7 @@ check_graph(
 
 \item{check_connected}{Whether to check if the graph is connected.}
 
-\item{nVertcies}{The number of vertices required in the graph.}
+\item{nVertices}{The number of vertices required in the graph.}
 }
 \value{
 The given \code{graph}, if necessary converted to undirected.

@@ -115,7 +115,7 @@ complete_Gamma_general <- function(Gamma, graph, N=10000, tol=1e-12, check_tol=1
   return(GammaComp)
 }
 
-#' Workhorse of `complete_Gamma_general()`
+# Workhorse of `complete_Gamma_general()`
 iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
   m <- length(sepList)
   n <- 0

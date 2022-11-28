@@ -12,7 +12,7 @@ complete_Gamma(Gamma, graph = NULL, ...)
 \item{graph}{\code{NULL} or \code{\link[igraph:make_graph]{igraph::graph}} object. If \code{NULL}, the graph
 is implied by non-edge entries in \code{Gamma} being \code{NA}. Must be connected, undirected.}
 
-\item{...}{Further arguments passed to \code{\link[=complete_gamma_general]{complete_gamma_general()}} if \code{graph}
+\item{...}{Further arguments passed to \code{\link[=complete_Gamma_general]{complete_Gamma_general()}} if \code{graph}
 is not decomposable}
 }
 \value{
@@ -89,7 +89,6 @@ Other Matrix completions:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general_split}()},
-\code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma_one_step}()}
+\code{\link{complete_Gamma_general}()}
 }
 \concept{Matrix completions}

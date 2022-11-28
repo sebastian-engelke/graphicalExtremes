@@ -6,6 +6,13 @@
 \usage{
 split_graph(g)
 }
+\arguments{
+\item{g}{\code{\link[igraph:make_graph]{igraph::graph}} object}
+}
+\value{
+List of invariant subgraphs
+}
 \description{
 Split graph into invariant subgraphs
 }
+\keyword{internal}

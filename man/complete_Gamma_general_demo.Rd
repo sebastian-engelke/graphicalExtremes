@@ -44,7 +44,6 @@ Other Matrix completions:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma_one_step}()},
 \code{\link{complete_Gamma}()}
 }
 \concept{Matrix completions}

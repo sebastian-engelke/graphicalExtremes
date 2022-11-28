@@ -89,6 +89,7 @@ getTransposedIndices <- function(d, ind = seq_len(d*d)){
 #' 
 #' Both the graph and subgraph need to have persistent IDs
 #' If graph==NULL it is assumed to have pIDs 1, 2, ...
+#' @keywords internal
 getSubMatrixForSubgraph <- function(fullMatrix, subgraph, graph=NULL){
   sgIds <- getIdsForSubgraph(subgraph, graph)
   return(fullMatrix[sgIds, sgIds, drop=FALSE])
@@ -103,10 +104,7 @@ getIdsForSubgraph <- function(subgraph, graph=NULL){
   return(sgIds)
 }
 
-#' Check if a graph is a block graph
-#'
-#' @param graph An [igraph::graph] object
-#' @return A `boolean` indicating if the graph is a glock graph
+## Check if a graph is of a certain type
 is_block_graph <- function(graph, check_connected=TRUE){
   if(check_connected && !igraph::is_connected(graph)){
     return(FALSE)
@@ -125,15 +123,12 @@ is_block_graph <- function(graph, check_connected=TRUE){
   }
   return(TRUE)
 }
-
 is_tree_graph <- function(graph){
   igraph::is_tree(graph, 'all', details = FALSE)
 }
-
 is_decomposable_graph <- function(graph){
   igraph::is.chordal(graph)$chordal
 }
-
 is_complete_graph <- function(graph){
   d <- igraph::vcount(graph)
   return(igraph::ecount(graph) == d*(d-1)/2)

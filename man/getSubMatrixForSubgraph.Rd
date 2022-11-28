@@ -10,3 +10,4 @@ getSubMatrixForSubgraph(fullMatrix, subgraph, graph = NULL)
 Both the graph and subgraph need to have persistent IDs
 If graph==NULL it is assumed to have pIDs 1, 2, ...
 }
+\keyword{internal}

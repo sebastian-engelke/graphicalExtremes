@@ -43,11 +43,11 @@ B <- (A == 0)
 diag(B) <- FALSE
 
 
-tic()
-gl1 <- make_graph_list(g)
-toc()
-print(length(gl1$graphs))
-sepList1 <- lapply(gl1$partitions, function(tmp) tmp$C)
+# tic()
+# gl1 <- make_graph_list(g)
+# toc()
+# print(length(gl1$graphs))
+# sepList1 <- lapply(gl1$partitions, function(tmp) tmp$C)
 
 
 tic()

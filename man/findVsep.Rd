@@ -9,3 +9,4 @@ findVsep(graph, v0, v1)
 \description{
 Finds a reasonably small set of vertices that separate \code{v0} and \code{v1} in \code{graph}.
 }
+\keyword{internal}

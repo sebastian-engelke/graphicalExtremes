@@ -9,3 +9,4 @@ order_cliques(cliques)
 \description{
 Orders the cliques in a connected decomposable graph so that they fulfill the running intersection property.
 }
+\keyword{internal}

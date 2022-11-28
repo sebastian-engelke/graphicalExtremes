@@ -7,7 +7,7 @@
 partialMatrixToGraph(Matrix)
 }
 \arguments{
-\item{Gamma}{A matrix with NA entries}
+\item{Matrix}{A matrix with NA entries}
 }
 \value{
 An \code{igraph::graph} object

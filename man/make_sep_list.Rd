@@ -8,6 +8,8 @@ make_sep_list(graph, details = TRUE)
 }
 \arguments{
 \item{graph}{A graph}
+
+\item{details}{Return detailed infos (default \code{TRUE})}
 }
 \value{
 A list of numeric vectors
@@ -17,3 +19,4 @@ Creates a list of separator set, such that every pair of non-adjacent
 vertices in \code{graph} is completely disconnected by the removal of
 (at least) one of the separator sets from the graph.
 }
+\keyword{internal}

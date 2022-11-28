@@ -7,16 +7,16 @@
 Sigma2Gamma(Sigma, k = NULL, full = FALSE)
 }
 \arguments{
+\item{Sigma}{Numeric \d1xd1 covariance matrix \eSigmaK
+from the definition of a Huesler--Reiss distribution.
+Numeric \dxd covariance matrix if \code{full = TRUE}, see \code{full} parameter.}
+
 \item{k}{Integer between \code{1} (the default value) and \code{d}.
 Indicates which matrix \eSigmaK is given as \code{S}.}
 
 \item{full}{Logical. If true, then the \code{k}th row and column in \eSigmaK
 are included and the function returns a \dxd matrix.
 By default, \code{full = FALSE}.}
-
-\item{S}{Numeric \d1xd1 covariance matrix \eSigmaK
-from the definition of a Huesler--Reiss distribution.
-Numeric \dxd covariance matrix if \code{full = TRUE}, see \code{full} parameter.}
 }
 \value{
 Numeric \dxd \eGamma matrix.

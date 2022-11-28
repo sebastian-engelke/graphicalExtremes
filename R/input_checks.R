@@ -7,7 +7,7 @@
 #' @param graph An [igraph::graph] object.
 #' @param graph_type `"general"`, `"decomposable"`, `"block"`, `"tree"`. The required type of graph.
 #' @param check_connected Whether to check if the graph is connected.
-#' @param nVertcies The number of vertices required in the graph.
+#' @param nVertices The number of vertices required in the graph.
 #'
 #' @return The given `graph`, if necessary converted to undirected.
 #' If the graph is not valid an error is thrown.

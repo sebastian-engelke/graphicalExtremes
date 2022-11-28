@@ -4,6 +4,7 @@
 #' Order Cliques
 #'
 #' Orders the cliques in a connected decomposable graph so that they fulfill the running intersection property.
+#' @keywords internal
 order_cliques <- function(cliques) {
   n <- length(cliques)
   ret <- list()
@@ -92,8 +93,8 @@ get_cliques_and_separators <- function(graph, sortIntoLayers = FALSE, includeSin
   return(layers)
 }
 
-#' Sort a set of cliques and separators into layers, such that the separator
-#' of two cliques/separators is contained in a previous layer
+# Sort a set of cliques and separators into layers, such that the separator
+# of two cliques/separators is contained in a previous layer
 sort_cliques_and_separators <- function(cliques){
   # Compute matrix indicating whether clique[[i]] is a subset of clique[[j]]
   subsetMat <- matrix(FALSE, length(cliques), length(cliques))
@@ -135,6 +136,9 @@ get_separators <- function(cliques, includeSingletons = FALSE){
 
 
 #' Split graph into invariant subgraphs
+#' @param g [`igraph::graph`] object
+#' @return List of invariant subgraphs
+#' @keywords internal
 split_graph <- function(g){
   g <- setPids(g)
   # compute cliques and sort by size:
@@ -203,7 +207,7 @@ split_off_cliques <- function(graphs, pCliques){
   return(newGraphs)
 }
 
-#' Split a graph at a single separator
+# Split a graph at a single separator
 split_graph_at_sep <- function(g, sepIds = NULL, sepPids = NULL, returnGraphs = FALSE, includeSep = TRUE){
   g <- setPids(g)
   if(is.null(sepIds)){
@@ -233,87 +237,6 @@ getConnectedComponents <- function(g){
 }
 
 
-#' Create graph list for non-decomposable completion
-#' 
-#' Creates a list of decomposable graphs, each consisting of two cliques,
-#' such that the intersection of their edge sets
-#' is identical to the edgeset of the input graph.
-#' 
-#' @param graph Graph object from `igraph` package.
-#' @return List of decomposable graphs
-make_graph_list <- function(graph){
-  d <- igraph::vcount(graph)
-  gTilde <- igraph::complementer(graph)
-  edgeMat <- igraph::as_edgelist(gTilde)
-  edgeList <- lapply(seq_len(NROW(edgeMat)), function(i){
-    edgeMat[i,]
-  })
-
-  edgeMat0 <- igraph::as_edgelist(graph)
-  edgeList0 <- lapply(seq_len(NROW(edgeMat0)), function(i){
-    edgeMat0[i,]
-  })
-
-  # order edges by vertex connectivity
-  conn <- sapply(edgeList, function(edge){
-    igraph::vertex_connectivity(graph, edge[1], edge[2])
-  })
-  ind <- order(conn, decreasing = TRUE)
-  edgeList <- edgeList[ind]
-
-  gList <- list()
-  partitionList <- list()
-  for(edge in edgeList){
-    # Check if edge is already covered by a different graph:
-    alreadyCovered <- FALSE
-    for(gg in gList){
-      if(!igraph::are.connected(gg, edge[1], edge[2])){
-        alreadyCovered <- TRUE
-        break
-      }
-    }
-    if(alreadyCovered){
-      next
-    }
-
-    tmp <- igraph::max_flow(
-      graph,
-      edge[1],
-      edge[2]
-    )
-
-    cutEdges <- edgeList0[tmp$cut]
-    sep <- integer(0)
-    for(ce in cutEdges){
-      if(ce[1] %in% edge){
-        sep <- c(sep, ce[2])
-      } else {
-        sep <- c(sep, ce[1])
-      }
-    }
-
-    A <- union(sep, tmp$partition1)
-    B <- union(sep, tmp$partition2)
-    adj <- matrix(0, d, d)
-    adj[A, A] <- 1
-    adj[B, B] <- 1
-    diag(adj) <- 0
-    g <- igraph::graph_from_adjacency_matrix(adj, mode='undirected')
-    gList <- c(gList, list(g))
-    partitionList <- c(partitionList, list(list(
-      A = A,
-      B = B,
-      C = intersect(A, B)
-    )))
-  }
-
-  return(list(
-    graphs = gList,
-    partitions = partitionList
-  ))
-}
-
-
 #' Create a list of separators
 #' 
 #' Creates a list of separator set, such that every pair of non-adjacent
@@ -321,7 +244,9 @@ make_graph_list <- function(graph){
 #' (at least) one of the separator sets from the graph.
 #' 
 #' @param graph A graph
+#' @param details Return detailed infos (default `TRUE`)
 #' @return A list of numeric vectors 
+#' @keywords internal
 make_sep_list <- function(graph, details=TRUE){
   graph <- setPids(graph)
   # Get matrix of non-edges (edgeTildes):
@@ -365,7 +290,6 @@ make_sep_list <- function(graph, details=TRUE){
   detailedSepList <- lapply(sepList, makeSepDetails, graph=graph)
   return(detailedSepList)
 }
-
 makeSepDetails <- function(graph, sep){
   parts <- split_graph_at_sep(graph, sep, includeSep = FALSE)
   partsWithSep <- lapply(parts, function(part){
@@ -394,6 +318,7 @@ makeSepDetails <- function(graph, sep){
 #' Find a separator set for two vertices
 #' 
 #' Finds a reasonably small set of vertices that separate `v0` and `v1` in `graph`.
+#' @keywords internal
 findVsep <- function(graph, v0, v1){
   # find max flow between vertices (includes edge-sep):
   tmp <- igraph::max_flow(
@@ -421,7 +346,7 @@ findVsep <- function(graph, v0, v1){
 #' @param edgeMat A two-column matrix, containing the vertex-paris to be checked
 #' 
 #' @return A logical vector, indicating for each edge whether it is split by `sep`
-#' 
+#' @keywords internal
 check_split_by_sep <- function(graph, sep, edgeMat){
   # Return early if no vertex pair (edge) is to be checked:
   if(nrow(edgeMat) == 0){

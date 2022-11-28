@@ -19,3 +19,4 @@ A logical vector, indicating for each edge whether it is split by \code{sep}
 \description{
 Identify pairs of vertices that are split by a separator
 }
+\keyword{internal}

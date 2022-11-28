@@ -277,8 +277,7 @@ generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))
   pruefer_to_graph(pruefer)
 }
-
-#' Convert a Pruefer sequence to a graph
+# Convert a Pruefer sequence to a graph
 pruefer_to_graph <- function(pruefer){
   d <- length(pruefer) + 2
   adj <- matrix(0, d, d)

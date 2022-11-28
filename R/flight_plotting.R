@@ -316,7 +316,7 @@ flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TR
   return(df)
 }
 
-#' Helper function to format (coordinate) degrees used as axis labels
+# Helper function to format (coordinate) degrees used as axis labels
 formatDegrees <- function(decDeg, direction = 'NS', latex=TRUE){
   dir <- 1 + (decDeg < 0)
   dirStrings <- substring(direction, dir, dir)
@@ -368,6 +368,7 @@ decDegToDegMinSec <- function(decDeg, asString = FALSE){
 #' Helper function to compute the axis limits of a plot
 #' with given x, y data and optionally a fixed x-y-ratio and
 #' correcting the latitude/longitude scale at different latitudes
+#' @keywords internal
 computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE){
   xRange <- range(xData)
   yRange <- range(yData)

@@ -46,7 +46,7 @@ Gamma2graph <- function(Gamma, tol=1e-6){
 #' Creates a graph that has edges in entries corresponding to non-NA entries
 #' in Gamma.
 #' 
-#' @param Gamma A matrix with NA entries
+#' @param Matrix A matrix with NA entries
 #' 
 #' @return An `igraph::graph` object
 #' 
@@ -127,7 +127,7 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 #' Transforms the \eSigmaK matrix from the definition of a
 #' Huesler--Reiss distribution to the corresponding \eGamma matrix.
 #'
-#' @param S Numeric \d1xd1 covariance matrix \eSigmaK
+#' @param Sigma Numeric \d1xd1 covariance matrix \eSigmaK
 #' from the definition of a Huesler--Reiss distribution.
 #' Numeric \dxd covariance matrix if `full = TRUE`, see `full` parameter.
 #' @param k Integer between `1` (the default value) and `d`.

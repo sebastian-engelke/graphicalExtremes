@@ -6,30 +6,11 @@
 \usage{
 complete_Gamma_one_step(Gamma, nA, nC, nB)
 }
-\arguments{
-\item{Gamma}{A variogram matrix that is specified on the edges of \code{graph}
-and the diagonals. All other entries are ignored.}
-
-\item{graph}{A decomposable \link[igraph:make_graph]{igraph::graph} object with two cliques and
-non-empty separator set}
-}
-\value{
-A complete variogram matrix that agrees with \code{Gamma} on the entries
-corresponding to edges in \code{graph} and the diagonals.
-The corresponding \eTheta matrix produced by \code{\link[=Gamma2Theta]{Gamma2Theta()}} has zeros
-in the remaining entries.
-}
 \description{
 Given a decomposable \code{graph} consisting of two cliques and incomplete
-variogram matrix \code{Gamma},
-returns the full \code{Gamma} matrix implied by the conditional independencies.
+variogram matrix \code{Gamma}, returns the full \code{Gamma} matrix implied by the
+conditional independencies. The rows/columns of \code{Gamma} must be ordered
+such that the clique of size \code{nA} (excluding separator) comes first, then
+the separator of size \code{nC}, and then the remaining \code{nB} vertices.
 }
-\seealso{
-Other Matrix completions: 
-\code{\link{complete_Gamma_decomposable}()},
-\code{\link{complete_Gamma_general_demo}()},
-\code{\link{complete_Gamma_general_split}()},
-\code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma}()}
-}
-\concept{Matrix completions}
+\keyword{internal}

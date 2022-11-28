@@ -11,7 +11,7 @@
 #' @param Gamma Numeric \dxd variogram matrix.
 #' @param graph `NULL` or [`igraph::graph`] object. If `NULL`, the graph
 #' is implied by non-edge entries in `Gamma` being `NA`. Must be connected, undirected.
-#' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
+#' @param ... Further arguments passed to [complete_Gamma_general()] if `graph`
 #' is not decomposable
 #'
 #' @return Completed \dxd `Gamma` matrix.
@@ -159,20 +159,12 @@ complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
 #' Completion of two-clique decomposable Gamma matrices
 #'
 #' Given a decomposable `graph` consisting of two cliques and incomplete
-#' variogram matrix `Gamma`,
-#' returns the full `Gamma` matrix implied by the conditional independencies.
+#' variogram matrix `Gamma`, returns the full `Gamma` matrix implied by the
+#' conditional independencies. The rows/columns of `Gamma` must be ordered
+#' such that the clique of size `nA` (excluding separator) comes first, then
+#' the separator of size `nC`, and then the remaining `nB` vertices.
 #'
-#' @param Gamma A variogram matrix that is specified on the edges of `graph`
-#' and the diagonals. All other entries are ignored.
-#' @param graph A decomposable [igraph::graph] object with two cliques and
-#' non-empty separator set
-#'
-#' @return A complete variogram matrix that agrees with `Gamma` on the entries
-#' corresponding to edges in `graph` and the diagonals.
-#' The corresponding \eTheta matrix produced by [Gamma2Theta()] has zeros
-#' in the remaining entries.
-#'
-#' @family Matrix completions
+#' @keywords internal
 complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   # Check arguments
   n <- nA + nB + nC

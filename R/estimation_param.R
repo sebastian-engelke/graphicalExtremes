@@ -114,7 +114,7 @@ fmpareto_graph_HR_clique_average <- function(
   
   graph <- check_graph(graph)
   cliques <- igraph::max_cliques(graph)
-  # Todo: use mclapply here
+  # TODO: use mclapply here?
   if(method == 'vario'){
     subGammas <- lapply(cliques, function(cli){
       data.cli <- mparetomargins(data, cli)
@@ -138,7 +138,6 @@ fmpareto_graph_HR_clique_average <- function(
   return(Gamma)
 }
 
-
 combine_clique_estimates_by_averaging <- function(cliques, subGammas){
   d <- do.call(max, cliques)
   Gamma <- matrix(0, d, d)
@@ -152,6 +151,7 @@ combine_clique_estimates_by_averaging <- function(cliques, subGammas){
   Gamma <- Gamma / overlaps
   return(Gamma)
 }
+
 
 fmpareto_graph_HR_clique_sequential <- function(
   data,
@@ -216,126 +216,6 @@ fmpareto_graph_HR_clique_sequential <- function(
   G_comp <- complete_Gamma(Ghat, graph)
   return(G_comp)
 }
-
-
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on non-decomposable graphs
-#'
-#' Works by computing an empirical Gamma matrix and then fitting this to the given `graph`.
-#'
-#' @param data Numeric \nxd matrix, where `n` is the
-#' number of observations and `d` is the dimension.
-#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
-#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
-#' to standardize the `data`.
-#' @param graph Connected graph object from `igraph` package.
-#' @param ... Further arguments passed to [complete_gamma_general()] if `graph`
-#' is not decomposable
-#'
-#'
-#' @export
-fmpareto_graph_HR_general <- function(data, graph, p = NULL, ...) {
-  # number of data columns (and expected vertices in graph)
-  d <- NCOL(data)
-
-  # make sure graph is valid
-  graph <- check_graph(graph, graph_type = 'general', nVertices = d)
-
-  # compute the empirical variogram
-  Gamma_emp <- emp_vario(data, p = p)
-
-  # fit the empirical variogram to the graph
-  Gamma_graph <- complete_Gamma(Gamma_emp, graph, allowed_graph_type = 'general', ...)
-
-  # check that completed Gamma matches the given graph
-  completed_graph <- Gamma2graph(Gamma_graph)
-
-  if (!(graphs_equal(completed_graph, graph))) {
-    message(paste0("The completed Gamm does not match the given graph.\n"))
-  }
-
-  return(list(
-    Gamma = Gamma_graph,
-    graph = graph
-  ))
-}
-
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distributions on decomposable graphs
-#'
-#' Similar to [fmpareto_graph_HR()]. Differences are:
-#' * Works with any decomposable graph, not just block graphs
-#' * Does not support `edges_to_add`
-#'
-#' @param data Numeric \nxd matrix, where `n` is the
-#' number of observations and `d` is the dimension.
-#' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
-#' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
-#' to standardize the `data`.
-#' @param cens Logical. If true, then censored likelihood contributions are used for
-#' components below the threshold. By default, `cens = FALSE`.
-#' @param graph Decomposable graph object from `igraph` package.
-#'
-#' @export
-fmpareto_graph_HR_decomposable <- function(data, graph, p = NULL, cens = FALSE) {
-  # number of data columns (and expected vertices in graph)
-  d <- NCOL(data)
-
-  # make sure graph is valid
-  graph <- check_graph(graph, graph_type = 'decomposable', nVertices = d)
-
-  # rescale data if necessary:
-  if(!is.null(p)){
-    data <- data2mpareto(data, p)
-  }
-
-  # compute cliques:
-  cliques <- get_cliques_and_separators(graph)
-
-  # initialize variables:
-  Ghat <- matrix(NA, d, d)
-
-  # loop through cliques and estimate Ghat:
-  for(clique in cliques){
-    # compute marginal pareto, on the nodes of the current clique
-    data.cli <- mparetomargins(data, set_indices = clique)
-
-    # find Ghat-entries that are already fixed by a previous clique/separator:
-    G.cli <- Ghat[clique, clique]
-    par.cli <- Gamma2par(G.cli)
-    fixParams <- !is.na(par.cli)
-
-    # get initial parameters, keeping the fixed ones:
-    G.est0 <- emp_vario(data.cli)
-    G.est <- replaceGammaSubMatrix(G.est0, G.cli)
-    init.cli <- Gamma2par(G.est)
-
-    # estimate parameters
-    par.cli <- fmpareto_HR_MLE(
-      data = data.cli,
-      init = init.cli,
-      fixParams = fixParams,
-      cens = cens
-    )$par
-
-    # update Ghat
-    G.cli <- par2Gamma(par.cli)
-    Ghat[clique, clique] <- G.cli
-  }
-
-  # fill entries that don't correspond to edges:
-  Ghat <- complete_Gamma(Ghat, allowed_graph_type = 'decomposable')
-
-  # check that completed Gamma matches the given graph
-  completed_graph <- Gamma2graph(Ghat)
-
-  if (!(graphs_equal(completed_graph, graph))) {
-    message(paste0("The completed Gamma", " does not match the given graph.\n"))
-  }
-
-  return(list(graph = graph, Gamma = Ghat))
-}
-
 
 
 #' Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution
