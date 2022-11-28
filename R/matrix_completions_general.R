@@ -6,9 +6,11 @@ complete_Gamma_general_mc <- function(
   N = 10000,
   tol = 1e-12,
   check_tol = 100,
-  mc.cores = 1,
+  mc_cores_overwrite = NULL,
   final_tol = 1e-9
 ){
+  # Check/find mc_cores
+  mc_cores <- get_mc_cores(mc_cores_overwrite)
   # wip
   graph <- setPids(graph)
   invSubGraphs <- split_graph(graph)
@@ -21,7 +23,7 @@ complete_Gamma_general_mc <- function(
   })
 
   completedSubMatrices <- parallel::mcmapply(
-    mc.cores = mc.cores,
+    mc.cores = mc_cores,
     complete_Gamma_general_sc,
     subMatrices[needsCompletion],
     invSubGraphs[needsCompletion],

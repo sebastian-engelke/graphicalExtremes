@@ -10,9 +10,8 @@ logdVK_HR(x, K, Gamma)
 \item{x}{Numeric vector with \code{d} positive elements
 where the censored exponent measure is to be evaluated.}
 
-\item{K}{Integer vector, subset of \eqn{\{1, \dots, d\}}{{1, ..., d}},
-the index set that is not censored.
-Or: Logical vector of length \code{d}, indicating entries that are not censored.}
+\item{K}{Integer vector, subset of 1, ..., \code{d}, the index set that is not censored.
+Or logical vector of length \code{d}, indicating entries that are not censored.}
 
 \item{Gamma}{d x d variogram matrix or numeric vector with d(d-1)/2 elements,
 containing the upper triangular part of a variogram matrix.}

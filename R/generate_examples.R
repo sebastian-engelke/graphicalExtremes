@@ -35,10 +35,7 @@ generate_random_model <- function(d, graph_type='general', ...){
     stop('Invalid graph_type!')
   }
 
-  Gamma <- ensure_symmetry(
-    generate_random_graphical_Gamma(graph, ...),
-    tol = Inf
-  )
+  Gamma <- generate_random_graphical_Gamma(graph, ...)
 
   return(list(
     graph = graph,
@@ -65,7 +62,7 @@ generate_random_graphical_Gamma <- function(graph, ...){
     P_cli <- ID %*% P_cli %*% ID
     P[cli, cli] <- P[cli, cli] + P_cli
   }
-  Gamma <- Theta2Gamma(P)
+  Gamma <- ensure_symmetry(Theta2Gamma(P))
   return(Gamma)
 }
 
@@ -85,8 +82,7 @@ generate_random_Gamma <- function(d, ...){
 
 #' Generate a random Gamma matrix containing only integers
 #'
-#' Generates a random variogram Matrix by producing a
-#' \eqn{(d-1) \times (d-1)}{(d-1)x(d-1)} matrix `B` with random
+#' Generates a random variogram Matrix by producing a \d1xd1 matrix `B` with random
 #' integer entries between `-b` and `b`, computing `S = B %*% t(B)`,
 #' and passing this `S` to [Sigma2Gamma()].
 #' This process is repeated with an increasing `b` until a valid Gamma matrix
@@ -114,12 +110,14 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
     B <- floor(b * (stats::runif(d1**2)*2 - 1))
     B <- matrix(B, d1, d1)
     S <- B %*% t(B)
-    if(matrixcalc::is.positive.definite(S)){
+    if(is_sym_pos_def(S)){
       break
     }
     b <- b+b_step
   }
-  G <- Sigma2Gamma(S, k=1)
+  # Converting to Sigma does not introduce non-integer values.
+  # Still round the result to avoid numerical issues (also ensures symmetry).
+  G <- round(Sigma2Gamma(S, k=1), 0)
   return(G)
 }
 
@@ -141,10 +139,10 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   while(det(M) == Inf){
     M <- M / (d+1)
   }
-  M <- (M + t(M)) / 2
   m <- max(floor(log(det(M), 10) / d), 0)
   M <- M * 10**(-m)
-  if(!matrixcalc::is.positive.definite(M)){
+  M <- ensure_symmetry(M)
+  if(!is_sym_pos_def(M)){
     stop('Failed to produce an SPD matrix!')
   }
   return(M)

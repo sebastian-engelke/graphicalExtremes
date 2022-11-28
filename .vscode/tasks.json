@@ -6,7 +6,7 @@
         {
             "label": "document package",
             "type": "shell",
-            "command": "R --silent --vanilla -e devtools::document()",
+            "command": "R --silent --vanilla -e \"devtools::document()\"",
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -24,7 +24,7 @@
         {
             "label": "install package",
             "type": "shell",
-            "command": "R --silent --vanilla -e devtools::install(dependencies=FALSE,quick=TRUE)",
+            "command": "R --silent --vanilla -e \"devtools::install(dependencies=FALSE,quick=TRUE)\"",
             "problemMatcher": []
         },
         {

@@ -21,7 +21,7 @@ fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
 # Replaces a principal submatrix of a Gamma matrix, preserving definiteness.
 # Other entries are kept "heuristically similar".
 # Zeros (instead of NAs) on the diagonal of G.fix indicate which principal submatrix to replace.
-# If not the entire submatrix in G.fix is specified, [complete_Gamma_decomposable] is used
+# If not the entire submatrix in G.fix is specified, [complete_Gamma_decomposable()] is used
 replaceGammaSubMatrix <- function(G.est, G.fix){
   # check which are fixed
   ind <- which(!is.na(diag(G.fix)))
@@ -93,53 +93,80 @@ rdunif <- function(n, a, b){
 }
 
 
-ensure_symmetry <- function(M, tol=1e-6){
-  if(max(abs(M - t(M))) > tol){
+ensure_symmetry <- function(M, tol=Inf){
+  if(tol < Inf && max(abs(M - t(M))) > tol){
     warning('Matrix not symmetric (up to tolerance: ', tol, ')!')
   }
   (M + t(M))/2
 }
 
-is_symmetric <- function(M, tol=1e-12){
-  max(M - t(M)) < tol
+is_square <- function(M){
+  is.matrix(M) && ncol(M) == nrow(M)
 }
 
-is_cnd <- function(M, tol=1e-12){
+is_symmetric <- function(M, tol=get_tol()){
+  is_square(M) && max(M - t(M)) < tol
+}
+
+is_sym_cnd <- function(M, tol=get_tol()){
+  # M must be symmetric
+  if(!is_symmetric(M, tol)){
+    return(fALSE)
+  }
   d <- nrow(M)
+  # Empty matrix is cnd
   if(d == 0){
     return(TRUE)
   }
-  if(d == 1){
-    return(abs(M[1,1]) < tol)
+  # Diagonal must be zeros
+  if(any(abs(diag(M)) > tol)){
+    return(FALSE)
   }
+  # 1x1 matrix is just 0 => ok
+  if(d == 1){
+    return(TRUE)
+  }
+  # All entries must be positive
   if(any(upper.tri.val(M) <= 0)){
     return(FALSE)
   }
+  # Check that Gamma2Sigma yields a pos. def. matrix
   Sk <- Gamma2Sigma(M, k=1)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
-  return(abs(eig[d-1]) > 0)
+  return(eig[d-1] > 0)
 }
 
-is_sym_cnd <- function(M, tol=1e-12){
-  is_symmetric(M, tol) && is_cnd(M, tol)
+is_sym_pos_def <- function(M, tol=get_tol()){
+  if(!is_symmetric(M, tol)){
+    return(FALSE)
+  }
+  # If M is symmetric, pos.def. is equivalent to all positive eigenvalues
+  d <- nrow(M)
+  eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
+  return(eig[d] > 0)
 }
 
-is_valid_Theta <- function(M, tol=1e-9){
+is_valid_Theta <- function(M, tol=get_tol()){
+  # Must be symmetric
   if(!is_symmetric(M, tol)){
     return(FALSE)
   }
   d <- nrow(M)
+  # Empty matrix is valid
   if(d == 0){
     return(TRUE)
   }
-  if(d == 1){
-    return(abs(M[1,1]) < tol)
-  }
+  # Check that rowsums are zero
   if(any(abs(rowSums(M)) > tol)){
     return(FALSE)
   }
+  # 1x1 matrix is just 0 => ok
+  if(d == 1){
+    return(TRUE)
+  }
+  # Check that there are d-1 positive and one zero eigenvalue
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
-  if(abs(eig[d]) > tol || abs(eig[d-1]) < tol){
+  if(abs(eig[d]) > tol || abs(eig[d-1]) <= 0){
     return(FALSE)
   }
   return(TRUE)
@@ -151,16 +178,15 @@ upper.tri.val <- function(M, diag=FALSE){
 }
 
 
-DEFAULT_TOL <- .Machine$double.eps^0.5
 is_eq <- function(a, b, tol=NULL) {
   if(is.null(tol)){
-    tol <- DEFAULT_TOL
+    tol <- get_tol()
   }
   abs(a - b) < tol
 }
 is_greater <- function(a, b, tol=NULL) {
   if(is.null(tol)){
-    tol <- DEFAULT_TOL
+    tol <- get_tol()
   }
   a - b > tol
 }

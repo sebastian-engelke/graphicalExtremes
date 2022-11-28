@@ -1,6 +1,5 @@
 
 - consistent symmetry checks/fixes
-    - tol in option? -> auch in eglearn
     - custom is.pos.def function?
 - consistent variable naming:
     - g / graph
@@ -8,8 +7,10 @@
     -> immer ausschreiben
 - plotting function for river data
     - no, but examples with normal plotting functions
-- make parallelization optional?
-    - nCores option?
+- options:
+    - nCores
+    - tolerance: implemented as "permissive" machine tolerance
+        -> check in eglearn() !
 - fix TODOs in danube documentation -> raus oder durch raw data
 - clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?

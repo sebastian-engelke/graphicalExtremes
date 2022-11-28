@@ -17,13 +17,14 @@ fmpareto_HR_MLE(
 )
 }
 \arguments{
-\item{data}{Numeric matrix with d columns (one per dimension) and n rows with one observation each.}
+\item{data}{Numeric \nxd matrix, where \code{n} is the
+number of observations and \code{d} is the number of dimensions.}
 
-\item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
-it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \link{data2mpareto} to standardize the data.}
+\item{p}{Numeric scalar between 0 and 1 or \code{NULL}. If \code{NULL} (default),
+it is assumed that the \code{data} is already on a multivariate Pareto scale. Else,
+\code{p} is used as the probability in \code{\link[=data2mpareto]{data2mpareto()}} to standardize the data.}
 
-\item{cens}{Logical. If true, then censored likelihood contributions are used for
+\item{cens}{Logical scalar. If true, then censored likelihood contributions are used for
 components below the threshold. This is computationally expensive and by default \code{cens = FALSE}.}
 
 \item{init}{Numeric vector or numeric matrix. Initial parameter values in the optimization.
