@@ -15,7 +15,7 @@ the number of nodes in the tree (and \code{d-1} is the number of edges).}
 \item{alpha.end}{Numeric vector with \code{d-1} elements, where \code{d} is
 the number of nodes in the tree (and \code{d-1} is the number of edges).}
 
-\item{A}{Numeric \edxd1 matrix; the rows represent the
+\item{A}{Numeric \dxd1 matrix; the rows represent the
 nodes in the tree, the columns represent the edges. For a fixed node
 \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 equal to 1 if the edge in position \code{j} is on the directed path from node

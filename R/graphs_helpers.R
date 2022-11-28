@@ -38,7 +38,7 @@ setPids <- function(g, ids = NULL, pids = NULL, overwrite = FALSE){
   return(g)
 }
 removePids <- function(g){
-  delete_vertex_attr(g, PERSISTENT_ID_ATTR_NAME)
+  igraph::delete_vertex_attr(g, PERSISTENT_ID_ATTR_NAME)
 }
 
 

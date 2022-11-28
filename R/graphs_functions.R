@@ -371,7 +371,7 @@ makeSepDetails <- function(graph, sep){
   partsWithSep <- lapply(parts, function(part){
     sort(c(part, sep))
   })
-  partPairs <- combn(parts, 2, simplify = FALSE)
+  partPairs <- utils::combn(parts, 2, simplify = FALSE)
   k <- sep[1]
   sepWithoutK <- sep[-1]
   d <- igraph::vcount(graph)

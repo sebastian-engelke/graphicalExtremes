@@ -10,6 +10,7 @@ x- consistent symmetry checks/fixes
 - options:
     x- nCores
     x- tolerance: implemented as "permissive" machine tolerance
+    - tolerance: default values to be used for e.g. zeros in Theta
     - check in eglearn() ! -> talk to sebastian!
         1e-5 ~= truncation threshold in Theta
         1e-8 == some tuning parameter of the glassoFast algorithm

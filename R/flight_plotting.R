@@ -55,7 +55,7 @@ plotFlights <- function(
   edgeAlpha = 0.2
 ) {
   # Make sure ggplot2 is installed
-  ggplotAvailable <- require('ggplot2')
+  ggplotAvailable <- requireNamespace('ggplot2')
   if(!ggplotAvailable){
     stop('ggplot2 needs to be installed')
   }
@@ -223,7 +223,7 @@ plotFlights <- function(
     ggp <- ggp + ggplot2::coord_cartesian(
       xlim = limits$xlim,
       ylim = limits$ylim
-    ) + theme(
+    ) + ggplot2::theme(
       aspect.ratio = limits$xyRatio
     )
   }
@@ -339,8 +339,7 @@ formatDegrees <- function(decDeg, direction = 'NS', latex=TRUE){
   return(degStrings)
 }
 formatDegrees2 <- function(decDeg, dirStrings, degString){
-  dmsString <- measurements::conv_unit(decDeg, from='dec_deg', to='deg_min_sec')
-  dms <- do.call(rbind, strsplit(dmsString, ' '))
+  dms <- decDegToDegMinSec(decDeg)
   x <- paste0(dms[,1], degString, dirStrings)
   if(!any(duplicated(x))){
     return(x)
@@ -353,6 +352,17 @@ formatDegrees2 <- function(decDeg, dirStrings, degString){
   print(x)
   x <- paste0(dms[,1], degString, ' ', dms[,2], "' ", dms[,3], '"', dirStrings)
   return(x)
+}
+
+decDegToDegMinSec <- function(decDeg, asString = FALSE){
+  deg <- floor(decDeg)
+  decMin <- (decDeg - deg) * 60
+  min <- floor(decMin)
+  decSec <- (decMin - min) * 60
+  if(asString){
+    return(paste(deg, min, decSec))
+  }
+  return(cbind(deg, min, decSec))
 }
 
 #' Helper function to compute the axis limits of a plot

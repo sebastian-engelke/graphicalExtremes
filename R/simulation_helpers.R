@@ -118,7 +118,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 #' @inheritParams rmpareto
 #' @param Gamma_vec Numeric vector with `d-1` elements, where `d` is the
 #' number of nodes in the tree (and `d-1` is the number of edges).
-#' @param A Numeric \edxd1 matrix; the rows represent the nodes
+#' @param A Numeric \dxd1 matrix; the rows represent the nodes
 #' in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 #' equal to 1 if the edge in position `j` is on the directed path from node
@@ -147,7 +147,7 @@ simu_px_tree_HR <- function(n, Gamma_vec, A) {
 #' @inheritParams rmpareto
 #' @param theta Numeric vector with 1 or `d-1` elements.
 #' Assume that the entry are such that \eqn{0 < \theta < 1}.
-#' @param A Numeric \edxd1 matrix; the rows represent the
+#' @param A Numeric \dxd1 matrix; the rows represent the
 #' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 #' equal to 1 if the edge in position `j` is on the directed path from node
@@ -190,7 +190,7 @@ simu_px_tree_logistic <- function(n, theta, A) {
 #' the number of nodes in the tree (and `d-1` is the number of edges).
 #' @param alpha.end Numeric vector with `d-1` elements, where `d` is
 #' the number of nodes in the tree (and `d-1` is the number of edges).
-#' @param A Numeric \edxd1 matrix; the rows represent the
+#' @param A Numeric \dxd1 matrix; the rows represent the
 #' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
 #' equal to 1 if the edge in position `j` is on the directed path from node

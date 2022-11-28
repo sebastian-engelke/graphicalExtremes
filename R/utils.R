@@ -89,7 +89,7 @@ replaceSpdSubmatrix <- function(M.est, M.fix){
 }
 
 rdunif <- function(n, a, b){
-  a + floor((b - a + 1) * runif(n))
+  a + floor((b - a + 1) * stats::runif(n))
 }
 
 
@@ -111,7 +111,7 @@ is_symmetric <- function(M, tol=get_tol()){
 is_sym_cnd <- function(M, tol=get_tol()){
   # M must be symmetric
   if(!is_symmetric(M, tol)){
-    return(fALSE)
+    return(FALSE)
   }
   d <- nrow(M)
   # Empty matrix is cnd
