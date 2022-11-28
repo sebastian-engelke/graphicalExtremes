@@ -1,6 +1,6 @@
 
 - consistent symmetry checks/fixes
-    - custom is.pos.def function?
+    x- custom is.pos.def function?
 - consistent variable naming:
     - g / graph
     - G / Gamma
@@ -8,9 +8,9 @@
 - plotting function for river data
     - no, but examples with normal plotting functions
 - options:
-    - nCores
-    - tolerance: implemented as "permissive" machine tolerance
-        -> check in eglearn() !
+    x- nCores
+    x- tolerance: implemented as "permissive" machine tolerance
+    - check in eglearn() !
 - fix TODOs in danube documentation -> raus oder durch raw data
 - clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?

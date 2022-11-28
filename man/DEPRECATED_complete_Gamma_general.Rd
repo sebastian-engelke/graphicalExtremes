@@ -35,13 +35,3 @@ Given a \code{graph} and variogram matrix \code{Gamma}, returns the full \code{G
 matrix implied by the conditional independencies.
 This function uses a convergent iterative algorithm.
 }
-\seealso{
-Other Matrix completions: 
-\code{\link{complete_Gamma_decomposable}()},
-\code{\link{complete_Gamma_general_demo}()},
-\code{\link{complete_Gamma_general_split}()},
-\code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma_one_step}()},
-\code{\link{complete_Gamma}()}
-}
-\concept{Matrix completions}
