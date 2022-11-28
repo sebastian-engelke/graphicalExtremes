@@ -16,3 +16,4 @@
 \.txt$
 \.md$
 ^tests$
+\.cmd$

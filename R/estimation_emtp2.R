@@ -17,7 +17,6 @@
 #' 
 #' @references \insertAllCited{}
 #' 
-#' @keywords block descent, concentration matrix, Laplacian matrix.
 #' @export
 emtp2 <- function(G, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
   d <- nrow(G)
@@ -68,7 +67,6 @@ emtp2 <- function(G, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
 #' This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S.
 #' This matrix is used to connstruct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 #' @param S a covariance matrix
-#' @keywords Z-matrix, starting point
 Zmatrix <- function(S){
   p <- nrow(S)
   R <- stats::cov2cor(S)

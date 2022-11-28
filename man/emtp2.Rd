@@ -28,9 +28,3 @@ See \insertCite{roe2021;textual}{graphicalExtremes} for details.
 \references{
 \insertAllCited{}
 }
-\keyword{Laplacian}
-\keyword{block}
-\keyword{concentration}
-\keyword{descent,}
-\keyword{matrix,}
-\keyword{matrix.}

@@ -17,7 +17,7 @@ of a pair of gauging stations that are directly connected by a river.
 }
 }
 \source{
-Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
+Bavarian Environmental Agency \url{https://www.gkd.bayern.de}.
 }
 \usage{
 danube

@@ -43,7 +43,7 @@
 #' @references
 #' \insertAllCited{}
 #'
-#' @source Bavarian Environmental Agency <http://www.gkd.bayern.de>.
+#' @source Bavarian Environmental Agency <https://www.gkd.bayern.de>.
 #'
 "danube"
 
