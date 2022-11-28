@@ -17,3 +17,6 @@ Helper function that returns the number of cores to be used in parallel computat
 Will always be 1 on windows. On other systems, this value can be set using
 \code{setOption('graphicalExtremes.mc.cores', ...)}.
 }
+\seealso{
+graphicalExtremes-package
+}

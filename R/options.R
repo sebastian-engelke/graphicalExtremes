@@ -8,6 +8,8 @@
 #' 
 #' @param overwrite Use this value (if it is valid and not on windows)
 #' @return An integer to be used as number of cores
+#' 
+#' @seealso graphicalExtremes-package
 get_mc_cores <- function(overwrite = NULL){
     # Always 1 on windows
     if(.Platform$OS.typ == 'windows'){
@@ -40,12 +42,10 @@ get_mc_cores <- function(overwrite = NULL){
 #' matrices for symmetry and definiteness.
 #' Can be set using `setOption('graphicalExtremes.tol', ...)`.
 #' 
-#' In general, this value is used only as a "permissive" tolerance, in the sense
-#' that if a value has to be positive, it is compared to actual zero, but if
-#' it has to be zero, its absolute value is compared to this tolerance.
-#' 
 #' @param overwrite Use this value if specified
 #' @return A non-negative numerical scalar
+#' 
+#' @seealso graphicalExtremes-package
 get_tol <- function(overwrite = NULL){
     # Use overwrite if specified
     if(is.numeric(overwrite) && length(overwrite) >= 1){

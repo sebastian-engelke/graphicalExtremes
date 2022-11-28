@@ -18,5 +18,6 @@
 \newcommand{\eGamma}{\eqn{\Gamma}}
 \newcommand{\eChi}{\eqn{\chi}}
 
-\newcommand{\localCite}{\insertCite{#1}{\packageTitle}}
+\newcommand{\localCite}{\insertCite{#1}{graphicalExtremes}}
+\newcommand{\localCiteT}{\insertCite{#1;textual}{graphicalExtremes}}
 

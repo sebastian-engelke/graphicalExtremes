@@ -17,8 +17,6 @@ Helper function that returns the tolerance to be used e.g. when checking
 matrices for symmetry and definiteness.
 Can be set using \code{setOption('graphicalExtremes.tol', ...)}.
 }
-\details{
-In general, this value is used only as a "permissive" tolerance, in the sense
-that if a value has to be positive, it is compared to actual zero, but if
-it has to be zero, its absolute value is compared to this tolerance.
+\seealso{
+graphicalExtremes-package
 }
