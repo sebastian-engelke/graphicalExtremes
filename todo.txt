@@ -18,6 +18,8 @@
     - other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
 - tests? muss nicht
 - travis? mit nico klaeren
+    - remove badges from description
+    - remove .travis.yml
 - update vignettes
 - readme
     - find out how Rmd->md in readme is compiled
