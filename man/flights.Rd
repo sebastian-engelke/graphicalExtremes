@@ -76,6 +76,8 @@ Some entries are missing, which is indicated by \code{NA}s.
 }
 }
 \examples{
+\dontrun{
+
 # Get total number of flights in the dataset:
 totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
 
@@ -88,6 +90,7 @@ connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008
 
 # Get total delays (arriving + departing):
 totalDelays <- apply(flights$delays, c(1,2), sum)
+}
 
 }
 \references{

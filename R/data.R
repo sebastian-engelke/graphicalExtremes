@@ -115,6 +115,8 @@
 #' @references \insertAllCited{}
 #' 
 #' @examples 
+#' \dontrun{
+#' 
 #' # Get total number of flights in the dataset:
 #' totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
 #' 
@@ -127,6 +129,7 @@
 #' 
 #' # Get total delays (arriving + departing):
 #' totalDelays <- apply(flights$delays, c(1,2), sum)
+#' }
 #' 
 #' @seealso [`danube`], [`flightCountMatrixToConnectionList`], [`plotFlights`]
 #' 
