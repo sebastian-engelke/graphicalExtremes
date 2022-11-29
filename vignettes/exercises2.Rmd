@@ -131,8 +131,7 @@ flights_loglik_tree <- loglik_HR(
   graph = flights_emst_fit$graph
 )
 
-paste0("Tree BIC = ", round(flights_loglik_tree[3], 2))
-
+cat("Tree BIC =", round(flights_loglik_tree[3], 2), '\n')
 ```
 
 4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
@@ -140,27 +139,39 @@ paste0("Tree BIC = ", round(flights_loglik_tree[3], 2))
 ```{r, fig.align='center'}
 emp_chi_mat <- emp_chi(mat, p = p)
 
-ggplot() +
-  geom_point(aes(x = c(Gamma2chi(flights_emst_fit$Gamma)),
-                 y = c(emp_chi_mat))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("Empirical")
+(
+  ggplot()
+  + geom_point(
+    aes(
+      x = c(Gamma2chi(flights_emst_fit$Gamma)),
+      y = c(emp_chi_mat)
+    )
+  )
+  + geom_abline(slope = 1, intercept = 0)
+  + xlab("Fitted")
+  + ylab("Empirical")
+)
 ```
 
 5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
 ```{r, message=FALSE, warning=FALSE}
-model_fit <- fmpareto_graph_HR(data = mat,
-                               graph = flight_graph, p = p, method = "vario")
+model_fit <- fmpareto_graph_HR(
+  data = mat,
+  graph = flight_graph,
+  p = p,
+  method = "vario"
+)
 ```
 
 6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
 
 ```{r}
-flights_loglik_graph <- loglik_HR(data = mat, 
-                                  p = p, graph = flight_graph,
-                                  Gamma = model_fit$Gamma)
-paste0("BIC = ", flights_loglik_graph[3] %>% round(2))
-
+flights_loglik_graph <- loglik_HR(
+  data = mat, 
+  p = p,
+  graph = flight_graph,
+  Gamma = model_fit
+)
+cat("BIC =", round(flights_loglik_graph[3], 2), '\n')
 ```
 

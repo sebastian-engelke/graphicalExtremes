@@ -233,9 +233,12 @@ plotFlights <- function(
     ggp <- ggp + ggplot2::coord_cartesian(
       xlim = limits$xlim,
       ylim = limits$ylim
-    ) + ggplot2::theme(
-      aspect.ratio = 1/limits$xyRatio
     )
+    if(!is.null(limits$xyRatio)){
+      ggp <- ggp + ggplot2::theme(
+        aspect.ratio = 1/limits$xyRatio
+      )
+    }
   }
 
   # Plot airports:
@@ -393,7 +396,7 @@ computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE, stretch 
     # Just don't scale
     xScale <- 1
     yScale <- 1
-    xyRatio0 <- xScale / yScale
+    xyRatio0 <- NULL
   } else{
     xyRatio0 <- xyRatio
     # Use lat/long to account for spherical coords:

@@ -6,4 +6,4 @@ if(!nchar(Sys.getenv('VSCODE_DEBUG_SESSION'))){
 library(ggplot2)
 
 
-plotFlights(1:5, clipMap = 1)
+plotFlights(1:5, clipMap = 2)
