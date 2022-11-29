@@ -64,7 +64,7 @@
 
 #' Flights delay data
 #' 
-#' A dataset containing daily total delays of major airlines in the USA.
+#' A dataset containing daily total delays of major U.S. airlines.
 #' The raw data was obtained from the U.S.
 #' [Bureau of Transportation Statistics](https://www.bts.dot.gov/),
 #' and pre-processed as described in

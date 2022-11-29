@@ -1,0 +1,166 @@
+---
+title: "Exercises"
+output:
+  bookdown::html_document2:
+    fig_width: 5
+    fig_height: 5
+    number_sections: false
+bibliography: ../inst/REFERENCES.bib
+toc:
+  depth: 2
+pkgdown:
+  as_is: true 
+vignette: >
+  %\VignetteIndexEntry{Exercises}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+\DeclareMathOperator{\Var}{Var}
+\newcommand{\g}[1]{\mathbf{#1}}
+\DeclareMathOperator{\MST}{mst}
+\DeclareMathOperator{\argmin}{arg\,min}
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    error = TRUE
+)
+```
+
+```{r}
+library(graphicalExtremes)
+library(ggplot2)
+library(igraph)
+```
+
+The `flights` dataset contains daily total delays of major U.S. airlines.
+For details, see the corresponding documentation page.
+Below, we plot all airports in the dataset.
+
+```{r, fig.width=10}
+plotFlights(plotConnections = FALSE, map='world', xyRatio = 2)
+```
+
+To perform an example application,
+we consider the years 2010 - 2020 and choose (somewhat arbitrarily)
+airports from the westcoast with a large number of flights per year.
+```{r, fig.align='center', fig.width=10}
+# Specify years
+yearNames <- as.character(seq(2010, 2020))
+minNFlights <- length(yearNames) * 1000
+
+# Compute departures + arrivals per airport
+flightsPerConnection <- apply(flights$flightCounts[,,yearNames], c(1,2), sum)
+flightsPerAirport <- rowSums(flightsPerConnection) + colSums(flightsPerConnection)
+
+# Select airports (more than minNFlights and rough westcoast coordinates)
+ind <- (
+  flightsPerAirport >= minNFlights
+  & flights$airports$Longitude < -119
+  & flights$airports$Longitude > -130
+  & flights$airports$Latitude > 25
+  & flights$airports$Latitude < 50
+)
+IATAs <- flights$airports$IATA[ind]
+
+# Plot airports + connections with at least monthly flights
+minNConnections <- length(yearNames) * 12
+plotFlights(
+  IATAs,
+  minNFlights = minNConnections,
+  useAirportNFlights = TRUE,
+  useConnectionNFlights = TRUE
+)
+```
+
+Also, it is useful to create an `igraph::graph()` object for the flights connections.
+```{r, fig.align='center'}
+# Compute undirected flights per connection
+flightsPerConnectionUD <- flightsPerConnection + t(flightsPerConnection)
+# Consider only connections between selected airports
+flightsPerConnectionUD <- flightsPerConnectionUD[IATAs, IATAs]
+
+# Make flight graph
+A <- 1 * (flightsPerConnectionUD > minNConnections)
+flight_graph <- graph_from_adjacency_matrix(A, diag = FALSE, mode = 'undirected')
+
+# Plot flight graph
+plotFlights(
+  IATAs,
+  graph = flight_graph,
+  clipMap = 1.3,
+  xyRatio = 1
+)
+```
+
+```{r}
+# We use only departure delays, at selected airports, within the selected years
+dates <- as.Date(dimnames(flights$delays)[[1]])
+indDates <- format(dates, '%Y') %in% yearNames
+mat <- flights$delays[indDates, IATAs, 'departures']
+# We remoe all rows containing NAs
+rowHasNA <- apply(is.na(mat), 1, any)
+mat <- mat[!rowHasNA,]
+```
+
+
+# Part A
+1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
+```{r, collapse=TRUE, fig.align='center'}
+p <- .7
+flights_emst_fit <- emst(data = mat, p = p, method = "vario")
+```
+
+2. Plot the estimated tree on the US map and interpret the results.
+```{r, fig.align='center'}
+plotFlights(
+  IATAs,
+  graph = flights_emst_fit$graph,
+  xyRatio = 1,
+  clipMap = 1.3
+)
+```
+
+3. Compute the BIC value of the fitted tree model.
+```{r}
+flights_loglik_tree <- loglik_HR(
+  data=mat,
+  p=p,
+  Gamma = flights_emst_fit$Gamma,
+  graph = flights_emst_fit$graph
+)
+
+paste0("Tree BIC = ", round(flights_loglik_tree[3], 2))
+
+```
+
+4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
+
+```{r, fig.align='center'}
+emp_chi_mat <- emp_chi(mat, p = p)
+
+ggplot() +
+  geom_point(aes(x = c(Gamma2chi(flights_emst_fit$Gamma)),
+                 y = c(emp_chi_mat))) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("Fitted") +
+  ylab("Empirical")
+```
+
+5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
+```{r, message=FALSE, warning=FALSE}
+model_fit <- fmpareto_graph_HR(data = mat,
+                               graph = flight_graph, p = p, method = "vario")
+```
+
+6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
+
+```{r}
+flights_loglik_graph <- loglik_HR(data = mat, 
+                                  p = p, graph = flight_graph,
+                                  Gamma = model_fit$Gamma)
+paste0("BIC = ", flights_loglik_graph[3] %>% round(2))
+
+```
+

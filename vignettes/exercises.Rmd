@@ -16,12 +16,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-  \DeclareMathOperator{\Var}{Var}
-  \newcommand{\g}[1]{\mathbf{#1}}
-  \DeclareMathOperator{\MST}{mst}
-  \DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\Var}{Var}
+\newcommand{\g}[1]{\mathbf{#1}}
+\DeclareMathOperator{\MST}{mst}
+\DeclareMathOperator{\argmin}{arg\,min}
 
-  ```{r, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
 collapse = TRUE,
 comment = ">"

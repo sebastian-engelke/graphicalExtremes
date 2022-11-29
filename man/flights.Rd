@@ -36,7 +36,7 @@ Airports (includes license information):
 flights
 }
 \description{
-A dataset containing daily total delays of major airlines in the USA.
+A dataset containing daily total delays of major U.S. airlines.
 The raw data was obtained from the U.S.
 \href{https://www.bts.dot.gov/}{Bureau of Transportation Statistics},
 and pre-processed as described in

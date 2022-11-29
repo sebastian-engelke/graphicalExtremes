@@ -84,6 +84,12 @@ plotFlights <- function(
     airports_sel <- airports_sel[airportIndices,]
   }
   IATAS <- airports_sel[,'IATA']
+  # If clipMap is numeric, it is used to zoom in/out of the clipped map:
+  stretchMap <- 1
+  if(is.numeric(clipMap)){
+    stretchMap <- fitInInterval(1 * clipMap, 0, Inf)
+    clipMap <- (clipMap > 0)
+  }
   
   ## If necessary, compute connections and flight counts
   computeConnections <- is.null(connections_sel) && plotConnections
@@ -221,13 +227,14 @@ plotFlights <- function(
     limits <- computeLimits(
       xData,
       yData,
-      xyRatio = xyRatio
+      xyRatio = xyRatio,
+      stretch = stretchMap
     )
     ggp <- ggp + ggplot2::coord_cartesian(
       xlim = limits$xlim,
       ylim = limits$ylim
     ) + ggplot2::theme(
-      aspect.ratio = limits$xyRatio
+      aspect.ratio = 1/limits$xyRatio
     )
   }
 
@@ -372,16 +379,9 @@ decDegToDegMinSec <- function(decDeg, asString = FALSE){
 #' with given x, y data and optionally a fixed x-y-ratio and
 #' correcting the latitude/longitude scale at different latitudes
 #' @keywords internal
-computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE){
+computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE, stretch = 1){
   xRange <- range(xData)
   yRange <- range(yData)
-  
-  if(is.null(xyRatio)){
-    return(list(
-      xlim = xRange,
-      ylim = yRange
-    ))
-  }
 
   xMid <- mean(xRange)
   yMid <- mean(yRange)
@@ -389,21 +389,29 @@ computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE){
   xRadius <- diff(xRange) / 2
   yRadius <- diff(yRange) / 2
 
-  # Use lat/long to account for spherical coords:
-  xyRatio0 <- xyRatio
-  if(convertLatLong){
-    xyRatio <- xyRatio / cos(pi/180 * yMid)
+  if(is.null(xyRatio)){
+    # Just don't scale
+    xScale <- 1
+    yScale <- 1
+    xyRatio0 <- xScale / yScale
+  } else{
+    xyRatio0 <- xyRatio
+    # Use lat/long to account for spherical coords:
+    if(convertLatLong){
+      xyRatio <- xyRatio * cos(pi/180 * yMid)
+    }
+
+    # Scale x, y according to xyRatio
+    xScale <- xyRatio / (xRadius / yRadius)
+    yScale <- 1/xScale
+    
+    xScale <- max(1, xScale)
+    yScale <- max(1, yScale)
   }
 
-  xScale <- xyRatio / (xRadius / yRadius)
-  yScale <- 1/xScale
-  
-  xScale <- max(1, xScale)
-  yScale <- max(1, yScale)
-
   return(list(
-    xlim = xMid + xRadius * xScale * c(-1, 1),
-    ylim = yMid + yRadius * yScale * c(-1, 1),
+    xlim = xMid + xRadius * xScale * c(-1, 1) * stretch,
+    ylim = yMid + yRadius * yScale * c(-1, 1) * stretch,
     xyRatio = xyRatio0
   ))
 }

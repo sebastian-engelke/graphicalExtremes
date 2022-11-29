@@ -6,7 +6,7 @@
 with given x, y data and optionally a fixed x-y-ratio and
 correcting the latitude/longitude scale at different latitudes}
 \usage{
-computeLimits(xData, yData, xyRatio = 1, convertLatLong = TRUE)
+computeLimits(xData, yData, xyRatio = 1, convertLatLong = TRUE, stretch = 1)
 }
 \description{
 Helper function to compute the axis limits of a plot
