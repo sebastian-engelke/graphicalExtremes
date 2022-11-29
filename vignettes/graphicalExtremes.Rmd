@@ -74,8 +74,8 @@ ggplot(X %>% as_tibble()) +
 
 ```{r, fig.align='center'}
 danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
-plot(danube_flow, layout = danube$coords_to_plot, 
-     edge.arrow.size=.3)
+danube_plot_coords <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+plot(danube_flow, layout = danube_plot_coords, edge.arrow.size=.3)
 ```
 
 
@@ -311,16 +311,16 @@ The function `emst()` estimates the extremal tree structure by a minimum spannin
 
 ```{r, fig.align='center'}
 danube_emst_fit <- emst(data = X, p = .8, method = "vario")
-plot(danube_emst_fit$graph, layout = danube$coords_to_plot)
+plot(danube_emst_fit$graph, layout = danube_plot_coords)
 ```
 
 ```{r, fig.align='center'}
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(danube_flow_fit$Gamma)), y = c(chi_hat))) +
+  geom_point(aes(x = c(Gamma2chi(danube_flow_fit)), y = c(chi_hat))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical") +
-  coord_cartesian(ylim = c(0.4, 1))
+  coord_cartesian(xlim = c(0.4, 1), ylim = c(0.4, 1))
 ```
 
 
@@ -442,13 +442,13 @@ d <- 10
 my_model <- generate_random_model(d = d, graph_type = "decomposable")
 plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
-my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "ML")
+my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL)
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
+  geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("True") +
-  coord_cartesian(ylim = c(0.35, 1))
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 ```
 
 
@@ -463,11 +463,11 @@ plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
 my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "vario")
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_fit$Gamma)), y = c(Gamma2chi(my_model$Gamma)))) +
+  geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("True") +
-  coord_cartesian(ylim = c(0.5, 1))
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 ```
 
 
@@ -484,22 +484,39 @@ Since we run $d$ different graphical lasso algorithms and the $k$th only enforce
 
 The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the `eglasso()` function. It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
+```{r, include = TRUE}
+# TEMP: Stop evaluating R code at this point
+# TODO: remove
+knitr::opts_chunk$set(
+  eval = FALSE
+)
+cat('\n\n')
+cat(strrep('=', 2000))
+cat('\n\n')
+```
+
+
 
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
 set.seed(42)
+# (Ysim from previous example is used)
 rholist = seq(1e-5, 0.04, length.out = 10)
-danube_eglasso_fit <- eglasso(Gamma = Gamma_hat, rholist = rholist, 
-                    eps = .5, reg_method = "glasso", complete_Gamma = TRUE)
+eglasso_fit <- eglearn(
+  data = Ysim,
+  rholist = rholist,
+  complete_Gamma = TRUE
+)
 
-danube_loglik <- sapply(1:length(rholist), FUN = function(j) 
-  loglik_HR(data=X, p=.8, Gamma = danube_eglasso_fit$Gamma[[j]], 
-            graph =  danube_eglasso_fit$graph[[j]]))
+eglasso_loglik <- sapply(1:length(rholist), FUN = function(j) 
+  loglik_HR(data=Ysim, p=.8, Gamma = eglasso_fit$Gamma[[j]], 
+            graph =  eglasso_fit$graph[[j]]))
 
+emst_fit <- emst(Ysim)
 
-danube_loglik_tree <- loglik_HR(data=X, p=.8, Gamma = danube_emst_fit$Gamma,
-                                graph = danube_emst_fit$graph)
+danube_loglik_tree <- loglik_HR(data=Ysim, p=.8, Gamma = emst_fit$Gamma,
+                                graph = emst_fit$graph)
 
-ggplot(mapping = aes(x = rholist, y = danube_loglik[3, ])) +
+ggplot(mapping = aes(x = rholist, y = eglasso_loglik[3, ])) +
   geom_line() +
   geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
   geom_hline(aes(yintercept = danube_loglik_tree[3]), lty = "dashed") +
@@ -509,34 +526,43 @@ ggplot(mapping = aes(x = rholist, y = danube_loglik[3, ])) +
     breaks = rholist,
     labels = round(rholist, 3),
     sec.axis = sec_axis(trans=~., breaks = rholist,
-                        labels = sapply(danube_eglasso_fit$graph, igraph::gsize),
+                        labels = sapply(eglasso_fit$graph, igraph::gsize),
                         name="Number of edges")
   )
 
 ```
-```{r, fig.show="hold", out.width="33%"}
-plot(danube_eglasso_fit$graph[[1]], layout = danube$coords_to_plot,
-     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[1]], 3)))
-plot(danube_eglasso_fit$graph[[5]], layout = danube$coords_to_plot,
-     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[5]], 3)))
-plot(danube_eglasso_fit$graph[[10]], layout = danube$coords_to_plot,
-     main = paste0("rho = ", round(danube_eglasso_fit$rholist[[10]], 3)))
-```
-
 
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
-best_Gamma <- danube_eglasso_fit$Gamma[[which.min(danube_loglik[3,])]]
+best_Gamma <- eglasso_fit$Gamma[[which.min(eglasso_loglik[3,])]]
+chi_hat <- emp_chi(Ysim)
 
 ggplot() +
   geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(chi_hat))) +
   geom_abline(slope = 1, intercept = 0) +
   xlab("Fitted") +
   ylab("Empirical") +
-  coord_cartesian(ylim = c(0.4, 1))
+  coord_cartesian(
+    ylim = c(0, 1),
+    xlim = c(0, 1)
+  )
+```
+
+
+```{r, include = TRUE, eval = TRUE}
+# TEMP: Start evaluating R code at this point
+# TODO: remove
+knitr::opts_chunk$set(
+  eval = TRUE
+)
+cat('\n\n')
+cat(strrep('=', 2000))
+cat('\n\n')
 ```
 
 
 # Exercises
+TODO: redo with new data, functions!
+
 The `flights()`dataset contains daily total delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
 The object `flights()` is a list made of:
 
@@ -546,15 +572,11 @@ The object `flights()` is a list made of:
 
 In the code below, we show how to load the dataset and plot the flight connections.
 
-```{r, fig.align='center', fig.width=10}
+```{r, fig.align='center', fig.width=10, eval=FALSE}
 # Load the dataset
-data <- flights$data
+data <- flights$delays[,,'arrivals']
 airports <- flights$airports
 connections <- flights$connections
-
-mat <- data %>% 
-  select(-DATE) %>% 
-  as.matrix()
 
 # Plot flight connection
 ggplot() +
@@ -573,7 +595,7 @@ ggplot() +
 ```
 
 Also, it is useful to create an `igraph::graph()` object for the flights connections.
-```{r}
+```{r, eval=FALSE}
 flight_graph <- connections %>%
   select(ID.origin, ID.dest) %>%
   as.matrix() %>%
@@ -584,7 +606,7 @@ flight_graph <- connections %>%
 In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
 
 Below, we provide a helper functions that you might use to plot an `igraph::graph()` object on the US map.
-```{r, fig.align='center', fig.width=10}
+```{r, fig.align='center', fig.width=10, eval=FALSE}
 # Function definition
 plot_connections <- function(graph, airports) {
   ## igraph tibble -> ggplot
@@ -615,8 +637,6 @@ plot_connections <- function(graph, airports) {
              aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
                  y = LATITUDE.origin, yend = LATITUDE.dest),
              alpha = .4, curvature = 0)
-
-
 }
 
 # Plot an igraph object

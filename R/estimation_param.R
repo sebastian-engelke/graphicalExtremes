@@ -29,14 +29,14 @@
 #' @return The estiamted parameter matrix.
 #' 
 #' @details
-#' If `handleCliques='full'`, first the full parameter matrix is estimated using the
-#' specified `method` and then the non-edge entries are adjusted such that the
-#' final parameter matrix has the graphical structure indicated by `graph`.
-#' 
 #' If `handleCliques='average'`, the marginal parameter matrix is estimated for
 #' each maximal clique of the `graph` and then combined into a partial parameter
 #' matrix by taking the average of entries from overlapping cliques. Lastly,
 #' the full parameter matrix is computed using [complete_Gamma].
+#' 
+#' If `handleCliques='full'`, first the full parameter matrix is estimated using the
+#' specified `method` and then the non-edge entries are adjusted such that the
+#' final parameter matrix has the graphical structure indicated by `graph`.
 #' 
 #' If `handleCliques='sequential'`, `graph` must be decomposable, and
 #' `method='ML'` must be specified. The parameter matrix is first estimated on
@@ -53,7 +53,7 @@ fmpareto_graph_HR <- function(
   graph,
   p = NULL,
   method = c('vario', 'ML'),
-  handleCliques = c('full', 'average', 'sequential'),
+  handleCliques = c( 'average','full', 'sequential'),
   ...
 ){
   # match args

@@ -9,7 +9,7 @@ fmpareto_graph_HR(
   graph,
   p = NULL,
   method = c("vario", "ML"),
-  handleCliques = c("full", "average", "sequential"),
+  handleCliques = c("average", "full", "sequential"),
   ...
 )
 }
@@ -43,14 +43,14 @@ with a given graphical structure, using maximum-likelihood estimation
 or the empirical variogram.
 }
 \details{
-If \code{handleCliques='full'}, first the full parameter matrix is estimated using the
-specified \code{method} and then the non-edge entries are adjusted such that the
-final parameter matrix has the graphical structure indicated by \code{graph}.
-
 If \code{handleCliques='average'}, the marginal parameter matrix is estimated for
 each maximal clique of the \code{graph} and then combined into a partial parameter
 matrix by taking the average of entries from overlapping cliques. Lastly,
 the full parameter matrix is computed using \link{complete_Gamma}.
+
+If \code{handleCliques='full'}, first the full parameter matrix is estimated using the
+specified \code{method} and then the non-edge entries are adjusted such that the
+final parameter matrix has the graphical structure indicated by \code{graph}.
 
 If \code{handleCliques='sequential'}, \code{graph} must be decomposable, and
 \code{method='ML'} must be specified. The parameter matrix is first estimated on

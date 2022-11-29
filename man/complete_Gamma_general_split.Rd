@@ -8,10 +8,10 @@ complete_Gamma_general_split(
   Gamma,
   graph,
   N = 10000,
-  sub_tol = final_tol * 0.001,
+  sub_tol = get_tol(),
   check_tol = 100,
   mc_cores_overwrite = NULL,
-  final_tol = get_tol()
+  final_tol = sub_tol * 1000
 )
 }
 \arguments{

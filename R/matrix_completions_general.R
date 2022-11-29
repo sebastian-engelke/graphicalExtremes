@@ -28,10 +28,10 @@ complete_Gamma_general_split <- function(
   Gamma,
   graph,
   N = 10000,
-  sub_tol = final_tol * 1e-3,
+  sub_tol = get_tol(),
   check_tol = 100,
   mc_cores_overwrite = NULL,
-  final_tol = get_tol()
+  final_tol = sub_tol * 1e3
 ){
   # Check/find mc_cores
   mc_cores <- get_mc_cores(mc_cores_overwrite)
@@ -74,7 +74,7 @@ complete_Gamma_general_split <- function(
   if(final_tol >= 0){
     Theta <- Gamma2Theta(Gamma)
     err <- max(abs(getNonEdgeEntries(Theta, graph)))
-    if(err > sub_tol){
+    if(err > final_tol){
       warning('Matrix completion did not converge (err = ', err, ')')
     }
   }
