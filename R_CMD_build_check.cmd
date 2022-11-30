@@ -5,6 +5,8 @@ rmdir graphicalExtremes.Rcheck /S /Q
 
 set RCMD=R
 
-%RCMD% CMD build --no-build-vignettes .
+@REM %RCMD% CMD build --no-build-vignettes .
+%RCMD% CMD build .
 
-%RCMD% CMD check --ignore-vignettes --as-cran graphicalExtremes_0.2.0.tar.gz
+@REM %RCMD% CMD check --ignore-vignettes --as-cran graphicalExtremes_0.2.0.tar.gz
+%RCMD% CMD check --as-cran graphicalExtremes_0.2.0.tar.gz

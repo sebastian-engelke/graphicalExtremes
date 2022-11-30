@@ -469,19 +469,6 @@ Since we run $d$ different graphical lasso algorithms and the $k$th only enforce
 
 The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the `eglasso()` function. It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
-```{r, include = TRUE}
-# TEMP: Stop evaluating R code at this point
-# TODO: remove
-knitr::opts_chunk$set(
-    eval = FALSE
-)
-cat("\n\n")
-cat(strrep("=", 2000))
-cat("\n\n")
-```
-
-
-
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
 set.seed(42)
 # (Ysim from previous example is used)
