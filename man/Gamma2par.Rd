@@ -2,15 +2,15 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2par}
 \alias{Gamma2par}
-\title{Extract upper triangular part of \eqn{\Gamma}}
+\title{Extract upper triangular part of \eGamma}
 \usage{
 Gamma2par(Gamma)
 }
 \arguments{
-\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
+\item{Gamma}{Numeric \dxd variogram matrix.}
 }
 \value{
-Numeric vector with \eqn{d} elements.
+Numeric vector with \code{d} elements.
 The upper triangular part of the given \code{Gamma} matrix.
 }
 \description{

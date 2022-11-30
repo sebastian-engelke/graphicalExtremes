@@ -3,19 +3,100 @@
 \docType{data}
 \name{flights}
 \alias{flights}
-\title{Flights delay data.}
+\title{Flights delay data}
 \format{
-An object of class \code{list} of length 3.
+A named \code{list} with three entries:
+\describe{
+\item{\code{airports}}{A \code{data.frame}, containing information about US airports}
+\item{\code{delays}}{A numeric matrix, containing daily aggregated delays at the airports in the dataset}
+\item{\code{flightCounts}}{
+A numeric array, containing yearly flight numbers between airports in the dataset
+}
+}
 }
 \source{
-U.S. Department of Transportation's (DOT) Bureau of Transportation Statistics \url{https://www.bts.gov/}.
+Raw delays data:
+\itemize{
+\item \url{https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time}
+}
+
+Fields/Forms used in the raw data:
+\itemize{
+\item \url{https://esubmit.rita.dot.gov/ViewReports.aspx}
+\item \url{https://esubmit.rita.dot.gov/On-Time-Form1.aspx}
+\item \url{https://esubmit.rita.dot.gov/On-Time-Form3A.aspx}
+}
+
+Airports (includes license information):
+\itemize{
+\item \url{https://openflights.org/data.html}
+}
 }
 \usage{
 flights
 }
 \description{
-A dataset containing daily total delays (Jan 1, 2015 -- Dec 31, 2015)
-of Southwest Airlines at different airports in California, Nevada,
-Arizona, Utah, and Texas.
+A dataset containing daily total delays of major U.S. airlines.
+The raw data was obtained from the U.S.
+\href{https://www.bts.dot.gov/}{Bureau of Transportation Statistics},
+and pre-processed as described in
+\insertCite{hen2022;textual}{graphicalExtremes}.
+}
+\details{
+\code{flightCounts} is a three-dimensional array, containing the number of flights in the dataset
+between each pair of airports, aggregated on a yearly basis.
+Each entry is the total number of flights between the departure airport (row)
+and destination airport (column) in a given year (dimension 3).
+This array does not contain any \code{NA}s, even if an airport did not operate
+at all in a given year, which is simply indicated by zeros.
+
+\code{delays} is a three-dimensional array containing daily total positive delays,
+in minutes, of incoming and outgoing flights respectively.
+Each column corresponds to an airport in the dataset and each row corresponds
+to a day. The third dimension has length two, \code{'arrivals'} containing delays of
+incoming flights and \code{'departures'} containing delays of outgoing flights.
+Zeros indicate that there were flights arriving/departing at that airport
+on a given day, but none of them had delays. \code{NA}s indicate that there were
+no flights arriving/departing at that airport on that day at all.
+
+\code{airports} is a data frame containing the following information about a number of US airports.
+Some entries are missing, which is indicated by \code{NA}s.
+\describe{
+\item{\code{IATA}}{3-letter IATA code}
+\item{\code{Name}}{name of the airport}
+\item{\code{City}}{main city served by the airport}
+\item{\code{Country}}{country or territory where the airport is located (mostly \code{"United States"})}
+\item{\code{ICAO}}{4-letter ICAO code}
+\item{\code{Latitude}}{latitude of the airport, in decimal degrees}
+\item{\code{Longitude}}{longitude of the airport, in decimal degrees}
+\item{\code{Altitude}}{altitude of the airport, in feet}
+\item{\code{Timezone}}{timezone of the airport, in hours offset from UTC}
+\item{\code{DST}}{Daylight savings time used at the airport. 'A'=US/Canada, 'N'=None.}
+\item{\code{Timezone2}}{name of the timezone of the airport}
+}
+}
+\examples{
+\dontrun{
+
+# Get total number of flights in the dataset:
+totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
+
+# Get number of flights for specific years in the dataset:
+flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), sum)
+
+# Get list of connections:
+connections <- flightCountMatrixToConnectionList(flights$flightCounts)
+connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008'])
+
+# Get total delays (arriving + departing):
+totalDelays <- apply(flights$delays, c(1,2), sum)
+}
+
+}
+\references{
+\insertAllCited{}
+}
+\seealso{
+\code{\link{danube}}, \code{\link{flightCountMatrixToConnectionList}}, \code{\link{plotFlights}}
 }
 \keyword{datasets}

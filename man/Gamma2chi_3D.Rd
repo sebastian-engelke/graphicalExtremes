@@ -2,19 +2,19 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2chi_3D}
 \alias{Gamma2chi_3D}
-\title{Compute theoretical \eqn{\chi} in 3D}
+\title{Compute theoretical \eChi in 3D}
 \usage{
 Gamma2chi_3D(Gamma)
 }
 \arguments{
-\item{Gamma}{Numeric matrix \eqn{3\times 3}{3 x 3}.}
+\item{Gamma}{Numeric \eXTimesY{3}{3} matrix.}
 }
 \value{
-The 3-dimensional \eqn{\chi} coefficient, i.e.,
+The 3-dimensional \eChi coefficient, i.e.,
 the extremal correlation coefficient for the HR distribution. Note that
 \eqn{0 \leq \chi \leq 1}.
 }
 \description{
-Computes the theoretical \eqn{\chi} coefficient in 3 dimensions.
+Computes the theoretical \eChi coefficient in 3 dimensions.
 }
 \keyword{internal}

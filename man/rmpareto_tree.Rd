@@ -22,12 +22,12 @@ undirected graph that is connected and has no cycles.}
 
 \item{par}{Respective parameter for the given \code{model}, that is,
 \itemize{
-\item \eqn{\Gamma}, numeric \eqn{d \times d}{d x d} variogram matrix,
+\item \eGamma, numeric \dxd variogram matrix,
 where only the entries corresponding to the edges of the \code{tree} are used,
 if \code{model = HR}. Alternatively, can be a vector of
-length \eqn{d - 1} containing the entries of the variogram corresponding
+length \code{d-1} containing the entries of the variogram corresponding
 to the edges of the given \code{tree}.
-\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \eqn{d - 1}
+\item \eqn{\theta \in (0, 1)}{0 < \theta < 1}, vector of length \code{d-1}
 containing the logistic parameters corresponding
 to the edges of the given \code{tree}, if \code{model = logistic}.
 \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
@@ -36,7 +36,7 @@ for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }
 \value{
-Numeric matrix of size \eqn{n \times d}{n x d} of simulations of the
+Numeric \nxd matrix of simulations of the
 multivariate Pareto distribution.
 }
 \description{

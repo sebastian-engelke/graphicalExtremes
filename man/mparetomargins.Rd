@@ -7,15 +7,15 @@
 mparetomargins(data, set_indices)
 }
 \arguments{
-\item{data}{Numeric matrix \eqn{n\times d}{n x d}. A dataset containing
+\item{data}{Numeric \nxd matrix. A dataset containing
 observations following a multivariate Pareto distribution.}
 
-\item{set_indices}{Numeric vector with at most \eqn{d} different elements in
-1, ..., \eqn{d}. The variables with respect to which to marginalize
+\item{set_indices}{Numeric vector with at most \code{d} different elements in
+1, ..., \code{d}. The variables with respect to which to marginalize
 the multivariate distribution.}
 }
 \value{
-Numeric matrix \eqn{n\times m}{n x m}, where \eqn{m} is the length
+Numeric \eXTimesY{n}{m} matrix, where \code{m} is the length
 of \code{set_indices}. Marginalized multivariate Pareto data.
 }
 \description{

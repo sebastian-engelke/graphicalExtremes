@@ -1,42 +1,36 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
+output_file: readme.md
 bibliography: inst/REFERENCES.bib
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd, using `rmarkdown::render()`. Please edit that file -->
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-# graphicalExtremes
+# Graphical Extremes
 
-<!-- badges: start -->
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis build
-status](https://api.travis-ci.org/sebastian-engelke/graphicalExtremes.svg?branch=master)](https://travis-ci.org/sebastian-engelke/graphicalExtremes)
-[![codecov](https://codecov.io/gh/sebastian-engelke/graphicalExtremes/branch/master/graph/badge.svg)](https://codecov.io/gh/sebastian-engelke/graphicalExtremes)
-<!-- badges: end -->
-
-The goal of graphicalExtremes is to provide an implementation of the statistical 
-methodology paper @eng2019 for sparse multivariate extreme
-value models. This includes exact simulation algorithms and statistical 
+An implementation of the statistical methodology paper @eng2019 for sparse
+multivariate extreme value models.
+Includes exact simulation algorithms and statistical 
 inference methods for multivariate Pareto distributions on graphical structures.
+
+Furthermore contains implementations of statistical methods from
+@eng2020, @roe2021, and @hen2022.
+
 
 ## Installation
 
-<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
+The latest
+[CRAN](https://cran.r-project.org/package=graphicalExtremes)
+version can be installed using:
+``` r
+install.packages("graphicalExtremes")
+```
 
-<!-- ``` r -->
-<!-- install.packages("graphicalExtremes") -->
-<!-- ``` -->
-
-You can install the development version of graphicalExtremes from [GitHub](https://github.com/) with:
-
+The latest
+[GitHub](https://github.com/sebastian-engelke/graphicalExtremes)
+version can be installed using:
 ``` r
 # install.packages("devtools")
 devtools::install_github("sebastian-engelke/graphicalExtremes")

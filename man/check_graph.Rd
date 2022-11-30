@@ -6,20 +6,19 @@
 \usage{
 check_graph(
   graph,
-  graph_type = "general",
+  graph_type = c("general", "decomposable", "block", "tree"),
   check_connected = TRUE,
   nVertices = NULL
 )
 }
 \arguments{
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object}
+\item{graph}{An [\code{igraph::graph}] object.}
 
-\item{graph_type}{\code{"general"}, \code{"decomposable"}, \code{"block"}, \code{"tree"}
-The required type of graph}
+\item{graph_type}{\code{"general"}, \code{"decomposable"}, \code{"block"}, \code{"tree"}. The required type of graph.}
 
-\item{check_connected}{Whether to check if the graph is connected}
+\item{check_connected}{Whether to check if the graph is connected.}
 
-\item{nVertcies}{The number of vertices required in the graph}
+\item{nVertices}{The number of vertices required in the graph.}
 }
 \value{
 The given \code{graph}, if necessary converted to undirected.
@@ -28,10 +27,10 @@ If the graph is not valid an error is thrown.
 \description{
 Checks that the input graph is a valid graph for an extremal graphical model.
 If necessary, converts the graph to an undirected graph.
+Removes vertex labels if present.
 }
 \seealso{
 Other Input checks: 
-\code{\link{check_Gamma_and_graph}()},
-\code{\link{is_block_graph}()}
+\code{\link{check_Gamma_and_graph}()}
 }
 \concept{Input checks}

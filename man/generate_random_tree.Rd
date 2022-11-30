@@ -10,13 +10,15 @@ generate_random_tree(d)
 \item{d}{Number of vertices in the graph}
 }
 \value{
-An \link[igraph:make_graph]{igraph::graph} object
+An [\code{igraph::graph}] object
 }
 \description{
 Generates a random tree from a random Pruefer sequence
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
+\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},

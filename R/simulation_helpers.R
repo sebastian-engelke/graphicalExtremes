@@ -5,10 +5,10 @@
 #' @inheritParams rmpareto
 #' @param idx Integer. Index corresponding to the variable over which
 #' the extremal function is simulated.
-#' @param trend Numeric. Trend corresponding to the variable \code{idx}.
-#' @param chol_mat Numeric matrix \eqn{d\times d}{d x d}.
+#' @param trend Numeric. Trend corresponding to the variable `idx`.
+#' @param chol_mat Numeric matrix \dxd.
 #' Cholesky decomposition of the desired covariance matrix.
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_HR <- function(n, d, idx, trend, chol_mat) {
@@ -29,10 +29,10 @@ simu_px_HR <- function(n, d, idx, trend, chol_mat) {
 #' Simulates logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_logistic <- function(n, d, idx, theta) {
@@ -59,10 +59,10 @@ simu_px_logistic <- function(n, d, idx, theta) {
 #' Simulates negative logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_neglogistic <- function(n, d, idx, theta) {
@@ -86,10 +86,10 @@ simu_px_neglogistic <- function(n, d, idx, theta) {
 #' Simulates Dirichlet extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with \code{n} elements. Inde(x|ces) from
-#' 1 to \code{d}, that determine which extremal function to simulate.
-#' @param alpha Numeric vector of size \code{d}.
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' 1 to `d`, that determine which extremal function to simulate.
+#' @param alpha Numeric vector of size `d`.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_dirichlet <- function(n, d, idx, alpha) {
@@ -116,15 +116,15 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 #' Simulates the Huessler--Reiss extremal functions on a tree
 #'
 #' @inheritParams rmpareto
-#' @param Gamma_vec Numeric vector with \eqn{d - 1} elements, where \eqn{d} is the
-#' number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' @param A Numeric matrix \eqn{d \times (d - 1)}; the rows represent the nodes
+#' @param Gamma_vec Numeric vector with `d-1` elements, where `d` is the
+#' number of nodes in the tree (and `d-1` is the number of edges).
+#' @param A Numeric \dxd1 matrix; the rows represent the nodes
 #' in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
-#' equal to 1 if the edge in position \eqn{j} is on the directed path from node
-#' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#' equal to 1 if the edge in position `j` is on the directed path from node
+#' `k` to node `i` in the polytree rooted at node `k`.
 #'
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_tree_HR <- function(n, Gamma_vec, A) {
@@ -145,15 +145,15 @@ simu_px_tree_HR <- function(n, Gamma_vec, A) {
 #' Simulates logistic extremal functions on a tree
 #'
 #' @inheritParams rmpareto
-#' @param theta Numeric vector with 1 or \eqn{d - 1} elements.
+#' @param theta Numeric vector with 1 or `d-1` elements.
 #' Assume that the entry are such that \eqn{0 < \theta < 1}.
-#' @param A Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
+#' @param A Numeric \dxd1 matrix; the rows represent the
 #' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
-#' equal to 1 if the edge in position \eqn{j} is on the directed path from node
-#' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#' equal to 1 if the edge in position `j` is on the directed path from node
+#' `k` to node `i` in the polytree rooted at node `k`.
 #'
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_tree_logistic <- function(n, theta, A) {
@@ -186,17 +186,17 @@ simu_px_tree_logistic <- function(n, theta, A) {
 #' Simulates Dirichlet extremal functions on a tree
 #'
 #' @inheritParams rmpareto
-#' @param alpha.start Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
-#' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' @param alpha.end Numeric vector with \eqn{d - 1} elements, where \eqn{d} is
-#' the number of nodes in the tree (and \eqn{d - 1} is the number of edges).
-#' @param A Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
+#' @param alpha.start Numeric vector with `d-1` elements, where `d` is
+#' the number of nodes in the tree (and `d-1` is the number of edges).
+#' @param alpha.end Numeric vector with `d-1` elements, where `d` is
+#' the number of nodes in the tree (and `d-1` is the number of edges).
+#' @param A Numeric \dxd1 matrix; the rows represent the
 #' nodes in the tree, the columns represent the edges. For a fixed node
 #' \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
-#' equal to 1 if the edge in position \eqn{j} is on the directed path from node
-#' \eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.
+#' equal to 1 if the edge in position `j` is on the directed path from node
+#' `k` to node `i` in the polytree rooted at node `k`.
 #'
-#' @return Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+#' @return Numeric \nxd matrix. Simulated data.
 #'
 #' @keywords internal
 simu_px_tree_dirichlet <- function(n, alpha.start, alpha.end, A) {

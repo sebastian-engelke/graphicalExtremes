@@ -14,11 +14,10 @@ generate_random_integer_Gamma(d, b = 2, b_step = 1)
 \item{b_step}{By how much \code{b} is increased in each iteration}
 }
 \value{
-A \eqn{d \times d}{d x d} variogram matrix with integer entries
+A numeric \dxd variogram matrix with integer entries
 }
 \description{
-Generates a random variogram Matrix by producing a
-\eqn{(d-1) \times (d-1)}{(d-1)x(d-1)} matrix \code{B} with random
+Generates a random variogram Matrix by producing a \d1xd1 matrix \code{B} with random
 integer entries between \code{-b} and \code{b}, computing \code{S = B \%*\% t(B)},
 and passing this \code{S} to \code{\link[=Sigma2Gamma]{Sigma2Gamma()}}.
 This process is repeated with an increasing \code{b} until a valid Gamma matrix
@@ -31,6 +30,8 @@ generate_random_integer_Gamma(5, 2, 0.1)
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
+\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},

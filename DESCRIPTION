@@ -1,6 +1,6 @@
 Package: graphicalExtremes
 Title: Statistical Methodology for Graphical Extreme Value Models
-Version: 0.1.0.9000
+Version: 0.2.0
 Maintainer: Sebastian Engelke <sebastian.engelke@unige.ch>
 Authors@R: 
     c(
@@ -9,10 +9,6 @@ Authors@R:
     person("Adrien S.", "Hitz", role = "aut"),
     person("Nicola", "Gnecco", role = "aut"),
     person("Manuel", "Hentschel", role = "aut"))
-Author:
-    Sebastian Engelke [aut, cre],
-    Adrien S. Hitz [aut],
-    Nicola Gnecco [aut]
 Description: Statistical methodology for sparse multivariate extreme value models. Methods are
              provided for exact simulation and statistical inference for multivariate Pareto distributions
              on graphical structures as described in the paper 'Graphical Models for Extremes' by
@@ -21,6 +17,7 @@ Depends: R (>= 3.6.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: bzip2
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
@@ -29,22 +26,19 @@ Suggests:
     ggplot2,
     bookdown,
     maps
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.2
 Roxygen: list(markdown = TRUE)
 Imports: 
     igraph (>= 1.2.4.1),
     mvtnorm (>= 1.0.10),
-    matrixcalc (>= 1.0.3),
     Rdpack,
     stats (>= 3.6.0),
-    grDevices (>= 3.6.0),
     utils,
     corpcor,
-    glasso,
     osqp,
     glmnet,
     glassoFast,
-    glue
+    edmcr
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack

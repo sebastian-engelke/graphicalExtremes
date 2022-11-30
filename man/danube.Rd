@@ -3,17 +3,61 @@
 \docType{data}
 \name{danube}
 \alias{danube}
-\title{Upper Danube basin dataset.}
+\title{Upper Danube basin dataset}
 \format{
-An object of class \code{list} of length 4.
+A named \code{list} with four entries
+\describe{
+\item{\code{data}}{A numeric matrix, containing pre-processed discharge data for each gauging station}
+\item{\code{dailyData}}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
+\item{\code{info}}{A data frame, containing information about each gauging station}
+\item{\code{flow_edges}}{
+A two-column numeric matrix. Each row contains the indices (in \code{info})
+of a pair of gauging stations that are directly connected by a river.
+}
+}
 }
 \source{
-Bavarian Environmental Agency \url{http://www.gkd.bayern.de}.
+Bavarian Environmental Agency \url{https://www.gkd.bayern.de}.
 }
 \usage{
 danube
 }
 \description{
-A dataset containing river discharge data for tributaries of Danube.
+A dataset containing river discharge data for tributaries of the Danube.
+}
+\details{
+To obtain the matrix \code{data}, the daily discharge data from the summer months of
+1960 to 2010, given in \code{dailyData}, was declustered, yielding between seven and ten observations per year.
+Each row corresponds to one observation from this declustered time series,
+the non-unique rownames indicate which year an observation is from.
+Each column corresponds to one of the gauging stations,
+with column indices in \code{data} corresponding to row indices in \code{info}.
+See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
+
+\code{info} is a data frame containing the following information for
+each of the gauging stations or its corresponding catchment area:
+\describe{
+\item{\code{RivNames}}{Name of the river at the gauging station}
+\item{\code{Lat}, \code{Long}}{Coordinates of the gauging station}
+\item{\code{Lat_Center}, \code{Long_Center}}{Coordinates of the center of the catchment corresponding to the gauging station}
+\item{\code{Alt}}{Mean altitude of the catchment}
+\item{\code{Area}}{Area of the catchment corresponding to the gauging station}
+\item{\code{Slope}}{Mean slope of the catchment}
+\item{\code{PlotCoordX}, \code{PlotCoordY}}{
+X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
+}
+}
+}
+\examples{
+g <- igraph::graph_from_edgelist(danube$flow_edges)
+loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+plot(g, layout = loc)
+
+}
+\references{
+\insertAllCited{}
+}
+\seealso{
+\code{\link{flights}}, \code{vignette('graphicalExtremes')}
 }
 \keyword{datasets}

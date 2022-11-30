@@ -2,38 +2,41 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Sigma}
 \alias{Gamma2Sigma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix}
+\title{Transformation of \eGamma matrix to \eSigma or \eSigmaK matrix}
 \usage{
 Gamma2Sigma(Gamma, k = NULL, full = FALSE)
 }
 \arguments{
-\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
+\item{Gamma}{Numeric \dxd variogram matrix.}
 
-\item{k}{Integer between \code{1} (the default value) and \code{d}.
-Indicates which matrix \eqn{\Sigma^{(k)}}{\Sigma^(k)} should be produced.}
+\item{k}{\code{NULL} (default) or an integer between \code{1} and \code{d}.
+Indicates which matrix \eSigma, or \eSigmaK
+should be produced.}
 
-\item{full}{Logical. If true, then the \code{k}th row and column in \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-are included and the function returns a \eqn{d \times d}{d x d} matrix.
+\item{full}{Logical. If true, then the \code{k}th row and column in \eSigmaK
+are included and the function returns a \dxd matrix.
 By default, \code{full = FALSE}.}
 }
 \value{
-Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-\code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+Numeric \eSigmaK matrix of size \d1xd1 if
+\code{full = FALSE}, and \eSigma of size \dxd if \code{full = TRUE}.
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix.
+Huesler--Reiss distribution to the corresponding
+\eSigma or \eSigmaK matrix.
 }
 \details{
-Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+Every \dxd \code{Gamma} matrix in the definition of a
 Huesler--Reiss distribution can be transformed into a
-\eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix,
-for any \code{k} from \code{1} to \code{d}. The inverse of \eqn{\Sigma^{(k)}}{\Sigma^(k)}
+\d1xd1 \eSigmaK matrix,
+for any \code{k} from \code{1} to \code{d}. The inverse of \eSigmaK
 contains the graph structure corresponding to the Huesler--Reiss distribution
-with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eqn{\Sigma^{(k)}}{\Sigma^(k)}
-is returned as a \eqn{d \times d}{d x d} matrix with additional \code{k}th row and column
-that contain zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-This is the inverse of function of \code{\link{Sigma2Gamma}}.
+with parameter matrix \code{Gamma}. If \code{full = TRUE}, then \eSigmaK
+is returned as a \dxd matrix with additional \code{k}th row and column
+that contain zeros.
+For details see \insertCite{eng2019;textual}{graphicalExtremes} and
+\insertCite{hen2022;textual}{graphicalExtremes}.
 }
 \examples{
 Gamma <- cbind(
@@ -43,7 +46,16 @@ Gamma <- cbind(
   c(2, 1.5, 1.5, 0)
 )
 Gamma2Sigma(Gamma, k = 1, full = FALSE)
+
 }
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other MatrixTransformations: 
+\code{\link{Gamma2Theta}()},
+\code{\link{Gamma2graph}()},
+\code{\link{Sigma2Gamma}()},
+\code{\link{Theta2Gamma}()}
+}
+\concept{MatrixTransformations}

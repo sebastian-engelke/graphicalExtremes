@@ -9,17 +9,17 @@ simu_px_tree_logistic(n, theta, A)
 \arguments{
 \item{n}{Number of simulations.}
 
-\item{theta}{Numeric vector with 1 or \eqn{d - 1} elements.
+\item{theta}{Numeric vector with 1 or \code{d-1} elements.
 Assume that the entry are such that \eqn{0 < \theta < 1}.}
 
-\item{A}{Numeric matrix \eqn{d \times (d - 1)}; the rows represent the
+\item{A}{Numeric \dxd1 matrix; the rows represent the
 nodes in the tree, the columns represent the edges. For a fixed node
 \eqn{k = 1, \dots, d}{k = 1, ..., d}, each entry \eqn{(i, j)} is
-equal to 1 if the edge in position \eqn{j} is on the directed path from node
-\eqn{k} to node \eqn{i} in the polytree rooted at node \eqn{k}.}
+equal to 1 if the edge in position \code{j} is on the directed path from node
+\code{k} to node \code{i} in the polytree rooted at node \code{k}.}
 }
 \value{
-Numeric matrix \eqn{n\times d}{n x d}. Simulated data.
+Numeric \nxd matrix. Simulated data.
 }
 \description{
 Simulates logistic extremal functions on a tree

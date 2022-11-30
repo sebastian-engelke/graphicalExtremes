@@ -2,25 +2,30 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2Theta}
 \alias{Gamma2Theta}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix}
+\title{Transformation of \eGamma matrix to \eTheta matrix}
 \usage{
 Gamma2Theta(Gamma, k = NULL)
 }
 \arguments{
-\item{Gamma}{Numeric \eqn{d \times d}{d x d} variogram matrix.}
+\item{Gamma}{Numeric \dxd variogram matrix.}
+
+\item{k}{\code{NULL} or integer between 1 and d. If this is \code{NULL}, the
+\dxd matrix \eTheta is produced, otherwise
+the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eThetaK.}
 }
 \value{
-Numeric \eqn{\Sigma^{(k)}}{\Sigma^(k)} matrix of size \eqn{(d - 1) \times (d - 1)}{(d - 1) x (d - 1)} if
-\code{full = FALSE}, and of size \eqn{d \times d}{d x d} if \code{full = TRUE}.
+Numeric \eSigmaK matrix of size \d1xd1 if
+\code{full = FALSE}, and of size \dxd if \code{full = TRUE}.
 }
 \description{
-Transforms the \code{Gamma} matrix from the definition of a
-Huesler--Reiss distribution to the corresponding \eqn{\Theta} matrix.
+Transforms the variogram matrix (\eGamma) from the definition of a
+Huesler--Reiss distribution to the corresponding precision matrix
+(\eTheta or \eThetaK).
 }
 \details{
-Every \eqn{d \times d}{d x d} \code{Gamma} matrix in the definition of a
+Every \dxd \code{Gamma} matrix in the definition of a
 Huesler--Reiss distribution can be transformed into a
-\eqn{d \times d}{d x d} \eqn{\Theta} matrix, which
+\dxd \eTheta matrix, which
 contains the graph structure corresponding to the Huesler--Reiss distribution
 with parameter matrix \code{Gamma}.
 }
@@ -31,8 +36,17 @@ Gamma <- cbind(
   c(1.5, 2, 0, 1.5),
   c(2, 1.5, 1.5, 0)
 )
-Gamma2Sigma(Gamma, k = 1, full = FALSE)
+Gamma2Theta(Gamma)
+
 }
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other MatrixTransformations: 
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2graph}()},
+\code{\link{Sigma2Gamma}()},
+\code{\link{Theta2Gamma}()}
+}
+\concept{MatrixTransformations}

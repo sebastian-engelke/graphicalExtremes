@@ -2,14 +2,14 @@
 % Please edit documentation in R/generate_examples.R
 \name{generate_random_model}
 \alias{generate_random_model}
-\title{Generate random Hüsler--Reiss Models}
+\title{Generate random Huesler--Reiss Models}
 \usage{
-generate_random_model(d, graph_type = "tree", ...)
+generate_random_model(d, graph_type = "general", ...)
 }
 \arguments{
 \item{d}{Number of vertices in the graph}
 
-\item{graph_type}{\code{"tree"}, \code{"block"}, \code{"decomposable"}, or \code{"general"}}
+\item{graph_type}{\code{"tree"}, \code{"block"}, \code{"decomposable"}, \code{"complete"}, or \code{"general"}}
 
 \item{...}{Further arguments passed to functions generating the graph and Gamma matrix}
 }
@@ -25,10 +25,13 @@ generate_random_model(d, 'tree')
 generate_random_model(d, 'block')
 generate_random_model(d, 'decomposable')
 generate_random_model(d, 'general')
+generate_random_model(d, 'complete')
 
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
+\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},

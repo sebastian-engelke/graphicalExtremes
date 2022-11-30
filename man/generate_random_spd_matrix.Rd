@@ -16,13 +16,15 @@ generate_random_spd_matrix(d, bMin = -10, bMax = 10, ...)
 \item{...}{Ignored, only allowed for compatibility}
 }
 \description{
-Generates a random \eqn{d \times d}{dxd} symmetric positive definite matrix.
-This is done by generating a random \eqn{d \times d}{dxd} matrix \code{B},
+Generates a random \dxd symmetric positive definite matrix.
+This is done by generating a random \dxd matrix \code{B},
 then computing \code{B \%*\% t(B)},
 and then normalizing the matrix to approximately single digit entries.
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
+\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},

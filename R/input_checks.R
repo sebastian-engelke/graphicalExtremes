@@ -2,18 +2,24 @@
 #'
 #' Checks that the input graph is a valid graph for an extremal graphical model.
 #' If necessary, converts the graph to an undirected graph.
+#' Removes vertex labels if present.
 #'
-#' @param graph An [igraph::graph] object
-#' @param graph_type `"general"`, `"decomposable"`, `"block"`, `"tree"`
-#' The required type of graph
-#' @param check_connected Whether to check if the graph is connected
-#' @param nVertcies The number of vertices required in the graph
+#' @param graph An \[`igraph::graph`\] object.
+#' @param graph_type `"general"`, `"decomposable"`, `"block"`, `"tree"`. The required type of graph.
+#' @param check_connected Whether to check if the graph is connected.
+#' @param nVertices The number of vertices required in the graph.
 #'
 #' @return The given `graph`, if necessary converted to undirected.
 #' If the graph is not valid an error is thrown.
 #'
 #' @family Input checks
-check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVertices=NULL){
+check_graph <- function(
+  graph,
+  graph_type = c('general', 'decomposable', 'block', 'tree'),
+  check_connected = TRUE,
+  nVertices = NULL
+){
+  graph_type <- match.arg(graph_type)
 
   # check that graph is actually a graph object
   if(!igraph::is.igraph(graph)){
@@ -31,13 +37,11 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
 
   # check if it is directed
   if (igraph::is_directed(graph)) {
-    warning("The given graph is directed. Converted to undirected.")
     graph <- igraph::as.undirected(graph)
   }
 
   if(!is.null(igraph::vertex_attr(graph)[['name']])){
-    warning("The vertex labels were removed.")
-    igraph::vertex_attr(graph)[['name']] <- NULL
+    graph <- igraph::remove.vertex.attribute(graph, 'name')
   }
 
   # check if it is connected
@@ -46,19 +50,16 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
     stop("The given graph is not connected.")
   }
 
-  is_tree <- is_connected && e == d-1
-  is_block <- is_block_graph(graph)
-  is_decomposable <- igraph::is_chordal(graph)$chordal
   if(graph_type == 'tree'){
-    if(!is_tree){
+    if(!is_tree_graph(graph)){
       stop("The given graph is not a tree.")
     }
   } else if(graph_type == 'block'){
-    if(!is_block){
+    if(!is_block_graph(graph)){
       stop("The given graph is not a block graph.")
     }
   } else if(graph_type == 'decomposable'){
-    if(!is_decomposable) {
+    if(!is_decomposable_graph(graph)) {
       stop("The given graph is not decomposable.")
     }
   } else if(graph_type != 'general'){
@@ -66,30 +67,6 @@ check_graph <- function(graph, graph_type='general', check_connected=TRUE, nVert
   }
 
   return(graph)
-}
-
-#' Check if a graph is a block graph
-#'
-#' @param graph An [igraph::graph] object
-#'
-#' @return A `boolean` indicating if the graph is a glock graph
-#'
-#' @family Input checks
-is_block_graph <- function(graph){
-  if(!igraph::is_connected(graph) || !igraph::is_chordal(graph)$chordal){
-    return(FALSE)
-  }
-  cliques <- igraph::max_cliques(graph)
-
-  # Check that separators are size 1 or 0:
-  for(i in seq_along(cliques)){
-    for(j in seq_len(i-1)){
-      if(length(intersect(cliques[[i]], cliques[[j]])) > 1){
-        return(FALSE)
-      }
-    }
-  }
-  return(TRUE)
 }
 
 #' Check input graph and Gamma matrix
@@ -103,18 +80,16 @@ is_block_graph <- function(graph){
 #' `NA` in the Gamma matrix
 #' @param graph_type Passed to [check_graph()].
 #'
-#' @return A list containing two named entries, `Gamma` and `graph` containing
-#' the input matrix and graph. Throws an error if the input is not valid.
+#' @return A list consisting of
+#' \item{`Gamma`}{The Gamma matrix given as input or implied by the input}
+#' \item{`graph`}{The graph given as input or implied by the input}
+#' Throws an error if the input is not valid.
 #'
 #' @family Input checks
 check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
-
   # make graph from Gamma if necessary
   if (is.null(graph) && is.matrix(Gamma)) {
-    graph <- igraph::graph_from_adjacency_matrix(
-      1 * !is.na(Gamma),
-      mode = "undirected"
-    )
+    graph <- partialMatrixToGraph(Gamma)
   } else if (is.null(graph)) {
     stop("Supply a graph or a valid Gamma matrix")
   }
@@ -134,13 +109,16 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
         "in the graph."
       ))
     }
-    G <- matrix(0, d, d)
-    G[igraph::as_edgelist(graph)] <- Gamma
-    Gamma <- G + t(G)
+    G <- matrix(NA, d, d)
+    edgeList <- igraph::as_edgelist(graph)
+    diag(G) <- 0 # diagonal = 0
+    G[edgeList] <- Gamma # upper tri
+    G[edgeList[,c(2,1),drop=FALSE]] <- Gamma # lower tri
+    Gamma <- G
   }
 
   # check that Gamma is d x d:
-  if (NROW(Gamma) != d || NCOL(Gamma) != d || any(abs(Gamma - t(Gamma)) > 1e-9, na.rm = T)) {
+  if (!is_symmetric(Gamma)) {
     stop(paste(
       "The argument Gamma must be a symmetric d x d matrix,",
       "or a vector with as many entries as the number of edges",
@@ -155,4 +133,26 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
   ))
 }
 
+
+#' Is Gamma square matrix?
+#'
+#' Check if Gamma matrix is square matrix. If so, return the dimension. Else,
+#' raise an error.
+#'
+#' @param Gamma Numeric matrix. Matrix representing the variogram of an HR
+#' distribution.
+#'
+#' @return Numeric. The dimension of the matrix (number of rows and columns, if
+#' the matrix is symmetric). Else, raises an error.
+#'
+#' @keywords internal
+dim_Gamma <- function(Gamma) {
+  dimension <- dim(Gamma)
+
+  if ((length(dimension) == 2) & (dimension[1] == dimension[2])) {
+    dimension[1]
+  } else {
+    stop("Not a square matrix!")
+  }
+}
 

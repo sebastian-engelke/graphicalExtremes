@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2chi}
 \alias{Gamma2chi}
-\title{Transformation of the Huesler--Reiss variogram \eqn{\Gamma} to extremal correlation \eqn{\chi}}
+\title{Transformation of the Huesler--Reiss variogram \eGamma to extremal correlation \eChi}
 \usage{
 Gamma2chi(Gamma)
 }
@@ -14,11 +14,11 @@ Numeric or matrix. The extremal correlation coefficient.
 }
 \description{
 Transforms the \code{Gamma} matrix from the definition of a Huesler--Reiss
-distribution into the corresponding extremal correlation \eqn{\chi}.
+distribution into the corresponding extremal correlation \eChi.
 }
 \details{
-The formula for transformation from \code{Gamma} to \eqn{\chi} that is applied element-wise is
+The formula for transformation from \code{Gamma} to \eChi that is applied element-wise is
 \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 where \eqn{\Phi} is the standard normal distribution function.
-This is the inverse of \code{\link{chi2Gamma}}.
+This is the inverse of \code{\link[=chi2Gamma]{chi2Gamma()}}.
 }

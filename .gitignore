@@ -8,12 +8,17 @@ docs
 inst/doc
 *.log
 
+debug
 .vscode
 build.R
 .Rprofile
-debug
+*.cmd
+*.sh
 
 *.tmp
 *.temp
 tmp.*
 temp.*
+
+*.tar.gz
+*.Rcheck

@@ -2,10 +2,30 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Theta2Gamma}
 \alias{Theta2Gamma}
-\title{Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix}
+\title{Transformation of \eGamma matrix to \eTheta matrix}
 \usage{
 Theta2Gamma(Theta, k = NULL)
 }
-\description{
-Transformation of \eqn{\Gamma} matrix to \eqn{\Theta} matrix
+\arguments{
+\item{Theta}{Numeric \dxd matrix (if \code{k} is \code{NULL})
+or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if \code{k} is a number).}
+
+\item{k}{\code{NULL} or integer between 1 and d.
+If this is \code{NULL} the input \code{Theta} is interpreted as a \dxd
+precision matrix \eTheta, otherwise as \eThetaK.}
 }
+\value{
+The \dxd variogram matrix implied by \code{Theta}.
+}
+\description{
+Transforms a precision matrix (\eTheta or \eThetaK)
+to the corresponding variogram matrix.
+}
+\seealso{
+Other MatrixTransformations: 
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2Theta}()},
+\code{\link{Gamma2graph}()},
+\code{\link{Sigma2Gamma}()}
+}
+\concept{MatrixTransformations}

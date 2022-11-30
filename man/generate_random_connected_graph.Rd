@@ -24,7 +24,7 @@ generate_random_connected_graph(
 \item{...}{Ignored, only allowed for compatibility}
 }
 \value{
-An \link[igraph:make_graph]{igraph::graph} object
+An [\code{igraph::graph}] object
 }
 \description{
 Generates a random connected graph.
@@ -33,6 +33,8 @@ to producing a tree and adding random edges to that tree.
 }
 \seealso{
 Other Example generations: 
+\code{\link{generate_random_Gamma}()},
+\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},
 \code{\link{generate_random_integer_Gamma}()},

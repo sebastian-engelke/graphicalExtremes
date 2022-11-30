@@ -1,10 +1,10 @@
-#' Generate random Hüsler--Reiss Models
+#' Generate random Huesler--Reiss Models
 #'
 #' Generates a random connected graph and Gamma matrix with conditional independence
 #' structure corresponding to that graph.
 #'
 #' @param d Number of vertices in the graph
-#' @param graph_type `"tree"`, `"block"`, `"decomposable"`, or `"general"`
+#' @param graph_type `"tree"`, `"block"`, `"decomposable"`, `"complete"`, or `"general"`
 #' @param ... Further arguments passed to functions generating the graph and Gamma matrix
 #'
 #' @family Example generations
@@ -17,9 +17,10 @@
 #' generate_random_model(d, 'block')
 #' generate_random_model(d, 'decomposable')
 #' generate_random_model(d, 'general')
+#' generate_random_model(d, 'complete')
 #'
 #' @export
-generate_random_model <- function(d, graph_type='tree', ...){
+generate_random_model <- function(d, graph_type='general', ...){
   graph <- if(graph_type == 'tree'){
     generate_random_tree(d)
   } else if(graph_type == 'block'){
@@ -28,6 +29,8 @@ generate_random_model <- function(d, graph_type='tree', ...){
     generate_random_chordal_graph(d, ...)
   } else if(graph_type == 'general'){
     generate_random_connected_graph(d, ...)
+  } else if(graph_type == 'complete'){
+    igraph::make_full_graph(d)
   } else{
     stop('Invalid graph_type!')
   }
@@ -45,7 +48,7 @@ generate_random_model <- function(d, graph_type='tree', ...){
 #' Generates a valid Gamma matrix with conditional independence structure
 #' specified by a graph
 #'
-#' @param graph An [igraph::graph] object
+#' @param graph An \[`igraph::graph`\] object
 #' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
 #' @family Example generations
 generate_random_graphical_Gamma <- function(graph, ...){
@@ -59,15 +62,27 @@ generate_random_graphical_Gamma <- function(graph, ...){
     P_cli <- ID %*% P_cli %*% ID
     P[cli, cli] <- P[cli, cli] + P_cli
   }
-  Gamma <- Theta2Gamma(P)
+  Gamma <- ensure_symmetry(Theta2Gamma(P))
   return(Gamma)
 }
 
+#' Generate a random Gamma matrix
+#' 
+#' Generates a valid Gamma matrix with a given dimension
+#' 
+#' @param d Size of the matrix
+#' @param ... Further arguments passed to [generate_random_spd_matrix()]
+#' @family Example generations
+#' 
+#' @export
+generate_random_Gamma <- function(d, ...){
+  g <- igraph::make_full_graph(d)
+  generate_random_graphical_Gamma(g, ...)
+}
 
 #' Generate a random Gamma matrix containing only integers
 #'
-#' Generates a random variogram Matrix by producing a
-#' \eqn{(d-1) \times (d-1)}{(d-1)x(d-1)} matrix `B` with random
+#' Generates a random variogram Matrix by producing a \d1xd1 matrix `B` with random
 #' integer entries between `-b` and `b`, computing `S = B %*% t(B)`,
 #' and passing this `S` to [Sigma2Gamma()].
 #' This process is repeated with an increasing `b` until a valid Gamma matrix
@@ -77,7 +92,7 @@ generate_random_graphical_Gamma <- function(graph, ...){
 #' @param b Initial `b` used in the algorithm described above
 #' @param b_step By how much `b` is increased in each iteration
 #'
-#' @return A \eqn{d \times d}{d x d} variogram matrix with integer entries
+#' @return A numeric \dxd variogram matrix with integer entries
 #'
 #' @family Example generations
 #'
@@ -95,19 +110,21 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
     B <- floor(b * (stats::runif(d1**2)*2 - 1))
     B <- matrix(B, d1, d1)
     S <- B %*% t(B)
-    if(matrixcalc::is.positive.definite(S)){
+    if(is_sym_pos_def(S)){
       break
     }
     b <- b+b_step
   }
-  G <- Sigma2Gamma(S, k=1)
+  # Converting to Sigma does not introduce non-integer values.
+  # Still round the result to avoid numerical issues (also ensures symmetry).
+  G <- round(Sigma2Gamma(S, k=1), 0)
   return(G)
 }
 
 #' Generate a random symmetric positive definite matrix
 #'
-#' Generates a random \eqn{d \times d}{dxd} symmetric positive definite matrix.
-#' This is done by generating a random \eqn{d \times d}{dxd} matrix `B`,
+#' Generates a random \dxd symmetric positive definite matrix.
+#' This is done by generating a random \dxd matrix `B`,
 #' then computing `B %*% t(B)`,
 #' and then normalizing the matrix to approximately single digit entries.
 #'
@@ -119,10 +136,13 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
   M <- B %*% t(B)
-  M <- (M + t(M)) / 2
+  while(det(M) == Inf){
+    M <- M / (d+1)
+  }
   m <- max(floor(log(det(M), 10) / d), 0)
   M <- M * 10**(-m)
-  if(!matrixcalc::is.positive.definite(M)){
+  M <- ensure_symmetry(M)
+  if(!is_sym_pos_def(M)){
     stop('Failed to produce an SPD matrix!')
   }
   return(M)
@@ -142,7 +162,7 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
 #' @param block_graph Force `sMin == sMax == 1` to produce a block graph
 #' @param ... Ignored, only allowed for compatibility
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #' @family Example generations
 generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
   if(block_graph){
@@ -152,15 +172,15 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
   if(cMax < cMin || sMax < sMin || cMin < sMin || cMax <= sMin || cMin > d){
     stop('Inconsistent parameters')
   }
-  c0 <- floor(stats::runif(1, max(cMin, sMin+1), min(d, cMax)))
-  g <- igraph::make_full_graph(c0, directed = FALSE)
+  c0 <- rdunif(1, max(cMin, sMin+1), min(d, cMax))
+  g <- without_igraph_params(igraph::make_full_graph(c0, directed = FALSE))
   missingVertices <- d - igraph::vcount(g)
   while(missingVertices > 0){
     cliques <- igraph::maximal.cliques(g)
     cliqueSizes <- sapply(cliques, length)
     cM <- max(cliqueSizes)
-    c1 <- floor(stats::runif(1, cMin, cMax))
-    s1 <- floor(stats::runif(1, sMin, sMax))
+    c1 <- rdunif(1, cMin, cMax)
+    s1 <- rdunif(1, sMin, sMax)
     dVertices <- c1 - s1
     if(dVertices <= 0 || s1 >= cM){
       next
@@ -201,28 +221,28 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #' @param maxTries Maximum number of tries to produce a connected Eroes-Renyi graph
 #' @param ... Ignored, only allowed for compatibility
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #'
 #' @family Example generations
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
-  # Usually works for small d / large m:
+  # Usually works for small d / large m / large p:
   if(!is.null(m)){
     if(m < d-1){
       stop('m must be at least d-1!')
-    } else if(m == d-1){
+    }
+    if(m == d-1){
       return(generate_random_tree(d))
-    } else{
-      for(i in seq_len(maxTries)){
-        g <- igraph::sample_gnm(d, m)
-        if(igraph::is.connected(g)){
-          return(g)
-        }
+    }
+    for(i in seq_len(maxTries)){
+      g <- without_igraph_params(igraph::sample_gnm(d, m))
+      if(igraph::is.connected(g)){
+        return(g)
       }
     }
   } else{
     for(i in seq_len(maxTries)){
-      g <- igraph::sample_gnp(d, p)
+      g <- without_igraph_params(igraph::sample_gnp(d, p))
       if(igraph::is.connected(g)){
         return(g)
       }
@@ -231,7 +251,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 
   # Fall back to making a tree and adding m-(d-1) edges:
   if(is.null(m)){
-    m <- p*d
+    m <- round(p*d)
   }
   m <- fitInInterval(m, d-1, d*(d-1) / 2)
   g <- generate_random_tree(d)
@@ -251,14 +271,13 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 #'
 #' @param d Number of vertices in the graph
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #' @family Example generations
 generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))
   pruefer_to_graph(pruefer)
 }
-
-#' Convert a Pruefer sequence to a graph
+# Convert a Pruefer sequence to a graph
 pruefer_to_graph <- function(pruefer){
   d <- length(pruefer) + 2
   adj <- matrix(0, d, d)
@@ -279,4 +298,42 @@ pruefer_to_graph <- function(pruefer){
 }
 
 
+
+#' Generate a random cactus graph
+#' 
+#' Generates a random cactus graph (mostly useful for benchmarking).
+#' 
+#' @param d Number of vertices in the graph
+#' @param cMin Minimal size of each block (last block might be smaller)
+#' @param cMax Maximal size of each block
+#' 
+#' @family Example generations
+#' @export
+generate_random_cactus <- function(d, cMin = 2, cMax = 6){
+  if(cMin > cMax || cMin < 2){
+    stop('Inconsistent Parameters')
+  }
+  A <- matrix(0, 0, 0)
+  while(nrow(A) < d){
+    nV0 <- nrow(A)
+    blockSize <- rdunif(1, cMin, cMax)
+    blockSize <- min(blockSize, d - nrow(A) + 1)
+    g1 <- igraph::make_ring(blockSize)
+    A1 <- igraph::as_adjacency_matrix(g1, sparse = FALSE)
+    A <- rbind(A, matrix(0, blockSize, ncol(A)))
+    A <- cbind(A, matrix(0, nrow(A), blockSize))
+    newInds <- (nV0 + 1):nrow(A)
+    A[newInds, newInds] <- A1
+    if(nV0 == 0){
+      next
+    }
+    joinVertex0 <- rdunif(1, 1, nV0)
+    joinVertex1 <- nV0 + 1
+    A[joinVertex0,] <- pmax(A[joinVertex0,], A[joinVertex1,])
+    A[,joinVertex0] <- A[joinVertex0,]
+    A <- A[-joinVertex1,-joinVertex1,drop=FALSE]
+  }
+  g <- igraph::graph_from_adjacency_matrix(A, mode = 'undirected')
+  return(g)
+}
 
