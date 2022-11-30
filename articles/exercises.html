@@ -187,7 +187,7 @@ airports from the westcoast with a large number of flights per year.</p>
 <span>    graph <span class="op">=</span> <span class="va">flights_emst_fit</span><span class="op">$</span><span class="va">graph</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tree BIC ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_tree</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Tree BIC = 110638.1</span></span></code></pre></div>
+<span><span class="co">#&gt; Tree BIC = 110638.5</span></span></code></pre></div>
 </li>
 <li>
 <p>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model.</p>
@@ -226,7 +226,7 @@ airports from the westcoast with a large number of flights per year.</p>
 <span>    Gamma <span class="op">=</span> <span class="va">model_fit</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"BIC ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_graph</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; BIC = 102405.1</span></span></code></pre></div>
+<span><span class="co">#&gt; BIC = 102405.5</span></span></code></pre></div>
 </li>
 <li>
 <p>Plot the empirical <span class="math inline">\(\chi\)</span> coefficient against the <span class="math inline">\(\chi\)</span> coefficient implied by the fitted model of Step 5.</p>
