@@ -36,6 +36,7 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
     cat("Iteration | Gap\n")
   }
 
+  # eps_abs, eps_rel chosen from experience to avoid numerical issues
   settings <- osqp::osqpSettings(verbose = FALSE, eps_abs = 1e-10, eps_rel = 1e-10)
 
   gap <- Inf

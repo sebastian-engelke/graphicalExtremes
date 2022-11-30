@@ -9,7 +9,7 @@ emtp2(Gamma, tol = 1e-06, verbose = TRUE, initial_point = TRUE)
 \arguments{
 \item{Gamma}{conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.}
 
-\item{tol}{The convergence tolerance (default tol=1e-7). The algorithm terminates when the sum of absolute differences between two iterations is below \code{tol}.}
+\item{tol}{The convergence tolerance. The algorithm terminates when the sum of absolute differences between two iterations is below \code{tol}.}
 
 \item{verbose}{if TRUE (default) the output will be printed.}
 
