@@ -222,14 +222,6 @@ test_that("fmpareto_graph_HR works", {
     data = data3, p = .95, cens = FALSE
   ))
   expect_error(fmpareto_graph_HR(
-    graph = non_decomposable,
-    data = data3, p = .95, cens = FALSE
-  ))
-  expect_error(fmpareto_graph_HR(
-    graph = non_block,
-    data = data3, p = .95, cens = FALSE
-  ))
-  expect_error(fmpareto_graph_HR(
     graph = block,
     data = data3[, -1], p = .95, cens = FALSE
   ))
