@@ -25,6 +25,9 @@ x- travis? mit nico klaeren
     x- remove badges from description
     x- remove .travis.yml
 - update vignettes
+    - fix errors with new function parameters
+    - use new data
+    - check/remove rogue "true" at top (-> caused by toc)
 - readme
     x- find out how Rmd->md in readme is compiled
     x?- update reference list
