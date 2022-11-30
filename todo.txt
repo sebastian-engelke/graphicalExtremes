@@ -40,3 +40,5 @@ x- readme
     x- info spalten raus oder durch raw data ersetzen
     x- add examples
     ?- rename `data` to `clusteredData` etc.?
+- fix bibliograph encoding
+    - see e.g. `complete_Gamma()` help
