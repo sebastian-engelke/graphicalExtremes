@@ -7,12 +7,12 @@ x- consistent variable naming:
     x- immer ausschreiben -> left short in some internal functions
 x- plotting function for river data
     x- no, but examples with normal plotting functions
-- options:
+?- options:
     x- nCores
     x- tolerance: implemented as "permissive" machine tolerance
     x- tolerance: default values to be used for e.g. zeros in Theta
     x- check in emtp2() ! -> talk to frank/sebastian
-    - check in eglearn() ! -> talk to sebastian!
+    ?- check in eglearn() ! -> ask sebastian
         1e-5 ~= truncation threshold in Theta
         1e-8 == some tuning parameter of the glassoFast algorithm
 x- clean up documentation, examples 
@@ -40,5 +40,6 @@ x- readme
     x- info spalten raus oder durch raw data ersetzen
     x- add examples
     ?- rename `data` to `clusteredData` etc.?
-- fix bibliograph encoding
+?- fix bibliograph encoding
     - see e.g. `complete_Gamma()` help
+    ?-> issue in Rdpack -> Issue/PR
