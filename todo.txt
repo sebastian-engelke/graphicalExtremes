@@ -1,21 +1,21 @@
 
 x- consistent symmetry checks/fixes
     x- custom is.pos.def function?
-- consistent variable naming:
+x- consistent variable naming:
     x- g / graph
     x- G / Gamma
     x- immer ausschreiben -> left short in some internal functions
-- plotting function for river data
-    - no, but examples with normal plotting functions
+x- plotting function for river data
+    x- no, but examples with normal plotting functions
 - options:
     x- nCores
     x- tolerance: implemented as "permissive" machine tolerance
     x- tolerance: default values to be used for e.g. zeros in Theta
-    - check in emtp2() ! -> talk to frank/sebastian
+    x- check in emtp2() ! -> talk to frank/sebastian
     - check in eglearn() ! -> talk to sebastian!
         1e-5 ~= truncation threshold in Theta
         1e-8 == some tuning parameter of the glassoFast algorithm
-- clean up documentation, examples 
+x- clean up documentation, examples 
 ?- remove "./R/deprecated_functions.R", "./other_scripts"?
     x- also remove flights_old?
     x- other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
@@ -34,9 +34,9 @@ x- readme
     x- find out how Rmd->md in readme is compiled
     x?- update reference list
     x- individual citations in help pages -> geht, genauer gucken
-- danube data
+?- danube data
     x- tagesdaten rein -> yes
     x- coords_to_plot in station info -> yes
     x- info spalten raus oder durch raw data ersetzen
-    - add examples
+    x- add examples
     ?- rename `data` to `clusteredData` etc.?

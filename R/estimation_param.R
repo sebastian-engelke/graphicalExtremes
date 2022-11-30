@@ -124,7 +124,7 @@ fmpareto_graph_HR_clique_average <- function(
       }
     )
   } else {
-    subGammas <- lapply(
+    subGammas <- parallel::mclapply(
       mc.cores = get_mc_cores(),
       cliques,
       function(cli){
@@ -182,33 +182,37 @@ fmpareto_graph_HR_clique_sequential <- function(
   Ghat <- matrix(NA, d, d)
   for(cliques in layers){
     # Compute estimate for each new clique/separator
-    subGammas <- lapply(cliques, function(cli){
-      # get margins data
-      data.cli <- mparetomargins(data, cli)
-      
-      # find (already) fixed entries
-      G.cli <- Ghat[cli, cli]
-      par.cli <- Gamma2par(G.cli)
-      fixParams.cli <- !is.na(par.cli)
-      
-      # get initial parameters that agree with the fixed ones (heuristic, close to empirical variogram):
-      G0 <- emp_vario(data.cli)
-      G1 <- replaceGammaSubMatrix(G0, G.cli)
-      init.cli <- Gamma2par(G1)
-      
-      # estimate parameters
-      opt <- fmpareto_HR_MLE(
-        data = data.cli,
-        init = init.cli,
-        fixParams = fixParams.cli,
-        useTheta = FALSE,
-        ...
-      )
-      if(is.null(opt$Gamma)){
-        stop('MLE did not converge for clique: ', cli)
+    subGammas <- parallel::mclapply(
+      mc.cores = get_mc_cores(),
+      cliques,
+        function(cli){
+        # get margins data
+        data.cli <- mparetomargins(data, cli)
+        
+        # find (already) fixed entries
+        G.cli <- Ghat[cli, cli]
+        par.cli <- Gamma2par(G.cli)
+        fixParams.cli <- !is.na(par.cli)
+        
+        # get initial parameters that agree with the fixed ones (heuristic, close to empirical variogram):
+        G0 <- emp_vario(data.cli)
+        G1 <- replaceGammaSubMatrix(G0, G.cli)
+        init.cli <- Gamma2par(G1)
+        
+        # estimate parameters
+        opt <- fmpareto_HR_MLE(
+          data = data.cli,
+          init = init.cli,
+          fixParams = fixParams.cli,
+          useTheta = FALSE,
+          ...
+        )
+        if(is.null(opt$Gamma)){
+          stop('MLE did not converge for clique: ', cli)
+        }
+        return(opt$Gamma)
       }
-      return(opt$Gamma)
-    })
+    )
 
     # Fill newly computed entries in Ghat
     for(i in seq_along(cliques)){

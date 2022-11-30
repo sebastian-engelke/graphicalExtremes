@@ -6,12 +6,12 @@ library(igraph)
 library(tictoc)
 
 newSeed <- floor(2^20 * runif(1))
-newSeed <- 12489
+newSeed <- 875916
 cat('Seed:', newSeed, '\n')
 set.seed(newSeed)
 
 
-d <- 5
+d <- 10
 n <- 100
 graphType <- c('general', 'decomposable', 'tree')[1]
 
@@ -121,7 +121,13 @@ for(i in seq_along(results)){
         Theta <- Gamma2Theta(Gamma)
         results[[i]]$Theta <- Theta
         results[[i]]$maxGammaDiff <- max(abs(getEdgeEntries(Gamma - G0, graph)))
+        results[[i]]$meanGammaDiff <- mean(abs(getEdgeEntries(Gamma - G0, graph)))
         results[[i]]$maxThetaDiff <- max(abs(getNonEdgeEntries(Theta, graph)))
     }
 }
+
+print(sapply(results, '[[', 'maxGammaDiff'))
+print(sapply(results, '[[', 'meanGammaDiff'))
+print(sapply(results, '[[', 'maxThetaDiff'))
+
 
