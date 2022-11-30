@@ -7,7 +7,7 @@
 #' See \insertCite{roe2021;textual}{graphicalExtremes} for details.
 #' 
 #' @param Gamma conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.
-#' @param tol The convergence tolerance (default tol=1e-7). The algorithm terminates when the sum of absolute differences between two iterations is below `tol`.
+#' @param tol The convergence tolerance. The algorithm terminates when the sum of absolute differences between two iterations is below `tol`.
 #' @param initial_point if TRUE (default), the algorithm will construct an initial point before the iteration steps.
 #' @param verbose if TRUE (default) the output will be printed.
 #' 
