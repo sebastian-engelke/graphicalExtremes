@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "document package",
+            "type": "shell",
+            "command": "R --silent --vanilla -e \"devtools::document()\"",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "install package",
+            "type": "shell",
+            "command": "R --silent --vanilla -e \"devtools::install(dependencies=FALSE,quick=TRUE)\"",
+            "problemMatcher": []
+        },
+        {
+            "label": "document + install package",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "document package",
+                "install package"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "R CMD build + check",
+            "type":"shell",
+            "command": ".\\R_CMD_build_check.cmd",
+            "problemMatcher": []
+        }
+    ]
+}

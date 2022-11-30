@@ -8,12 +8,9 @@ docs
 inst/doc
 *.log
 
-debug
-.vscode
+# .vscode
 build.R
 .Rprofile
-*.cmd
-*.sh
 
 *.tmp
 *.temp
