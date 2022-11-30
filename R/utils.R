@@ -20,32 +20,32 @@ fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
 
 # Replaces a principal submatrix of a Gamma matrix, preserving definiteness.
 # Other entries are kept "heuristically similar".
-# Zeros (instead of NAs) on the diagonal of G.fix indicate which principal submatrix to replace.
-# If not the entire submatrix in G.fix is specified, [complete_Gamma_decomposable()] is used
-replaceGammaSubMatrix <- function(G.est, G.fix){
+# Zeros (instead of NAs) on the diagonal of `Gamma.fix` indicate which principal submatrix to replace.
+# If not the entire submatrix in `Gamma.fix` is specified, [complete_Gamma_decomposable()] is used
+replaceGammaSubMatrix <- function(Gamma.est, Gamma.fix){
   # check which are fixed
-  ind <- which(!is.na(diag(G.fix)))
+  ind <- which(!is.na(diag(Gamma.fix)))
   if(length(ind)==0){
-    return(G.est)
+    return(Gamma.est)
   }
-  if(any(is.na(G.fix[ind, ind]))){
-    G.fix[ind, ind] <- complete_Gamma(G.fix[ind, ind], allowed_graph_type = 'decomposable')
+  if(any(is.na(Gamma.fix[ind, ind]))){
+    Gamma.fix[ind, ind] <- complete_Gamma(Gamma.fix[ind, ind], allowed_graph_type = 'decomposable')
   }
-  if(length(ind) == ncol(G.est)){
-    return(G.fix)
+  if(length(ind) == ncol(Gamma.est)){
+    return(Gamma.fix)
   }
   
   # naive attempt:
-  G1 <- G.est
-  G1[ind, ind] <- G.fix[ind, ind]
+  G1 <- Gamma.est
+  G1[ind, ind] <- Gamma.fix[ind, ind]
   if(is_sym_cnd(G1)){
     return(G1)
   }
 
   # heuristic, but safe solution:
   k <- ind[1]
-  M.est <- Gamma2Sigma(G.est, k)
-  M.fix <- Gamma2Sigma(G.fix, k)
+  M.est <- Gamma2Sigma(Gamma.est, k)
+  M.fix <- Gamma2Sigma(Gamma.fix, k)
   M <- replaceSpdSubmatrix(M.est, M.fix)
   G <- Sigma2Gamma(M, k=k)
   return(G)

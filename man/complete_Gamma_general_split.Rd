@@ -8,10 +8,10 @@ complete_Gamma_general_split(
   Gamma,
   graph,
   N = 10000,
-  sub_tol = get_small_tol(),
+  sub_tol = get_large_tol() * 0.001,
   check_tol = 100,
   mc_cores_overwrite = NULL,
-  final_tol = sub_tol * 1000
+  final_tol = get_large_tol()
 )
 }
 \arguments{
@@ -21,7 +21,8 @@ complete_Gamma_general_split(
 
 \item{N}{Maximum number of iterations.}
 
-\item{sub_tol}{Numeric scalar. Tolerance to be used when completing submatrices.}
+\item{sub_tol}{Numeric scalar. Tolerance to be used when completing submatrices.
+Should be smaller than \code{final_tol}.}
 
 \item{check_tol}{Numeric/integer scalar. How often to check the tolerance when completing submatrices.}
 

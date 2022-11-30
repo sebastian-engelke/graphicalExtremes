@@ -4,7 +4,13 @@
 \alias{complete_Gamma_general}
 \title{Non-decomposable completion of variogram matrices}
 \usage{
-complete_Gamma_general(Gamma, graph, N = 10000, tol = 1e-12, check_tol = 100)
+complete_Gamma_general(
+  Gamma,
+  graph,
+  N = 10000,
+  tol = get_large_tol(),
+  check_tol = 100
+)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
