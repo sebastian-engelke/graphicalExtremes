@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Compute the exponent measure density of HR distribution</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/fitting_estimation_helpers.R" class="external-link"><code>R/fitting_estimation_helpers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/estimation_helpers.R" class="external-link"><code>R/estimation_helpers.R</code></a></small>
       <div class="d-none name"><code>logdV_HR.Rd</code></div>
     </div>
 
@@ -57,21 +57,23 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logdV_HR</span><span class="op">(</span><span class="va">x</span>, <span class="va">par</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logdV_HR</span><span class="op">(</span><span class="va">x</span>, Gamma <span class="op">=</span> <span class="cn">NULL</span>, Theta <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>Numeric matrix \(n\times d\) or vector with \(d\)
-elements.</p></dd>
+<dd><p>Numeric \(n \times d\) matrix or vector with <code>d</code> elements.</p></dd>
 
 
-<dt>par</dt>
-<dd><p>Numeric vector with
-\(\frac{d(d - 1)}{2}\) elements.
-It represents the upper triangular portion of a
-variogram matrix \(\Gamma\).</p></dd>
+<dt>Gamma</dt>
+<dd><p>d x d variogram matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a variogram matrix.</p></dd>
+
+
+<dt>Theta</dt>
+<dd><p>d x d precision matrix or numeric vector with d(d-1)/2 elements,
+containing the upper triangular part of a precision matrix.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -79,6 +81,11 @@ variogram matrix \(\Gamma\).</p></dd>
     
 
 <p>Numeric. The censored exponent measure of the HR distribution.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Both <code>Gamma</code> and <code>Theta</code> are needed internally, but if one
+is missing it is computed from the other one.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

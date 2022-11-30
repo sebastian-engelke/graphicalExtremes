@@ -12,7 +12,7 @@ variables in set_indices."><!-- mathjax --><script src="https://cdnjs.cloudflare
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@ variables in set_indices."><!-- mathjax --><script src="https://cdnjs.cloudflare
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -66,13 +66,13 @@ variables in <code>set_indices</code>.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>Numeric matrix \(n\times d\). A dataset containing
+<dd><p>Numeric \(n \times d\) matrix. A dataset containing
 observations following a multivariate Pareto distribution.</p></dd>
 
 
 <dt>set_indices</dt>
-<dd><p>Numeric vector with at most \(d\) different elements in
-1, ..., \(d\). The variables with respect to which to marginalize
+<dd><p>Numeric vector with at most <code>d</code> different elements in
+1, ..., <code>d</code>. The variables with respect to which to marginalize
 the multivariate distribution.</p></dd>
 
 </dl></div>
@@ -80,7 +80,7 @@ the multivariate distribution.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Numeric matrix \(n\times m\), where \(m\) is the length
+<p>Numeric \(n \times m\) matrix, where <code>m</code> is the length
 of <code>set_indices</code>. Marginalized multivariate Pareto data.</p>
     </div>
 

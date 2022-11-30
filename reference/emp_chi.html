@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -47,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Empirical estimation of extremal correlation matrix \(\chi\)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/fitting_estimation_functions.R" class="external-link"><code>R/fitting_estimation_functions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/estimation_param.R" class="external-link"><code>R/estimation_param.R</code></a></small>
       <div class="d-none name"><code>emp_chi.Rd</code></div>
     </div>
 
@@ -57,29 +57,39 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">emp_chi</span><span class="op">(</span><span class="va">data</span>, p <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">emp_chi</span><span class="op">(</span><span class="va">data</span>, p <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">emp_chi_pairwise</span><span class="op">(</span><span class="va">data</span>, p <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>Numeric matrix of size \(n\times d\), where \(n\) is the
-number of observations and \(d\) is the dimension.</p></dd>
+<dd><p>Numeric \(n \times d\) matrix, where <code>n</code> is the
+number of observations and <code>d</code> is the dimension.</p></dd>
 
 
 <dt>p</dt>
-<dd><p>Numeric between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
+<dd><p>Numeric scalar between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
 it is assumed that the <code>data</code> are already on multivariate Pareto scale. Else,
-<code>p</code> is used as the probability in the function <code><a href="data2mpareto.html">data2mpareto</a></code>
-to standardize the <code>data</code>.</p></dd>
+<code>p</code> is used as the probability in <code><a href="data2mpareto.html">data2mpareto()</a></code> to standardize the <code>data</code>.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Print verbose progress information</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Numeric matrix \(d\times d\). The matrix contains the
+<p>Numeric matrix \(d \times d\). The matrix contains the
 bivariate extremal coefficients \(\chi_{ij}\), for \(i, j = 1, ..., d\).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>emp_chi_pairwise</code> calls <code>emp_chi</code> for each pair of observations.
+This is more robust if the data contains many <code>NA</code>s, but can take rather long.</p>
     </div>
 
     <div class="section level2">
@@ -102,6 +112,7 @@ bivariate extremal coefficients \(\chi_{ij}\), for \(i, j = 1, ..., d\).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.65 1.00 0.60 0.55</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.55 0.60 1.00 0.60</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.45 0.55 0.60 1.00</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

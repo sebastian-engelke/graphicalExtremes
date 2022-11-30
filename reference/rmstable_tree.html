@@ -14,7 +14,7 @@ is an extremal graphical model on a tree as defined in Engelke and Hitz (2020)
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,7 @@ is an extremal graphical model on a tree as defined in Engelke and Hitz (2020)
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -89,9 +89,9 @@ undirected graph that is connected and has no cycles.</p></dd>
 <dd><p>Respective parameter for the given <code>model</code>, that is,</p><ul><li><p>\(\Gamma\), numeric \(d \times d\) variogram matrix,
 where only the entries corresponding to the edges of the <code>tree</code> are used,
 if <code>model = HR</code>. Alternatively, can be a vector of
-length \(d - 1\) containing the entries of the variogram corresponding
+length <code>d-1</code> containing the entries of the variogram corresponding
 to the edges of the given <code>tree</code>.</p></li>
-<li><p>\(\theta \in (0, 1)\), vector of length \(d - 1\)
+<li><p>\(\theta \in (0, 1)\), vector of length <code>d-1</code>
 containing the logistic parameters corresponding
 to the edges of the given <code>tree</code>, if <code>model = logistic</code>.</p></li>
 <li><p>a matrix of size \((d - 1) \times 2\), where the rows
@@ -104,7 +104,7 @@ for each of the edges in <code>tree</code>, if <code>model = dirichlet</code>.</
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Numeric matrix of size \(n \times d\) of simulations of the
+<p>Numeric \(n \times d\) matrix of simulations of the
 multivariate max-stable distribution.</p>
     </div>
     <div class="section level2">

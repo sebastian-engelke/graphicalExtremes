@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul>
@@ -73,25 +73,32 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="graphicalextremes">graphicalExtremes<a class="anchor" aria-label="anchor" href="#graphicalextremes"></a>
+<div class="page-header"><h1 id="graphical-extremes">Graphical Extremes<a class="anchor" aria-label="anchor" href="#graphical-extremes"></a>
 </h1></div>
-<!-- badges: start -->
-<p>The goal of graphicalExtremes is to provide an implementation of the statistical methodology paper Engelke and Hitz (2020) for sparse multivariate extreme value models. This includes exact simulation algorithms and statistical inference methods for multivariate Pareto distributions on graphical structures.</p>
+<p>An implementation of the statistical methodology paper Engelke and Hitz (2020) for sparse multivariate extreme value models. Includes exact simulation algorithms and statistical inference methods for multivariate Pareto distributions on graphical structures.</p>
+<p>Furthermore contains implementations of statistical methods from Engelke and Volgushev (2020), Röttger, Engelke, and Zwiernik (2021), and Hentschel, Engelke, and Segers (2022).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: --><!-- ``` r --><!-- install.packages("graphicalExtremes") --><!-- ``` --><p>You can install the development version of graphicalExtremes from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The latest <a href="https://cran.r-project.org/package=graphicalExtremes" class="external-link">CRAN</a> version can be installed using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"graphicalExtremes"</span><span class="op">)</span></span></code></pre></div>
+<p>The latest <a href="https://github.com/sebastian-engelke/graphicalExtremes" class="external-link">GitHub</a> version can be installed using:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sebastian-engelke/graphicalExtremes"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-eng2019" class="csl-entry"><p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p></div>
+<div id="ref-eng2020" class="csl-entry"><p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.” <a href="https://arxiv.org/abs/2012.06179" class="external-link uri">https://arxiv.org/abs/2012.06179</a>.</p></div>
+<div id="ref-hen2022" class="csl-entry"><p>Hentschel, Manuel, Sebastian Engelke, and Johan Segers. 2022. “Statistical Inference for Hüsler-Reiss Graphical Models Through Matrix Completions.” arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link uri">https://doi.org/10.48550/ARXIV.2210.14292</a>.</p></div>
+<div id="ref-roe2021" class="csl-entry"><p>Röttger, Frank, Sebastian Engelke, and Piotr Zwiernik. 2021. “Total Positivity in Multivariate Extremes.” arXiv. <a href="https://doi.org/10.48550/ARXIV.2112.14727" class="external-link uri">https://doi.org/10.48550/ARXIV.2112.14727</a>.</p></div>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
-<div id="refs" class="references"><div id="ref-eng2019"><p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p></div></div>
 </div>
-
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -126,14 +133,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
-<li><a href="https://travis-ci.org/sebastian-engelke/graphicalExtremes" class="external-link"><img src="https://api.travis-ci.org/sebastian-engelke/graphicalExtremes.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://codecov.io/gh/sebastian-engelke/graphicalExtremes" class="external-link"><img src="https://codecov.io/gh/sebastian-engelke/graphicalExtremes/branch/master/graph/badge.svg" alt="codecov"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>

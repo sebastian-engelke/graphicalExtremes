@@ -12,7 +12,7 @@ returns the full Gamma matrix implied by the conditional independencies."><!-- m
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@ returns the full Gamma matrix implied by the conditional independencies."><!-- m
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -49,7 +49,7 @@ returns the full Gamma matrix implied by the conditional independencies."><!-- m
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Completion of decomposable Gamma matrices</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/matrix_completions.R" class="external-link"><code>R/matrix_completions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/matrix_completions_main.R" class="external-link"><code>R/matrix_completions_main.R</code></a></small>
       <div class="d-none name"><code>complete_Gamma_decomposable.Rd</code></div>
     </div>
 
@@ -60,18 +60,20 @@ returns the full <code>Gamma</code> matrix implied by the conditional independen
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">complete_Gamma_decomposable</span><span class="op">(</span><span class="va">Gamma</span>, <span class="va">graph</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">complete_Gamma_decomposable</span><span class="op">(</span><span class="va">Gamma</span>, graph <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>Gamma</dt>
 <dd><p>A variogram matrix that is specified on the edges of <code>graph</code>
-and the diagonals. All other entries are ignored.</p></dd>
+and the diagonals. All other entries are ignored (if <code>graph</code> is specified),
+or should be <code>NA</code> to indicate non-edges in <code>graph</code>.</p></dd>
 
 
 <dt>graph</dt>
-<dd><p>A decomposable <a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a> object</p></dd>
+<dd><p><code>NULL</code> or a decomposable [<code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code>] object. If <code>NULL</code>, the
+structure of <code>NA</code> entries in <code>Gamma</code> is used instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,14 +82,15 @@ and the diagonals. All other entries are ignored.</p></dd>
 
 <p>A complete variogram matrix that agrees with <code>Gamma</code> on the entries
 corresponding to edges in <code>graph</code> and the diagonals.
-The corresponding \(\Theta\) matrix pdocued by <a href="Gamma2Theta.html">Gamma2Theta</a> has zeros
+The corresponding \(\Theta\) matrix produced by <code><a href="Gamma2Theta.html">Gamma2Theta()</a></code> has zeros
 in the remaining entries.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other Matrix completions: 
+<code><a href="complete_Gamma_general_demo.html">complete_Gamma_general_demo</a>()</code>,
+<code><a href="complete_Gamma_general_split.html">complete_Gamma_general_split</a>()</code>,
 <code><a href="complete_Gamma_general.html">complete_Gamma_general</a>()</code>,
-<code><a href="complete_Gamma_one_step.html">complete_Gamma_one_step</a>()</code>,
 <code><a href="complete_Gamma.html">complete_Gamma</a>()</code></p></div>
     </div>
 

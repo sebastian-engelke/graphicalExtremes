@@ -18,7 +18,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Learning extremal graph structure</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/fitting_estimation_functions.R" class="external-link"><code>R/fitting_estimation_functions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/estimation_structure.R" class="external-link"><code>R/estimation_structure.R</code></a></small>
       <div class="d-none name"><code>eglearn.Rd</code></div>
     </div>
 
@@ -81,14 +81,14 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>Numeric matrix of size \(n\times d\), where \(n\) is the
-number of observations and \(d\) is the dimension.</p></dd>
+<dd><p>Numeric \(n \times d\) matrix, where <code>n</code> is the
+number of observations and <code>d</code> is the dimension.</p></dd>
 
 
 <dt>p</dt>
 <dd><p>Numeric between 0 and 1 or <code>NULL</code>. If <code>NULL</code> (default),
 it is assumed that the <code>data</code> are already on multivariate Pareto scale. Else,
-<code>p</code> is used as the probability in the function <code><a href="data2mpareto.html">data2mpareto</a></code>
+<code>p</code> is used as the probability in the function <code><a href="data2mpareto.html">data2mpareto()</a></code>
 to standardize the <code>data</code>.</p></dd>
 
 
@@ -96,7 +96,7 @@ to standardize the <code>data</code>.</p></dd>
 <dd><p>Numeric vector of non-negative regularization parameters
 for the lasso.
 Default is <code>rholist = c(0.1, 0.15, 0.19, 0.205)</code>.
-For details see <a href="https://rdrr.io/pkg/glasso/man/glassopath.html" class="external-link">glasso::glassopath</a>.</p></dd>
+For details see <code>glasso::glassopath()</code>.</p></dd>
 
 
 <dt>reg_method</dt>
@@ -118,32 +118,32 @@ Default is <code>complete_Gamma = FALSE</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>List made of:</p><dl><dt><code>graph</code></dt>
-<dd><p>A list of <a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a> objects representing the
+<p>List made of:</p>
+<dl><dt><code>graph</code></dt>
+<dd><p>A list of [<code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code>] objects representing the
 fitted graphs for each <code>rho</code> in <code>rholist</code>.</p></dd>
 
 <dt><code>Gamma</code></dt>
-<dd><p>A list of numeric \(d\times d\) estimated
+<dd><p>A list of numeric estimated \(d \times d\)
 variogram matrices \(\Gamma\) corresponding to the fitted graphs,
 for each <code>rho</code> in <code>rholist</code>. If <code>complete_Gamma = FALSE</code> or the
-underlying graph is not connected, it returns <code>NA</code>.</p></dd>
+underlying graph is not connected, it returns <code>NULL</code>.</p></dd>
 
 <dt><code>rholist</code></dt>
 <dd><p>The list of penalty coefficients.</p></dd>
 
 <dt><code>graph_ic</code></dt>
-<dd><p>A list of <a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a> objects
+<dd><p>A list of [<code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code>] objects
 representing the optimal graph
 according to the <code>aic</code>, <code>bic</code>, and <code>mbic</code> information criteria.
 If <code>reg_method = "glasso"</code>, it returns a list of <code>NA</code>.</p></dd>
 
 <dt><code>Gamma_ic</code></dt>
-<dd><p>A list of numeric \(d\times d\) estimated
+<dd><p>A list of numeric \(d \times d\) estimated
 variogram matrices \(\Gamma\) corresponding
 to the <code>aic</code>, <code>bic</code>, and <code>mbic</code> information criteria.
 If <code>reg_method = "glasso"</code>, <code>complete_Gamma = FALSE</code>, or the underlying
 graph is not connected, it returns a list of <code>NA</code>.</p></dd>
-
 
 </dl></div>
 

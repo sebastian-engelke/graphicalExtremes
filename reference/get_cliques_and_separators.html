@@ -12,7 +12,7 @@ in a graph."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@ in a graph."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
+    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -49,7 +49,7 @@ in a graph."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get Cliques and Separators of a graph</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/fitting_estimation_helpers.R" class="external-link"><code>R/fitting_estimation_helpers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/graphs_functions.R" class="external-link"><code>R/graphs_functions.R</code></a></small>
       <div class="d-none name"><code>get_cliques_and_separators.Rd</code></div>
     </div>
 
@@ -60,13 +60,17 @@ in a graph.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_cliques_and_separators</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_cliques_and_separators</span><span class="op">(</span></span>
+<span>  <span class="va">graph</span>,</span>
+<span>  sortIntoLayers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  includeSingletons <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>graph</dt>
-<dd><p>An <a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a> object</p></dd>
+<dd><p>An [<code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code>] object</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -74,9 +78,7 @@ in a graph.</p>
     
 
 <p>A list of vertex sets that represent the cliques and (recursive)
-separators of <code>graph</code></p>
-
-
+separators of <code>graph</code>, ordered such that separators come before cliques they separate.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
