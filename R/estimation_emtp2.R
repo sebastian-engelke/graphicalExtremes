@@ -6,7 +6,7 @@
 #' Gaussian log-likelihood under the constraint that the concentration matrix is a Laplacian matrix.
 #' See \insertCite{roe2021;textual}{graphicalExtremes} for details.
 #' 
-#' @param Gamma conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.
+#' @param G conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.
 #' @param tol The convergence tolerance (default tol=1e-7). The algorithm terminates when the sum of absolute differences between two iterations is below `tol`.
 #' @param initial_point if TRUE (default), the algorithm will construct an initial point before the iteration steps.
 #' @param verbose if TRUE (default) the output will be printed.
@@ -25,7 +25,7 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
   }
   if (initial_point==TRUE){
     P <- diag(d)-matrix(1,d,d)/(d)
-    S <- P%*%(-Gamma/2)%*%P
+    S <- P%*%(-G/2)%*%P
     Z <- Zmatrix(S)
     Gamma <- Sigma2Gamma(Z)
   }
