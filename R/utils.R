@@ -104,11 +104,16 @@ is_square <- function(M){
   is.matrix(M) && ncol(M) == nrow(M)
 }
 
-is_symmetric <- function(M, tol=get_tol()){
-  is_square(M) && max(M - t(M)) < tol
+# Check if a matrix is symmetric up to tolerance, allowing NAs
+is_symmetric <- function(M, tol=get_small_tol()){
+  (
+    is_square(M)
+    && all(is.na(M) == t(is.na(M)))
+    && max(M - t(M), na.rm = TRUE) < tol
+  )
 }
 
-is_sym_cnd <- function(M, tol=get_tol()){
+is_sym_cnd <- function(M, tol=get_small_tol()){
   # M must be symmetric
   if(!is_symmetric(M, tol)){
     return(FALSE)
@@ -136,7 +141,7 @@ is_sym_cnd <- function(M, tol=get_tol()){
   return(eig[d-1] > 0)
 }
 
-is_sym_pos_def <- function(M, tol=get_tol()){
+is_sym_pos_def <- function(M, tol=get_small_tol()){
   if(!is_symmetric(M, tol)){
     return(FALSE)
   }
@@ -146,7 +151,7 @@ is_sym_pos_def <- function(M, tol=get_tol()){
   return(eig[d] > 0)
 }
 
-is_valid_Theta <- function(M, tol=get_tol()){
+is_valid_Theta <- function(M, tol=get_small_tol()){
   # Must be symmetric
   if(!is_symmetric(M, tol)){
     return(FALSE)
@@ -180,13 +185,13 @@ upper.tri.val <- function(M, diag=FALSE){
 
 is_eq <- function(a, b, tol=NULL) {
   if(is.null(tol)){
-    tol <- get_tol()
+    tol <- get_small_tol()
   }
   abs(a - b) < tol
 }
 is_greater <- function(a, b, tol=NULL) {
   if(is.null(tol)){
-    tol <- get_tol()
+    tol <- get_small_tol()
   }
   a - b > tol
 }

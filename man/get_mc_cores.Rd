@@ -18,5 +18,5 @@ Will always be 1 on windows. On other systems, this value can be set using
 \code{setOption('graphicalExtremes.mc.cores', ...)}.
 }
 \seealso{
-graphicalExtremes-package
+\code{\link{graphicalExtremes-package}}
 }

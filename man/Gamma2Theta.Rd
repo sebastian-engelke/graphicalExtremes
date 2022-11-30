@@ -45,6 +45,7 @@ Gamma2Theta(Gamma)
 \seealso{
 Other MatrixTransformations: 
 \code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2graph}()},
 \code{\link{Sigma2Gamma}()},
 \code{\link{Theta2Gamma}()}
 }

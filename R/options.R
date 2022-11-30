@@ -9,7 +9,8 @@
 #' @param overwrite Use this value (if it is valid and not on windows)
 #' @return An integer to be used as number of cores
 #' 
-#' @seealso graphicalExtremes-package
+#' @seealso [`graphicalExtremes-package`]
+#' @export
 get_mc_cores <- function(overwrite = NULL){
     # Always 1 on windows
     if(.Platform$OS.typ == 'windows'){
@@ -36,24 +37,30 @@ get_mc_cores <- function(overwrite = NULL){
 }
 
 
-#' Tolerance to be used instead of machine precision
+#' Tolerances to be used in computations
 #' 
-#' Helper function that returns the tolerance to be used e.g. when checking 
-#' matrices for symmetry and definiteness.
-#' Can be set using `setOption('graphicalExtremes.tol', ...)`.
+#' Helper function that returns the tolerance to be used in internal computations.
 #' 
-#' @param overwrite Use this value if specified
+#' There are two different tolerances used in the package, for details see
+#' [`graphicalExtremes-package`]. The default values for these tolerances can be
+#' set using the options `"graphicalExtremes.tol.small"` and
+#' `"graphicalExtremes.tol.large"`.
+#' 
+#' @param overwrite `NULL` or numeric scalar. If specified, use this value
+#' instead of the option value.
 #' @return A non-negative numerical scalar
 #' 
-#' @seealso graphicalExtremes-package
-get_tol <- function(overwrite = NULL){
+#' @rdname get_tol
+#' @seealso [`graphicalExtremes-package`]
+#' @export
+get_small_tol <- function(overwrite = NULL){
     # Use overwrite if specified
     if(is.numeric(overwrite) && length(overwrite) >= 1){
         tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
         return(tol_overwrite)
     }
     # Try package option
-    tol_option <- getOption('graphicalExtremes.tol')
+    tol_option <- getOption('graphicalExtremes.tol.small')
     if(is.numeric(tol_option) && length(tol_option) >= 1){
         tol_option <- fitInInterval(tol_option[1], 0, Inf)
         return(tol_option)
@@ -62,3 +69,21 @@ get_tol <- function(overwrite = NULL){
     return(1e-12)
 }
 
+
+#' @rdname get_tol
+#' @export
+get_large_tol <- function(overwrite = NULL){
+    # Use overwrite if specified
+    if(is.numeric(overwrite) && length(overwrite) >= 1){
+        tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
+        return(tol_overwrite)
+    }
+    # Try package option
+    tol_option <- getOption('graphicalExtremes.tol.large')
+    if(is.numeric(tol_option) && length(tol_option) >= 1){
+        tol_option <- fitInInterval(tol_option[1], 0, Inf)
+        return(tol_option)
+    }
+    # Fall back to some default value
+    return(1e-9)
+}

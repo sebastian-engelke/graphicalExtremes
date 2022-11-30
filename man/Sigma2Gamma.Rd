@@ -52,6 +52,7 @@ Sigma2Gamma(Sigma1, k = 1, full = FALSE)
 Other MatrixTransformations: 
 \code{\link{Gamma2Sigma}()},
 \code{\link{Gamma2Theta}()},
+\code{\link{Gamma2graph}()},
 \code{\link{Theta2Gamma}()}
 }
 \concept{MatrixTransformations}

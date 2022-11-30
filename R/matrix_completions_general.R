@@ -14,6 +14,7 @@
 #' @param graph `igraph::graph()` object.
 #' @param N Maximum number of iterations.
 #' @param sub_tol Numeric scalar. Tolerance to be used when completing submatrices.
+#' Should be smaller than `final_tol`.
 #' @param check_tol Numeric/integer scalar. How often to check the tolerance when completing submatrices.
 #' @param mc_cores_overwrite `NULL` or numeric/integer scalar. Maximal number of cores to use.
 #' @param final_tol Numeric scalar. Check convergence of the final result with this tolerance.
@@ -28,10 +29,10 @@ complete_Gamma_general_split <- function(
   Gamma,
   graph,
   N = 10000,
-  sub_tol = get_tol(),
+  sub_tol = get_large_tol() * 1e-3,
   check_tol = 100,
   mc_cores_overwrite = NULL,
-  final_tol = sub_tol * 1e3
+  final_tol = get_large_tol()
 ){
   # Check/find mc_cores
   mc_cores <- get_mc_cores(mc_cores_overwrite)
@@ -100,7 +101,7 @@ complete_Gamma_general_split <- function(
 #' @family Matrix completions
 #' 
 #' @export
-complete_Gamma_general <- function(Gamma, graph, N=10000, tol=1e-12, check_tol=100){
+complete_Gamma_general <- function(Gamma, graph, N=10000, tol=get_large_tol(), check_tol=100){
   
   if(is_complete_graph(graph)){
     return(Gamma)

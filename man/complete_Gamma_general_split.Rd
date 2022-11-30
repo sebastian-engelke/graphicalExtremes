@@ -8,7 +8,7 @@ complete_Gamma_general_split(
   Gamma,
   graph,
   N = 10000,
-  sub_tol = get_tol(),
+  sub_tol = get_small_tol(),
   check_tol = 100,
   mc_cores_overwrite = NULL,
   final_tol = sub_tol * 1000

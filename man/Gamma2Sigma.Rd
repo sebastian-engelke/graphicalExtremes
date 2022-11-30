@@ -54,6 +54,7 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 \seealso{
 Other MatrixTransformations: 
 \code{\link{Gamma2Theta}()},
+\code{\link{Gamma2graph}()},
 \code{\link{Sigma2Gamma}()},
 \code{\link{Theta2Gamma}()}
 }

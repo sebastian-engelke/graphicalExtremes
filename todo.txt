@@ -10,14 +10,14 @@ x- consistent symmetry checks/fixes
 - options:
     x- nCores
     x- tolerance: implemented as "permissive" machine tolerance
-    - tolerance: default values to be used for e.g. zeros in Theta
+    x- tolerance: default values to be used for e.g. zeros in Theta
     - check in eglearn() ! -> talk to sebastian!
         1e-5 ~= truncation threshold in Theta
         1e-8 == some tuning parameter of the glassoFast algorithm
 - fix TODOs in danube documentation -> raus oder durch raw data
 - clean up documentation, examples 
 - remove "./R/deprecated_functions.R", "./other_scripts"?
-    - also remove flights_old?
+    x- also remove flights_old?
     x- other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
     - sind raus -> sebastian fragen
 x- tests? muss nicht
@@ -25,10 +25,12 @@ x- travis? mit nico klaeren
     x- remove badges from description
     x- remove .travis.yml
 - update vignettes
-    - fix errors with new function parameters
-    - use new data
-    - check/remove rogue "true" at top (-> caused by toc)
-- readme
+    x- fix errors with new function parameters
+    x- use new data
+    - check/remove rogue "true" at top
+        - caused by toc
+        - check with pkgdown etc. once on master
+x- readme
     x- find out how Rmd->md in readme is compiled
     x?- update reference list
     x- individual citations in help pages -> geht, genauer gucken

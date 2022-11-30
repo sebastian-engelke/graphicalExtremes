@@ -1,18 +1,18 @@
 ---
 title: "Introduction to Extremal Graphical Models"
 output:
-  bookdown::html_document2:
-    fig_width: 5
-    fig_height: 5
+    bookdown::html_document2:
+        fig_width: 5
+        fig_height: 5
 bibliography: ../inst/REFERENCES.bib
 toc:
-  depth: 2
+    depth: 2
 pkgdown:
-  as_is: true 
+    as_is: true 
 vignette: >
-  %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 \DeclareMathOperator{\Var}{Var}
@@ -23,8 +23,8 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = ">"
+    collapse = TRUE,
+    comment = ">"
 )
 ```
 
@@ -33,49 +33,38 @@ library(graphicalExtremes)
 library(dplyr)
 library(ggplot2)
 theme_set(theme_bw() +
-            theme(plot.background = element_blank(),
-                  legend.background = element_blank(),
-                  strip.background = element_rect(fill = "white"),
-                  plot.caption=element_text(size=7.5, hjust=0, 
-                                            margin=margin(t=15)),
-                  text = element_text(size = 11),
-                  axis.ticks = element_blank(),
-                  panel.grid.major = element_line(size = 0.25)))
+    theme(
+        plot.background = element_blank(),
+        legend.background = element_blank(),
+        strip.background = element_rect(fill = "white"),
+        plot.caption = element_text(
+            size = 7.5, hjust = 0,
+            margin = margin(t = 15)
+        ),
+        text = element_text(size = 11),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(size = 0.25)
+    )
+)
 ```
 
-# Installation
-
-<!-- You can install the released version of graphicalExtremes from [CRAN](https://CRAN.R-project.org) with: -->
-
-<!-- ``` r -->
-<!-- install.packages("graphicalExtremes") -->
-<!-- ``` -->
-
-Make sure to install the _development_ version of graphicalExtremes from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("sebastian-engelke/graphicalExtremes")
-```
-
-# Data
+# Danube Data
 
 ```{r, fig.show='hold', out.width="50%"}
-danube = graphicalExtremes::danube
+danube <- graphicalExtremes::danube
 
-X = danube$data
+X <- danube$data
 
 ggplot(X %>% as_tibble()) +
-  geom_point(aes(x = X1, y = X2))
+    geom_point(aes(x = X1, y = X2))
 ggplot(X %>% as_tibble()) +
-  geom_point(aes(x = X22, y = X28))
-
+    geom_point(aes(x = X22, y = X28))
 ```
 
 ```{r, fig.align='center'}
 danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
-danube_plot_coords <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
-plot(danube_flow, layout = danube_plot_coords, edge.arrow.size=.3)
+danube_plot_coords <- as.matrix(danube$info[, c("PlotCoordX", "PlotCoordY")])
+plot(danube_flow, layout = danube_plot_coords, edge.arrow.size = .3)
 ```
 
 
@@ -103,7 +92,7 @@ Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function `data2m
 
 
 ```{r, fig.align='center'}
-Y <- data2mpareto(data=X, p = .8)
+Y <- data2mpareto(data = X, p = .8)
 ```
 
 
@@ -124,11 +113,11 @@ The parameter $\theta$ governs the extremal dependence, ranging from complete de
 ::: {.example}
 The $d$-dimensional H&uuml;sler--Reiss distribution [@hue1989] is parameterized by the variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
 \begin{equation}
-  \lambda(\g y) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal L,  (\#eq:fYHR)
+    \lambda(\g y) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal L,  (\#eq:fYHR)
 \end{equation}
 where $\phi_p(\cdot; \Sigma)$ is the density of a centred $p$-dimensional normal distribution with covariance matrix $\Sigma$, $\g{\tilde y} = \{\log(y_i/y_k) + \Gamma_{ik}/2\}_{i=1,\dots, d}$ and 
 \begin{equation}\label{sigma_k}
-  \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}. (\#eq:Sigmak)
+    \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}. (\#eq:Sigmak)
 \end{equation}
 The matrix $\Sigma^{(k)}$ is positive definite and will play an important role in the theory of extremal graphical models. The representation of the density in \@ref(eq:fYHR) seems to depend on the choice of $k$, but, in fact, the value of the right-hand side of this equation is independent of $k$. 
 The H&uuml;sler--Reiss multivariate Pareto distribution has density 
@@ -144,13 +133,11 @@ The function `rmpareto()` generates samples from a MPD $\g Y$ based on the exact
 
 
 ```{r, fig.align='center'}
-G <-  cbind(c(0,1.5), c(1.5,0))
+G <- cbind(c(0, 1.5), c(1.5, 0))
 Ysim <- rmpareto(n = 100, model = "HR", d = 2, par = G)
 
 theta <- .5
 Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
-
-
 ```
 
 Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable()`, following the exact algorithm in @dom2016.
@@ -162,7 +149,7 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 The extremal correlation $\chi_{ij}\in [0,1]$ measures the dependence between the largest values of the random variables $X_i$ and $X_j$. It is defined as
 \begin{equation}\label{EC}
-  \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
+    \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb P\left\{F_i(X_i) > p\mid  F_j(X_j) > p \right\},
 \end{equation}
 where the boundary cases $0$ and $1$ correspond to asymptotic independence and complete dependence, respectively. 
 
@@ -175,14 +162,14 @@ chi_hat <- emp_chi(data = X, p = .8)
 In this function, and in all subsequent functions, if the variable `p = NULL` then the data is already expected to be on MPD scale, and no thresholding is performed. For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
-chi_hat <- emp_chi(data = Y) 
+chi_hat <- emp_chi(data = Y)
 ```
 
 
 ::: {.example}
 For the H&uuml;sler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
-  where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
+    where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
 :::
 
 
@@ -192,8 +179,8 @@ There exist several other summary statistics for extremal dependence. The extrem
 
 For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as the matrix $\Gamma^{(k)}$ with entries
 \begin{equation*}
-	\Gamma_{ij}^{(k)}(p) = \Var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
-	\end{equation*}  
+    \Gamma_{ij}^{(k)}(p) = \Var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
+    \end{equation*}  
 whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, condtioned on the $k$th variable being large. 
 
 The limit as $p\to 1$ is called the extremal variogram and can be expressed in terms of the MPD $\g Y$:
@@ -203,7 +190,7 @@ The limit as $p\to 1$ is called the extremal variogram and can be expressed in t
 Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function `emp_vario()` estimates the (pre-asymptotic) extremal variogram, for instance for $k=1$.
 
 ```{r}
-Gamma_1_hat = emp_vario(data = X, k = 1, p = 0.8)
+Gamma_1_hat <- emp_vario(data = X, k = 1, p = 0.8)
 ```
 
 In general, the matrices $\Gamma^{(k)}$ can be different for $k \in V$, but for example for the H&uuml;sler--Reiss distribution, they all coincide.
@@ -216,8 +203,8 @@ $$ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.$$
 
 In this case it makes sense to estimate the extremal variogram $\hat \Gamma$ as the average of the estimators $\hat \Gamma^{(k)}$:
 ```{r}
-Gamma_hat = emp_vario(data = X, p = 0.8)
-Gamma_hat = emp_vario(data = Y)
+Gamma_hat <- emp_vario(data = X, p = 0.8)
+Gamma_hat <- emp_vario(data = Y)
 ```
 
 
@@ -241,7 +228,7 @@ knitr::include_graphics("images/graphs.png")
 
 A tree $T = (V,E)$ is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly $|E| = d-1$ edges. The Hammersley--Clifford theorem shown in @eng2019 yields that the density of an extremal tree model $\g Y$ on the tree $T= (V,E)$ factorizes into 
 \begin{equation}
-  f_{\g Y}(\g y) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  (\#eq:treedens)
+    f_{\g Y}(\g y) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  (\#eq:treedens)
 \end{equation}
 where $\lambda_{ij}$ are the bivariate marginals of the exponent measure density $\lambda$ corresponding to $\g Y$. The $d$-dimensional density of the MPD is therefore reduced to bivariate interactions only. 
 
@@ -262,15 +249,18 @@ The function `rmpareto_tree()` generates samples from an extremal tree model $\g
 set.seed(42)
 
 my_model <- generate_random_model(d = 4, graph_type = "tree")
-Ysim <- rmpareto_tree(n=100, model = "HR", 
-                      tree = my_model$graph,
-                      par = my_model$Gamma)
+Ysim <- rmpareto_tree(
+    n = 100, model = "HR",
+    tree = my_model$graph,
+    par = my_model$Gamma
+)
 
 theta_vec <- c(.2, .8, .3)
-Ysim <- rmpareto_tree(n=100, model = "logistic", 
-                      tree = my_model$graph, 
-                      par = theta_vec)
-
+Ysim <- rmpareto_tree(
+    n = 100, model = "logistic",
+    tree = my_model$graph,
+    par = theta_vec
+)
 ```
 
 Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable_tree()`.
@@ -284,9 +274,6 @@ If provided with a tree and data, the function `fmpareto_graph_HR()` estimates t
 ```{r, fig.align='center'}
 danube_tree <- igraph::as.undirected(danube_flow)
 danube_flow_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
-
-
-
 ```
 
 
@@ -297,7 +284,7 @@ In practice, the underlying conditonal independence tree $T = (V,E)$ is usually 
 
 The method is based on the notion of a minimum spanning tree. For a set of symmetric weights $\rho_{ij} > 0$ associated with any pair of nodes $i,j\in V$, $i\neq j$, the latter is defined as the tree structure
 \begin{align}\label{Tmin}
-  T_{\MST} = \argmin_{T' = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
+    T_{\MST} = \argmin_{T' = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
 \end{align}
 that minimizes the sum of distances on that tree.
 
@@ -316,11 +303,11 @@ plot(danube_emst_fit$graph, layout = danube_plot_coords)
 
 ```{r, fig.align='center'}
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(danube_flow_fit)), y = c(chi_hat))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("Empirical") +
-  coord_cartesian(xlim = c(0.4, 1), ylim = c(0.4, 1))
+    geom_point(aes(x = c(Gamma2chi(danube_flow_fit)), y = c(chi_hat))) +
+    geom_abline(slope = 1, intercept = 0) +
+    xlab("Fitted") +
+    ylab("Empirical") +
+    coord_cartesian(xlim = c(0.4, 1), ylim = c(0.4, 1))
 ```
 
 
@@ -328,13 +315,13 @@ ggplot() +
 
 The H&uuml;sler--Reiss Pareto distribution $\g Y$
 is parametrized by the variogram matrix $\Gamma$. Using the linear transformation \@ref(eq:Sigmak), we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. @eng2019 showed that for any $k\in V$ this precision matrix contains the conditional independence structure of $\g Y$, since for $i,j\in V$ with $i\neq j$,
-  \begin{equation*}
-    Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
-    \begin{cases}
-       \Theta^{(k)}_{ij}= 0,  &\text{ if } i,j \neq k,\\
-       \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, & \text{ if } i = k,j \neq k.
-    \end{cases} 
-  \end{equation*}
+    \begin{equation*}
+        Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
+        \begin{cases}
+             \Theta^{(k)}_{ij}= 0,  &\text{ if } i,j \neq k,\\
+             \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, & \text{ if } i = k,j \neq k.
+        \end{cases} 
+    \end{equation*}
 This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros on the off-diagonal and zero row sums. 
 
 Note that the matrices $\Theta^{(k)}$ are $(d-1)\times(d-1)$ dimensional. To combine all these precision matrices for $k\in V$, we may in fact a positive semi-definite precision matrix $\Theta \in \mathbb R^{d\times d}$ as
@@ -342,9 +329,9 @@ Note that the matrices $\Theta^{(k)}$ are $(d-1)\times(d-1)$ dimensional. To com
  \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j,
 \end{equation*}
 which contains all extremal conditional independencies as zeros on the off-diagonal:
-  \begin{equation*}
-    Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
-       \Theta_{ij}= 0,  \quad i,j \in V.
+    \begin{equation*}
+        Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
+             \Theta_{ij}= 0,  \quad i,j \in V.
 \end{equation*}
 
 
@@ -354,28 +341,26 @@ While the H&uuml;sler--Reiss distribution is parameterized by the variogram matr
 
 ```{r, eval=FALSE}
 Gamma <- cbind(
-  c(0, 1.5, 1.5, 2),
-  c(1.5, 0, 2, 1.5),
-  c(1.5, 2, 0, 1.5),
-  c(2, 1.5, 1.5, 0)
+    c(0, 1.5, 1.5, 2),
+    c(1.5, 0, 2, 1.5),
+    c(1.5, 2, 0, 1.5),
+    c(2, 1.5, 1.5, 0)
 )
 Gamma2Sigma(Gamma, k = 1)
 Gamma2Theta(Gamma)
 my_graph <- Gamma2graph(Gamma)
-
 ```
 
 ```{r, fig.align='center', echo=FALSE}
 Gamma <- cbind(
-  c(0, 1.5, 1.5, 2),
-  c(1.5, 0, 2, 1.5),
-  c(1.5, 2, 0, 1.5),
-  c(2, 1.5, 1.5, 0)
+    c(0, 1.5, 1.5, 2),
+    c(1.5, 0, 2, 1.5),
+    c(1.5, 2, 0, 1.5),
+    c(2, 1.5, 1.5, 0)
 )
 Gamma2Sigma(Gamma, k = 1)
 round(Gamma2Theta(Gamma), 3)
 my_graph <- Gamma2graph(Gamma)
-
 ```
 
 
@@ -401,11 +386,11 @@ This also works for more general decomposable graphs, where the matrix $\Gamma$ 
 
 ```{r, fig.align='center'}
 G <- rbind(
-c(0, 5, 7, 6, NA),
-c(5, 0, 14, 15, NA),
-c(7, 14, 0, 5, 5),
-c(6, 15, 5, 0, 6),
-c(NA, NA, 5, 6, 0)
+    c(0, 5, 7, 6, NA),
+    c(5, 0, 14, 15, NA),
+    c(7, 14, 0, 5, 5),
+    c(6, 15, 5, 0, 6),
+    c(NA, NA, 5, 6, 0)
 )
 complete_Gamma(Gamma = G)
 my_graph <- Gamma2graph(complete_Gamma(G))
@@ -417,11 +402,11 @@ For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connecte
 ```{r, fig.align='center'}
 set.seed(42)
 G <- rbind(
-c(0, 5, 7, 6, 6),
-c(5, 0, 14, 15, 13),
-c(7, 14, 0, 5, 5),
-c(6, 15, 5, 0, 6),
-c(6, 13, 5, 6, 0)
+    c(0, 5, 7, 6, 6),
+    c(5, 0, 14, 15, 13),
+    c(7, 14, 0, 5, 5),
+    c(6, 15, 5, 0, 6),
+    c(6, 13, 5, 6, 0)
 )
 my_graph <- generate_random_model(d = 5, graph_type = "general", m = 5)$graph
 complete_Gamma(Gamma = G, graph = my_graph)
@@ -444,11 +429,11 @@ plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
 my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL)
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("True") +
-  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+    geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
+    geom_abline(slope = 1, intercept = 0) +
+    xlab("Fitted") +
+    ylab("True") +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 ```
 
 
@@ -463,11 +448,11 @@ plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
 my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "vario")
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("True") +
-  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+    geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
+    geom_abline(slope = 1, intercept = 0) +
+    xlab("Fitted") +
+    ylab("True") +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 ```
 
 
@@ -488,11 +473,11 @@ The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC
 # TEMP: Stop evaluating R code at this point
 # TODO: remove
 knitr::opts_chunk$set(
-  eval = FALSE
+    eval = FALSE
 )
-cat('\n\n')
-cat(strrep('=', 2000))
-cat('\n\n')
+cat("\n\n")
+cat(strrep("=", 2000))
+cat("\n\n")
 ```
 
 
@@ -500,181 +485,61 @@ cat('\n\n')
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
 set.seed(42)
 # (Ysim from previous example is used)
-rholist = seq(1e-5, 0.04, length.out = 10)
+rholist <- seq(1e-5, 0.04, length.out = 10)
 eglasso_fit <- eglearn(
-  data = Ysim,
-  rholist = rholist,
-  complete_Gamma = TRUE
+    data = Ysim,
+    rholist = rholist,
+    complete_Gamma = TRUE
 )
 
-eglasso_loglik <- sapply(1:length(rholist), FUN = function(j) 
-  loglik_HR(data=Ysim, p=.8, Gamma = eglasso_fit$Gamma[[j]], 
-            graph =  eglasso_fit$graph[[j]]))
+eglasso_loglik <- sapply(1:length(rholist), FUN = function(j) {
+    loglik_HR(
+        data = Ysim, p = .8, Gamma = eglasso_fit$Gamma[[j]],
+        graph = eglasso_fit$graph[[j]]
+    )
+})
 
 emst_fit <- emst(Ysim)
 
-danube_loglik_tree <- loglik_HR(data=Ysim, p=.8, Gamma = emst_fit$Gamma,
-                                graph = emst_fit$graph)
+danube_loglik_tree <- loglik_HR(
+    data = Ysim, p = .8, Gamma = emst_fit$Gamma,
+    graph = emst_fit$graph
+)
 
 ggplot(mapping = aes(x = rholist, y = eglasso_loglik[3, ])) +
-  geom_line() +
-  geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-  geom_hline(aes(yintercept = danube_loglik_tree[3]), lty = "dashed") +
-  xlab("rho") +
-  ylab("BIC") +
-  scale_x_continuous(
-    breaks = rholist,
-    labels = round(rholist, 3),
-    sec.axis = sec_axis(trans=~., breaks = rholist,
-                        labels = sapply(eglasso_fit$graph, igraph::gsize),
-                        name="Number of edges")
-  )
-
+    geom_line() +
+    geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+    geom_hline(aes(yintercept = danube_loglik_tree[3]), lty = "dashed") +
+    xlab("rho") +
+    ylab("BIC") +
+    scale_x_continuous(
+        breaks = rholist,
+        labels = round(rholist, 3),
+        sec.axis = sec_axis(
+            trans = ~., breaks = rholist,
+            labels = sapply(eglasso_fit$graph, igraph::gsize),
+            name = "Number of edges"
+        )
+    )
 ```
 
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
-best_Gamma <- eglasso_fit$Gamma[[which.min(eglasso_loglik[3,])]]
+best_Gamma <- eglasso_fit$Gamma[[which.min(eglasso_loglik[3, ])]]
 chi_hat <- emp_chi(Ysim)
 
 ggplot() +
-  geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(chi_hat))) +
-  geom_abline(slope = 1, intercept = 0) +
-  xlab("Fitted") +
-  ylab("Empirical") +
-  coord_cartesian(
-    ylim = c(0, 1),
-    xlim = c(0, 1)
-  )
+    geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(chi_hat))) +
+    geom_abline(slope = 1, intercept = 0) +
+    xlab("Fitted") +
+    ylab("Empirical") +
+    coord_cartesian(
+        ylim = c(0, 1),
+        xlim = c(0, 1)
+    )
 ```
 
-
-```{r, include = TRUE, eval = TRUE}
-# TEMP: Start evaluating R code at this point
-# TODO: remove
-knitr::opts_chunk$set(
-  eval = TRUE
-)
-cat('\n\n')
-cat(strrep('=', 2000))
-cat('\n\n')
-```
-
-
-# Exercises
-TODO: redo with new data, functions!
-
-The `flights()`dataset contains daily total delays (Jan 1, 2015 -- Dec 31, 2015) of Southwest Airlines at different airports in California, Nevada, Arizona, Utah, and Texas.
-The object `flights()` is a list made of:
-
-* `data`: a `dplyr::tibble()`  containing the delay data. Each row corresponds to a day and each column to an airport.
-* `airports`: a `dplyr::tibble()` containing the details for each airport.
-* `connections`: a `dplyr::tibble()` containing the details of the _undirected_ flights.
-
-In the code below, we show how to load the dataset and plot the flight connections.
-
-```{r, fig.align='center', fig.width=10, eval=FALSE}
-# Load the dataset
-data <- flights$delays[,,'arrivals']
-airports <- flights$airports
-connections <- flights$connections
-
-# Plot flight connection
-ggplot() +
-  geom_polygon(data = map_data("usa"),
-               aes(x = long, y = lat, group = group), color = "grey65",
-               fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = airports,
-             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
-             alpha = 1) +
-  geom_curve(data = connections,
-             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest,
-                 size = N_FLIGHTS),
-             alpha = .2, curvature = 0)
-
-```
-
-Also, it is useful to create an `igraph::graph()` object for the flights connections.
-```{r, eval=FALSE}
-flight_graph <- connections %>%
-  select(ID.origin, ID.dest) %>%
-  as.matrix() %>%
-  igraph::graph_from_edgelist(directed = FALSE)
-
-```
-
-In the exercises below we are modeling the extremal dependence of the flight delays at the 24 airports. Note that the `flight_graph` does not necessarily represent the extremal graphical structure, but it can be used as a comparison to the estimated graphs. 
-
-Below, we provide a helper functions that you might use to plot an `igraph::graph()` object on the US map.
-```{r, fig.align='center', fig.width=10, eval=FALSE}
-# Function definition
-plot_connections <- function(graph, airports) {
-  ## igraph tibble -> ggplot
-  ## plots the given `graph` on the US map
-
-  # name the graph nodes
-  igraph::V(graph)$name <- airports$IATA_CODE[airports$ID == igraph::V(graph)]
-
-  # write flight connections
-  flights_connections_est <- igraph::get.edgelist(graph) %>%
-  as_tibble(.name_repair = ~ c("ORIGIN_AIRPORT", "DESTINATION_AIRPORT")) %>%
-  left_join(airports, by = c("ORIGIN_AIRPORT" = "IATA_CODE")) %>%
-  left_join(airports, by = c("DESTINATION_AIRPORT" = "IATA_CODE"),
-            suffix = c(".origin", ".dest")) %>%
-  select(ORIGIN_AIRPORT, DESTINATION_AIRPORT,
-         LATITUDE.origin, LONGITUDE.origin,
-         LATITUDE.dest, LONGITUDE.dest)
-
-  # plot connections
-  ggplot() +
-  geom_polygon(data = map_data("usa"),
-               aes(x = long, y = lat, group = group), color = "grey65",
-               fill = "#f9f9f9", size = 0.2) +
-  geom_point(data = airports,
-             aes(x = LONGITUDE, y = LATITUDE, size = N_FLIGHTS),
-             alpha = 1) +
-  geom_curve(data = flights_connections_est,
-             aes(x = LONGITUDE.origin, xend = LONGITUDE.dest,
-                 y = LATITUDE.origin, yend = LATITUDE.dest),
-             alpha = .4, curvature = 0)
-}
-
-# Plot an igraph object
-plot_connections(flight_graph, airports)
-```
-
-
-## Part A
-
-1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
-2. Plot the estimated tree on the US map and interpret the results.
-3. Compute the BIC value of the fitted tree model.
-4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
-5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
-6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
-7. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model of Step 5.
-
-## Part B
-
-1. Fit an extremal graphical lasso model with `eglasso()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
-2. Plot the estimated graph on the US map for different values of `rho` and interpret the results.
-3. Compute and plot the BIC values of the estimated models for different values of `rho`.
-4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* fitted model.
-5. The function `eglasso()` accepts as input the variogram matrix `Gamma`. Try to estimate the variogram matrix using different methods, such as:
-
-* `emp_vario()`, fixing some `k`, e.g., `k = 1`.
-* `graphicalExtremes:::ml_weight_matrix()`, which is an internal function.
-
-With these different estimates for the variogram:
-
-* fit an `eglasso()` model,
-* plot the corresponding BIC curves,
-* plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the *best* `eglasso()` fit.
-
-_Hint_: For some of the methods, you might need to adjust the `rholist` provided to `eglasso()`.
-
-## Solutions
-For solutions see `vignette("exercises")`.
+## Exercises
+For some exercises and solutions see `vignette("exercises")`.
 
 
 # References

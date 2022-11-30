@@ -35,6 +35,15 @@ knitr::opts_chunk$set(
 library(graphicalExtremes)
 library(ggplot2)
 library(igraph)
+theme_set(theme_bw() +
+            theme(plot.background = element_blank(),
+                  legend.background = element_blank(),
+                  strip.background = element_rect(fill = "white"),
+                  plot.caption=element_text(size=7.5, hjust=0, 
+                                            margin=margin(t=15)),
+                  text = element_text(size = 11),
+                  axis.ticks = element_blank(),
+                  panel.grid.major = element_line(size = 0.25)))
 ```
 
 The `flights` dataset contains daily total delays of major U.S. airlines.

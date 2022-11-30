@@ -1,21 +1,14 @@
 
-#' Transformation of \eGamma matrix to graph object
+#' Transformation of matrix to graph object
 #'
-#' Transforms `Gamma` matrix to an `igraph` object for
-#' the corresponding Huesler--Reiss extremal graphical model,
-#' and plots it (optionally).
+#' Transforms a \eGamma or \eTheta matrix to an [`igraph::graph`] object for
+#' the corresponding Huesler--Reiss extremal graphical model.
 #'
 #' @param Gamma Numeric \dxd variogram matrix.
 #' @param tol Numeric scalar, entries in the precision matrix with absolute value
 #' smaller than this are considered to be zero.
 #'
 #' @return Graph object from `igraph` package. An undirected graph.
-#'
-#' @details
-#' The variogram uniquely determines the extremal graph structure of the
-#' corresponding Huesler--Reiss distribution. The conditional independencies
-#' can be identified from the inverses of the matrices \eSigmaK
-#' defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
 #'
 #' @examples
 #' Gamma <- cbind(
@@ -26,12 +19,18 @@
 #' )
 #'
 #' Gamma2graph(Gamma)
-#' @references
-#'  \insertAllCited{}
 #'
+#' @family MatrixTransformations
+#' @seealso [get_large_tol()]
+#' @rdname Gamma2graph
 #' @export
-Gamma2graph <- function(Gamma, tol=1e-6){
-  Theta <- Gamma2Theta(Gamma)
+Gamma2graph <- function(Gamma, tol=get_large_tol()){
+  Theta2graph(Gamma2Theta(Gamma))
+}
+#' @param Theta Numeric \dxd precision matrix.
+#' @rdname Gamma2graph
+#' @export
+Theta2graph <- function(Theta, tol=get_large_tol()){
   A <- 1*(abs(Theta) > tol)
   graph <- igraph::graph_from_adjacency_matrix(
     A,

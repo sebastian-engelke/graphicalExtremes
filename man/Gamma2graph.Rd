@@ -2,29 +2,27 @@
 % Please edit documentation in R/transformation_functions.R
 \name{Gamma2graph}
 \alias{Gamma2graph}
-\title{Transformation of \eGamma matrix to graph object}
+\alias{Theta2graph}
+\title{Transformation of matrix to graph object}
 \usage{
-Gamma2graph(Gamma, tol = 1e-06)
+Gamma2graph(Gamma, tol = get_large_tol())
+
+Theta2graph(Theta, tol = get_large_tol())
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
 
 \item{tol}{Numeric scalar, entries in the precision matrix with absolute value
 smaller than this are considered to be zero.}
+
+\item{Theta}{Numeric \dxd precision matrix.}
 }
 \value{
 Graph object from \code{igraph} package. An undirected graph.
 }
 \description{
-Transforms \code{Gamma} matrix to an \code{igraph} object for
-the corresponding Huesler--Reiss extremal graphical model,
-and plots it (optionally).
-}
-\details{
-The variogram uniquely determines the extremal graph structure of the
-corresponding Huesler--Reiss distribution. The conditional independencies
-can be identified from the inverses of the matrices \eSigmaK
-defined in equation (10) in \insertCite{eng2019;textual}{graphicalExtremes}.
+Transforms a \eGamma or \eTheta matrix to an \code{\link[igraph:make_graph]{igraph::graph}} object for
+the corresponding Huesler--Reiss extremal graphical model.
 }
 \examples{
 Gamma <- cbind(
@@ -35,7 +33,15 @@ Gamma <- cbind(
 )
 
 Gamma2graph(Gamma)
+
 }
-\references{
-\insertAllCited{}
+\seealso{
+\code{\link[=get_large_tol]{get_large_tol()}}
+
+Other MatrixTransformations: 
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2Theta}()},
+\code{\link{Sigma2Gamma}()},
+\code{\link{Theta2Gamma}()}
 }
+\concept{MatrixTransformations}
