@@ -49,13 +49,15 @@ X-Y-coordinates which can be used to arrange the gauging stations when plotting 
 }
 }
 \examples{
-# TODO
+g <- igraph::graph_from_edgelist(danube$flow_edges)
+loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+plot(g, layout = loc)
 
 }
 \references{
 \insertAllCited{}
 }
 \seealso{
-\code{\link{flights}}
+\code{\link{flights}}, \code{vignette('graphicalExtremes')}
 }
 \keyword{datasets}

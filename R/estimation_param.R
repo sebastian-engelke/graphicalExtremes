@@ -114,24 +114,31 @@ fmpareto_graph_HR_clique_average <- function(
   
   graph <- check_graph(graph)
   cliques <- igraph::max_cliques(graph)
-  # TODO: use mclapply here?
   if(method == 'vario'){
-    subGammas <- lapply(cliques, function(cli){
-      data.cli <- mparetomargins(data, cli)
-      emp_vario(data.cli)
-    })
-  } else {
-    subGammas <- lapply(cliques, function(cli){
-      data.cli <- mparetomargins(data, cli)
-      tmp <- fmpareto_HR_MLE(
-        data.cli,
-        ...
-      )
-      if(is.null(tmp$Gamma)){
-        stop('MLE did not find a valid Gamma for clique: ', paste0(cli, collapse = ','))
+    subGammas <- parallel::mclapply(
+      mc.cores = get_mc_cores(),
+      cliques,
+      function(cli){
+        data.cli <- mparetomargins(data, cli)
+        emp_vario(data.cli)
       }
-      return(tmp$Gamma)
-    })
+    )
+  } else {
+    subGammas <- lapply(
+      mc.cores = get_mc_cores(),
+      cliques,
+      function(cli){
+        data.cli <- mparetomargins(data, cli)
+        tmp <- fmpareto_HR_MLE(
+          data.cli,
+          ...
+        )
+        if(is.null(tmp$Gamma)){
+          stop('MLE did not find a valid Gamma for clique: ', paste0(cli, collapse = ','))
+        }
+        return(tmp$Gamma)
+      }
+    )
   }
   Gamma_partial <- combine_clique_estimates_by_averaging(cliques, subGammas)
   Gamma <- complete_Gamma(Gamma_partial, graph)
@@ -158,8 +165,6 @@ fmpareto_graph_HR_clique_sequential <- function(
   graph,
   ...
 ){
-  ## TODO: use mclapply
-  
   # Check that not `useTheta=TRUE`
   argsMLE <- list(...)
   if(!is.null(argsMLE$useTheta) && argsMLE$useTheta){
@@ -488,9 +493,6 @@ emp_chi_multdim <- function(data, p = NULL) {
 #'
 #' @export
 loglik_HR <- function(data, p = NULL, graph = NULL, Gamma, cens = FALSE){
-  # Todo:
-  # change log(n) to log(n_edges)
-  # explain in help file how we compute bic, aic
   if (!is.null(p)) {
     data <- data2mpareto(data, p)
   }

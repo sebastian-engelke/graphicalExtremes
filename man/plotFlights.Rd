@@ -59,7 +59,8 @@ according to the number of flights on that connection.}
 
 \item{xyRatio}{Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.}
 
-\item{clipMap}{Whether to ignore the map image when determining the axis limits of the plot.}
+\item{clipMap}{Logical or numeric scalar. Whether to ignore the map image when determining the axis limits of the plot.
+If it is a positive scalar, the plot limits are extended by that factor.}
 
 \item{useLatex}{Whether to format numbers etc. as latex code (useful when plotting to tikz).}
 
@@ -73,6 +74,15 @@ Plotting function to visualize the flight connections from the \code{\link{fligh
 This function requires the package \code{ggplot2} to be installed.
 }
 \examples{
-# TODO
+# Plot all airports in the dataset
+plotFlights(plotConnections = FALSE, map = 'world')
+
+# Plot a selection of airports
+plotFlights(c('JFK', 'SFO', 'LAX'), useConnectionNFlights = TRUE, useAirportNFlights = TRUE)
+
+# Plot airports with a custom connections graph
+IATAs <- c('ACV', 'BFL', 'EUG', 'SFO', 'MRY')
+graph <- igraph::make_full_graph(length(IATAs))
+plotFlights(IATAs, graph=graph, clipMap = 1.5)
 
 }

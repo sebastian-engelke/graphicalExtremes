@@ -36,9 +36,12 @@
 #'  }
 #' }
 #' 
-#' @examples # TODO
+#' @examples
+#' g <- igraph::graph_from_edgelist(danube$flow_edges)
+#' loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+#' plot(g, layout = loc)
 #' 
-#' @seealso [`flights`]
+#' @seealso [`flights`], `vignette('graphicalExtremes')`
 #' 
 #' @references
 #' \insertAllCited{}

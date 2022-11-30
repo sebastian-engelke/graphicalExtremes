@@ -173,7 +173,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
       break
     }
   }
-  Gamma <- ensure_symmetry(Gamma) # todo: set tolerance = Inf?
+  Gamma <- ensure_symmetry(Gamma)
   return(Gamma)
 }
 

@@ -26,13 +26,23 @@
 #' @param vertexColors Optional vector, named with IATA codes, to be used as colors for the vertices/airports.
 #' @param vertexShapes Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to `character`.
 #' @param xyRatio Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.
-#' @param clipMap Whether to ignore the map image when determining the axis limits of the plot.
+#' @param clipMap Logical or numeric scalar. Whether to ignore the map image when determining the axis limits of the plot.
+#' If it is a positive scalar, the plot limits are extended by that factor.
 #' @param useLatex Whether to format numbers etc. as latex code (useful when plotting to tikz).
 #' @param edgeAlpha Numeric scalar between 0 and 1. The alpha value to be used when plotting edges/connections.
 #'
 #' @return If `returnGGPlot` is `TRUE`, a [`ggplot2::ggplot`] object, otherwise `NULL`.
 #' @examples
-#' # TODO
+#' # Plot all airports in the dataset
+#' plotFlights(plotConnections = FALSE, map = 'world')
+#' 
+#' # Plot a selection of airports
+#' plotFlights(c('JFK', 'SFO', 'LAX'), useConnectionNFlights = TRUE, useAirportNFlights = TRUE)
+#' 
+#' # Plot airports with a custom connections graph
+#' IATAs <- c('ACV', 'BFL', 'EUG', 'SFO', 'MRY')
+#' graph <- igraph::make_full_graph(length(IATAs))
+#' plotFlights(IATAs, graph=graph, clipMap = 1.5)
 #' 
 #' @export
 plotFlights <- function(
@@ -214,7 +224,7 @@ plotFlights <- function(
   }
   
   # Manually set axes limits (clips map, sets aspect ratio):
-  # TODO: consider different crs from
+  # Note: might be improced using a different crs from
   # https://ggplot2.tidyverse.org/reference/ggsf.html
   if(!is.null(xyRatio) || (clipMap && !is.null(map))){
     xData <- airports_sel$Longitude

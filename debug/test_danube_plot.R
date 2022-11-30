@@ -7,9 +7,10 @@ library(ggplot2)
 
 
 
-g <- igraph::graph_from_edgelist(danube$flow_edges, directed = FALSE)
-
+g <- igraph::graph_from_edgelist(danube$flow_edges)
 loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+plot(g, layout = loc)
+
 loc <- as.matrix(danube$info[,c('Lat', 'Long')])
 
 aveVol <- colMeans(danube$dailyData, na.rm = TRUE)

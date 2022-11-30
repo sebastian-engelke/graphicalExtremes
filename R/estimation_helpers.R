@@ -136,7 +136,7 @@ fast_diag <- function(y, M) {
 #'
 #' @keywords internal
 logdVK_HR <- function(x, K, Gamma) {
-  ## TODO: this function can probably be optimized by allowing calls with multiple observations
+  ## Note: this function can probably be optimized by allowing calls with multiple observations
 
   # Convert logical K to numeric indices
   if(is.logical(K)){
@@ -278,7 +278,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
 #'
 #' @keywords internal
 censor <- function(x, p) {
-  # Todo: this can be expressed as a parallel minimum (`pmin`)?
+  # Note: can this be expressed as a parallel minimum (`pmin`)?
   f2 <- function(x, p) {
     x_is_less <- x <= p
     y <- x
