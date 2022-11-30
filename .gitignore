@@ -19,6 +19,7 @@ build.R
 *.temp
 tmp.*
 temp.*
+todo.txt
 
 *.tar.gz
 *.Rcheck
