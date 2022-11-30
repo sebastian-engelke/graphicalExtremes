@@ -78,8 +78,7 @@
 
     
     
-
-<div class="section level2">
+<div class="section level2" number="1">
 <h2 id="danube-data">
 <span class="header-section-number">1</span> Danube Data<a class="anchor" aria-label="anchor" href="#danube-data"></a>
 </h2>
@@ -99,11 +98,11 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">danube_flow</span>, layout <span class="op">=</span> <span class="va">danube_plot_coords</span>, edge.arrow.size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-3-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
+<div class="section level2" number="2">
 <h2 id="multivariate-pareto-distributions">
 <span class="header-section-number">2</span> Multivariate Pareto distributions<a class="anchor" aria-label="anchor" href="#multivariate-pareto-distributions"></a>
 </h2>
-<div class="section level3">
+<div class="section level3" number="2.1">
 <h3 id="definition">
 <span class="header-section-number">2.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
 </h3>
@@ -124,7 +123,7 @@ Given <span class="math inline">\(n\)</span> oberservations <span class="math in
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
+<div class="section level3" number="2.2">
 <h3 id="examples">
 <span class="header-section-number">2.2</span> Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
@@ -137,7 +136,7 @@ f_{\mathbf{Y}}(\mathbf{y}) = \frac{1}{d^{\theta}} \left(y_1^{-1/\theta}+\dots+y_
 The parameter <span class="math inline">\(\theta\)</span> governs the extremal dependence, ranging from complete dependence for <span class="math inline">\(\theta\to 0\)</span> and independence for <span class="math inline">\(\theta \to 1\)</span>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-2" class="example"><strong>Example 2.2  </strong></span>The <span class="math inline">\(d\)</span>-dimensional Hüsler–Reiss distribution <span class="citation">(Hüsler and Reiss 1989)</span> is parameterized by the variogram matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>. The corresponding density of the exponent measure can be written for any <span class="math inline">\(k\in\{1,\dots, d\}\)</span> as 
+<p><span id="exm:unlabeled-div-2" class="example"><strong>Example 2.2  </strong></span>The <span class="math inline">\(d\)</span>-dimensional Hüsler–Reiss distribution <span class="citation">(Hüsler and Reiss 1989)</span> is parameterized by the variogram matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>. The corresponding density of the exponent measure can be written for any <span class="math inline">\(k\in\{1,\dots, d\}\)</span> as
 <span class="math display" id="eq:fYHR">\[\begin{equation}
     \lambda(\mathbf{y}) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\mathbf{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \mathbf{y} \in \mathcal L,  \tag{2.3}
 \end{equation}\]</span>
@@ -162,11 +161,11 @@ extremes.</p>
 <span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span></code></pre></div>
 <p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable.html">rmstable()</a></code>, following the exact algorithm in <span class="citation">Dombry, Engelke, and Oesting (2016)</span>.</p>
 </div>
-<div class="section level3">
+<div class="section level3" number="2.3">
 <h3 id="measures-of-extremal-dependence">
 <span class="header-section-number">2.3</span> Measures of extremal dependence<a class="anchor" aria-label="anchor" href="#measures-of-extremal-dependence"></a>
 </h3>
-<div class="section level4">
+<div class="section level4" number="2.3.1">
 <h4 id="extremal-correlation">
 <span class="header-section-number">2.3.1</span> Extremal correlation<a class="anchor" aria-label="anchor" href="#extremal-correlation"></a>
 </h4>
@@ -187,11 +186,11 @@ where the boundary cases <span class="math inline">\(0\)</span> and <span class=
 where <span class="math inline">\(\Phi\)</span> is the standard normal distribution function. We can use the functions <code><a href="../reference/Gamma2chi.html">Gamma2chi()</a></code> and <code><a href="../reference/chi2Gamma.html">chi2Gamma()</a></code> to switch between the two coefficients.</p>
 </div>
 </div>
-<div class="section level4">
+<div class="section level4" number="2.3.2">
 <h4 id="extremal-variogram">
 <span class="header-section-number">2.3.2</span> Extremal variogram<a class="anchor" aria-label="anchor" href="#extremal-variogram"></a>
 </h4>
-<p>There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in  and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
+<p>There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
 <p>For any root node <span class="math inline">\(k\in V\)</span>, the pre-asymptotic extremal variogram is defined as the matrix <span class="math inline">\(\Gamma^{(k)}\)</span> with entries
 <span class="math display">\[\begin{equation*}
     \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) &gt; p\right], \quad i,j\in V,
@@ -199,7 +198,7 @@ where <span class="math inline">\(\Phi\)</span> is the standard normal distribut
 whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 - F_i(X_{i})\}\)</span> transforms <span class="math inline">\(X_i\)</span> to a standard exponential distribution, such that <span class="math inline">\(\Gamma^{(k)}\)</span> is simply the variogram matrix of <span class="math inline">\(\mathbf{X}\)</span> on exponential scale, condtioned on the <span class="math inline">\(k\)</span>th variable being large.</p>
 <p>The limit as <span class="math inline">\(p\to 1\)</span> is called the extremal variogram and can be expressed in terms of the MPD <span class="math inline">\(\mathbf{Y}\)</span>:
 <span class="math display">\[\begin{equation*}
- \Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k &gt; 1 \right\}, \quad i,j\in V.
+\Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k &gt; 1 \right\}, \quad i,j\in V.
 \end{equation*}\]</span><br>
 Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function <code><a href="../reference/emp_vario.html">emp_vario()</a></code> estimates the (pre-asymptotic) extremal variogram, for instance for <span class="math inline">\(k=1\)</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -216,7 +215,7 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 </div>
 </div>
 </div>
-<div class="section level2">
+<div class="section level2" number="3">
 <h2 id="extremal-graphical-models">
 <span class="header-section-number">3</span> Extremal graphical models<a class="anchor" aria-label="anchor" href="#extremal-graphical-models"></a>
 </h2>
@@ -225,7 +224,7 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
 <p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a Hammersley–Clifford theorem stating that for an extr emal graphical model on a decomposable graph <span class="math inline">\(G\)</span>, the density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes into the marginal density on the cliques.</p>
 <p><img src="images/graphs.png" width="50%" style="display: block; margin: auto;"></p>
-<div class="section level3">
+<div class="section level3" number="3.1">
 <h3 id="trees">
 <span class="header-section-number">3.1</span> Trees<a class="anchor" aria-label="anchor" href="#trees"></a>
 </h3>
@@ -238,7 +237,7 @@ where <span class="math inline">\(\lambda_{ij}\)</span> are the bivariate margin
 \Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(k)}_{st}, \tag{3.2}
 \end{equation}\]</span>
 where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path between node <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> on the tree <span class="math inline">\(T\)</span>.</p>
-<div class="section level4">
+<div class="section level4" number="3.1.1">
 <h4 id="simulation">
 <span class="header-section-number">3.1.1</span> Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h4>
@@ -262,7 +261,7 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <span><span class="op">)</span></span></code></pre></div>
 <p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable_tree.html">rmstable_tree()</a></code>.</p>
 </div>
-<div class="section level4">
+<div class="section level4" number="3.1.2">
 <h4 id="estimation">
 <span class="header-section-number">3.1.2</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
 </h4>
@@ -272,7 +271,7 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <code class="sourceCode R"><span><span class="va">danube_tree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as.directed.html" class="external-link">as.undirected</a></span><span class="op">(</span><span class="va">danube_flow</span><span class="op">)</span></span>
 <span><span class="va">danube_flow_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, graph <span class="op">=</span> <span class="va">danube_tree</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
+<div class="section level4" number="3.1.3">
 <h4 id="structure-learning">
 <span class="header-section-number">3.1.3</span> Structure learning<a class="anchor" aria-label="anchor" href="#structure-learning"></a>
 </h4>
@@ -299,7 +298,7 @@ that minimizes the sum of distances on that tree.</p>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-14-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.2">
 <h3 id="hüslerreiss-graphical-models">
 <span class="header-section-number">3.2</span> Hüsler–Reiss graphical models<a class="anchor" aria-label="anchor" href="#h%C3%BCslerreiss-graphical-models"></a>
 </h3>
@@ -310,19 +309,19 @@ is parametrized by the variogram matrix <span class="math inline">\(\Gamma\)</sp
         \begin{cases}
              \Theta^{(k)}_{ij}= 0,  &amp;\text{ if } i,j \neq k,\\
              \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, &amp; \text{ if } i = k,j \neq k.
-        \end{cases} 
+        \end{cases}
     \end{equation*}\]</span>
 This means, if <span class="math inline">\(Y\)</span> is an extremal graphical on the graph <span class="math inline">\(G = (V,E)\)</span>, the missing edges can be read off from the matrix <span class="math inline">\(\Theta^{(k)}\)</span> as zeros on the off-diagonal and zero row sums.</p>
 <p>Note that the matrices <span class="math inline">\(\Theta^{(k)}\)</span> are <span class="math inline">\((d-1)\times(d-1)\)</span> dimensional. To combine all these precision matrices for <span class="math inline">\(k\in V\)</span>, we may in fact a positive semi-definite precision matrix <span class="math inline">\(\Theta \in \mathbb R^{d\times d}\)</span> as
 <span class="math display">\[\begin{equation*}
- \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j,
+\Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j,
 \end{equation*}\]</span>
 which contains all extremal conditional independencies as zeros on the off-diagonal:
 <span class="math display">\[\begin{equation*}
         Y_i\perp_e Y_j\mid \mathbf{Y}_{V\setminus \{i,j\}} \quad \iff \quad
              \Theta_{ij}= 0,  \quad i,j \in V.
 \end{equation*}\]</span></p>
-<div class="section level4">
+<div class="section level4" number="3.2.1">
 <h4 id="transformations">
 <span class="header-section-number">3.2.1</span> Transformations<a class="anchor" aria-label="anchor" href="#transformations"></a>
 </h4>
@@ -347,7 +346,7 @@ which contains all extremal conditional independencies as zeros on the off-diago
 &gt; [3,] -0.5  0.0  1.0 -0.5
 &gt; [4,]  0.0 -0.5 -0.5  1.0</code></pre>
 </div>
-<div class="section level4">
+<div class="section level4" number="3.2.2">
 <h4 id="completion-of-gamma">
 <span class="header-section-number">3.2.2</span> Completion of <span class="math inline">\(\Gamma\)</span><a class="anchor" aria-label="anchor" href="#completion-of-gamma"></a>
 </h4>
@@ -355,54 +354,54 @@ which contains all extremal conditional independencies as zeros on the off-diago
 <p>The function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> takes as an input the partially specified <span class="math inline">\(\Gamma\)</span> matrix and the corresponding graph structure <span class="math inline">\(G\)</span>, and completes the <span class="math inline">\(\Gamma\)</span> matrix. The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.</p>
 <p>The simplest case is a tree, where the entries <span class="math inline">\(\Gamma_{ij}\)</span> for <span class="math inline">\((i,j) \notin E\)</span> can be easily obtained
 from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a>my_tree &lt;-<span class="st"> </span><span class="kw">generate_random_model</span>(<span class="dt">d =</span> <span class="dv">4</span>, <span class="dt">graph_type =</span> <span class="st">"tree"</span>)<span class="op">$</span>graph</span>
-<span id="cb15-3"><a href="#cb15-3"></a>Gamma_vec &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">1.4</span>, <span class="fl">.8</span>)</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="kw">complete_Gamma</span>(<span class="dt">Gamma =</span> Gamma_vec, <span class="dt">graph =</span> my_tree)</span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="op">&gt;</span><span class="st">      </span>[,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>]</span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>,]  <span class="fl">0.0</span>  <span class="fl">0.5</span>  <span class="fl">1.9</span>  <span class="fl">1.3</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">2</span>,]  <span class="fl">0.5</span>  <span class="fl">0.0</span>  <span class="fl">1.4</span>  <span class="fl">0.8</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">3</span>,]  <span class="fl">1.9</span>  <span class="fl">1.4</span>  <span class="fl">0.0</span>  <span class="fl">2.2</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">4</span>,]  <span class="fl">1.3</span>  <span class="fl">0.8</span>  <span class="fl">2.2</span>  <span class="fl">0.0</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="kw">plot</span>(my_tree)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>my_tree <span class="ot">&lt;-</span> <span class="fu">generate_random_model</span>(<span class="at">d =</span> <span class="dv">4</span>, <span class="at">graph_type =</span> <span class="st">"tree"</span>)<span class="sc">$</span>graph</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Gamma_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">5</span>, <span class="fl">1.4</span>, .<span class="dv">8</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">complete_Gamma</span>(<span class="at">Gamma =</span> Gamma_vec, <span class="at">graph =</span> my_tree)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      [,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>]</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">1</span>,]  <span class="fl">0.0</span>  <span class="fl">0.5</span>  <span class="fl">1.9</span>  <span class="fl">1.3</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">2</span>,]  <span class="fl">0.5</span>  <span class="fl">0.0</span>  <span class="fl">1.4</span>  <span class="fl">0.8</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">3</span>,]  <span class="fl">1.9</span>  <span class="fl">1.4</span>  <span class="fl">0.0</span>  <span class="fl">2.2</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">4</span>,]  <span class="fl">1.3</span>  <span class="fl">0.8</span>  <span class="fl">2.2</span>  <span class="fl">0.0</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(my_tree)</span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-17-1.png" width="480" style="display: block; margin: auto;"></p>
 <p>This also works for more general decomposable graphs, where the matrix <span class="math inline">\(\Gamma\)</span> has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by <span class="math inline">\(\Gamma_{ij} = \text{NA}\)</span> for <span class="math inline">\((i,j)\notin E\)</span>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>G &lt;-<span class="st"> </span><span class="kw">rbind</span>(</span>
-<span id="cb16-2"><a href="#cb16-2"></a>    <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="ot">NA</span>),</span>
-<span id="cb16-3"><a href="#cb16-3"></a>    <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="ot">NA</span>),</span>
-<span id="cb16-4"><a href="#cb16-4"></a>    <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">5</span>),</span>
-<span id="cb16-5"><a href="#cb16-5"></a>    <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">6</span>),</span>
-<span id="cb16-6"><a href="#cb16-6"></a>    <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>)</span>
-<span id="cb16-7"><a href="#cb16-7"></a>)</span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="kw">complete_Gamma</span>(<span class="dt">Gamma =</span> G)</span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="op">&gt;</span><span class="st">      </span>[,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>] [,<span class="dv">5</span>]</span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>,]  <span class="fl">0.0</span>  <span class="fl">5.0</span>    <span class="dv">7</span>    <span class="dv">6</span>  <span class="fl">9.6</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">2</span>,]  <span class="fl">5.0</span>  <span class="fl">0.0</span>   <span class="dv">14</span>   <span class="dv">15</span> <span class="fl">17.4</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">3</span>,]  <span class="fl">7.0</span> <span class="fl">14.0</span>    <span class="dv">0</span>    <span class="dv">5</span>  <span class="fl">5.0</span></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">4</span>,]  <span class="fl">6.0</span> <span class="fl">15.0</span>    <span class="dv">5</span>    <span class="dv">0</span>  <span class="fl">6.0</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">5</span>,]  <span class="fl">9.6</span> <span class="fl">17.4</span>    <span class="dv">5</span>    <span class="dv">6</span>  <span class="fl">0.0</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a>my_graph &lt;-<span class="st"> </span><span class="kw">Gamma2graph</span>(<span class="kw">complete_Gamma</span>(G))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="cn">NA</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="cn">NA</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">5</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">complete_Gamma</span>(<span class="at">Gamma =</span> G)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      [,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>] [,<span class="dv">5</span>]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">1</span>,]  <span class="fl">0.0</span>  <span class="fl">5.0</span>    <span class="dv">7</span>    <span class="dv">6</span>  <span class="fl">9.6</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">2</span>,]  <span class="fl">5.0</span>  <span class="fl">0.0</span>   <span class="dv">14</span>   <span class="dv">15</span> <span class="fl">17.4</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">3</span>,]  <span class="fl">7.0</span> <span class="fl">14.0</span>    <span class="dv">0</span>    <span class="dv">5</span>  <span class="fl">5.0</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">4</span>,]  <span class="fl">6.0</span> <span class="fl">15.0</span>    <span class="dv">5</span>    <span class="dv">0</span>  <span class="fl">6.0</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">5</span>,]  <span class="fl">9.6</span> <span class="fl">17.4</span>    <span class="dv">5</span>    <span class="dv">6</span>  <span class="fl">0.0</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>my_graph <span class="ot">&lt;-</span> <span class="fu">Gamma2graph</span>(<span class="fu">complete_Gamma</span>(G))</span></code></pre></div>
 <p>For non-decomposable graphs, a valid <span class="math inline">\(\Gamma\)</span> matrix and an undirected, connected graph has to be provided.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>G &lt;-<span class="st"> </span><span class="kw">rbind</span>(</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">6</span>),</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">13</span>),</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">5</span>),</span>
-<span id="cb17-6"><a href="#cb17-6"></a>    <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">6</span>),</span>
-<span id="cb17-7"><a href="#cb17-7"></a>    <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">13</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>)</span>
-<span id="cb17-8"><a href="#cb17-8"></a>)</span>
-<span id="cb17-9"><a href="#cb17-9"></a>my_graph &lt;-<span class="st"> </span><span class="kw">generate_random_model</span>(<span class="dt">d =</span> <span class="dv">5</span>, <span class="dt">graph_type =</span> <span class="st">"general"</span>, <span class="dt">m =</span> <span class="dv">5</span>)<span class="op">$</span>graph</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="kw">complete_Gamma</span>(<span class="dt">Gamma =</span> G, <span class="dt">graph =</span> my_graph)</span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="op">&gt;</span><span class="st">         </span>[,<span class="dv">1</span>]    [,<span class="dv">2</span>]    [,<span class="dv">3</span>]    [,<span class="dv">4</span>]    [,<span class="dv">5</span>]</span>
-<span id="cb17-12"><a href="#cb17-12"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">1</span>,]  <span class="fl">0.0000</span>  <span class="fl">5.0000</span> <span class="fl">10.2915</span>  <span class="fl">6.0000</span> <span class="fl">15.2915</span></span>
-<span id="cb17-13"><a href="#cb17-13"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">2</span>,]  <span class="fl">5.0000</span>  <span class="fl">0.0000</span> <span class="fl">14.0000</span> <span class="fl">10.2915</span> <span class="fl">19.0000</span></span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">3</span>,] <span class="fl">10.2915</span> <span class="fl">14.0000</span>  <span class="fl">0.0000</span>  <span class="fl">5.0000</span>  <span class="fl">5.0000</span></span>
-<span id="cb17-15"><a href="#cb17-15"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">4</span>,]  <span class="fl">6.0000</span> <span class="fl">10.2915</span>  <span class="fl">5.0000</span>  <span class="fl">0.0000</span> <span class="fl">10.0000</span></span>
-<span id="cb17-16"><a href="#cb17-16"></a><span class="op">&gt;</span><span class="st"> </span>[<span class="dv">5</span>,] <span class="fl">15.2915</span> <span class="fl">19.0000</span>  <span class="fl">5.0000</span> <span class="fl">10.0000</span>  <span class="fl">0.0000</span></span>
-<span id="cb17-17"><a href="#cb17-17"></a><span class="kw">plot</span>(my_graph)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">6</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">13</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">5</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">13</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>my_graph <span class="ot">&lt;-</span> <span class="fu">generate_random_model</span>(<span class="at">d =</span> <span class="dv">5</span>, <span class="at">graph_type =</span> <span class="st">"general"</span>, <span class="at">m =</span> <span class="dv">5</span>)<span class="sc">$</span>graph</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">complete_Gamma</span>(<span class="at">Gamma =</span> G, <span class="at">graph =</span> my_graph)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>         [,<span class="dv">1</span>]    [,<span class="dv">2</span>]    [,<span class="dv">3</span>]    [,<span class="dv">4</span>]    [,<span class="dv">5</span>]</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">1</span>,]  <span class="fl">0.0000</span>  <span class="fl">5.0000</span> <span class="fl">10.2915</span>  <span class="fl">6.0000</span> <span class="fl">15.2915</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">2</span>,]  <span class="fl">5.0000</span>  <span class="fl">0.0000</span> <span class="fl">14.0000</span> <span class="fl">10.2915</span> <span class="fl">19.0000</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">3</span>,] <span class="fl">10.2915</span> <span class="fl">14.0000</span>  <span class="fl">0.0000</span>  <span class="fl">5.0000</span>  <span class="fl">5.0000</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">4</span>,]  <span class="fl">6.0000</span> <span class="fl">10.2915</span>  <span class="fl">5.0000</span>  <span class="fl">0.0000</span> <span class="fl">10.0000</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">5</span>,] <span class="fl">15.2915</span> <span class="fl">19.0000</span>  <span class="fl">5.0000</span> <span class="fl">10.0000</span>  <span class="fl">0.0000</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(my_graph)</span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-19-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="3.2.3">
 <h4 id="estimation-1">
 <span class="header-section-number">3.2.3</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation-1"></a>
 </h4>
@@ -443,7 +442,7 @@ Combining the clique estimates relies on the same principle as in the <code><a h
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-21-2.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level4">
+<div class="section level4" number="3.2.4">
 <h4 id="extremal-graphical-lasso">
 <span class="header-section-number">3.2.4</span> Extremal graphical lasso<a class="anchor" aria-label="anchor" href="#extremal-graphical-lasso"></a>
 </h4>
@@ -511,7 +510,7 @@ Since we run <span class="math inline">\(d\)</span> different graphical lasso al
 <p><img src="graphicalExtremes_files/figure-html/unnamed-chunk-23-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div class="section level3">
+<div class="section level3" number="3.3">
 <h3 id="exercises">
 <span class="header-section-number">3.3</span> Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
 </h3>
@@ -521,21 +520,21 @@ Since we run <span class="math inline">\(d\)</span> different graphical lasso al
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-dom2016">
-<p>Dombry, C., S. Engelke, and M. Oesting. 2016. “Exact Simulation of Max-Stable Processes.” <em>Biometrika</em> 103: 303–17.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-dom2016" class="csl-entry">
+Dombry, C., S. Engelke, and M. Oesting. 2016. <span>“Exact Simulation of Max-Stable Processes.”</span> <em>Biometrika</em> 103: 303–17.
 </div>
-<div id="ref-eng2019">
-<p>Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with Discussion).” <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.</p>
+<div id="ref-eng2019" class="csl-entry">
+Engelke, S., and A. S. Hitz. 2020. <span>“Graphical Models for Extremes (with Discussion).”</span> <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.
 </div>
-<div id="ref-eng2020">
-<p>Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal Tree Models.” <a href="https://arxiv.org/abs/2012.06179" class="external-link">https://arxiv.org/abs/2012.06179</a>.</p>
+<div id="ref-eng2020" class="csl-entry">
+Engelke, S., and S. Volgushev. 2020. <span>“Structure Learning for Extremal Tree Models.”</span> <a href="https://arxiv.org/abs/2012.06179" class="external-link">https://arxiv.org/abs/2012.06179</a>.
 </div>
-<div id="ref-hue1989">
-<p>Hüsler, J., and R.-D. Reiss. 1989. “Maxima of Normal Random Vectors: Between Independence and Complete Dependence.” <em>Statist. Probab. Lett.</em> 7: 283–86.</p>
+<div id="ref-hue1989" class="csl-entry">
+Hüsler, J., and R.-D. Reiss. 1989. <span>“Maxima of Normal Random Vectors: Between Independence and Complete Dependence.”</span> <em>Statist. Probab. Lett.</em> 7: 283–86.
 </div>
-<div id="ref-kab2009">
-<p>Kabluchko, Z., M. Schlather, and L. de Haan. 2009. “Stationary Max-Stable Fields Associated to Negative Definite Functions.” <em>Ann. Probab.</em> 37: 2042–65.</p>
+<div id="ref-kab2009" class="csl-entry">
+Kabluchko, Z., M. Schlather, and L. de Haan. 2009. <span>“Stationary Max-Stable Fields Associated to Negative Definite Functions.”</span> <em>Ann. Probab.</em> 37: 2042–65.
 </div>
 </div>
 </div>
