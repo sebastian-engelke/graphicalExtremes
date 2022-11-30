@@ -1,5 +1,5 @@
 
-rm graphicalExtremes_0.1.0.9000.tar.gz
+rm graphicalExtremes_0.2.0.tar.gz
 
 rm -rf graphicalExtremes.Rcheck
 

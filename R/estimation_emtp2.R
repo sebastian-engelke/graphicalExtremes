@@ -81,7 +81,8 @@ Zmatrix <- function(S){
     for (i in 1:(p-1)){
       if (hcl$merge[i,1]<0 && hcl$merge[i,2]<0) {
         subs[[i]] <- union(-hcl$merge[i,1],-hcl$merge[i,2])
-        Z[-hcl$merge[i,1],-hcl$merge[i,2]]<- Z[-hcl$merge[i,2],-hcl$merge[i,1]] <- hcl$height[i]} else if (hcl$merge[i,1]<0 && hcl$merge[i,2]>0) {
+        Z[-hcl$merge[i,1],-hcl$merge[i,2]]<- Z[-hcl$merge[i,2],-hcl$merge[i,1]] <- hcl$height[i]
+      } else if (hcl$merge[i,1]<0 && hcl$merge[i,2]>0) {
         subs[[i]] <- union(-hcl$merge[i,1],subs[[hcl$merge[i,2]]])
         Z[-hcl$merge[i,1],subs[[hcl$merge[i,2]]]] <- hcl$height[i]
         Z[subs[[hcl$merge[i,2]]],-hcl$merge[i,1]] <- hcl$height[i]
@@ -89,7 +90,7 @@ Zmatrix <- function(S){
         subs[[i]] <- union(subs[[hcl$merge[i,1]]],subs[[hcl$merge[i,2]]])
         Z[subs[[hcl$merge[i,1]]],subs[[hcl$merge[i,2]]]] <- hcl$height[i]
         Z[subs[[hcl$merge[i,2]]],subs[[hcl$merge[i,1]]]] <- hcl$height[i]
-          }
+      }
     }
   # Z is the corresponding ultrametric. Now compute the indiced correlation matrix
   Z <- exp(-Z)
