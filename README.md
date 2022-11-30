@@ -30,7 +30,7 @@ can be installed using:
 devtools::install_github("sebastian-engelke/graphicalExtremes")
 ```
 
-# References
+## References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
