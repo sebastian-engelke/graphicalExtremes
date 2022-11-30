@@ -18,16 +18,17 @@
 #' @references \insertAllCited{}
 #' 
 #' @export
-emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
-  d <- nrow(Gamma)
+emtp2 <- function(G, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
+  d <- nrow(G)
   if (verbose==TRUE){
     cat("** The function maximizes the log-likelihood function under Laplacian matrix constraints.\n")
   }
+  Gam <- G
   if (initial_point==TRUE){
     P <- diag(d)-matrix(1,d,d)/(d)
     S <- P%*%(-G/2)%*%P
     Z <- Zmatrix(S)
-    Gamma <- Sigma2Gamma(Z)
+    Gam <- Sigma2Gamma(Z)
   }
   it <- 0
   if (verbose==TRUE){
@@ -39,22 +40,22 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
 
   gap <- Inf
   while (gap>tol){
-    Gamma0 <- Gamma
+    Gam0 <- Gam
     for (i in 1:d) {
-      A <- solve((-Gamma/2)[-i,-i])
+      A <- solve((-Gam/2)[-i,-i])
       Dmat <- 2*(A%*%matrix(1,d-1,d-1)%*%A-sum(A)*A)
       dvec <- -2*A%*%rep(1,d-1)
       bvec <- (-G/2)[-i,i]
       y <- osqp::solve_osqp(P = Dmat, q = dvec, A = diag(d-1), l = bvec, u = rep(0,d-1), settings)
-      Gamma[-i,i] <- Gamma[i,-i] <- -2*y$x
+      Gam[-i,i] <- Gam[i,-i] <- -2*y$x
     }
     it <- it+1
-    gap <- sum(abs(Gamma-Gamma0))
+    gap <- sum(abs(Gam-Gam0))
     if (verbose==TRUE){
       cat(it,"\t  | ",gap,"\n")
     }
   }
-  return(list(G_emtp2=Gamma,it=it))
+  return(list(G_emtp2=Gam,it=it))
 }
 
 
