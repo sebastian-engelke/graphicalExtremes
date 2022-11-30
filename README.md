@@ -1,15 +1,7 @@
 
 <!-- README.md is generated from README.Rmd, using `rmarkdown::render()`. Please edit that file -->
-<!-- ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```-->
 
-# graphicalExtremes
+# Graphical Extremes
 
 An implementation of the statistical methodology paper Engelke and Hitz
 (2020) for sparse multivariate extreme value models. Includes exact
@@ -38,7 +30,7 @@ can be installed using:
 devtools::install_github("sebastian-engelke/graphicalExtremes")
 ```
 
-# References
+## References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 

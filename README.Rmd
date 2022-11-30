@@ -36,4 +36,4 @@ version can be installed using:
 devtools::install_github("sebastian-engelke/graphicalExtremes")
 ```
 
-# References
+## References
