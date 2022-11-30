@@ -4,7 +4,7 @@
 #' If necessary, converts the graph to an undirected graph.
 #' Removes vertex labels if present.
 #'
-#' @param graph An [igraph::graph] object.
+#' @param graph An \[`igraph::graph`\] object.
 #' @param graph_type `"general"`, `"decomposable"`, `"block"`, `"tree"`. The required type of graph.
 #' @param check_connected Whether to check if the graph is connected.
 #' @param nVertices The number of vertices required in the graph.

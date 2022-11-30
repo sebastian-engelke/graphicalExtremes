@@ -190,10 +190,10 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
 #' that is used. Is way slower than other functions.
 #'
 #' @param Gamma A complete variogram matrix (without any graphical structure).
-#' @param graph An [igraph::graph] object.
+#' @param graph An [`igraph::graph`] object.
 #' @param N The maximal number of iterations of the algorithm.
 #' @param tol The tolerance to use when checking for zero entries in `Theta`.
-#' @param gList A list of graphs to ge used instead of the output from [make_sep_list()].
+#' @param gList A list of graphs to be used instead of the output from [make_sep_list()].
 #'
 #' @return A nested list, containing the following details.
 #' The "error term" is the maximal absolute value of `Theta` in a non-edge entry.

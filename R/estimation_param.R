@@ -9,12 +9,12 @@
 #' @param data Numeric \nxd matrix, where `n` is the
 #' number of observations and `d` is the number of dimensions.
 #'
-#' @param graph Undirected, connected [igraph::graph] object with `d` vertices,
+#' @param graph Undirected, connected \[`igraph::graph`\] object with `d` vertices,
 #' representing the graphical structure of the fitted Huesler--Reiss model.
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` is already on a multivariate Pareto scale.
-#' Else, `p` is used as the probability in the function [data2mpareto]
+#' Else, `p` is used as the probability in the function [data2mpareto()]
 #' to standardize the `data`.
 #'
 #' @param method One of `c('vario', 'ML')`, with `'vario'` as default, indicating
@@ -32,7 +32,7 @@
 #' If `handleCliques='average'`, the marginal parameter matrix is estimated for
 #' each maximal clique of the `graph` and then combined into a partial parameter
 #' matrix by taking the average of entries from overlapping cliques. Lastly,
-#' the full parameter matrix is computed using [complete_Gamma].
+#' the full parameter matrix is computed using [complete_Gamma()].
 #' 
 #' If `handleCliques='full'`, first the full parameter matrix is estimated using the
 #' specified `method` and then the non-edge entries are adjusted such that the
@@ -229,7 +229,7 @@ fmpareto_graph_HR_clique_sequential <- function(
 #' If `NULL` (default), then an average over all `k` is returned.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
+#' `p` is used as the probability in the function [data2mpareto()]
 #' to standardize the `data`.
 #' 
 #' @details
@@ -469,7 +469,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' @param data Numeric \nxd matrix. It contains
 #' observations following a multivariate HR Pareto distribution.
 #'
-#' @param graph An [igraph::graph] object or `NULL`. The `graph` must be undirected and
+#' @param graph An \[`igraph::graph`\] object or `NULL`. The `graph` must be undirected and
 #' connected. If no graph is specified, the complete graph is used.
 #'
 #' @param Gamma Numeric \nxd matrix.
@@ -480,7 +480,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale.
-#'  Else, `p` is used as the probability in the function [data2mpareto]
+#'  Else, `p` is used as the probability in the function [data2mpareto()]
 #' to standardize the `data`.
 #'
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated

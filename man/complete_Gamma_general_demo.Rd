@@ -9,13 +9,13 @@ complete_Gamma_general_demo(Gamma, graph, N = 1000, tol = 0, gList = NULL)
 \arguments{
 \item{Gamma}{A complete variogram matrix (without any graphical structure).}
 
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object.}
+\item{graph}{An \code{\link[igraph:make_graph]{igraph::graph}} object.}
 
 \item{N}{The maximal number of iterations of the algorithm.}
 
 \item{tol}{The tolerance to use when checking for zero entries in \code{Theta}.}
 
-\item{gList}{A list of graphs to ge used instead of the output from \code{\link[=make_sep_list]{make_sep_list()}}.}
+\item{gList}{A list of graphs to be used instead of the output from \code{\link[=make_sep_list]{make_sep_list()}}.}
 }
 \value{
 A nested list, containing the following details.

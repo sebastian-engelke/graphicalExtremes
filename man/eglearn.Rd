@@ -18,13 +18,13 @@ number of observations and \code{d} is the dimension.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale. Else,
-\code{p} is used as the probability in the function \link{data2mpareto}
+\code{p} is used as the probability in the function \code{\link[=data2mpareto]{data2mpareto()}}
 to standardize the \code{data}.}
 
 \item{rholist}{Numeric vector of non-negative regularization parameters
 for the lasso.
 Default is \code{rholist = c(0.1, 0.15, 0.19, 0.205)}.
-For details see \link[glasso:glassopath]{glasso::glassopath}.}
+For details see \code{\link[glasso:glassopath]{glasso::glassopath()}}.}
 
 \item{reg_method}{One of \verb{"ns", "glasso"}, for neighborhood selection and
 graphical lasso, respectively.
@@ -38,7 +38,7 @@ Default is \code{complete_Gamma = FALSE}.}
 \value{
 List made of:
 \item{\code{graph}}{
-A list of \link[igraph:make_graph]{igraph::graph} objects representing the
+A list of [\code{igraph::graph}] objects representing the
 fitted graphs for each \code{rho} in \code{rholist}.
 }
 \item{\code{Gamma}}{
@@ -51,7 +51,7 @@ underlying graph is not connected, it returns \code{NULL}.
 The list of penalty coefficients.
 }
 \item{\code{graph_ic}}{
-A list of \link[igraph:make_graph]{igraph::graph} objects
+A list of [\code{igraph::graph}] objects
 representing the optimal graph
 according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, it returns a list of \code{NA}.

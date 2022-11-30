@@ -9,13 +9,13 @@
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
+#' `p` is used as the probability in the function [data2mpareto()]
 #' to standardize the `data`.
 #'
 #' @param rholist Numeric vector of non-negative regularization parameters
 #' for the lasso.
 #' Default is `rholist = c(0.1, 0.15, 0.19, 0.205)`.
-#' For details see [glasso::glassopath].
+#' For details see [glasso::glassopath()].
 #'
 #' @param reg_method One of `"ns", "glasso"`, for neighborhood selection and
 #' graphical lasso, respectively.
@@ -28,7 +28,7 @@
 #'
 #' @return List made of:
 #' \item{`graph`}{
-#'   A list of [igraph::graph] objects representing the
+#'   A list of \[`igraph::graph`\] objects representing the
 #'   fitted graphs for each `rho` in `rholist`.
 #' }
 #' \item{`Gamma`}{
@@ -41,7 +41,7 @@
 #'   The list of penalty coefficients.
 #' }
 #' \item{`graph_ic`}{
-#'   A list of [igraph::graph] objects
+#'   A list of \[`igraph::graph`\] objects
 #'   representing the optimal graph
 #'   according to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, it returns a list of `NA`.
@@ -207,7 +207,7 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' number of observations and `d` is the dimension.
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` are already on multivariate Pareto scale. Else,
-#' `p` is used as the probability in the function [data2mpareto]
+#' `p` is used as the probability in the function [data2mpareto()]
 #' to standardize the `data`.
 #' @param method One of `"vario", "ML", "chi"`.
 #' Default is `method = "vario"`.
@@ -302,7 +302,7 @@ emst <- function(
 #' @param Gamma_emp The empirical Gamma matrix
 #' (can be `NULL` if `data` is given)
 #'
-#' @return A list containing an [igraph::graph] object and a fitted `Gamma` matrix
+#' @return A list containing an \[`igraph::graph`\] object and a fitted `Gamma` matrix
 #'
 #' @keywords internal
 fit_graph_to_Theta <- function(data, m=NULL, Gamma_emp=NULL){

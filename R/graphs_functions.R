@@ -38,7 +38,7 @@ order_cliques <- function(cliques) {
 #' Finds all cliques, separators, and (recursively) separators of separators
 #' in a graph.
 #'
-#' @param graph An [igraph::graph] object
+#' @param graph An \[`igraph::graph`\] object
 #' @return A list of vertex sets that represent the cliques and (recursive)
 #' separators of `graph`
 #'
@@ -68,7 +68,7 @@ get_cliques_and_separators_OLD <- function(graph){
 #' Finds all cliques, separators, and (recursively) separators of separators
 #' in a graph.
 #'
-#' @param graph An [igraph::graph] object
+#' @param graph An \[`igraph::graph`\] object
 #' @return A list of vertex sets that represent the cliques and (recursive)
 #' separators of `graph`, ordered such that separators come before cliques they separate.
 #'

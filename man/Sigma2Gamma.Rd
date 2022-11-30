@@ -34,7 +34,7 @@ corresponding \dxd \eGamma matrix.
 If \code{full = TRUE}, then \eSigmaK must be a \dxd
 matrix with \code{k}th row and column
 containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-This is the inverse of function of \link{Gamma2Sigma}.
+This is the inverse of function of \code{\link[=Gamma2Sigma]{Gamma2Sigma()}}.
 }
 \examples{
 Sigma1 <- rbind(

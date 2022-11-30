@@ -24,7 +24,7 @@ generate_random_connected_graph(
 \item{...}{Ignored, only allowed for compatibility}
 }
 \value{
-An \link[igraph:make_graph]{igraph::graph} object
+An [\code{igraph::graph}] object
 }
 \description{
 Generates a random connected graph.

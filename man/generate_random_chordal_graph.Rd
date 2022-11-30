@@ -30,7 +30,7 @@ generate_random_chordal_graph(
 \item{...}{Ignored, only allowed for compatibility}
 }
 \value{
-An \link[igraph:make_graph]{igraph::graph} object
+An [\code{igraph::graph}] object
 }
 \description{
 Generates a random chordal graph by starting with a (small) complete graph

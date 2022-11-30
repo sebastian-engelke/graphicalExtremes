@@ -17,12 +17,12 @@ fmpareto_graph_HR(
 \item{data}{Numeric \nxd matrix, where \code{n} is the
 number of observations and \code{d} is the number of dimensions.}
 
-\item{graph}{Undirected, connected \link[igraph:make_graph]{igraph::graph} object with \code{d} vertices,
+\item{graph}{Undirected, connected [\code{igraph::graph}] object with \code{d} vertices,
 representing the graphical structure of the fitted Huesler--Reiss model.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} is already on a multivariate Pareto scale.
-Else, \code{p} is used as the probability in the function \link{data2mpareto}
+Else, \code{p} is used as the probability in the function \code{\link[=data2mpareto]{data2mpareto()}}
 to standardize the \code{data}.}
 
 \item{method}{One of \code{c('vario', 'ML')}, with \code{'vario'} as default, indicating
@@ -46,7 +46,7 @@ or the empirical variogram.
 If \code{handleCliques='average'}, the marginal parameter matrix is estimated for
 each maximal clique of the \code{graph} and then combined into a partial parameter
 matrix by taking the average of entries from overlapping cliques. Lastly,
-the full parameter matrix is computed using \link{complete_Gamma}.
+the full parameter matrix is computed using \code{\link[=complete_Gamma]{complete_Gamma()}}.
 
 If \code{handleCliques='full'}, first the full parameter matrix is estimated using the
 specified \code{method} and then the non-edge entries are adjusted such that the

@@ -20,5 +20,5 @@ distribution into the corresponding extremal correlation \eChi.
 The formula for transformation from \code{Gamma} to \eChi that is applied element-wise is
 \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 where \eqn{\Phi} is the standard normal distribution function.
-This is the inverse of \link{chi2Gamma}.
+This is the inverse of \code{\link[=chi2Gamma]{chi2Gamma()}}.
 }

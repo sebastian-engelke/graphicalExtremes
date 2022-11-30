@@ -15,7 +15,7 @@ fit_graph_to_Theta(data, m = NULL, Gamma_emp = NULL)
 (can be \code{NULL} if \code{data} is given)}
 }
 \value{
-A list containing an \link[igraph:make_graph]{igraph::graph} object and a fitted \code{Gamma} matrix
+A list containing an [\code{igraph::graph}] object and a fitted \code{Gamma} matrix
 }
 \description{
 Fits a graph to an empirical Gamma matrix by computing the corresponding

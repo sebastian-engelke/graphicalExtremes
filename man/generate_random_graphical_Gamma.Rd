@@ -7,7 +7,7 @@
 generate_random_graphical_Gamma(graph, ...)
 }
 \arguments{
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object}
+\item{graph}{An [\code{igraph::graph}] object}
 
 \item{...}{Furhter arguments passed to \code{\link[=generate_random_spd_matrix]{generate_random_spd_matrix()}}}
 }

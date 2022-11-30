@@ -23,5 +23,5 @@ distribution.
 The formula for transformation from \code{chi} to \eGamma that is applied element-wise is
 \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
 where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
-This is the inverse of \link{Gamma2chi}.
+This is the inverse of \code{\link[=Gamma2chi]{Gamma2chi()}}.
 }

@@ -12,7 +12,7 @@ check_graph(
 )
 }
 \arguments{
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object.}
+\item{graph}{An [\code{igraph::graph}] object.}
 
 \item{graph_type}{\code{"general"}, \code{"decomposable"}, \code{"block"}, \code{"tree"}. The required type of graph.}
 

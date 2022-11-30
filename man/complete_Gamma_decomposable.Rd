@@ -11,7 +11,7 @@ complete_Gamma_decomposable(Gamma, graph = NULL)
 and the diagonals. All other entries are ignored (if \code{graph} is specified),
 or should be \code{NA} to indicate non-edges in \code{graph}.}
 
-\item{graph}{\code{NULL} or a decomposable \link[igraph:make_graph]{igraph::graph} object. If \code{NULL}, the
+\item{graph}{\code{NULL} or a decomposable [\code{igraph::graph}] object. If \code{NULL}, the
 structure of \code{NA} entries in \code{Gamma} is used instead.}
 }
 \value{

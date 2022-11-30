@@ -144,7 +144,7 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 #' If `full = TRUE`, then \eSigmaK must be a \dxd
 #' matrix with `k`th row and column
 #' containing zeros. For details see \insertCite{eng2019;textual}{graphicalExtremes}.
-#' This is the inverse of function of [Gamma2Sigma].
+#' This is the inverse of function of [Gamma2Sigma()].
 #'
 #' @return Numeric \dxd \eGamma matrix.
 #'
@@ -408,7 +408,7 @@ Gamma2par <- function(Gamma) {
 #' The formula for transformation from `chi` to \eGamma that is applied element-wise is
 #' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
 #' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
-#' This is the inverse of [Gamma2chi].
+#' This is the inverse of [Gamma2chi()].
 #'
 #' @export
 chi2Gamma <- function(chi) {
@@ -429,7 +429,7 @@ chi2Gamma <- function(chi) {
 #' The formula for transformation from `Gamma` to \eChi that is applied element-wise is
 #' \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 #' where \eqn{\Phi} is the standard normal distribution function.
-#' This is the inverse of [chi2Gamma].
+#' This is the inverse of [chi2Gamma()].
 #'
 #'
 #' @param Gamma Numeric or matrix, with positive entries.

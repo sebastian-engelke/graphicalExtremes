@@ -48,7 +48,7 @@ generate_random_model <- function(d, graph_type='general', ...){
 #' Generates a valid Gamma matrix with conditional independence structure
 #' specified by a graph
 #'
-#' @param graph An [igraph::graph] object
+#' @param graph An \[`igraph::graph`\] object
 #' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
 #' @family Example generations
 generate_random_graphical_Gamma <- function(graph, ...){
@@ -162,7 +162,7 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
 #' @param block_graph Force `sMin == sMax == 1` to produce a block graph
 #' @param ... Ignored, only allowed for compatibility
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #' @family Example generations
 generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
   if(block_graph){
@@ -221,7 +221,7 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #' @param maxTries Maximum number of tries to produce a connected Eroes-Renyi graph
 #' @param ... Ignored, only allowed for compatibility
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #'
 #' @family Example generations
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
@@ -271,7 +271,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 #'
 #' @param d Number of vertices in the graph
 #'
-#' @return An [igraph::graph] object
+#' @return An \[`igraph::graph`\] object
 #' @family Example generations
 generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))

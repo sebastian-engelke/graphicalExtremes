@@ -12,10 +12,10 @@ observations following a multivariate HR Pareto distribution.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} are already on multivariate Pareto scale.
-Else, \code{p} is used as the probability in the function \link{data2mpareto}
+Else, \code{p} is used as the probability in the function \code{\link[=data2mpareto]{data2mpareto()}}
 to standardize the \code{data}.}
 
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object or \code{NULL}. The \code{graph} must be undirected and
+\item{graph}{An [\code{igraph::graph}] object or \code{NULL}. The \code{graph} must be undirected and
 connected. If no graph is specified, the complete graph is used.}
 
 \item{Gamma}{Numeric \nxd matrix.

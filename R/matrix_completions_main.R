@@ -112,7 +112,7 @@ complete_Gamma <- function(
 #' @param Gamma A variogram matrix that is specified on the edges of `graph`
 #' and the diagonals. All other entries are ignored (if `graph` is specified),
 #' or should be `NA` to indicate non-edges in `graph`.
-#' @param graph `NULL` or a decomposable [igraph::graph] object. If `NULL`, the
+#' @param graph `NULL` or a decomposable \[`igraph::graph`\] object. If `NULL`, the
 #' structure of `NA` entries in `Gamma` is used instead.
 #'
 #' @return A complete variogram matrix that agrees with `Gamma` on the entries

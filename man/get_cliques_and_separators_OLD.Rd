@@ -7,7 +7,7 @@
 get_cliques_and_separators_OLD(graph)
 }
 \arguments{
-\item{graph}{An \link[igraph:make_graph]{igraph::graph} object}
+\item{graph}{An [\code{igraph::graph}] object}
 }
 \value{
 A list of vertex sets that represent the cliques and (recursive)
