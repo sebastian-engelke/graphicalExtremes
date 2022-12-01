@@ -23,7 +23,7 @@
 #'    that if a value has to be positive, it is compared to actual zero, but if
 #'    it has to be zero, its absolute value is compared to this tolerance.
 #'  }
-#'  \item{`"graphicalExtremes.tol.small"`}{
+#'  \item{`"graphicalExtremes.tol.large"`}{
 #'    The "large" tolerance is used for values that **converge to zero**, but are
 #'    mathematically not supposed to be equal to zero. This value is used e.g.
 #'    when converting a precision matrix \eTheta to an adjacency matrix of a graph.
