@@ -53,7 +53,7 @@ theme_set(theme_bw() +
 ```{r, fig.show='hold', out.width="50%"}
 danube <- graphicalExtremes::danube
 
-X <- danube$data
+X <- danube$data_clustered
 
 ggplot(X %>% as_tibble()) +
     geom_point(aes(x = X1, y = X2))
