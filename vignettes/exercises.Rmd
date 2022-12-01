@@ -5,11 +5,9 @@ output:
         fig_width: 5
         fig_height: 5
         number_sections: false
+        toc: true
+        toc_depth: 1
 bibliography: ../inst/REFERENCES.bib
-toc:
-    depth: 2
-pkgdown:
-    as_is: true
 vignette: >
     %\VignetteIndexEntry{Exercises}
     %\VignetteEngine{knitr::rmarkdown}
