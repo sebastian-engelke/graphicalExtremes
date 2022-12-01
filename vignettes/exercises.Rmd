@@ -4,7 +4,7 @@ output:
     bookdown::html_document2:
         fig_width: 5
         fig_height: 5
-        number_sections: false
+        number_sections: true
         toc: true
         toc_depth: 1
 bibliography: ../inst/REFERENCES.bib
