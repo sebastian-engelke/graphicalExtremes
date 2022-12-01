@@ -16,11 +16,6 @@ vignette: >
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
 
-\DeclareMathOperator{\Var}{Var}
-\newcommand{\g}[1]{\mathbf{#1}}
-\DeclareMathOperator{\MST}{mst}
-\DeclareMathOperator{\argmin}{arg\,min}
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
