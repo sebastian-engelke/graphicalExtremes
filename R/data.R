@@ -4,8 +4,8 @@
 #' 
 #' @format A named `list` with four entries
 #' \describe{
-#'  \item{`data`}{A numeric matrix, containing pre-processed discharge data for each gauging station}
-#'  \item{`dailyData`}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
+#'  \item{`data_clustered`}{A numeric matrix, containing pre-processed discharge data for each gauging station}
+#'  \item{`data_raw`}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 #'  \item{`info`}{A data frame, containing information about each gauging station}
 #'  \item{`flow_edges`}{
 #'    A two-column numeric matrix. Each row contains the indices (in `info`)
