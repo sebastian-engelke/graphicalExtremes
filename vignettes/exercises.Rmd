@@ -48,11 +48,13 @@ plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 ```
 
 To perform an example application,
-we consider the years 2010 - 2020 and choose (somewhat arbitrarily)
+we consider the years 2010 - 2013 and choose (somewhat arbitrarily)
 airports from the westcoast with a large number of flights per year.
+*Note: In the CRAN version of this package, these are the only available years.*
+*A version of this package with a larger dataset is available on GitHub*
 ```{r, fig.align='center', fig.width=10}
 # Specify years
-yearNames <- as.character(seq(2010, 2020))
+yearNames <- as.character(seq(2010, 2013))
 minNFlights <- length(yearNames) * 1000
 
 # Compute departures + arrivals per airport
