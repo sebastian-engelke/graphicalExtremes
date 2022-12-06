@@ -4,12 +4,10 @@ output:
     bookdown::html_document2:
         fig_width: 5
         fig_height: 5
-        number_sections: false
+        number_sections: true
+        toc: true
+        toc_depth: 1
 bibliography: ../inst/REFERENCES.bib
-toc:
-    depth: 2
-pkgdown:
-    as_is: true
 vignette: >
     %\VignetteIndexEntry{Exercises}
     %\VignetteEngine{knitr::rmarkdown}
@@ -17,11 +15,6 @@ vignette: >
 ---
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
-
-\DeclareMathOperator{\Var}{Var}
-\newcommand{\g}[1]{\mathbf{#1}}
-\DeclareMathOperator{\MST}{mst}
-\DeclareMathOperator{\argmin}{arg\,min}
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -55,11 +48,13 @@ plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 ```
 
 To perform an example application,
-we consider the years 2010 - 2020 and choose (somewhat arbitrarily)
+we consider the years 2010 - 2013 and choose (somewhat arbitrarily)
 airports from the westcoast with a large number of flights per year.
+*Note: In the CRAN version of this package, these are the only available years.*
+*A version of this package with a larger dataset is available on GitHub*
 ```{r, fig.align='center', fig.width=10}
 # Specify years
-yearNames <- as.character(seq(2010, 2020))
+yearNames <- as.character(seq(2010, 2013))
 minNFlights <- length(yearNames) * 1000
 
 # Compute departures + arrivals per airport

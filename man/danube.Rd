@@ -7,8 +7,8 @@
 \format{
 A named \code{list} with four entries
 \describe{
-\item{\code{data}}{A numeric matrix, containing pre-processed discharge data for each gauging station}
-\item{\code{dailyData}}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
+\item{\code{data_clustered}}{A numeric matrix, containing pre-processed discharge data for each gauging station}
+\item{\code{data_raw}}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 \item{\code{info}}{A data frame, containing information about each gauging station}
 \item{\code{flow_edges}}{
 A two-column numeric matrix. Each row contains the indices (in \code{info})

@@ -4,16 +4,17 @@ output:
     bookdown::html_document2:
         fig_width: 5
         fig_height: 5
+        number_sections: true
+        toc: true
+        toc_depth: 1
 bibliography: ../inst/REFERENCES.bib
-toc:
-    depth: 2
-pkgdown:
-    as_is: true 
 vignette: >
     %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
+
+<!-- Rmarkdown requries 4 spaces of indentation -->
 
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
@@ -24,7 +25,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
-    comment = ">"
+    comment = '#>',
+    error = TRUE
 )
 ```
 
@@ -53,7 +55,7 @@ theme_set(theme_bw() +
 ```{r, fig.show='hold', out.width="50%"}
 danube <- graphicalExtremes::danube
 
-X <- danube$data
+X <- danube$data_clustered
 
 ggplot(X %>% as_tibble()) +
     geom_point(aes(x = X1, y = X2))

@@ -9,8 +9,8 @@ simulation algorithms and statistical inference methods for multivariate
 Pareto distributions on graphical structures.
 
 Furthermore contains implementations of statistical methods from Engelke
-and Volgushev (2020), Röttger, Engelke, and Zwiernik (2021), and
-Hentschel, Engelke, and Segers (2022).
+and Volgushev (2022), Röttger et al. (2021), and Hentschel et al.
+(2022).
 
 ## Installation
 
@@ -32,35 +32,37 @@ devtools::install_github("sebastian-engelke/graphicalExtremes")
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+line-spacing="2">
 
 <div id="ref-eng2019" class="csl-entry">
 
-Engelke, S., and A. S. Hitz. 2020. “Graphical Models for Extremes (with
-Discussion).” *J. R. Stat. Soc. Ser. B Stat. Methodol.* 82: 871–932.
+Engelke, S., and Hitz, A. S. (2020). Graphical models for extremes (with
+discussion). *J. R. Stat. Soc. Ser. B Stat. Methodol.*, *82*, 871–932.
 
 </div>
 
 <div id="ref-eng2020" class="csl-entry">
 
-Engelke, S., and S. Volgushev. 2020. “Structure Learning for Extremal
-Tree Models.” <https://arxiv.org/abs/2012.06179>.
+Engelke, S., and Volgushev, S. (2022). Structure learning for extremal
+tree models. *J. R. Stat. Soc. Ser. B Stat. Methodol.*
+https://doi.org/<https://doi.org/10.1111/rssb.12556>
 
 </div>
 
 <div id="ref-hen2022" class="csl-entry">
 
-Hentschel, Manuel, Sebastian Engelke, and Johan Segers. 2022.
-“Statistical Inference for Hüsler-Reiss Graphical Models Through Matrix
-Completions.” arXiv. <https://doi.org/10.48550/ARXIV.2210.14292>.
+Hentschel, M., Engelke, S., and Segers, J. (2022). *Statistical
+inference for hüsler-reiss graphical models through matrix completions*.
+arXiv. <https://doi.org/10.48550/ARXIV.2210.14292>
 
 </div>
 
 <div id="ref-roe2021" class="csl-entry">
 
-Röttger, Frank, Sebastian Engelke, and Piotr Zwiernik. 2021. “Total
-Positivity in Multivariate Extremes.” arXiv.
-<https://doi.org/10.48550/ARXIV.2112.14727>.
+Röttger, F., Engelke, S., and Zwiernik, P. (2021). *Total positivity in
+multivariate extremes*. arXiv.
+<https://doi.org/10.48550/ARXIV.2112.14727>
 
 </div>
 
