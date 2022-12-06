@@ -19,7 +19,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Install OS dependencies
-        run: sudo apt-get install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libicu66
+        run: sudo apt-get install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
 
       - name: Query dependencies
         run: |
@@ -39,6 +39,10 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           install.packages("pkgdown")
+        shell: Rscript {0}
+          
+      - name: Install stringi
+        run: install.packages('stringi')
         shell: Rscript {0}
 
       - name: Install package
