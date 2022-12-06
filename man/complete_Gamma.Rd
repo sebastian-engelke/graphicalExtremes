@@ -12,7 +12,7 @@ complete_Gamma(Gamma, graph = NULL, ...)
 \item{graph}{\code{NULL} or \code{\link[igraph:make_graph]{igraph::graph}} object. If \code{NULL}, the graph
 is implied by non-edge entries in \code{Gamma} being \code{NA}. Must be connected, undirected.}
 
-\item{...}{Further arguments passed to \code{\link[=complete_Gamma_general]{complete_Gamma_general()}} if \code{graph}
+\item{...}{Further arguments passed to \code{\link[=complete_Gamma_general_split]{complete_Gamma_general_split()}} if \code{graph}
 is not decomposable}
 }
 \value{

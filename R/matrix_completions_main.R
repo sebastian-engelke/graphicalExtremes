@@ -11,7 +11,7 @@
 #' @param Gamma Numeric \dxd variogram matrix.
 #' @param graph `NULL` or [`igraph::graph`] object. If `NULL`, the graph
 #' is implied by non-edge entries in `Gamma` being `NA`. Must be connected, undirected.
-#' @param ... Further arguments passed to [complete_Gamma_general()] if `graph`
+#' @param ... Further arguments passed to [complete_Gamma_general_split()] if `graph`
 #' is not decomposable
 #'
 #' @return Completed \dxd `Gamma` matrix.
