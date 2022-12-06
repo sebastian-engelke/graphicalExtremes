@@ -39,10 +39,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           install.packages("pkgdown")
-        shell: Rscript {0}
-          
-      - name: Install stringi
-        run: install.packages('stringi')
+          install.packages("stringi")
         shell: Rscript {0}
 
       - name: Install package
