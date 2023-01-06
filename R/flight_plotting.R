@@ -7,15 +7,16 @@
 #' This function requires the package `ggplot2` to be installed.
 #'
 #' @param airportIndices The indices of the airports (w.r.t. `airports_sel`) to include.
-#' @param airports_sel The airports to plot. Might be further subset by arguments `airportIndeices`, `graph`.
-#' If `NULL`, then [`flights`]`$aiports` will be used.
+#' @param airports_sel The airports to plot. Might be further subset by arguments `airportIndices`, `graph`.
+#' If `NULL`, then [`flights`]`$airports` will be used.
 #' @param connections_sel A three columns data frame as output by [flightCountMatrixToConnectionList()].
-#' If `NULL`, then [`flights`]$`nFlights` will be used to construct one.
+#' If `NULL`, then [`flights`]`$nFlights` will be used to construct one.
 #' @param graph An optional [`igraph::graph`] object, containing a flight graph to plot.
 #' Vertices should either match the selected airports in number and order,
 #' or be named with the corresponding IATA codes of the airports they represent.
 #' @param plotAirports Logical. Whether to plot the airports specified.
 #' @param plotConnections Logical. Whether to plot the connections specified.
+#' @param labelAirports Logical. Whether to show the IATA code next to each plotted airport.
 #' @param returnGGPlot If `TRUE`, a [`ggplot2::ggplot`] object is returned and not plotted immediately.
 #' @param useAirportNFlights Logical. Whether to vary the size of the circles representing airports in the plot,
 #' according to the number of flights at that airport.
@@ -25,6 +26,9 @@
 #' @param map String or `NULL`. What map to use as the background image. Is passed to `ggplot2::map_data()`.
 #' @param vertexColors Optional vector, named with IATA codes, to be used as colors for the vertices/airports.
 #' @param vertexShapes Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to `character`.
+#' @param edgeColors Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
+#' If this is a vector, its entries must match the plotted connections (in the order specified in `connections_sel` or implied by `igraph::get.edgelist`).
+#' If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).
 #' @param xyRatio Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.
 #' @param clipMap Logical or numeric scalar. Whether to ignore the map image when determining the axis limits of the plot.
 #' If it is a positive scalar, the plot limits are extended by that factor.
@@ -52,6 +56,7 @@ plotFlights <- function(
   graph = NULL,
   plotAirports = TRUE,
   plotConnections = TRUE,
+  labelAirports = FALSE,
   returnGGPlot = FALSE,
   useAirportNFlights = FALSE,
   useConnectionNFlights = FALSE,
@@ -59,6 +64,7 @@ plotFlights <- function(
   map = 'state',
   vertexColors = NULL,
   vertexShapes = NULL,
+  edgeColors = NULL,
   xyRatio = NULL,
   clipMap = FALSE,
   useLatex = FALSE,
@@ -192,6 +198,27 @@ plotFlights <- function(
     connections_sel$y1 <- airports_sel[connections_sel$arrivalAirport, 'Latitude']
   }
   
+  # Handle edge coloring
+  aesEdgeColor <- NULL
+  if(plotConnections && !is.null(edgeColors)){
+    aesEdgeColor <- 'edgeColors'
+    if(is.matrix(edgeColors)){
+      # Handle matrix with edge colors as entries (ignore non-edge entries)
+      if(is.null(dimnames(edgeColors))){
+        # No dimnames -> assume square matrix, matching IATAs
+        dimnames(edgeColors) <- list(IATAS, IATAS)
+      }
+      # Read colors from matrix and add to connections_sel
+      ind <- cbind(connections_sel$departureAirport, connections_sel$arrivalAirport)
+      connections_sel$edgeColors <- edgeColors[ind]
+    } else if(is.vector(edgeColors)){
+      # Assume the vector matches the order of connections
+      connections_sel$edgeColors <- edgeColors
+    } else{
+      stop('Argument `edgeColors` must be a vector with one entry per edge, or a matrix.')
+    }
+  }
+  
   # Specify whether to size vertices/edges by nFlights:
   aesSizeNodes <- NULL
   aesSizeEdges <- NULL
@@ -266,6 +293,18 @@ plotFlights <- function(
       alpha = 1
     )
   }
+  if(plotAirports && labelAirports){
+    ggp <- ggp + ggplot2::geom_text(
+      data = airports_sel,
+      ggplot2::aes_string(
+        x = 'Longitude',
+        y = 'Latitude',
+        label = 'IATA'
+      ),
+      hjust = 'left',
+      nudge_x = 1/2
+    )
+  }
   
   # Plot connections:
   if(plotConnections){
@@ -276,6 +315,7 @@ plotFlights <- function(
         xend = 'x1',
         y = 'y0',
         yend = 'y1',
+        col = aesEdgeColor,
         size = aesSizeEdges
       ),
       alpha = edgeAlpha

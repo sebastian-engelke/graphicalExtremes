@@ -11,6 +11,7 @@ plotFlights(
   graph = NULL,
   plotAirports = TRUE,
   plotConnections = TRUE,
+  labelAirports = FALSE,
   returnGGPlot = FALSE,
   useAirportNFlights = FALSE,
   useConnectionNFlights = FALSE,
@@ -18,6 +19,7 @@ plotFlights(
   map = "state",
   vertexColors = NULL,
   vertexShapes = NULL,
+  edgeColors = NULL,
   xyRatio = NULL,
   clipMap = FALSE,
   useLatex = FALSE,
@@ -27,11 +29,11 @@ plotFlights(
 \arguments{
 \item{airportIndices}{The indices of the airports (w.r.t. \code{airports_sel}) to include.}
 
-\item{airports_sel}{The airports to plot. Might be further subset by arguments \code{airportIndeices}, \code{graph}.
-If \code{NULL}, then \code{\link{flights}}\verb{$aiports} will be used.}
+\item{airports_sel}{The airports to plot. Might be further subset by arguments \code{airportIndices}, \code{graph}.
+If \code{NULL}, then \code{\link{flights}}\verb{$airports} will be used.}
 
 \item{connections_sel}{A three columns data frame as output by \code{\link[=flightCountMatrixToConnectionList]{flightCountMatrixToConnectionList()}}.
-If \code{NULL}, then \code{\link{flights}}$\code{nFlights} will be used to construct one.}
+If \code{NULL}, then \code{\link{flights}}\verb{$nFlights} will be used to construct one.}
 
 \item{graph}{An optional \code{\link[igraph:make_graph]{igraph::graph}} object, containing a flight graph to plot.
 Vertices should either match the selected airports in number and order,
@@ -40,6 +42,8 @@ or be named with the corresponding IATA codes of the airports they represent.}
 \item{plotAirports}{Logical. Whether to plot the airports specified.}
 
 \item{plotConnections}{Logical. Whether to plot the connections specified.}
+
+\item{labelAirports}{Logical. Whether to show the IATA code next to each plotted airport.}
 
 \item{returnGGPlot}{If \code{TRUE}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot}} object is returned and not plotted immediately.}
 
@@ -56,6 +60,10 @@ according to the number of flights on that connection.}
 \item{vertexColors}{Optional vector, named with IATA codes, to be used as colors for the vertices/airports.}
 
 \item{vertexShapes}{Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to \code{character}.}
+
+\item{edgeColors}{Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
+If this is a vector, its entries must match the plotted connections (in the order specified in \code{connections_sel} or implied by \code{igraph::get.edgelist}).
+If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).}
 
 \item{xyRatio}{Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.}
 

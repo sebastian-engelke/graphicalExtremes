@@ -8,6 +8,8 @@ docs
 inst/doc
 *.log
 
+debug
+
 # .vscode
 build.R
 .Rprofile
