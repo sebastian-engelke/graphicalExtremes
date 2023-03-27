@@ -14,12 +14,12 @@
 #' }
 #' 
 #' @details
-#' To obtain the matrix `data`, the daily discharge data from the summer months of
-#' 1960 to 2010, given in `dailyData`, was declustered, yielding between seven and ten observations per year.
+#' To obtain the matrix `data_clustered`, the daily discharge data from the summer months of
+#' 1960 to 2010, given in `data_raw`, was declustered, yielding between seven and ten observations per year.
 #' Each row corresponds to one observation from this declustered time series,
-#' the non-unique rownames indicate which year an observation is from.
+#' the *non-unique rownames* indicate which year an observation is from.
 #' Each column corresponds to one of the gauging stations,
-#' with column indices in `data` corresponding to row indices in `info`.
+#' with column indices in `data_raw`/`data_clustered` corresponding to row indices in `info`.
 #' See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 #' 
 #' `info` is a data frame containing the following information for
