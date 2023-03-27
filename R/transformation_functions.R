@@ -25,7 +25,7 @@
 #' @rdname Gamma2graph
 #' @export
 Gamma2graph <- function(Gamma, tol=get_large_tol()){
-  Theta2graph(Gamma2Theta(Gamma))
+  Theta2graph(Gamma2Theta(Gamma), tol=tol)
 }
 #' @param Theta Numeric \dxd precision matrix.
 #' @rdname Gamma2graph
