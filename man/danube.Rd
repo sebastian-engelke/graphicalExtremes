@@ -26,12 +26,12 @@ danube
 A dataset containing river discharge data for tributaries of the Danube.
 }
 \details{
-To obtain the matrix \code{data}, the daily discharge data from the summer months of
-1960 to 2010, given in \code{dailyData}, was declustered, yielding between seven and ten observations per year.
+To obtain the matrix \code{data_clustered}, the daily discharge data from the summer months of
+1960 to 2010, given in \code{data_raw}, was declustered, yielding between seven and ten observations per year.
 Each row corresponds to one observation from this declustered time series,
-the non-unique rownames indicate which year an observation is from.
+the \emph{non-unique rownames} indicate which year an observation is from.
 Each column corresponds to one of the gauging stations,
-with column indices in \code{data} corresponding to row indices in \code{info}.
+with column indices in \code{data_raw}/\code{data_clustered} corresponding to row indices in \code{info}.
 See \insertCite{asadi2015}{graphicalExtremes} for details on the preprocessing and declustering.
 
 \code{info} is a data frame containing the following information for
