@@ -67,6 +67,7 @@ This function requires the package <code>ggplot2</code> to be installed.</p>
 <span>  graph <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plotAirports <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plotConnections <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  labelAirports <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  returnGGPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useAirportNFlights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useConnectionNFlights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -74,6 +75,7 @@ This function requires the package <code>ggplot2</code> to be installed.</p>
 <span>  map <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  vertexColors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vertexShapes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  edgeColors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xyRatio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  clipMap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useLatex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -88,13 +90,13 @@ This function requires the package <code>ggplot2</code> to be installed.</p>
 
 
 <dt>airports_sel</dt>
-<dd><p>The airports to plot. Might be further subset by arguments <code>airportIndeices</code>, <code>graph</code>.
-If <code>NULL</code>, then <code><a href="flights.html">flights</a></code><code>$aiports</code> will be used.</p></dd>
+<dd><p>The airports to plot. Might be further subset by arguments <code>airportIndices</code>, <code>graph</code>.
+If <code>NULL</code>, then <code><a href="flights.html">flights</a></code><code>$airports</code> will be used.</p></dd>
 
 
 <dt>connections_sel</dt>
 <dd><p>A three columns data frame as output by <code><a href="flightCountMatrixToConnectionList.html">flightCountMatrixToConnectionList()</a></code>.
-If <code>NULL</code>, then <code><a href="flights.html">flights</a></code>$<code>nFlights</code> will be used to construct one.</p></dd>
+If <code>NULL</code>, then <code><a href="flights.html">flights</a></code><code>$nFlights</code> will be used to construct one.</p></dd>
 
 
 <dt>graph</dt>
@@ -109,6 +111,10 @@ or be named with the corresponding IATA codes of the airports they represent.</p
 
 <dt>plotConnections</dt>
 <dd><p>Logical. Whether to plot the connections specified.</p></dd>
+
+
+<dt>labelAirports</dt>
+<dd><p>Logical. Whether to show the IATA code next to each plotted airport.</p></dd>
 
 
 <dt>returnGGPlot</dt>
@@ -139,6 +145,12 @@ according to the number of flights on that connection.</p></dd>
 
 <dt>vertexShapes</dt>
 <dd><p>Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to <code>character</code>.</p></dd>
+
+
+<dt>edgeColors</dt>
+<dd><p>Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
+If this is a vector, its entries must match the plotted connections (in the order specified in <code>connections_sel</code> or implied by <code><a href="https://rdrr.io/pkg/igraph/man/as_edgelist.html" class="external-link">igraph::get.edgelist</a></code>).
+If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).</p></dd>
 
 
 <dt>xyRatio</dt>
