@@ -37,8 +37,7 @@ Imports:
     corpcor,
     osqp,
     glmnet,
-    glassoFast,
-    edmcr
+    glassoFast
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack
