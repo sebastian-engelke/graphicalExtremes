@@ -251,7 +251,7 @@ plotFlights <- function(
   }
   
   # Manually set axes limits (clips map, sets aspect ratio):
-  # Note: might be improced using a different crs from
+  # Note: might be improved using a different crs from
   # https://ggplot2.tidyverse.org/reference/ggsf.html
   if(!is.null(xyRatio) || (clipMap && !is.null(map))){
     xData <- airports_sel$Longitude
@@ -407,12 +407,12 @@ formatDegrees2 <- function(decDeg, dirStrings, degString){
   if(!any(duplicated(x))){
     return(x)
   }
-  print(x)
+  # print(x)
   x <- paste0(dms[,1], degString, ' ', dms[,2], "'", dirStrings)
   if(!any(duplicated(x))){
     return(x)
   }
-  print(x)
+  # print(x)
   x <- paste0(dms[,1], degString, ' ', dms[,2], "' ", dms[,3], '"', dirStrings)
   return(x)
 }
@@ -451,7 +451,7 @@ computeLimits <- function(xData, yData, xyRatio=1, convertLatLong=TRUE, stretch 
     xyRatio0 <- xyRatio
     # Use lat/long to account for spherical coords:
     if(convertLatLong){
-      xyRatio <- xyRatio * cos(pi/180 * yMid)
+      xyRatio <- xyRatio / cos(pi/180 * yMid)
     }
 
     # Scale x, y according to xyRatio

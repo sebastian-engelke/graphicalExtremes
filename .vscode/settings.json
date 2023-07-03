@@ -1,3 +1,7 @@
 {
-    "latex-workshop.bibtex-format.tab": "2 spaces"
+    "latex-workshop.bibtex-format.tab": "2 spaces",
+    "files.readonlyInclude": {
+        "NAMESPACE": true,
+        "man/*": true
+    }
 }

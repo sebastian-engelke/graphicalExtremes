@@ -1,23 +1,44 @@
 
-if(!nchar(Sys.getenv('VSCODE_DEBUG_SESSION'))){
-    devtools::load_all('.')
-}
-library(igraph)
-library(tictoc)
-
-newSeed <- floor(2^20 * runif(1))
-newSeed <- 875916
-cat('Seed:', newSeed, '\n')
-set.seed(newSeed)
 
 
-d <- 10
-n <- 100
-graphType <- c('general', 'decomposable', 'tree')[1]
+vCols <- as.character(seq_len(nrow(danube$info)))
+eCols <- as.character(seq_len(nrow(danube$info)-1))
 
-m <- generate_random_model(d, graphType)
+ind <- danube$info$AveVol > mean(danube$info$AveVol)
+vCols <- as.character(danube$info$AveVol > mean(danube$info$AveVol))
 
-G0 <- m$Gamma
-graph <- m$graph
 
-data <- rmpareto(n, 'HR', d, G0)
+ggp <- plotDanube(
+    returnGGPlot = TRUE,
+    # stationIndices = ind,
+    xyRatio = 1,
+    clipMap = 1.2,
+    plotStations = TRUE,
+    # useStationVolume = TRUE,
+    # useConnectionVolume = TRUE,
+    # vertexColors = vCols,
+    labelStations = TRUE,
+    # edgeColors = eCols,
+    # edgeAlpha = 1,
+    mapCountries = c('Germany', 'Austria', 'Czech Republic')
+)
+# plot(ggp)
+
+plotDanubePng()
+
+
+
+# airports <- graphicalExtremes::flights$airports
+# ind <- seq_along(airports$IATA)
+# # Only mainland US:
+# ind <- (
+#   ind
+#   & airports$Latitude > 24
+#   & airports$Latitude < 50
+#   & airports$Longitude < -60
+#   & airports$Longitude > -130
+# )
+# # Remove NAs
+# ind[is.na(ind)] <- FALSE
+
+# plotFlights(airportIndices = ind, plotConnections = FALSE, xyRatio = 1)
