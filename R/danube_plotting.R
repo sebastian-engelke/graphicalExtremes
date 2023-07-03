@@ -276,3 +276,15 @@ plotDanube <- function(
 }
 
 
+
+plotDanube2 <- function(graph = NULL, directed = FALSE, ...){
+  danube <- graphicalExtremes::danube
+  if(is.null(graph)){
+    graph <- igraph::graph_from_edgelist(danube$flow_edges, directed)
+  }
+  pos <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+  igraph::plot.igraph(graph, layout = pos, ...)
+}
+
+
+

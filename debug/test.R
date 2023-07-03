@@ -24,7 +24,9 @@ ggp <- plotDanube(
 )
 # plot(ggp)
 
-plotDanubePng()
+# plotDanubePng()
+
+plotDanube2()
 
 
 
