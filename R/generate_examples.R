@@ -57,9 +57,7 @@ generate_random_graphical_Gamma <- function(graph, ...){
   P <- matrix(0, d, d)
   for(cli in cliques){
     d_cli <- length(cli)
-    P_cli <- generate_random_spd_matrix(d_cli, ...)
-    ID <- diag(d_cli) - matrix(1/d_cli, d_cli, d_cli)
-    P_cli <- ID %*% P_cli %*% ID
+    P_cli <- generate_random_spsd_matrix(d_cli, ...)
     P[cli, cli] <- P[cli, cli] + P_cli
   }
   Gamma <- ensure_symmetry(Theta2Gamma(P))
@@ -139,13 +137,28 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   while(det(M) == Inf){
     M <- M / (d+1)
   }
-  m <- max(floor(log(det(M), 10) / d), 0)
+  m <- floor(log(det(M), 10) / d)
   M <- M * 10**(-m)
   M <- ensure_symmetry(M)
   if(!is_sym_pos_def(M)){
     stop('Failed to produce an SPD matrix!')
   }
   return(M)
+}
+
+generate_random_spsd_matrix <- function(d, ...){
+  # Start with spd matrix
+  Theta <- generate_random_spd_matrix(d, ...)
+
+  # Project spd matrix
+  ID <- diag(d) - matrix(1/d, d, d)
+  Theta <- ID %*% Theta %*% ID
+  
+  # Normalize roughly
+  m <- floor(log(pdet(Theta), 10) / d)
+  Theta <- Theta * 10**(-m)
+  Theta <- ensure_symmetry(Theta)
+  return(Theta)
 }
 
 #' Generate a random chordal graph

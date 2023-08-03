@@ -46,7 +46,8 @@ fmpareto_HR_MLE <- function(
   useTheta = TRUE,
   maxit = 100,
   graph = NULL,
-  optMethod = "BFGS"
+  optMethod = "BFGS",
+  nAttemptsFixInit = 3
 ){
   # if p provided -> data not Pareto -> to convert
   if(!is.null(p)) {
@@ -157,6 +158,14 @@ fmpareto_HR_MLE <- function(
 
   # Check that initial parameters are actually valid
   init_opt <- init[!fixParams]
+  while(useTheta && nAttemptsFixInit > 0 && is.null(parToMatrices(init_opt))){
+    if(any(init_opt >= 0)){
+      init_opt <- init_opt - 1
+    } else {
+      init_opt <- init_opt - runif(length(init_opt))
+      nAttemptsFixInit <- nAttemptsFixInit - 1
+    }
+  }
   if(is.null(parToMatrices(init_opt))){
     stop('Invalid initial parameters!')
   }
