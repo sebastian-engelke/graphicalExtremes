@@ -193,6 +193,9 @@ fmpareto_HR_MLE <- function(
 #' @param par Numeric vector. The parameters that are optimized
 #' @param init Numeric vector. The initial parameters (including the ones optimized over)
 #' @param fixParams Numeric or logical vector. Positions of fixed parameters in the full parameter vector.
+#' 
+#' @keywords internal
+#' 
 fillFixedParams <- function(par, init, fixParams){
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
