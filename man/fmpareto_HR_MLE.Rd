@@ -13,7 +13,8 @@ fmpareto_HR_MLE(
   useTheta = TRUE,
   maxit = 100,
   graph = NULL,
-  optMethod = "BFGS"
+  optMethod = "BFGS",
+  nAttemptsFixInit = 3
 )
 }
 \arguments{

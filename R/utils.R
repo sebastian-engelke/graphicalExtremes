@@ -177,6 +177,11 @@ is_valid_Theta <- function(M, tol=get_small_tol()){
   return(TRUE)
 }
 
+pdet <- function(M, tol=get_small_tol()){
+  ev <- eigen(M, only.values = TRUE)$values
+  prod(ev[abs(ev) > tol])
+}
+
 
 upper.tri.val <- function(M, diag=FALSE){
   M[upper.tri(M, diag)]

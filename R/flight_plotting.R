@@ -408,12 +408,12 @@ formatDegrees2 <- function(decDeg, dirStrings, degString){
     return(x)
   }
   # print(x)
-  x <- paste0(dms[,1], degString, ' ', dms[,2], "'", dirStrings)
+  x <- paste0(dms[,1], degString, ' ', sprintf('%02d', dms[,2]), "'", dirStrings)
   if(!any(duplicated(x))){
     return(x)
   }
   # print(x)
-  x <- paste0(dms[,1], degString, ' ', dms[,2], "' ", dms[,3], '"', dirStrings)
+  x <- paste0(dms[,1], degString, ' ', sprintf('%02d', dms[,2]), "' ", dms[,3], '"', dirStrings)
   return(x)
 }
 
