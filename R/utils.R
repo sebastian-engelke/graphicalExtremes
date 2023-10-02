@@ -92,7 +92,18 @@ rdunif <- function(n, a, b){
   a + floor((b - a + 1) * stats::runif(n))
 }
 
-
+#' Ensure matrix symmetry
+#' 
+#' Ensures the symmetry of a square matrix by averaging it with its transpose.
+#' Optionally verifies that the matrix was close to symmetric before.
+#' 
+#' @param M Numeric square matrix
+#' @param tol Positive scalar. If the maximum absolute difference between `M`
+#' and `t(M)` is larger, show a warning.
+#' 
+#' @return The value of `(M+t(M))/2`
+#' 
+#' @export
 ensure_symmetry <- function(M, tol=Inf){
   if(tol < Inf && max(abs(M - t(M))) > tol){
     warning('Matrix not symmetric (up to tolerance: ', tol, ')!')
