@@ -48,6 +48,8 @@
 #' graph <- igraph::make_full_graph(length(IATAs))
 #' plotFlights(IATAs, graph=graph, clipMap = 1.5)
 #' 
+#' @family flightData
+#' 
 #' @export
 plotFlights <- function(
   airportIndices = NULL,
@@ -333,14 +335,49 @@ plotFlights <- function(
 }
 
 
-#' Get delay data
+#' Get filtered flight delays
 #' 
-#' Get filtered delay data.
+#' Get filtered flight delay data, containing only a selection of dates and airports.
+#' Currently, all possible selections correspond to the case study in \localCiteT{hen2022}.
+#' 
+#' @param what Whether to get the array of delays (numerical),
+#' or just the vector of airport codes (`"IATAs"`, strings)
+#' or dates (as strings). Specify exactly one.
+#' @param airportFilter Which airports to include. Specify exactly one. See details below.
+#' @param dateFilter Which dates to include. Specify one or more. See details below.
+#' @param delayFilter Which kinds of delays to include. Possible values are `"arrivals"`,
+#' `"departures"`, and `"totals"` (computed as sum of arrival and departure delays).
+#' 
+#' @details
+#' The provided lists of airports and dates correspond to the ones used in
+#' the case study of \localCiteT{hen2022}.
+#' The argument `airportFilter="tcCluster"` corresponds to the airports in the analyzed "Texas Cluster",
+#' `airportFilter="tcAll"` corresponds to all airports used in the previous clustering step.
+#' Similarly, `dateFilter="tcTrain"` selects the dates from the training set,
+#' and `dateFitler="tcTest"` the ones from the test/validation set.
+#' 
+#' @return
+#' If `what="delays"`, a three-dimensional array,
+#' with dimensions corresponding to dates, airports, and delay types.
+#' If only one value is specified for `delayFilter`, the result can be
+#' converted to a matrix by calling `drop(...)`.
+#' 
+#' If `what="IATAs"` or `what="dates"`, a character vector.
+#' If required, it can be converted to [`Date`] objects using [`as.Date()`].
+#' 
+#' @examples
+#' getFlightDelayData(
+#'     airportFilter = 'tcCluster',
+#'     dateFilter = 'tcTrain',
+#'     delayFilter = c('totals')
+#' )
+#' 
+#' @family flightData
 #' 
 #' @export
 getFlightDelayData <- function(
   what = c('delays', 'IATAs', 'dates'),
-  IATAfilter = c('all', 'tcCluster', 'tcAll'),
+  airportFilter = c('all', 'tcCluster', 'tcAll'),
   dateFilter = c('all', 'tcTrain', 'tcTest')[1],
   delayFilter = c('totals', 'arrivals', 'departures')[1]
 ){
@@ -352,16 +389,16 @@ getFlightDelayData <- function(
 
   # Check args
   what <- match.arg(what)
-  IATAfilter <- match.arg(IATAfilter)
+  airportFilter <- match.arg(airportFilter)
   dateFilter <- match.arg(dateFilter, c('all', 'tcTrain', 'tcTest'), several.ok = TRUE)
   delayFilter <- match.arg(delayFilter, c('totals', 'arrivals', 'departures'), several.ok = TRUE)
   
   # Compute filtered IATA list (if necessary)
-  if(what == 'dates' || IATAfilter == 'all'){
+  if(what == 'dates' || airportFilter == 'all'){
     IATAs <- dimnames(graphicalExtremes::flights$delays)[[2]]
-  } else if(IATAfilter == 'tcCluster'){
+  } else if(airportFilter == 'tcCluster'){
     IATAs <- getPrivateData(TC_IATAS_CLUSTER)
-  } else if(IATAfilter == 'tcAll'){
+  } else if(airportFilter == 'tcAll'){
     IATAs <- getPrivateData(TC_IATAS_ALL)
   }
 
@@ -392,7 +429,7 @@ getFlightDelayData <- function(
     c(length(dates), length(IATAs), length(delayFilter)),
     list(dates, IATAs, delayFilter)
   )
-  for(i in seq_along(IATAfilter)){
+  for(i in seq_along(delayFilter)){
     filter <- delayFilter[i]
     if(filter == 'totals'){
       ret[,,i] <- apply(filteredDelays, c(1,2), sum)      
@@ -417,6 +454,8 @@ getFlightDelayData <- function(
 #' 
 #' @return A data frame with columns `departureAirport`, `arrivalAirport`, `nFlights`.
 #' Each row represents one connection with >=1 flights in the input matrix.
+#' 
+#' @family flightData
 #' 
 #' @export
 flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){

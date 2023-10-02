@@ -70,7 +70,8 @@ getPrivateData <- function(filename, isRDS=TRUE){
 #' loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
 #' plot(g, layout = loc)
 #' 
-#' @seealso [`flights`], `vignette('graphicalExtremes')`
+#' @family danubeData
+#' @family datasets
 #' 
 #' @references
 #' \insertAllCited{}
@@ -151,7 +152,8 @@ getPrivateData <- function(filename, isRDS=TRUE){
 #' totalDelays <- apply(flights$delays, c(1,2), sum)
 #' }
 #' 
-#' @seealso [`danube`], [`flightCountMatrixToConnectionList`], [`plotFlights`]
+#' @family flightData
+#' @family datasets
 #' 
 #' @source
 #' Raw delays data:

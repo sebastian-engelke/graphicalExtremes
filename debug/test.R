@@ -1,7 +1,7 @@
 
 
 dd <- getFlightDelayData(
-    IATAfilter = 'tcCluster',
+    airportFilter = 'tcCluster',
     dateFilter = 'tcTrain',
     delayFilter = c('totals')
 )

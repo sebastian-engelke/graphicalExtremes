@@ -99,6 +99,14 @@ totalDelays <- apply(flights$delays, c(1,2), sum)
 \insertAllCited{}
 }
 \seealso{
-\code{\link{danube}}, \code{\link{flightCountMatrixToConnectionList}}, \code{\link{plotFlights}}
+Other flight data related topics:
+\code{\link{flightCountMatrixToConnectionList}()},
+\code{\link{getFlightDelayData}()},
+\code{\link{plotFlights}()}
+
+Other datasets:
+\code{\link{danube}}
 }
+\concept{datasets}
+\concept{flightData}
 \keyword{datasets}

@@ -21,6 +21,8 @@
 #'     graph = g
 #' )
 #' 
+#' @family danubeData
+#' 
 #' @export
 plotDanube <- function(
   stationIndices = NULL,
