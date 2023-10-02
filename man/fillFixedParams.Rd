@@ -16,3 +16,4 @@ fillFixedParams(par, init, fixParams)
 \description{
 Helper function to combine par with fixed params (in init)
 }
+\keyword{internal}
