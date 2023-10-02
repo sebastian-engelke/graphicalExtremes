@@ -7,13 +7,13 @@
 ensure_symmetry(M, tol = Inf)
 }
 \arguments{
-\item{M}{Numeric square matrix}
+\item{M}{Numeric square matrix.}
 
 \item{tol}{Positive scalar. If the maximum absolute difference between \code{M}
 and \code{t(M)} is larger, show a warning.}
 }
 \value{
-The value of \code{(M+t(M))/2}
+The value of \code{(M+t(M))/2}.
 }
 \description{
 Ensures the symmetry of a square matrix by averaging it with its transpose.
