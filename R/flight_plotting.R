@@ -333,6 +333,78 @@ plotFlights <- function(
 }
 
 
+#' Get delay data
+#' 
+#' Get filtered delay data.
+#' 
+#' @export
+getFlightDelayData <- function(
+  what = c('delays', 'IATAs', 'dates'),
+  IATAfilter = c('all', 'tcCluster', 'tcAll'),
+  dateFilter = c('all', 'tcTrain', 'tcTest')[1],
+  delayFilter = c('totals', 'arrivals', 'departures')[1]
+){
+  # Filenames of internal data files
+  TC_IATAS_ALL <- 'Texas_cluster_IATAS_all.rds'
+  TC_IATAS_CLUSTER <- 'Texas_cluster_IATAS_cluster.rds'
+  TC_DATES_TRAIN <- 'Texas_cluster_days_train_data.rds'
+  TC_DATES_TEST <- 'Texas_cluster_days_test_data.rds'
+
+  # Check args
+  what <- match.arg(what)
+  IATAfilter <- match.arg(IATAfilter)
+  dateFilter <- match.arg(dateFilter, c('all', 'tcTrain', 'tcTest'), several.ok = TRUE)
+  delayFilter <- match.arg(delayFilter, c('totals', 'arrivals', 'departures'), several.ok = TRUE)
+  
+  # Compute filtered IATA list (if necessary)
+  if(what == 'dates' || IATAfilter == 'all'){
+    IATAs <- dimnames(graphicalExtremes::flights$delays)[[2]]
+  } else if(IATAfilter == 'tcCluster'){
+    IATAs <- getPrivateData(TC_IATAS_CLUSTER)
+  } else if(IATAfilter == 'tcAll'){
+    IATAs <- getPrivateData(TC_IATAS_ALL)
+  }
+
+  # Compute filtered date list (if necessary)
+  if(what == 'IATAs' || dateFilter == 'all'){
+    dates <- dimnames(graphicalExtremes::flights$delays)[[1]]
+  } else{
+    dates <- c()
+    if('tcTrain' %in% dateFilter){
+      dates <- c(dates, getPrivateData(TC_DATES_TRAIN))
+    }
+    if('tcTest' %in% dateFilter){
+      dates <- c(dates, getPrivateData(TC_DATES_TEST))
+    }
+  }
+
+  # Compute dataset to return
+  if(what == 'dates'){
+    return(dates)
+  }
+  if(what == 'IATAs'){
+    return(IATAs)
+  }
+  # else: what == 'delays'
+  filteredDelays <- graphicalExtremes::flights$delays[dates, IATAs, ]
+  ret <- array(
+    0,
+    c(length(dates), length(IATAs), length(delayFilter)),
+    list(dates, IATAs, delayFilter)
+  )
+  for(i in seq_along(IATAfilter)){
+    filter <- delayFilter[i]
+    if(filter == 'totals'){
+      ret[,,i] <- apply(filteredDelays, c(1,2), sum)      
+    } else {
+      ret[,,i] <- filteredDelays[,,filter]
+    }
+  }
+  return(ret)
+}
+
+
+
 #' Convert flight counts to connection list
 #' 
 #' Convert a numeric matrix containing flight counts between ariports to a data

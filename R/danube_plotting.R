@@ -1,5 +1,26 @@
 
-
+#' Plot Danube River Flow Data
+#' 
+#' @examples
+#' # Basic plot
+#' graphicalExtremes::plotDanube()
+#' 
+#' # Plot flow volumes
+#' graphicalExtremes::plotDanube(
+#'     clipMap = 1.2,
+#'     useConnectionVolume = TRUE,
+#'     useStationVolume = TRUE,
+#'     returnGGPlot = TRUE
+#' ) + ggplot2::theme(legend.position = "none")
+#' 
+#' # Plot other graph structures
+#' nStations <- nrow(graphicalExtremes::danube$info)
+#' g <- igraph::erdos.renyi.game(nStations, nStations, 'gnm')
+#' graphicalExtremes::plotDanube(
+#'     clipMap = 1.2,
+#'     graph = g
+#' )
+#' 
 #' @export
 plotDanube <- function(
   stationIndices = NULL,

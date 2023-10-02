@@ -1,3 +1,32 @@
+
+#' Get private data
+#' 
+#' Get private data sets from `inst/extdata`.
+#' 
+#' @param filename Base name of the file. E.g. `"FILENAME"` for a file `inst/extdata/FILENAME`.
+#' @param isRDS Whether the file is an `.RDS` file.
+#' 
+#' @return
+#' If `isRDS=TRUE` an R object.
+#' If `isRDS=FALSE` an environment, containing the R objects from the file.
+#' 
+#' @keywords internal
+#' 
+getPrivateData <- function(filename, isRDS=TRUE){
+    # Path of data file
+    fpath <- system.file('extdata', filename, package='graphicalExtremes')
+
+    # RDS files contain a single object which is returned
+    if(isRDS){
+        return(readRDS(fpath))
+    }
+    
+    # RDA files contain one/multiple R object(s) which are returned in a new environment
+    env <- new.env(parent = emptyenv())
+    load(fpath, envir = env)
+    return(env)
+}
+
 #' Upper Danube basin dataset
 #'
 #' A dataset containing river discharge data for tributaries of the Danube.
