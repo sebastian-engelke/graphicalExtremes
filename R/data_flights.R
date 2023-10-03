@@ -239,6 +239,7 @@ plotFlights <- function(
     + ggplot2::ylab(NULL)
     + ggplot2::scale_x_continuous(labels = function(x) formatDegrees(x, 'EW', useLatex))
     + ggplot2::scale_y_continuous(labels = function(x) formatDegrees(x, 'NS', useLatex))
+    + ggplot2::theme(legend.position = 'none')
   )
   
   # Plot US map in background:
