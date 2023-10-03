@@ -60,7 +60,7 @@ generate_random_graphical_Gamma <- function(graph, ...){
     P_cli <- generate_random_spsd_matrix(d_cli, ...)
     P[cli, cli] <- P[cli, cli] + P_cli
   }
-  Gamma <- ensure_symmetry(Theta2Gamma(P))
+  Gamma <- ensure_matrix_symmetry(Theta2Gamma(P))
   return(Gamma)
 }
 
@@ -139,7 +139,7 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   }
   m <- floor(log(det(M), 10) / d)
   M <- M * 10**(-m)
-  M <- ensure_symmetry(M)
+  M <- ensure_matrix_symmetry(M)
   if(!is_sym_pos_def(M)){
     stop('Failed to produce an SPD matrix!')
   }
@@ -157,7 +157,7 @@ generate_random_spsd_matrix <- function(d, ...){
   # Normalize roughly
   m <- floor(log(pdet(Theta), 10) / d)
   Theta <- Theta * 10**(-m)
-  Theta <- ensure_symmetry(Theta)
+  Theta <- ensure_matrix_symmetry(Theta)
   return(Theta)
 }
 

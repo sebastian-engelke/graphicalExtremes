@@ -104,7 +104,7 @@ rdunif <- function(n, a, b){
 #' @return The value of `(M+t(M))/2`.
 #' 
 #' @export
-ensure_symmetry <- function(M, tol=Inf){
+ensure_matrix_symmetry <- function(M, tol=Inf){
   if(tol < Inf && max(abs(M - t(M))) > tol){
     warning('Matrix not symmetric (up to tolerance: ', tol, ')!')
   }

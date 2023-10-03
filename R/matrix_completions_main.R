@@ -151,7 +151,7 @@ complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
 
     oldVertices <- union(oldVertices, newVertices)
   }
-  Gamma <- ensure_symmetry(Gamma)
+  Gamma <- ensure_matrix_symmetry(Gamma)
   return(Gamma)
 }
 

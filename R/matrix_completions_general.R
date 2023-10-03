@@ -173,7 +173,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
       break
     }
   }
-  Gamma <- ensure_symmetry(Gamma)
+  Gamma <- ensure_matrix_symmetry(Gamma)
   return(Gamma)
 }
 
