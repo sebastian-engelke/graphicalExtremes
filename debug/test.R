@@ -1,11 +1,8 @@
 
+d <- igraph::vcount(getDanubeFlowGraph())
 
-dd <- getFlightDelayData(
-    airportFilter = 'tcCluster',
-    dateFilter = 'tcTrain',
-    delayFilter = c('totals')
-)
+cc <- sample(5, d-1, replace=TRUE)
 
-print(dim(dd))
+# plotDanube(edgeColors = cc)
 
-print(str(dd))
+# plotDanube2(stationIndices = c(10:20, 1, 25, ))

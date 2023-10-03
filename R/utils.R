@@ -222,4 +222,33 @@ is_geq <- function(a, b, tol=NULL) {
 }
 
 
+#' Convert indices to numerical indices
+#' 
+#' Converts (possibly) logical indices to numerical ones.
+#' Also ensures unique indices and sorts them if specified.
+#' 
+#' @param ind The numerical or logical index vector
+#' @param n Max numerical index (used if `ind` is logical and might be recycled)
+#' @param unique Whether to keep every (numerical) index at most once
+#' @param sort Whether to sort the numerical indices
+#' 
+#' @return A numerical index vector
+#' 
+make_numeric_indices <- function(ind, n=NULL, unique=TRUE, sort=TRUE){
+  if(is.logical(ind)){
+    if(is.null(n)){
+      n <- length(ind)
+    }
+    ind0 <- seq_len(n)
+    ind <- ind0[ind]
+  }
+  ind <- as.integer(ind)
+  if(unique){
+    ind <- unique(ind)
+  }
+  if(sort){
+    ind <- sort(ind)
+  }
+  return(ind)
+}
 

@@ -27,6 +27,7 @@
 plotDanube <- function(
   stationIndices = NULL,
   graph = NULL,
+  directed = NULL,
   plotStations = TRUE,
   plotConnections = TRUE,
   labelStations = FALSE,
@@ -38,7 +39,7 @@ plotDanube <- function(
   vertexShapes = NULL,
   edgeColors = NULL,
   xyRatio = NULL,
-  clipMap = FALSE,
+  clipMap = 1.2,
   useLatex = FALSE,
   edgeAlpha = 0.2
 ) {
@@ -52,13 +53,13 @@ plotDanube <- function(
   danube <- graphicalExtremes::danube
 
   ## Fill unspecified inputs
-  # Use all airports, connections if not specified
+  # Use all stations, connections if not specified
   if(is.null(stationIndices)){
     stationIndices <- seq_len(nrow(danube$info))
   } else if(is.logical(stationIndices)){
     stationIndices <- which(stationIndices)
   }
-  # Make selection of airports:
+  # Make selection of stations:
   stations <- danube$info[stationIndices,]
 
   # Set map to NULL if not specified:
@@ -73,7 +74,7 @@ plotDanube <- function(
     clipMap <- (clipMap > 0)
   }
   
-  # Make sure number of graph vertices and selected airports match:
+  # Make sure number of graph vertices and selected stations match:
   if(!is.null(graph)){
     nVertices <- igraph::vcount(graph)
     nStations <- nrow(stations)
@@ -106,9 +107,10 @@ plotDanube <- function(
     if(is.null(graph)){
       ind <- (
         danube$flow_edges[,1] %in% stationIndices
-        | danube$flow_edges[,2] %in% stationIndices
+        & danube$flow_edges[,2] %in% stationIndices
       )
       edgeList <- danube$flow_edges[ind,]
+      edgeList <- edgeList[order(edgeList[,1]),]
     } else{
       edgeList <- igraph::as_edgelist(graph, names=FALSE)
     }
@@ -120,6 +122,19 @@ plotDanube <- function(
       y1 = danube$info$Lat[edgeList[,2]],
       AveVol = danube$info$AveVol[edgeList[,1]]
     )
+  }
+  
+  # Handle arrowheads if plot is directed
+  if(!is.null(directed)){
+    # all good
+  } else if(!is.null(graph)){
+    directed <- igraph::is.directed(graph)
+  } else{
+    directed <- FALSE
+  }
+  arrow <- NULL
+  if(directed){
+    arrow <- ggplot2::arrow()
   }
   
   # Handle edge coloring
@@ -155,6 +170,7 @@ plotDanube <- function(
     + ggplot2::ylab(NULL)
     + ggplot2::scale_x_continuous(labels = function(x) formatDegrees(x, 'EW', useLatex))
     + ggplot2::scale_y_continuous(labels = function(x) formatDegrees(x, 'NS', useLatex))
+    + ggplot2::theme(legend.position = 'none')
   )
   
   # Plot US map in background:
@@ -213,44 +229,17 @@ plotDanube <- function(
     )
   }
   if(plotStations && labelStations){
-    justs <- c(
-      'bl',
-      'bl',
-      'bl',
-      'bl',
-      'tl',
-      'tl',
-      'br', #7
-      'br',
-      'br',
-      'br',
-      'cr',
-      'cr', #12
-      'tl',
-      'cr',
-      'tl',
-      'tl',
-      'cl',
-      'cl',
-      'tl', #19
-      'cl',
-      'cl',
-      'tl', #22
-      'cr',
-      'br',
-      'bl',
-      'bl',
-      'bl', #27
-      'cl',
-      'tl',
-      'cl',
-      'cl' #31
+    stationLabelJustifications <- c(
+      'bl', 'bl', 'bl', 'bl', 'tl', 'tl', 'br', 'br',
+      'br', 'br', 'cr', 'cr', 'tl', 'cr', 'tl', 'tl',
+      'cl', 'cl', 'tl', 'cl', 'cl', 'tl', 'cr', 'br',
+      'bl', 'bl', 'bl', 'cl', 'tl', 'cl', 'cl'
     )[stationIndices]
-    stations$vjust <- sapply(justs, function(x){
+    stations$vjust <- sapply(stationLabelJustifications, function(x){
       s <- substr(x, 1, 1)
       c(t = 'top', b = 'bottom', c = 'center')[s]
     })
-    stations$hjust <- sapply(justs, function(x){
+    stations$hjust <- sapply(stationLabelJustifications, function(x){
       s <- substr(x, 2, 2)
       c(l = 'left', r = 'right', c = 'center')[s]
     })
@@ -276,6 +265,7 @@ plotDanube <- function(
   if(plotConnections){
     ggp <- ggp + ggplot2::geom_segment(
       data = connections_sel,
+      arrow = arrow,
       ggplot2::aes_string(
         x = 'x0',
         xend = 'x1',
@@ -298,15 +288,64 @@ plotDanube <- function(
   return(invisible(NULL))
 }
 
-
-
-plotDanube2 <- function(graph = NULL, directed = FALSE, ...){
-  danube <- graphicalExtremes::danube
-  if(is.null(graph)){
-    graph <- igraph::graph_from_edgelist(danube$flow_edges, directed)
+getDanubeFlowGraph <- function(stationIndices=NULL, directed=FALSE){
+  # If not specified, use all indices
+  if(is.null(stationIndices)){
+    stationIndices <- TRUE
   }
-  pos <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
-  igraph::plot.igraph(graph, layout = pos, ...)
+  # Convert to numerical indices
+  stationIndices <- make_numeric_indices(stationIndices, nrow(danube$info))
+  
+  # Make sure danube data is available
+  danube <- graphicalExtremes::danube
+  
+  # Make (full) flow graph
+  g <- igraph::graph_from_edgelist(danube$flow_edges, directed)
+  
+  # Keep only specified station indices
+  igraph::V(g)$name <- as.character(seq_along(igraph::V(g)))
+  g <- igraph::induced_subgraph(g, stationIndices)
+
+  return(g)
+}
+
+plotDanube2 <- function(
+  stationIndices = NULL,
+  graph = NULL,
+  directed = NULL,
+  plotStations = TRUE,
+  plotConnections = TRUE,
+  labelStations = FALSE,
+  returnGGPlot = FALSE,
+  useStationVolume = FALSE,
+  useConnectionVolume = FALSE,
+  mapCountries = c('Germany'),
+  vertexColors = NULL,
+  vertexShapes = NULL,
+  edgeColors = NULL,
+  xyRatio = NULL, #ignore
+  clipMap = FALSE, #ignore
+  useLatex = FALSE, #ignore
+  edgeAlpha = 0.2
+){
+  danube <- graphicalExtremes::danube
+
+  # If not specified, use all indices
+  if(is.null(stationIndices)){
+    stationIndices <- TRUE
+  }
+  # Convert to numerical indices
+  stationIndices <- make_numeric_indices(stationIndices, nrow(danube$info))
+  
+  if(is.null(graph)){
+    if(is.null(directed)){
+      directed <- FALSE
+    }
+    graph <- getDanubeFlowGraph(stationIndices, directed)
+  }
+  # pos <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
+  pos <- as.matrix(danube$info[stationIndices,c('PlotCoordX', 'PlotCoordY')])
+  igraph::plot.igraph(graph, layout = pos)
 }
 
 
