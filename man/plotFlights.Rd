@@ -95,6 +95,8 @@ plotFlights(IATAs, graph=graph, clipMap = 1.5)
 
 }
 \seealso{
+\code{\link{plotDanube}}
+
 Other flight data related topics:
 \code{\link{flightCountMatrixToConnectionList}()},
 \code{\link{flights}},

@@ -234,6 +234,7 @@ is_geq <- function(a, b, tol=NULL) {
 #' 
 #' @return A numerical index vector
 #' 
+#' @keywords internal
 make_numeric_indices <- function(ind, n=NULL, unique=TRUE, sort=TRUE){
   if(is.logical(ind)){
     if(is.null(n)){

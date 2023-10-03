@@ -49,6 +49,7 @@
 #' plotFlights(IATAs, graph=graph, clipMap = 1.5)
 #' 
 #' @family flightData
+#' @seealso [`plotDanube`]
 #' 
 #' @export
 plotFlights <- function(
@@ -371,6 +372,8 @@ plotFlights <- function(
 #'     dateFilter = 'tcTrain',
 #'     delayFilter = c('totals')
 #' )
+#' 
+#' @references \insertAllCited{}
 #' 
 #' @family flightData
 #' 

@@ -52,6 +52,9 @@ getFlightDelayData(
 )
 
 }
+\references{
+\insertAllCited{}
+}
 \seealso{
 Other flight data related topics:
 \code{\link{flightCountMatrixToConnectionList}()},

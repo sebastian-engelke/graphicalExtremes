@@ -1,6 +1,29 @@
 
 #' Plot Danube River Flow Data
 #' 
+#' Plotting function to visualize the river flow data from the [`danube`] dataset.
+#' Requires `ggplot2` to be installed.
+#' 
+#' @param stationIndices Logical or numerical vector, indicating the stations to be plotted.
+#' @param graph An [`igraph::graph`] object or `NULL` to use the flow graph.
+#' @param directed Logical. Whether to consider the flow graph as directed.
+#' @param plotStations Logical. Whether to plot the stations.
+#' @param plotConnections Logical. Whether to plot the connections.
+#' @param labelStations Logical. Whether to label stations.
+#' @param useStationVolume Logical. Whether to indicate flow volume at a station by circle size.
+#' @param useConnectionVolume Logical. Whether to indicate flow volume on a connection by line width.
+#' @param mapCountries Which country borders to show using `ggplot2::map_data('world', mapCountries)`.
+#' @param vertexColors Vector with color information for vertices.
+#' @param vertexShapes Vector with shape information for vertices.
+#' @param edgeColors Vector with color information for edges.
+#' @inheritParams plotFlights
+#' 
+#' @details
+#' The values of `vertexColors`, `vertexShapes`, and `edgeColors` are intepreted differently
+#' by [`ggplot2::geom_point`]/[`ggplot2::geom_segment`] and [`igraph::plot.igraph()`].
+#' 
+#' `plotDanube` uses a combination of [`ggplot2`] functions to plot the graph.
+#' 
 #' @examples
 #' # Basic plot
 #' graphicalExtremes::plotDanube()
@@ -22,6 +45,8 @@
 #' )
 #' 
 #' @family danubeData
+#' @seealso [`plotFlights`]
+#' @rdname plotDanube
 #' 
 #' @export
 plotDanube <- function(
@@ -309,24 +334,21 @@ getDanubeFlowGraph <- function(stationIndices=NULL, directed=FALSE){
   return(g)
 }
 
-plotDanube2 <- function(
+#' @param ... Passed through to [`igraph::plot.igraph`].
+#' 
+#' @details `plotDanubeIGraph` uses [`igraph::plot.igraph`] to plot the graph.
+#' 
+#' @rdname plotDanube
+#' @export
+plotDanubeIGraph <- function(
   stationIndices = NULL,
   graph = NULL,
   directed = NULL,
-  plotStations = TRUE,
-  plotConnections = TRUE,
   labelStations = FALSE,
-  returnGGPlot = FALSE,
-  useStationVolume = FALSE,
-  useConnectionVolume = FALSE,
-  mapCountries = c('Germany'),
   vertexColors = NULL,
   vertexShapes = NULL,
   edgeColors = NULL,
-  xyRatio = NULL, #ignore
-  clipMap = FALSE, #ignore
-  useLatex = FALSE, #ignore
-  edgeAlpha = 0.2
+  ...
 ){
   danube <- graphicalExtremes::danube
 
@@ -337,6 +359,12 @@ plotDanube2 <- function(
   # Convert to numerical indices
   stationIndices <- make_numeric_indices(stationIndices, nrow(danube$info))
   
+  # Handle vertex labelling
+  labels <- NA # --> do not label
+  if(labelStations){
+    labels <- NULL # --> infer labels from graph
+  }
+
   if(is.null(graph)){
     if(is.null(directed)){
       directed <- FALSE
@@ -348,8 +376,11 @@ plotDanube2 <- function(
   igraph::plot.igraph(
     graph,
     layout = pos,
+    vertex.label = labels,
+    vertex.shape = vertexShapes,
     vertex.color = vertexColors,
-    edge.color = edgeColors
+    edge.color = edgeColors,
+    ...
   )
 }
 
