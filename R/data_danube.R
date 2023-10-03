@@ -345,7 +345,12 @@ plotDanube2 <- function(
   }
   # pos <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
   pos <- as.matrix(danube$info[stationIndices,c('PlotCoordX', 'PlotCoordY')])
-  igraph::plot.igraph(graph, layout = pos)
+  igraph::plot.igraph(
+    graph,
+    layout = pos,
+    vertex.color = vertexColors,
+    edge.color = edgeColors
+  )
 }
 
 
