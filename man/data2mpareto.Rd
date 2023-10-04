@@ -46,4 +46,5 @@ G <- cbind(
 set.seed(123)
 my_data <- rmstable(n, "HR", d = d, par = G)
 data2mpareto(my_data, p)
+
 }

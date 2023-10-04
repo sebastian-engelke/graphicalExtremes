@@ -14,7 +14,7 @@
 #' @param ... Further arguments passed to [complete_Gamma_general_split()] if `graph`
 #' is not decomposable
 #'
-#' @return Completed \dxd `Gamma` matrix.
+#' @return Completed \dxd variogram matrix.
 #'
 #' @details
 #' If `graph` is decomposable, `Gamma` only needs to be specified on
@@ -71,8 +71,8 @@
 #' @references \insertAllCited{}
 #'
 #' @seealso [Gamma2Theta()]
-#' @family Matrix completions
 #'
+#' @family Matrix completions
 #' @export
 complete_Gamma <- function(
   Gamma,
@@ -121,7 +121,6 @@ complete_Gamma <- function(
 #' in the remaining entries.
 #'
 #' @family Matrix completions
-#'
 #' @export
 complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
   # Compute graph if not specified

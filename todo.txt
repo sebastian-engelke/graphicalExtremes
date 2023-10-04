@@ -1,45 +1,13 @@
 
-x- consistent symmetry checks/fixes
-    x- custom is.pos.def function?
-x- consistent variable naming:
-    x- g / graph
-    x- G / Gamma
-    x- immer ausschreiben -> left short in some internal functions
-x- plotting function for river data
-    x- no, but examples with normal plotting functions
-?- options:
-    x- nCores
-    x- tolerance: implemented as "permissive" machine tolerance
-    x- tolerance: default values to be used for e.g. zeros in Theta
-    x- check in emtp2() ! -> talk to frank/sebastian
-    ?- check in eglearn() ! -> ask sebastian
-        1e-5 ~= truncation threshold in Theta
-        1e-8 == some tuning parameter of the glassoFast algorithm
-x- clean up documentation, examples 
-?- remove "./R/deprecated_functions.R", "./other_scripts"?
-    x- also remove flights_old?
-    x- other_scripts: nico fragen, dann sebastian fragen, dann ggf raus
-    ?- sind raus -> sebastian fragen
-x- tests? muss nicht
-x- travis? mit nico klaeren
-    x- remove badges from description
-    x- remove .travis.yml
-- update vignettes
-    x- fix errors with new function parameters
-    x- use new data
-    - check/remove rogue "true" at top
-        - caused by toc
-        - check with pkgdown etc. once on master
-x- readme
-    x- find out how Rmd->md in readme is compiled
-    x?- update reference list
-    x- individual citations in help pages -> geht, genauer gucken
-?- danube data
-    x- tagesdaten rein -> yes
-    x- coords_to_plot in station info -> yes
-    x- info spalten raus oder durch raw data ersetzen
-    x- add examples
-    ?- rename `data` to `clusteredData` etc.?
-?- fix bibliograph encoding
-    - see e.g. `complete_Gamma()` help
-    ?-> issue in Rdpack -> Issue/PR
+- add symmetry/definiteness checks to inputs and outputs
+- rework vignettes
+    - one for introduction of methods, theory etc.
+    - one per dataset
+    - one for literature overview
+- update, clean up documentation
+    - summarize for Gamma2Theta etc.?
+- update bibliography
+    - contents
+    - formatting
+
+

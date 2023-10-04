@@ -97,6 +97,7 @@ partialMatrixToGraph <- function(Matrix){
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = G)
 #' data2mpareto(my_data, p)
+#' 
 #' @export
 data2mpareto <- function(data, p, na.rm=FALSE) {
   # If specified, remove all rows that contain >=1 NA:
@@ -159,7 +160,6 @@ data2mpareto <- function(data, p, na.rm=FALSE) {
 #' @references \insertAllCited{}
 #' 
 #' @family MatrixTransformations
-#'
 #' @export
 Sigma2Gamma <- function(Sigma, k = NULL, full = FALSE) {
   if (full || is.null(k)) {
@@ -223,7 +223,6 @@ Sigma2Gamma <- function(Sigma, k = NULL, full = FALSE) {
 #' @references \insertAllCited{}
 #' 
 #' @family MatrixTransformations
-#'
 #' @export
 Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
   d <- ncol(Gamma)
@@ -274,7 +273,6 @@ Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
 #' @references \insertAllCited{}
 #' 
 #' @family MatrixTransformations
-#'
 #' @export
 Gamma2Theta <- function(Gamma, k=NULL) {
   d <- ncol(Gamma)
@@ -303,7 +301,6 @@ Gamma2Theta <- function(Gamma, k=NULL) {
 #' @return The \dxd variogram matrix implied by `Theta`.
 #' 
 #' @family MatrixTransformations
-#' 
 #' @export
 Theta2Gamma <- function(Theta, k=NULL) {
   if(is.null(k)){
@@ -332,8 +329,7 @@ Theta2Gamma <- function(Theta, k=NULL) {
 #'
 #' @return Numeric matrix \dxd. Full Gamma/Theta matrix.
 #' 
-#' @name par2Matrix
-#'
+#' @rdname par2Matrix
 #' @keywords internal
 par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){
   # Check for forbidden/trivial input
@@ -395,8 +391,7 @@ Gamma2par <- function(Gamma) {
 #' Transformation of extremal correlation \eChi to the Huesler--Reiss variogram \eGamma
 #'
 #' Transforms the extremal correlation \eChi into the `Gamma` matrix
-#' from the definition of a Huesler--Reiss
-#' distribution.
+#' from the definition of a Huesler--Reiss distribution.
 #'
 #' @param chi Numeric or matrix, with entries
 #' between 0 and 1.

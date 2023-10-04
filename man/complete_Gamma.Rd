@@ -16,7 +16,7 @@ is implied by non-edge entries in \code{Gamma} being \code{NA}. Must be connecte
 is not decomposable}
 }
 \value{
-Completed \dxd \code{Gamma} matrix.
+Completed \dxd variogram matrix.
 }
 \description{
 Given a \code{graph} and a (partial) variogram matrix \code{Gamma}, returns a full
