@@ -51,6 +51,7 @@ generate_random_model <- function(d, graph_type='general', ...){
 #' @param graph An \[`igraph::graph`\] object
 #' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
 #' @family Example generations
+#' @export
 generate_random_graphical_Gamma <- function(graph, ...){
   d <- igraph::vcount(graph)
   cliques <- igraph::maximal.cliques(graph)
@@ -131,6 +132,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param bMax Maximum value of entries in `B`
 #' @param ... Ignored, only allowed for compatibility
 #' @family Example generations
+#' @export
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
   M <- B %*% t(B)
@@ -177,6 +179,7 @@ generate_random_spsd_matrix <- function(d, ...){
 #'
 #' @return An \[`igraph::graph`\] object
 #' @family Example generations
+#' @export
 generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
   if(block_graph){
     sMin <- 1
@@ -237,6 +240,7 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #' @return An \[`igraph::graph`\] object
 #'
 #' @family Example generations
+#' @export
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
   # Usually works for small d / large m / large p:
@@ -286,6 +290,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 #'
 #' @return An \[`igraph::graph`\] object
 #' @family Example generations
+#' @export
 generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))
   pruefer_to_graph(pruefer)

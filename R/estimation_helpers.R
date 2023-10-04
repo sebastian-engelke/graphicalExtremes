@@ -108,6 +108,8 @@ logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
 #' @param y Numeric matrix
 #' @param M Numeric matrix
 #' @return Numeric vector
+#' 
+#' @keywords internal
 fast_diag <- function(y, M) {
   n <- nrow(y)
   if(n == 0){

@@ -48,7 +48,7 @@ Theta2graph <- function(Theta, tol=get_large_tol()){
 #' @param Matrix A matrix with NA entries
 #' 
 #' @return An `igraph::graph` object
-#' 
+#' @keywords internal
 partialMatrixToGraph <- function(Matrix){
   A <- !is.na(Matrix)
   graph <- igraph::graph_from_adjacency_matrix(

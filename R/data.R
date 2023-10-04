@@ -11,7 +11,6 @@
 #' If `isRDS=FALSE` an environment, containing the R objects from the file.
 #' 
 #' @keywords internal
-#' 
 getPackageData <- function(filename, isRDS=TRUE){
     # Path of data file
     fpath <- system.file('extdata', filename, package='graphicalExtremes')
@@ -77,7 +76,6 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' \insertAllCited{}
 #'
 #' @source Bavarian Environmental Agency <https://www.gkd.bayern.de>.
-#'
 "danube"
 
 
@@ -166,5 +164,4 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' 
 #' Airports (includes license information):
 #' - <https://openflights.org/data.html>
-#' 
 "flights"

@@ -1,3 +1,4 @@
+
 #' Check input graph
 #'
 #' Checks that the input graph is a valid graph for an extremal graphical model.
@@ -13,6 +14,7 @@
 #' If the graph is not valid an error is thrown.
 #'
 #' @family Input checks
+#' @keywords internal
 check_graph <- function(
   graph,
   graph_type = c('general', 'decomposable', 'block', 'tree'),
@@ -86,6 +88,7 @@ check_graph <- function(
 #' Throws an error if the input is not valid.
 #'
 #' @family Input checks
+#' @keywords internal
 check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
   # make graph from Gamma if necessary
   if (is.null(graph) && is.matrix(Gamma)) {
@@ -145,6 +148,7 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
 #' @return Numeric. The dimension of the matrix (number of rows and columns, if
 #' the matrix is symmetric). Else, raises an error.
 #'
+#' @family Input checks
 #' @keywords internal
 dim_Gamma <- function(Gamma) {
   dimension <- dim(Gamma)

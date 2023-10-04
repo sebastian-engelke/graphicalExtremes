@@ -18,4 +18,10 @@ the matrix is symmetric). Else, raises an error.
 Check if Gamma matrix is square matrix. If so, return the dimension. Else,
 raise an error.
 }
+\seealso{
+Other Input checks: 
+\code{\link{check_Gamma_and_graph}()},
+\code{\link{check_graph}()}
+}
+\concept{Input checks}
 \keyword{internal}

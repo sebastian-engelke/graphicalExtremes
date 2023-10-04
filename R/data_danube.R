@@ -313,6 +313,16 @@ plotDanube <- function(
   return(invisible(NULL))
 }
 
+#' Get Danube flow graph
+#' 
+#' Returns an [`igraph::graph`] object representing the flow graph of the [`danube`] dataset.
+#' 
+#' @param stationIndices Logical or numerical vector. Indicating which stations to include.
+#' @param directed Logical. Whether the graph should be directed (in the direction of flow).
+#' 
+#' @return An [`igraph::graph`] object.
+#' 
+#' @export
 getDanubeFlowGraph <- function(stationIndices=NULL, directed=FALSE){
   # If not specified, use all indices
   if(is.null(stationIndices)){

@@ -68,6 +68,7 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
 #' This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S.
 #' This matrix is used to connstruct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 #' @param S a covariance matrix
+#' @keywords internal
 Zmatrix <- function(S){
   p <- nrow(S)
   R <- stats::cov2cor(S)

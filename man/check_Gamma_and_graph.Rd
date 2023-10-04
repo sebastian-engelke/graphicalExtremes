@@ -27,6 +27,8 @@ HR graphical model.
 }
 \seealso{
 Other Input checks: 
-\code{\link{check_graph}()}
+\code{\link{check_graph}()},
+\code{\link{dim_Gamma}()}
 }
 \concept{Input checks}
+\keyword{internal}

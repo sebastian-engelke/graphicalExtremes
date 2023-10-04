@@ -14,3 +14,4 @@ Copied from the R package "golazo" with kind permission by Piotr Zwiernik \href{
 This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S.
 This matrix is used to connstruct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 }
+\keyword{internal}

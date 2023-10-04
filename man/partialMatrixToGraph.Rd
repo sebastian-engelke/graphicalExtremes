@@ -16,3 +16,4 @@ An \code{igraph::graph} object
 Creates a graph that has edges in entries corresponding to non-NA entries
 in Gamma.
 }
+\keyword{internal}

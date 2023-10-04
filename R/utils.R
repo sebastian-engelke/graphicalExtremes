@@ -8,6 +8,7 @@
 #' @param xMin Numeric vector
 #' @param xMax Numeric vector
 #' @return Numeric vector
+#' @keywords internal
 fitInInterval <- function(x, xMin=-Inf, xMax=Inf){
   if(any(xMax<xMin)){
     stop('Make sure that xMax>=xMin!')

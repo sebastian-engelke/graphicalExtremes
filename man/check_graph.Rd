@@ -31,6 +31,8 @@ Removes vertex labels if present.
 }
 \seealso{
 Other Input checks: 
-\code{\link{check_Gamma_and_graph}()}
+\code{\link{check_Gamma_and_graph}()},
+\code{\link{dim_Gamma}()}
 }
 \concept{Input checks}
+\keyword{internal}

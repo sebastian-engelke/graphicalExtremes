@@ -55,7 +55,6 @@
 #' }
 #'
 #' @export
-#'
 eglearn <- function(
   data,
   p = NULL,
@@ -244,7 +243,6 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #'  \insertAllCited{}
 #'
 #' @export
-#'
 emst <- function(
     data,
     p = NULL,

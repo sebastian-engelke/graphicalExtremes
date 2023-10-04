@@ -22,10 +22,14 @@
 #' vector with one entry per edge in `graph`, or a complete variogram/precision matrix.
 #' @param fixParams Numeric or logical vector. Indices of the parameter vectors that are kept
 #' fixed (identical to `init`) during the optimization. Default is `integer(0)`.
+#' @param useTheta Logical. Whether to perform the MLE optimization in terms of Theta or Gamma.
 #' @param maxit Positive integer. The maximum number of iterations in the optimization.
 #' @param graph Graph object from `igraph` package or `NULL` (implying the complete graph).
-#' @param method String. A valid optimization method used by the function
+#' @param optMethod String. A valid optimization method used by the function
 #' [stats::optim]. By default, `method = "BFGS"`.
+#' @param nAttemptsFixInit Numeric. If `useTheta=TRUE` and the initial parameter `init` is not valid,
+#' attempt to fix it first by making sure all off-diagonal entries are negative and then adding some random noise
+#' at most this many times.
 #'
 #' @return List consisting of:
 #' \item{`convergence`}{Logical. Indicates whether the optimization converged or not.}
@@ -36,7 +40,7 @@
 #' \item{`nllik`}{Numeric. Optimal value of the negative log-likelihood function.}
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 #'
-#' @keywords internal
+#' @export 
 fmpareto_HR_MLE <- function(
   data,
   p = NULL,
@@ -204,7 +208,6 @@ fmpareto_HR_MLE <- function(
 #' @param fixParams Numeric or logical vector. Positions of fixed parameters in the full parameter vector.
 #' 
 #' @keywords internal
-#' 
 fillFixedParams <- function(par, init, fixParams){
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
@@ -231,7 +234,6 @@ fillFixedParams <- function(par, init, fixParams){
 #' `Gamma` and `Theta` are matrices implied by `par`.
 #' 
 #' @keywords internal
-#' 
 parToMatricesFactory <- function(
   graph,
   init = NULL,

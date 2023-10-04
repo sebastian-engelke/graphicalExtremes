@@ -35,12 +35,18 @@ vector with one entry per edge in \code{graph}, or a complete variogram/precisio
 \item{fixParams}{Numeric or logical vector. Indices of the parameter vectors that are kept
 fixed (identical to \code{init}) during the optimization. Default is \code{integer(0)}.}
 
+\item{useTheta}{Logical. Whether to perform the MLE optimization in terms of Theta or Gamma.}
+
 \item{maxit}{Positive integer. The maximum number of iterations in the optimization.}
 
 \item{graph}{Graph object from \code{igraph} package or \code{NULL} (implying the complete graph).}
 
-\item{method}{String. A valid optimization method used by the function
+\item{optMethod}{String. A valid optimization method used by the function
 \link[stats:optim]{stats::optim}. By default, \code{method = "BFGS"}.}
+
+\item{nAttemptsFixInit}{Numeric. If \code{useTheta=TRUE} and the initial parameter \code{init} is not valid,
+attempt to fix it first by making sure all off-diagonal entries are negative and then adding some random noise
+at most this many times.}
 }
 \value{
 List consisting of:
@@ -63,4 +69,3 @@ The optimization is done either in terms of the variogram (Gamma) or precision m
 depending on the value of \code{useTheta}. If \code{graph} is non-decomposable,
 \code{useTheta=TRUE} is significantly faster, otherwise they are similar in performance.
 }
-\keyword{internal}

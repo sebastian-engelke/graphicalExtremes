@@ -136,11 +136,12 @@ is_complete_graph <- function(graph){
 
 #' Graph equality
 #' 
-#' Produce true if two graphs have same vertices and edges (labelled)
+#' Produce true if two graphs have same vertices and edges (ordered)
 #' 
 #' @param g1 `igraph::graph`
 #' @param g2 `igraph::graph`
 #' @return `logical` indicating if the graphs are equal
+#' @export
 graphs_equal <- function(g1, g2) {
 
   # Return early if graph sizes are different
