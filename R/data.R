@@ -1,5 +1,5 @@
 
-#' Get private data
+#' Get package data
 #' 
 #' Get private data sets from `inst/extdata`.
 #' 
@@ -12,7 +12,7 @@
 #' 
 #' @keywords internal
 #' 
-getPrivateData <- function(filename, isRDS=TRUE){
+getPackageData <- function(filename, isRDS=TRUE){
     # Path of data file
     fpath <- system.file('extdata', filename, package='graphicalExtremes')
 
@@ -20,7 +20,7 @@ getPrivateData <- function(filename, isRDS=TRUE){
     if(isRDS){
         return(readRDS(fpath))
     }
-    
+
     # RDA files contain one/multiple R object(s) which are returned in a new environment
     env <- new.env(parent = emptyenv())
     load(fpath, envir = env)
