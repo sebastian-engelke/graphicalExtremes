@@ -9,5 +9,9 @@
 - update bibliography
     - contents
     - formatting
+- unify x2y
+    - xy: Gamma, Sigma, SigmaK, Theta, ThetaK, chi, par?
+    - y: graph
+    - others: chi_3d, NA
 
 
