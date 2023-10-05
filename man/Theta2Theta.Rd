@@ -3,7 +3,7 @@
 \name{Theta2Theta}
 \alias{Theta2Theta}
 \alias{Sigma2Sigma}
-\title{Convert between different representations of \eTheta / \eSigma}
+\title{Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK}
 \usage{
 Theta2Theta(
   Theta,
@@ -24,7 +24,7 @@ Sigma2Sigma(
 )
 }
 \arguments{
-\item{Theta}{Precision matrix \eTheta or \eThetaK.}
+\item{Theta}{Numeric \dxd or \d1xd1 precision matrix.}
 
 \item{k1}{\code{NULL} if the input matrix is \eSigma/\eTheta.
 Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.}
@@ -38,8 +38,19 @@ Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK
 
 \item{check}{Whether to check the inputs and ensure numerical symmetry of outputs.}
 
-\item{Sigma}{Covariance matrix \eSigma or \eSigmaK.}
+\item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
+}
+\value{
+The precision matrix \eTheta or \eThetaK, corresponding to the specified arguments.
+
+The covariance matrix \eSigma or \eSigmaK, corresponding to the specified arguments.
 }
 \description{
-Convert between different representations of \eTheta / \eSigma
+Converts between matrices \eTheta and \eThetaK,
+possibly for different values of k,
+and possibly filling the kth row/colum with zeros.
+Same for \eSigma, \eSigmaK.
+}
+\details{
+If \code{k1} or \code{k2} is \code{NULL}, the corresponding \code{full_} argument is ignored.
 }

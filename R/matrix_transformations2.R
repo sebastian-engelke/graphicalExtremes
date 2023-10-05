@@ -28,9 +28,13 @@ NULL
 NULL
 
 
-#' Convert between different representations of \eTheta / \eSigma
+#' Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK
 #' 
-#' @param Theta Precision matrix \eTheta or \eThetaK.
+#' Converts between matrices \eTheta and \eThetaK,
+#' possibly for different values of k,
+#' and possibly filling the kth row/colum with zeros.
+#' Same for \eSigma, \eSigmaK.
+#' 
 #' @param k1 `NULL` if the input matrix is \eSigma/\eTheta.
 #' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
 #' @param k2 `NULL` if the output matrix is \eSigma/\eTheta.
@@ -39,6 +43,12 @@ NULL
 #' @param full2 Logical. If `TRUE` and `!is.null(k2)`, the output is a \dxd matrix with the kth row filled with zeros.
 #' 
 #' @inheritParams sharedParamsMatrixTransformations
+#' 
+#' @details
+#' If `k1` or `k2` is `NULL`, the corresponding `full_` argument is ignored.
+#' 
+#' @return
+#' The precision matrix \eTheta or \eThetaK, corresponding to the specified arguments.
 #' 
 #' @rdname Theta2Theta
 #' @export
@@ -73,9 +83,9 @@ Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     return(ThetaFull)
 }
 
-#' @param Sigma Covariance matrix \eSigma or \eSigmaK.
-#' 
 #' @rdname Theta2Theta
+#' @return
+#' The covariance matrix \eSigma or \eSigmaK, corresponding to the specified arguments.
 #' @export
 Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
     # TODO: check input
@@ -91,7 +101,9 @@ Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     }
     
     # Compute return matrix
-    if(is.null(k2)){
+    if(identical(k1, k2)){
+        Sigma2 <- SigmaFull
+    } else if(is.null(k2)){
         ID <- diag(d) - matrix(1/d, d, d)
         Sigma2 <- ID %*% SigmaFull %*% ID
     } else {
