@@ -131,12 +131,99 @@ computeD <- function(M, k=NULL, full=FALSE){
     return(nrow(M) + 1)
 }
 
-# Gamma2Sigma <- NULL
-# Gamma2Theta <- NULL
-# Sigma2Gamma <- NULL
-# Sigma2Theta <- NULL
+Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
+    if(check){
+        Gamma <- checkGamma(Gamma)
+    }
+    
+    # -1/2 Gamma is a valid Sigma matrix, if positive semi-definiteness is not checked
+    Sigma <- Sigma2Sigma(-1/2 * Gamma, k2=k, full2=full, check=FALSE)
+
+    if(check){
+        Sigma <- ensure_matrix_symmetry(Sigma)
+    }
+    return(Sigma)
+}
+Gamma2Theta <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
+    if(check){
+        Gamma <- checkGamma(Gamma)
+    }
+    
+    Sigma <- Gamma2Sigma(Gamma, check=FALSE)
+    Theta <- Sigma2Theta(Sigma, k2=k, full2=full, check=FALSE)
+    
+    if(check){
+        Theta <- ensure_matrix_symmetry(Theta)
+    }
+    
+    return(Theta)
+}
+Sigma2Gamma <- function(Sigma, k=NULL, full=FALSE, check=TRUE){
+    if(check){
+        Sigma <- checkSigma(Sigma, k, full)
+    }
+    
+    if(!is.null(k) && !full){
+        # The below transformation works for all dxd matrices that correspond to Gamma,
+        # not just the one Sigma matrix -> only transform if not full
+        Sigma <- Sigma2Sigma(Sigma, k1=k, full1=full, check=FALSE)
+    }
+    d <- nrow(Sigma)
+    oneVec <- makeOneVec(d)
+    Gamma <- oneVec %*% t(diag(Sigma)) + diag(Sigma) %*% t(oneVec) - 2 * Sigma
+
+    if(check){
+        Gamma <- ensure_matrix_symmetry(Gamma)
+    }
+    return(Gamma)
+}
 # Theta2Gamma <- NULL
-# Theta2Sigma <- NULL
+#' @export
+Sigma2Theta <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
+    if(check){
+        Sigma <- checkSigma(Sigma, k1, full1)
+    }
+
+    # Convert input to Sigma (from Sigma^k) if necessary
+    if(!is.null(k1)){
+        Sigma <- Sigma2Sigma(Sigma, k1=k1, full1=full1, check=FALSE)
+    }
+    
+    Theta <- corpcor::pseudoinverse(Sigma)
+
+    # Convert output to Theta^k if necessary
+    if(!is.null(k2)){
+        Theta <- Theta2Theta(Theta, k2=k2, full2=full2, check=FALSE)
+    }
+
+    if(check){
+        Theta <- ensure_matrix_symmetry(Theta)
+    }
+    return(Theta)
+}
+#' @export
+Theta2Sigma <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
+    if(check){
+        Theta <- checkTheta(Theta, k1, full1)
+    }
+    
+    # Convert input to Theta (from Theta^k) if necessary
+    if(!is.null(k1)){
+        Theta <- Theta2Theta(Theta, k1=k1, full1=full1, check=FALSE)
+    }
+
+    Sigma <- corpcor::pseudoinverse(Theta)
+    
+    # Convert output to Sigma^k if necessary
+    if(!is.null(k2)){
+        Sigma <- Sigma2Sigma(Sigma, k2=k2, full2=full2, check=FALSE)
+    }
+    
+    if(check){
+        Sigma <- ensure_matrix_symmetry(Sigma)
+    }
+    return(Sigma)
+}
 
 
 # par2Matrix <- NULL
@@ -149,4 +236,15 @@ computeD <- function(M, k=NULL, full=FALSE){
 # Gamma2chi <- NULL
 # Gamma2chi_3D <- NULL
 
+
+
+checkGamma <- function(Gamma){
+    return(Gamma)
+}
+checkSigma <- function(Sigma, k, full){
+    return(Sigma)
+}
+checkTheta <- function(Theta, k, full){
+    return(Theta)
+}
 

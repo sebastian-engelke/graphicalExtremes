@@ -13,5 +13,5 @@
     - xy: Gamma, Sigma, SigmaK, Theta, ThetaK, chi, par?
     - y: graph
     - others: chi_3d, NA
-
+- check all new matrix transformations!
 
