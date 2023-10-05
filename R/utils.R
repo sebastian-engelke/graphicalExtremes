@@ -223,6 +223,22 @@ is_geq <- function(a, b, tol=NULL) {
 }
 
 
+makeUnitVector <- function(k, d){
+    ek <- numeric(d)
+    ek[k] <- 1
+    return(ek)
+}
+makeOneVec <- function(d){
+    v <- rep(1, d)
+}
+makeProjK <- function(d, k){
+    ek <- makeUnitVector(d, k)
+    oneVec <- rep(1, d)
+    diag(d) - ek %*% t(oneVec)
+}
+
+
+
 #' Convert indices to numerical indices
 #' 
 #' Converts (possibly) logical indices to numerical ones.
