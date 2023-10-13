@@ -3,8 +3,10 @@
 #' @param Sigma Numeric \dxd or \d1xd1 covariance matrix.
 #' @param Gamma Numeric \dxd variogram matrix.
 #' @param Theta Numeric \dxd or \d1xd1 precision matrix.
-#' @param k `NULL` or Integer between one and `d` (dimension of the corresponding matrix).
-#' @param full Logical. If `TRUE` and `k!=NULL`, include the krh row, filled with zeros.
+#' @param k `NULL` if the corresponding matrix is \eSigma/\eTheta.
+#' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
+#' @param full Logical. If `TRUE` and `!is.null(k)`,
+#' the corresponding matrix is a \dxd matrix with the kth row filled with zeros.
 #' @param M Partial matrix with `NA` entries indicating missing edges.
 #' @param tol Numeric scalar. Entries in the precision matrix with absolute value
 #' smaller than this are considered to be zero.
