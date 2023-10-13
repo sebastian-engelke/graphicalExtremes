@@ -209,6 +209,8 @@ Sigma2Gamma <- function(Sigma, k=NULL, full=FALSE, check=TRUE){
     return(Gamma)
 }
 
+#' @rdname parameterMatrixConversion
+#' @export
 Theta2Gamma <- function(Theta, k=NULL, full=FALSE, check=TRUE){
     Sigma <- Theta2Sigma(Theta, k1=k, full1=full, check=check)
     Gamma <- Sigma2Gamma(Sigma, check=FALSE)

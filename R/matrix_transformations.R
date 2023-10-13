@@ -61,178 +61,176 @@
 
 
 
-#' Transformation of \eSigma and \eSigmaK matrix to \eGamma matrix
-#'
-#' Transforms the \eSigmaK matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding \eGamma matrix.
-#'
-#' @param Sigma Numeric \dxd covariance matrix \eSigma, or \d1xd1 covariance
-#' matrix \eSigmaK from the definition of a Huesler--Reiss distribution.
-#' @param k `NULL` or integer between `1` and `d`.
-#' If `NULL`, `Sigma` is interpreted as \eSigma, else
-#' indicates which matrix \eSigmaK is given.
-#'
-#' @return Numeric \dxd \eGamma matrix.
-#'
-#' @examples
-#' Sigma1 <- rbind(
-#'   c(1.5, 0.5, 1),
-#'   c(0.5, 1.5, 1),
-#'   c(1, 1, 2)
-#' )
-#' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
-#' 
-#' @family MatrixTransformations
-#' @export
-Sigma2Gamma <- function(Sigma, k = NULL) {
-  if(is.null(k)) {
-    # Sigma is already d x d
-    S_full <- Sigma
-  } else {
-    # S is (d-1) x (d-1) => fill up with zeros
-    d <- NROW(Sigma) + 1
-    S_full <- matrix(0, d, d)
-    S_full[-k ,-k] <- Sigma
-  }
-
-  # compute Gamma
-  One <- rep(1, times = ncol(S_full))
-  D <- diag(S_full)
-  Gamma <- One %*% t(D) + D %*% t(One) - 2 * S_full
-
-  return(Gamma)
-}
+# #' Transformation of \eSigma and \eSigmaK matrix to \eGamma matrix
+# #'
+# #' Transforms the \eSigmaK matrix from the definition of a
+# #' Huesler--Reiss distribution to the corresponding \eGamma matrix.
+# #'
+# #' @param Sigma Numeric \dxd covariance matrix \eSigma, or \d1xd1 covariance
+# #' matrix \eSigmaK from the definition of a Huesler--Reiss distribution.
+# #' @param k `NULL` or integer between `1` and `d`.
+# #' If `NULL`, `Sigma` is interpreted as \eSigma, else
+# #' indicates which matrix \eSigmaK is given.
+# #'
+# #' @return Numeric \dxd \eGamma matrix.
+# #'
+# #' @examples
+# #' Sigma1 <- rbind(
+# #'   c(1.5, 0.5, 1),
+# #'   c(0.5, 1.5, 1),
+# #'   c(1, 1, 2)
+# #' )
+# #' Sigma2Gamma(Sigma1, k = 1, full = FALSE)
+# #' 
+# #' @family MatrixTransformations
+# #' @export
+# Sigma2Gamma <- function(Sigma, k = NULL) {
+#   if(is.null(k)) {
+#     # Sigma is already d x d
+#     S_full <- Sigma
+#   } else {
+#     # S is (d-1) x (d-1) => fill up with zeros
+#     d <- NROW(Sigma) + 1
+#     S_full <- matrix(0, d, d)
+#     S_full[-k ,-k] <- Sigma
+#   }
+#   # compute Gamma
+#   One <- rep(1, times = ncol(S_full))
+#   D <- diag(S_full)
+#   Gamma <- One %*% t(D) + D %*% t(One) - 2 * S_full
+#   return(Gamma)
+# }
 
 
 
-#' Transformation of \eGamma matrix to \eSigma or \eSigmaK matrix
-#'
-#' Transforms the `Gamma` matrix from the definition of a
-#' Huesler--Reiss distribution to the corresponding
-#' \eSigma or \eSigmaK matrix.
-#'
-#' @param Gamma Numeric \dxd variogram matrix.
-#' @param k `NULL` (default) or an integer between `1` and `d`.
-#' Indicates which matrix \eSigma, or \eSigmaK
-#' should be produced.
-#' @param full Logical. If true, then the `k`th row and column in \eSigmaK
-#' are included and the function returns a \dxd matrix.
-#' By default, `full = FALSE`.
-#'
-#' @details
-#' Every \dxd `Gamma` matrix in the definition of a
-#' Huesler--Reiss distribution can be transformed into a
-#' \d1xd1 \eSigmaK matrix,
-#' for any `k` from `1` to `d`. The inverse of \eSigmaK
-#' contains the graph structure corresponding to the Huesler--Reiss distribution
-#' with parameter matrix `Gamma`. If `full = TRUE`, then \eSigmaK
-#' is returned as a \dxd matrix with additional `k`th row and column
-#' that contain zeros.
-#' For details see \insertCite{eng2019;textual}{graphicalExtremes} and
-#' \insertCite{hen2022;textual}{graphicalExtremes}.
-#'
-#' @return Numeric \eSigmaK matrix of size \d1xd1 if
-#' `full = FALSE`, and \eSigma of size \dxd if `full = TRUE`.
-#'
-#' @examples
-#' Gamma <- cbind(
-#'   c(0, 1.5, 1.5, 2),
-#'   c(1.5, 0, 2, 1.5),
-#'   c(1.5, 2, 0, 1.5),
-#'   c(2, 1.5, 1.5, 0)
-#' )
-#' Gamma2Sigma(Gamma, k = 1, full = FALSE)
-#' 
-#' @references \insertAllCited{}
-#' 
-#' @family MatrixTransformations
-#' @export
-Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
-  d <- ncol(Gamma)
-  if(is.null(k)) {
-    ID <- diag(d) - matrix(1/d, d, d)
-    ID %*% (-1/2 * Gamma) %*% ID
-  } else if (full) {
-    1 / 2 * (matrix(rep(Gamma[, k], d), ncol = d, nrow = d) +
-      t(matrix(rep(Gamma[, k], d), ncol = d, nrow = d)) - Gamma)
-  } else {
-    1 / 2 * (matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1) +
-      t(matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1)) - Gamma[-k, -k])
-  }
-}
+# #' Transformation of \eGamma matrix to \eSigma or \eSigmaK matrix
+# #'
+# #' Transforms the `Gamma` matrix from the definition of a
+# #' Huesler--Reiss distribution to the corresponding
+# #' \eSigma or \eSigmaK matrix.
+# #'
+# #' @param Gamma Numeric \dxd variogram matrix.
+# #' @param k `NULL` (default) or an integer between `1` and `d`.
+# #' Indicates which matrix \eSigma, or \eSigmaK
+# #' should be produced.
+# #' @param full Logical. If true, then the `k`th row and column in \eSigmaK
+# #' are included and the function returns a \dxd matrix.
+# #' By default, `full = FALSE`.
+# #'
+# #' @details
+# #' Every \dxd `Gamma` matrix in the definition of a
+# #' Huesler--Reiss distribution can be transformed into a
+# #' \d1xd1 \eSigmaK matrix,
+# #' for any `k` from `1` to `d`. The inverse of \eSigmaK
+# #' contains the graph structure corresponding to the Huesler--Reiss distribution
+# #' with parameter matrix `Gamma`. If `full = TRUE`, then \eSigmaK
+# #' is returned as a \dxd matrix with additional `k`th row and column
+# #' that contain zeros.
+# #' For details see \insertCite{eng2019;textual}{graphicalExtremes} and
+# #' \insertCite{hen2022;textual}{graphicalExtremes}.
+# #'
+# #' @return Numeric \eSigmaK matrix of size \d1xd1 if
+# #' `full = FALSE`, and \eSigma of size \dxd if `full = TRUE`.
+# #'
+# #' @examples
+# #' Gamma <- cbind(
+# #'   c(0, 1.5, 1.5, 2),
+# #'   c(1.5, 0, 2, 1.5),
+# #'   c(1.5, 2, 0, 1.5),
+# #'   c(2, 1.5, 1.5, 0)
+# #' )
+# #' Gamma2Sigma(Gamma, k = 1, full = FALSE)
+# #' 
+# #' @references \insertAllCited{}
+# #' 
+# #' @family MatrixTransformations
+# #' @export
+# Gamma2Sigma <- function(Gamma, k = NULL, full = FALSE) {
+#   d <- ncol(Gamma)
+#   if(is.null(k)) {
+#     ID <- diag(d) - matrix(1/d, d, d)
+#     ID %*% (-1/2 * Gamma) %*% ID
+#   } else if (full) {
+#     1 / 2 * (matrix(rep(Gamma[, k], d), ncol = d, nrow = d) +
+#       t(matrix(rep(Gamma[, k], d), ncol = d, nrow = d)) - Gamma)
+#   } else {
+#     1 / 2 * (matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1) +
+#       t(matrix(rep(Gamma[-k, k], d - 1), ncol = d - 1, nrow = d - 1)) - Gamma[-k, -k])
+#   }
+# }
 
 
-#' Transformation of \eGamma matrix to \eTheta matrix
-#'
-#' Transforms the variogram matrix (\eGamma) from the definition of a
-#' Huesler--Reiss distribution to the corresponding precision matrix
-#' (\eTheta or \eThetaK).
-#'
-#'
-#' @param Gamma Numeric \dxd variogram matrix.
-#' @param k `NULL` or integer between 1 and d. If this is `NULL`, the
-#' \dxd matrix \eTheta is produced, otherwise
-#' the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eThetaK.
-#' 
-#' @details
-#' Every \dxd `Gamma` matrix in the definition of a
-#' Huesler--Reiss distribution can be transformed into a
-#' \dxd \eTheta matrix, which
-#' contains the graph structure corresponding to the Huesler--Reiss distribution
-#' with parameter matrix `Gamma`.
-#'
-#' @return Numeric \eSigmaK matrix of size \d1xd1 if
-#' `full = FALSE`, and of size \dxd if `full = TRUE`.
-#'
-#' @examples
-#' Gamma <- cbind(
-#'   c(0, 1.5, 1.5, 2),
-#'   c(1.5, 0, 2, 1.5),
-#'   c(1.5, 2, 0, 1.5),
-#'   c(2, 1.5, 1.5, 0)
-#' )
-#' Gamma2Theta(Gamma)
-#' 
-#' @references \insertAllCited{}
-#' 
-#' @family MatrixTransformations
-#' @export
-Gamma2Theta <- function(Gamma, k=NULL) {
-  d <- ncol(Gamma)
-  if(is.null(k)){
-    ID <- diag(d) - matrix(1/d, d, d)
-    S <- ID %*% (-1/2 * Gamma) %*% ID
-    Theta <- corpcor::pseudoinverse(S)
-    return(Theta)
-  }
-  Sigma_k <- Gamma2Sigma(Gamma, k)
-  Theta_k <- chol2inv(chol(Sigma_k))
-  return(Theta_k)
-}
+# #' Transformation of \eGamma matrix to \eTheta matrix
+# #'
+# #' Transforms the variogram matrix (\eGamma) from the definition of a
+# #' Huesler--Reiss distribution to the corresponding precision matrix
+# #' (\eTheta or \eThetaK).
+# #'
+# #'
+# #' @param Gamma Numeric \dxd variogram matrix.
+# #' @param k `NULL` or integer between 1 and d. If this is `NULL`, the
+# #' \dxd matrix \eTheta is produced, otherwise
+# #' the specified \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix \eThetaK.
+# #' 
+# #' @details
+# #' Every \dxd `Gamma` matrix in the definition of a
+# #' Huesler--Reiss distribution can be transformed into a
+# #' \dxd \eTheta matrix, which
+# #' contains the graph structure corresponding to the Huesler--Reiss distribution
+# #' with parameter matrix `Gamma`.
+# #'
+# #' @return Numeric \eSigmaK matrix of size \d1xd1 if
+# #' `full = FALSE`, and of size \dxd if `full = TRUE`.
+# #'
+# #' @examples
+# #' Gamma <- cbind(
+# #'   c(0, 1.5, 1.5, 2),
+# #'   c(1.5, 0, 2, 1.5),
+# #'   c(1.5, 2, 0, 1.5),
+# #'   c(2, 1.5, 1.5, 0)
+# #' )
+# #' Gamma2Theta(Gamma)
+# #' 
+# #' @references \insertAllCited{}
+# #' 
+# #' @family MatrixTransformations
+# #' @export
+# Gamma2Theta <- function(Gamma, k=NULL) {
+#   d <- ncol(Gamma)
+#   if(is.null(k)){
+#     ID <- diag(d) - matrix(1/d, d, d)
+#     S <- ID %*% (-1/2 * Gamma) %*% ID
+#     Theta <- corpcor::pseudoinverse(S)
+#     return(Theta)
+#   }
+#   Sigma_k <- Gamma2Sigma(Gamma, k)
+#   Theta_k <- chol2inv(chol(Sigma_k))
+#   return(Theta_k)
+# }
 
-#' Transformation of \eGamma matrix to \eTheta matrix
-#' 
-#' Transforms a precision matrix (\eTheta or \eThetaK)
-#' to the corresponding variogram matrix.
-#' 
-#' @param Theta Numeric \dxd matrix (if `k` is `NULL`)
-#' or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if `k` is a number).
-#' @param k `NULL` or integer between 1 and d.
-#' If this is `NULL` the input `Theta` is interpreted as a \dxd
-#' precision matrix \eTheta, otherwise as \eThetaK.
-#' 
-#' @return The \dxd variogram matrix implied by `Theta`.
-#' 
-#' @family MatrixTransformations
-#' @export
-Theta2Gamma <- function(Theta, k=NULL) {
-  if(is.null(k)){
-    Sigma <- corpcor::pseudoinverse(Theta)
-    return(Sigma2Gamma(Sigma))
-  }
-  Sigma_k <- chol2inv(chol(Theta))
-  return(Sigma2Gamma(Sigma_k, k))
-}
+# #' Transformation of \eGamma matrix to \eTheta matrix
+# #' 
+# #' Transforms a precision matrix (\eTheta or \eThetaK)
+# #' to the corresponding variogram matrix.
+# #' 
+# #' @param Theta Numeric \dxd matrix (if `k` is `NULL`)
+# #' or \eqn{(d-1) \times (d-1)}{(d-1) x (d-1)} matrix (if `k` is a number).
+# #' @param k `NULL` or integer between 1 and d.
+# #' If this is `NULL` the input `Theta` is interpreted as a \dxd
+# #' precision matrix \eTheta, otherwise as \eThetaK.
+# #' 
+# #' @return The \dxd variogram matrix implied by `Theta`.
+# #' 
+# #' @family MatrixTransformations
+# #' @export
+# Theta2Gamma <- function(Theta, k=NULL) {
+#   if(is.null(k)){
+#     Sigma <- corpcor::pseudoinverse(Theta)
+#     return(Sigma2Gamma(Sigma))
+#   }
+#   Sigma_k <- chol2inv(chol(Theta))
+#   return(Sigma2Gamma(Sigma_k, k))
+# }
 
 
 #' Create Gamma or Theta from vector

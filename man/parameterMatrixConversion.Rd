@@ -6,6 +6,7 @@
 \alias{Gamma2Sigma}
 \alias{Gamma2Theta}
 \alias{Sigma2Gamma}
+\alias{Theta2Gamma}
 \alias{Sigma2Theta}
 \alias{Theta2Sigma}
 \title{Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK}
@@ -33,6 +34,8 @@ Gamma2Sigma(Gamma, k = NULL, full = FALSE, check = TRUE)
 Gamma2Theta(Gamma, k = NULL, full = FALSE, check = TRUE)
 
 Sigma2Gamma(Sigma, k = NULL, full = FALSE, check = TRUE)
+
+Theta2Gamma(Theta, k = NULL, full = FALSE, check = TRUE)
 
 Sigma2Theta(
   Sigma,
