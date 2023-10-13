@@ -1,63 +1,63 @@
 
-#' Transformation of matrix to graph object
-#'
-#' Transforms a \eGamma or \eTheta matrix to an [`igraph::graph`] object for
-#' the corresponding Huesler--Reiss extremal graphical model.
-#'
-#' @param Gamma Numeric \dxd variogram matrix.
-#' @param tol Numeric scalar, entries in the precision matrix with absolute value
-#' smaller than this are considered to be zero.
-#'
-#' @return Graph object from `igraph` package. An undirected graph.
-#'
-#' @examples
-#' Gamma <- cbind(
-#'   c(0, 1.5, 1.5, 2),
-#'   c(1.5, 0, 2, 1.5),
-#'   c(1.5, 2, 0, 1.5),
-#'   c(2, 1.5, 1.5, 0)
-#' )
-#'
-#' Gamma2graph(Gamma)
-#'
-#' @family MatrixTransformations
-#' @seealso [get_large_tol()]
-#' @rdname Gamma2graph
-#' @export
-Gamma2graph <- function(Gamma, tol=get_large_tol()){
-  Theta2graph(Gamma2Theta(Gamma), tol=tol)
-}
-#' @param Theta Numeric \dxd precision matrix.
-#' @rdname Gamma2graph
-#' @export
-Theta2graph <- function(Theta, tol=get_large_tol()){
-  A <- 1*(abs(Theta) > tol)
-  graph <- igraph::graph_from_adjacency_matrix(
-    A,
-    mode = "undirected",
-    diag = FALSE
-  )
-  return(graph)
-}
+# #' Transformation of matrix to graph object
+# #'
+# #' Transforms a \eGamma or \eTheta matrix to an [`igraph::graph`] object for
+# #' the corresponding Huesler--Reiss extremal graphical model.
+# #'
+# #' @param Gamma Numeric \dxd variogram matrix.
+# #' @param tol Numeric scalar, entries in the precision matrix with absolute value
+# #' smaller than this are considered to be zero.
+# #'
+# #' @return Graph object from `igraph` package. An undirected graph.
+# #'
+# #' @examples
+# #' Gamma <- cbind(
+# #'   c(0, 1.5, 1.5, 2),
+# #'   c(1.5, 0, 2, 1.5),
+# #'   c(1.5, 2, 0, 1.5),
+# #'   c(2, 1.5, 1.5, 0)
+# #' )
+# #'
+# #' Gamma2graph(Gamma)
+# #'
+# #' @family MatrixTransformations
+# #' @seealso [get_large_tol()]
+# #' @rdname Gamma2graph
+# #' @export
+# Gamma2graph <- function(Gamma, tol=get_large_tol()){
+#   Theta2graph(Gamma2Theta(Gamma), tol=tol)
+# }
+# #' @param Theta Numeric \dxd precision matrix.
+# #' @rdname Gamma2graph
+# #' @export
+# Theta2graph <- function(Theta, tol=get_large_tol()){
+#   A <- 1*(abs(Theta) > tol)
+#   graph <- igraph::graph_from_adjacency_matrix(
+#     A,
+#     mode = "undirected",
+#     diag = FALSE
+#   )
+#   return(graph)
+# }
 
-#' Transformation of a partial matrix to a graph
-#' 
-#' Creates a graph that has edges in entries corresponding to non-NA entries
-#' in Gamma.
-#' 
-#' @param Matrix A matrix with NA entries
-#' 
-#' @return An `igraph::graph` object
-#' @keywords internal
-partialMatrixToGraph <- function(Matrix){
-  A <- !is.na(Matrix)
-  graph <- igraph::graph_from_adjacency_matrix(
-    A,
-    mode='undirected',
-    diag = FALSE
-  )
-  return(graph)
-}
+# #' Transformation of a partial matrix to a graph
+# #' 
+# #' Creates a graph that has edges in entries corresponding to non-NA entries
+# #' in Gamma.
+# #' 
+# #' @param Matrix A matrix with NA entries
+# #' 
+# #' @return An `igraph::graph` object
+# #' @keywords internal
+# partialMatrixToGraph <- function(Matrix){
+#   A <- !is.na(Matrix)
+#   graph <- igraph::graph_from_adjacency_matrix(
+#     A,
+#     mode='undirected',
+#     diag = FALSE
+#   )
+#   return(graph)
+# }
 
 
 

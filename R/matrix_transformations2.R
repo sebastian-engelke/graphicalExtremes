@@ -19,13 +19,43 @@ NULL
 #' 
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
+#' @return An [`igraph::graph`] object.
+#' 
 #' @rdname matrix2graph
 #' @export
-# Gamma2graph <- function(Gamma, tol=get_large_tol()){}
-# Theta2graph <- NULL
-# Sigma2graph <- NULL
-# partialMatrixToGraph <- NULL
-NULL
+Gamma2graph <- function(Gamma, tol=get_large_tol(), check=TRUE){
+    Theta <- Gamma2Theta(Gamma, check=check)
+    Theta2graph(Theta, tol=tol, check=FALSE)
+}
+#' @rdname matrix2graph
+#' @export
+Sigma2graph <- function(Sigma, tol=get_large_tol(), k=NULL, full=FALSE, check=TRUE){
+    Theta <- Sigma2Theta(Sigma, k1=k, full1=full, check=check)
+    Theta2graph(Theta)
+}
+#' @rdname matrix2graph
+#' @export
+Theta2graph <- function(Theta, tol=get_large_tol(), k=NULL, full=FALSE, check=TRUE){
+    Theta <- Theta2Theta(Theta, k1=k, full1=full, check=check)
+    A <- 1*(abs(Theta) > tol)
+    graph <- igraph::graph_from_adjacency_matrix(
+        A,
+        mode = 'undirected',
+        diag = FALSE
+    )
+    return(graph)
+}
+#' @rdname matrix2graph
+#' @export
+partialMatrixToGraph <- function(M){
+    A <- !is.na(Matrix)
+    graph <- igraph::graph_from_adjacency_matrix(
+        A,
+        mode = 'undirected',
+        diag = FALSE
+    )
+    return(graph)
+}
 
 
 #' Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK
@@ -53,7 +83,9 @@ NULL
 #' @rdname Theta2Theta
 #' @export
 Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    # TODO: check input
+    if(check){
+        Theta <- checkTheta(Theta, k1, full1)
+    }
 
     # Compute full Theta matrix
     if(full1 || is.null(k1)){
@@ -88,7 +120,9 @@ Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
 #' The covariance matrix \eSigma or \eSigmaK, corresponding to the specified arguments.
 #' @export
 Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    # TODO: check input
+    if(check){
+        Sigma <- checkSigma(Sigma)
+    }
 
     d <- computeD(Sigma, k1, full1)
 
@@ -121,15 +155,6 @@ Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     return(Sigma2)
 }
 
-
-computeD <- function(M, k=NULL, full=FALSE){
-    # M is full matrix -> return number of rows/columns
-    if(is.null(k) || full){
-        return(nrow(M))
-    }
-    # M is d-1 x d-1 -> return 1 + number of rows/columns
-    return(nrow(M) + 1)
-}
 
 Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     if(check){
@@ -246,5 +271,14 @@ checkSigma <- function(Sigma, k, full){
 }
 checkTheta <- function(Theta, k, full){
     return(Theta)
+}
+
+computeD <- function(M, k=NULL, full=FALSE){
+    # M is full matrix -> return number of rows/columns
+    if(is.null(k) || full){
+        return(nrow(M))
+    }
+    # M is d-1 x d-1 -> return 1 + number of rows/columns
+    return(nrow(M) + 1)
 }
 

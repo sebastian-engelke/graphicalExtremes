@@ -4,7 +4,7 @@
 \alias{Sigma2Gamma}
 \title{Transformation of \eSigma and \eSigmaK matrix to \eGamma matrix}
 \usage{
-Sigma2Gamma(Sigma, k = NULL)
+Sigma2Gamma(Sigma, k = NULL, full = FALSE, check = TRUE)
 }
 \arguments{
 \item{Sigma}{Numeric \dxd covariance matrix \eSigma, or \d1xd1 covariance
@@ -34,7 +34,6 @@ Sigma2Gamma(Sigma1, k = 1, full = FALSE)
 Other MatrixTransformations: 
 \code{\link{Gamma2Sigma}()},
 \code{\link{Gamma2Theta}()},
-\code{\link{Gamma2graph}()},
 \code{\link{Theta2Gamma}()}
 }
 \concept{MatrixTransformations}

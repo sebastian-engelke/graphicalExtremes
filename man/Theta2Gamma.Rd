@@ -25,7 +25,6 @@ to the corresponding variogram matrix.
 Other MatrixTransformations: 
 \code{\link{Gamma2Sigma}()},
 \code{\link{Gamma2Theta}()},
-\code{\link{Gamma2graph}()},
 \code{\link{Sigma2Gamma}()}
 }
 \concept{MatrixTransformations}

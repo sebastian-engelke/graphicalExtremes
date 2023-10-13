@@ -4,7 +4,7 @@
 \alias{Gamma2Theta}
 \title{Transformation of \eGamma matrix to \eTheta matrix}
 \usage{
-Gamma2Theta(Gamma, k = NULL)
+Gamma2Theta(Gamma, k = NULL, full = FALSE, check = TRUE)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
@@ -45,7 +45,6 @@ Gamma2Theta(Gamma)
 \seealso{
 Other MatrixTransformations: 
 \code{\link{Gamma2Sigma}()},
-\code{\link{Gamma2graph}()},
 \code{\link{Sigma2Gamma}()},
 \code{\link{Theta2Gamma}()}
 }

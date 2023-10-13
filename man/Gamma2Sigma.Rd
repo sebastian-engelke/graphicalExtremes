@@ -4,7 +4,7 @@
 \alias{Gamma2Sigma}
 \title{Transformation of \eGamma matrix to \eSigma or \eSigmaK matrix}
 \usage{
-Gamma2Sigma(Gamma, k = NULL, full = FALSE)
+Gamma2Sigma(Gamma, k = NULL, full = FALSE, check = TRUE)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
@@ -54,7 +54,6 @@ Gamma2Sigma(Gamma, k = 1, full = FALSE)
 \seealso{
 Other MatrixTransformations: 
 \code{\link{Gamma2Theta}()},
-\code{\link{Gamma2graph}()},
 \code{\link{Sigma2Gamma}()},
 \code{\link{Theta2Gamma}()}
 }
