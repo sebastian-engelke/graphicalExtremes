@@ -1,8 +1,6 @@
 
-d <- igraph::vcount(getDanubeFlowGraph())
+d <- 5
 
-cc <- sample(5, d-1, replace=TRUE)
+G <- generate_random_Gamma(d)
 
-# plotDanube(edgeColors = cc)
-
-# plotDanube2(stationIndices = c(10:20, 1, 25, ))
+S <- Gamma2Sigma(G, k=1)

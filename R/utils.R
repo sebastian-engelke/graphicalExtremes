@@ -223,7 +223,7 @@ is_geq <- function(a, b, tol=NULL) {
 }
 
 
-makeUnitVector <- function(k, d){
+makeUnitVector <- function(d, k){
     ek <- numeric(d)
     ek[k] <- 1
     return(ek)

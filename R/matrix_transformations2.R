@@ -3,10 +3,18 @@
 #' @param Sigma Numeric \dxd or \d1xd1 covariance matrix.
 #' @param Gamma Numeric \dxd variogram matrix.
 #' @param Theta Numeric \dxd or \d1xd1 precision matrix.
-#' @param k `NULL` if the corresponding matrix is \eSigma/\eTheta.
+#' @param k `NULL` if the input/output matrix is \eSigma/\eTheta.
+#' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
+#' @param k1 `NULL` if the input matrix is \eSigma/\eTheta.
+#' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
+#' @param k2 `NULL` if the output matrix is \eSigma/\eTheta.
 #' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
 #' @param full Logical. If `TRUE` and `!is.null(k)`,
-#' the corresponding matrix is a \dxd matrix with the kth row filled with zeros.
+#' the input/output matrix is a \dxd matrix with the kth row filled with zeros.
+#' @param full1 Logical. If `TRUE` and `!is.null(k1)`,
+#' the input is a \dxd matrix with the kth row filled with zeros.
+#' @param full2 Logical. If `TRUE` and `!is.null(k2)`,
+#' the output is a \dxd matrix with the kth row filled with zeros.
 #' @param M Partial matrix with `NA` entries indicating missing edges.
 #' @param tol Numeric scalar. Entries in the precision matrix with absolute value
 #' smaller than this are considered to be zero.
@@ -67,22 +75,16 @@ partialMatrixToGraph <- function(M){
 #' and possibly filling the kth row/colum with zeros.
 #' Same for \eSigma, \eSigmaK.
 #' 
-#' @param k1 `NULL` if the input matrix is \eSigma/\eTheta.
-#' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
-#' @param k2 `NULL` if the output matrix is \eSigma/\eTheta.
-#' Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.
-#' @param full1 Logical. If `TRUE` and `!is.null(k1)`, the input is a \dxd matrix with the kth row filled with zeros.
-#' @param full2 Logical. If `TRUE` and `!is.null(k2)`, the output is a \dxd matrix with the kth row filled with zeros.
 #' 
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
 #' @details
-#' If `k1` or `k2` is `NULL`, the corresponding `full_` argument is ignored.
+#' If `k`, `k1`, or `k2` is `NULL`, the corresponding `full_` argument is ignored.
 #' 
 #' @return
-#' The precision matrix \eTheta or \eThetaK, corresponding to the specified arguments.
+#' The desired parameter matrix corresponding to the specified inputs.
 #' 
-#' @rdname Theta2Theta
+#' @rdname parameterMatrixConversion
 #' @export
 Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
     if(check){
@@ -117,9 +119,7 @@ Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     return(ThetaFull)
 }
 
-#' @rdname Theta2Theta
-#' @return
-#' The covariance matrix \eSigma or \eSigmaK, corresponding to the specified arguments.
+#' @rdname parameterMatrixConversion
 #' @export
 Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
     if(check){
@@ -157,26 +157,28 @@ Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     return(Sigma2)
 }
 
-
+#' @rdname parameterMatrixConversion
+#' @export
 Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     if(check){
         Gamma <- checkGamma(Gamma)
     }
     
-    # -1/2 Gamma is a valid Sigma matrix, if positive semi-definiteness is not checked
-    Sigma <- Sigma2Sigma(-1/2 * Gamma, k2=k, full2=full, check=FALSE)
+    d <- nrow(Gamma)
+    ID <- diag(d) - matrix(1/d, d, d)
+    Sigma <- ID %*% (-1/2 * Gamma) %*% ID
+    Sigma <- Sigma2Sigma(Sigma, k2=k, full2=full, check=FALSE)
 
     if(check){
         Sigma <- ensure_matrix_symmetry(Sigma)
     }
     return(Sigma)
 }
+
+#' @rdname parameterMatrixConversion
+#' @export
 Gamma2Theta <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
-    if(check){
-        Gamma <- checkGamma(Gamma)
-    }
-    
-    Sigma <- Gamma2Sigma(Gamma, check=FALSE)
+    Sigma <- Gamma2Sigma(Gamma, check=check)
     Theta <- Sigma2Theta(Sigma, k2=k, full2=full, check=FALSE)
     
     if(check){
@@ -185,16 +187,18 @@ Gamma2Theta <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     
     return(Theta)
 }
+
+#' @rdname parameterMatrixConversion
+#' @export
 Sigma2Gamma <- function(Sigma, k=NULL, full=FALSE, check=TRUE){
-    if(check){
+    # The below transformation works for all dxd matrices that correspond to Gamma,
+    # not just the one Sigma matrix -> only transform if not full
+    if(!is.null(k) && !full){
+        Sigma <- Sigma2Sigma(Sigma, k1=k, full1=full, check=check)
+    } else if(check){
         Sigma <- checkSigma(Sigma, k, full)
     }
-    
-    if(!is.null(k) && !full){
-        # The below transformation works for all dxd matrices that correspond to Gamma,
-        # not just the one Sigma matrix -> only transform if not full
-        Sigma <- Sigma2Sigma(Sigma, k1=k, full1=full, check=FALSE)
-    }
+
     d <- nrow(Sigma)
     oneVec <- makeOneVec(d)
     Gamma <- oneVec %*% t(diag(Sigma)) + diag(Sigma) %*% t(oneVec) - 2 * Sigma
@@ -204,17 +208,21 @@ Sigma2Gamma <- function(Sigma, k=NULL, full=FALSE, check=TRUE){
     }
     return(Gamma)
 }
-# Theta2Gamma <- NULL
+
+Theta2Gamma <- function(Theta, k=NULL, full=FALSE, check=TRUE){
+    Sigma <- Theta2Sigma(Theta, k1=k, full1=full, check=check)
+    Gamma <- Sigma2Gamma(Sigma, check=FALSE)
+    if(check){
+        Gamma <- ensure_matrix_symmetry(Gamma)
+    }
+    return(Gamma)
+}
+
+#' @rdname parameterMatrixConversion
 #' @export
 Sigma2Theta <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    if(check){
-        Sigma <- checkSigma(Sigma, k1, full1)
-    }
-
     # Convert input to Sigma (from Sigma^k) if necessary
-    if(!is.null(k1)){
-        Sigma <- Sigma2Sigma(Sigma, k1=k1, full1=full1, check=FALSE)
-    }
+    Sigma <- Sigma2Sigma(Sigma, k1=k1, full1=full1, check=check)
     
     Theta <- corpcor::pseudoinverse(Sigma)
 
@@ -228,16 +236,12 @@ Sigma2Theta <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     }
     return(Theta)
 }
+
+#' @rdname parameterMatrixConversion
 #' @export
 Theta2Sigma <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    if(check){
-        Theta <- checkTheta(Theta, k1, full1)
-    }
-    
     # Convert input to Theta (from Theta^k) if necessary
-    if(!is.null(k1)){
-        Theta <- Theta2Theta(Theta, k1=k1, full1=full1, check=FALSE)
-    }
+    Theta <- Theta2Theta(Theta, k1=k1, full1=full1, check=check)
 
     Sigma <- corpcor::pseudoinverse(Theta)
     

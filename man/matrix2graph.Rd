@@ -25,11 +25,11 @@ smaller than this are considered to be zero.}
 
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 
-\item{k}{\code{NULL} if the corresponding matrix is \eSigma/\eTheta.
+\item{k}{\code{NULL} if the input/output matrix is \eSigma/\eTheta.
 Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.}
 
 \item{full}{Logical. If \code{TRUE} and \code{!is.null(k)},
-the corresponding matrix is a \dxd matrix with the kth row filled with zeros.}
+the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 
 \item{Theta}{Numeric \dxd or \d1xd1 precision matrix.}
 

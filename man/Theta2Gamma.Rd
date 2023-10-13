@@ -4,7 +4,7 @@
 \alias{Theta2Gamma}
 \title{Transformation of \eGamma matrix to \eTheta matrix}
 \usage{
-Theta2Gamma(Theta, k = NULL)
+Theta2Gamma(Theta, k = NULL, full = FALSE, check = TRUE)
 }
 \arguments{
 \item{Theta}{Numeric \dxd matrix (if \code{k} is \code{NULL})
