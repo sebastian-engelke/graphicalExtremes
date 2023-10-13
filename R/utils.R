@@ -105,12 +105,21 @@ rdunif <- function(n, a, b){
 #' @return The value of `(M+t(M))/2`.
 #' 
 #' @export
-ensure_matrix_symmetry <- function(M, tol=Inf){
-  if(tol < Inf && max(abs(M - t(M))) > tol){
-    warning('Matrix not symmetric (up to tolerance: ', tol, ')!')
+ensure_matrix_symmetry <- function(M, checkTol=Inf){
+  if(checkTol < Inf && max(abs(M - t(M))) > checkTol){
+    warning('Matrix not symmetric (up to tolerance: ', checkTol, ')!')
   }
   (M + t(M))/2
 }
+truncate_zeros <- function(M, tol=get_small_tol()){
+  M[abs(M) < tol] <- 0
+  M
+}
+ensure_matrix_symmetry_and_truncate_zeros <- function(M, tol=get_small_tol(), checkTol=Inf){
+  M <- ensure_matrix_symmetry(M, checkTol)
+  truncate_zeros(M, tol)
+}
+
 
 is_square <- function(M){
   is.matrix(M) && ncol(M) == nrow(M)

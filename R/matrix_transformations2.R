@@ -107,7 +107,9 @@ Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     }
     
     # Compute return matrix
-    # strict symmetry is ensured by assignments above if input is symmetric (!)
+    if(check){
+        ThetaFull <- ensure_matrix_symmetry_and_truncate_zeros(ThetaFull)
+    }
     if(is.null(k2)){
         return(ThetaFull)
     }
@@ -157,7 +159,7 @@ Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
 
     # If requested, ensure numerical symmetry of return matrix
     if(check){
-        Sigma2 <- ensure_matrix_symmetry(Sigma2)
+        Sigma2 <- ensure_matrix_symmetry_and_truncate_zeros(Sigma2)
     }
     return(Sigma2)
 }
@@ -178,7 +180,7 @@ Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     }
 
     if(check){
-        Sigma <- ensure_matrix_symmetry(Sigma)
+        Sigma <- ensure_matrix_symmetry_and_truncate_zeros(Sigma)
     }
     return(Sigma)
 }
@@ -190,7 +192,7 @@ Gamma2Theta <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     Theta <- Sigma2Theta(Sigma, k2=k, full2=full, check=FALSE)
     
     if(check){
-        Theta <- ensure_matrix_symmetry(Theta)
+        Theta <- ensure_matrix_symmetry_and_truncate_zeros(Theta)
     }
     
     return(Theta)
@@ -212,7 +214,7 @@ Sigma2Gamma <- function(Sigma, k=NULL, full=FALSE, check=TRUE){
     Gamma <- oneVec %*% t(diag(Sigma)) + diag(Sigma) %*% t(oneVec) - 2 * Sigma
 
     if(check){
-        Gamma <- ensure_matrix_symmetry(Gamma)
+        Gamma <- ensure_matrix_symmetry_and_truncate_zeros(Gamma)
     }
     return(Gamma)
 }
@@ -223,7 +225,7 @@ Theta2Gamma <- function(Theta, k=NULL, full=FALSE, check=TRUE){
     Sigma <- Theta2Sigma(Theta, k1=k, full1=full, check=check)
     Gamma <- Sigma2Gamma(Sigma, check=FALSE)
     if(check){
-        Gamma <- ensure_matrix_symmetry(Gamma)
+        Gamma <- ensure_matrix_symmetry_and_truncate_zeros(Gamma)
     }
     return(Gamma)
 }
@@ -242,7 +244,7 @@ Sigma2Theta <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     }
 
     if(check){
-        Theta <- ensure_matrix_symmetry(Theta)
+        Theta <- ensure_matrix_symmetry_and_truncate_zeros(Theta)
     }
     return(Theta)
 }
@@ -261,7 +263,7 @@ Theta2Sigma <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
     }
     
     if(check){
-        Sigma <- ensure_matrix_symmetry(Sigma)
+        Sigma <- ensure_matrix_symmetry_and_truncate_zeros(Sigma)
     }
     return(Sigma)
 }
