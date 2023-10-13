@@ -9,7 +9,7 @@
 \alias{Theta2Gamma}
 \alias{Sigma2Theta}
 \alias{Theta2Sigma}
-\title{Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK}
+\title{Conversion between Hüsler-Reiss parameter matrices}
 \usage{
 Theta2Theta(
   Theta,
@@ -86,11 +86,12 @@ the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 The desired parameter matrix corresponding to the specified inputs.
 }
 \description{
-Converts between matrices \eTheta and \eThetaK,
-possibly for different values of k,
-and possibly filling the kth row/colum with zeros.
-Same for \eSigma, \eSigmaK.
+Converts between different matrices that parametrize the same
+Hüsler-Reiss distribution:
+\eGamma, \eSigma, \eTheta, \eSigmaK, \eThetaK.
+The \d1xd1 matrices \eSigmaK and \eThetaK can also be given/returned
+as \dxd matrices with the kth row and column filled with zeros.
 }
 \details{
-If \code{k}, \code{k1}, or \code{k2} is \code{NULL}, the corresponding \code{full_} argument is ignored.
+If \code{k}, \code{k1}, or \code{k2} is \code{NULL}, the corresponding \verb{full*} argument is ignored.
 }

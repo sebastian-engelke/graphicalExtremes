@@ -68,18 +68,18 @@ partialMatrixToGraph <- function(M){
 }
 
 
-#' Convert between representations of \eTheta, \eThetaK / \eSigma, \eSigmaK
+#' Conversion between Hüsler-Reiss parameter matrices
 #' 
-#' Converts between matrices \eTheta and \eThetaK,
-#' possibly for different values of k,
-#' and possibly filling the kth row/colum with zeros.
-#' Same for \eSigma, \eSigmaK.
-#' 
+#' Converts between different matrices that parametrize the same
+#' Hüsler-Reiss distribution:
+#' \eGamma, \eSigma, \eTheta, \eSigmaK, \eThetaK.
+#' The \d1xd1 matrices \eSigmaK and \eThetaK can also be given/returned
+#' as \dxd matrices with the kth row and column filled with zeros.
 #' 
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
 #' @details
-#' If `k`, `k1`, or `k2` is `NULL`, the corresponding `full_` argument is ignored.
+#' If `k`, `k1`, or `k2` is `NULL`, the corresponding `full*` argument is ignored.
 #' 
 #' @return
 #' The desired parameter matrix corresponding to the specified inputs.
@@ -143,8 +143,13 @@ Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
         ID <- diag(d) - matrix(1/d, d, d)
         Sigma2 <- ID %*% SigmaFull %*% ID
     } else {
-        ProjK <- makeProjK(d, k2)
-        Sigma2 <- t(ProjK) %*% SigmaFull %*% ProjK
+        Sigma2 <- (
+            SigmaFull
+            - matrix(SigmaFull[,k2], d, d, byrow = FALSE)
+            - matrix(SigmaFull[,k2], d, d, byrow = TRUE)
+            + SigmaFull[k2,k2]
+        )
+
         if(!full2){
             Sigma2 <- Sigma2[-k2, -k2]
         }
@@ -163,11 +168,14 @@ Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     if(check){
         Gamma <- checkGamma(Gamma)
     }
-    
+
     d <- nrow(Gamma)
-    ID <- diag(d) - matrix(1/d, d, d)
-    Sigma <- ID %*% (-1/2 * Gamma) %*% ID
-    Sigma <- Sigma2Sigma(Sigma, k2=k, full2=full, check=FALSE)
+    if(is.null(k)){
+        ID <- diag(d) - matrix(1/d, d, d)
+        Sigma <- ID %*% (-1/2 * Gamma) %*% ID
+    } else{
+        Sigma <- Sigma2Sigma(-1/2 * Gamma, k2=k, full2=full, check=FALSE)
+    }
 
     if(check){
         Sigma <- ensure_matrix_symmetry(Sigma)
