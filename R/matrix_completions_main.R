@@ -187,7 +187,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   }
 
   ## Larger separator -> convert to Sigma, complete, convert back
-  Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE)
+  Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE, check = FALSE)
 
   # Invert separator submatrix
   R <- chol(Sigma[vC_Sigma, vC_Sigma, drop=FALSE])
@@ -200,7 +200,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   Sigma[vB, vA] <- t(SigmaAB)
 
   # Convert back
-  Gamma <- Sigma2Gamma(Sigma)
+  Gamma <- Sigma2Gamma(Sigma, check = FALSE)
   return(Gamma)
 }
 

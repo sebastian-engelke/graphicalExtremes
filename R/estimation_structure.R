@@ -89,7 +89,7 @@ eglearn <- function(
   # Loop through variables
   for (k in 1:d) {
     if (reg_method == "glasso") {
-      Sk <- Gamma2Sigma(Gamma = Gamma, k = k)
+      Sk <- Gamma2Sigma(Gamma = Gamma, k = k, check = FALSE)
       gl.fit <- lapply(1:length(rholist), FUN = function(i) {
         glassoFast::glassoFast(S = Sk, rho = rholist[i], thr = 1e-8, maxIt = 100000)$wi
       })
@@ -309,7 +309,7 @@ fit_graph_to_Theta <- function(data, m=NULL, Gamma_emp=NULL){
     Gamma_emp <- emp_vario(data)
   }
 
-  Theta_emp <- Gamma2Theta(Gamma_emp)
+  Theta_emp <- Gamma2Theta(Gamma_emp, check = FALSE)
 
   d <- nrow(Gamma_emp)
 

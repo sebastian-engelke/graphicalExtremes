@@ -61,7 +61,7 @@ generate_random_graphical_Gamma <- function(graph, ...){
     P_cli <- generate_random_spsd_matrix(d_cli, ...)
     P[cli, cli] <- P[cli, cli] + P_cli
   }
-  Gamma <- ensure_matrix_symmetry(Theta2Gamma(P))
+  Gamma <- ensure_matrix_symmetry(Theta2Gamma(P, check = FALSE))
   return(Gamma)
 }
 
@@ -116,7 +116,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
   }
   # Converting to Sigma does not introduce non-integer values.
   # Still round the result to avoid numerical issues (also ensures symmetry).
-  G <- round(Sigma2Gamma(S, k=1), 0)
+  G <- round(Sigma2Gamma(S, k=1, check = FALSE), 0)
   return(G)
 }
 

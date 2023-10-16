@@ -124,7 +124,7 @@ rmpareto <- function(
     Gamma <- par
 
     # compute cholesky decomposition
-    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE, check = FALSE)
     chol_mat <- matrix(0, d, d)
 
     result <- tryCatch(
@@ -579,7 +579,7 @@ rmstable <- function(n,
     Gamma <- par
 
     # compute cholesky decomposition
-    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE, check = FALSE)
     chol_mat <- matrix(0, d, d)
 
     result <- tryCatch(

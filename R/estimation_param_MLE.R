@@ -72,7 +72,7 @@ fmpareto_HR_MLE <- function(
   if(is.null(init)){
     Gamma0 <- emp_vario(data)
     if(useTheta){
-      Theta0 <- Gamma2Theta(Gamma0)
+      Theta0 <- Gamma2Theta(Gamma0, check = FALSE)
       init <- getEdgeEntries(Theta0, graph, type = 'upper')
     } else{
       init <- getEdgeEntries(Gamma0, graph, type = 'upper')
@@ -270,7 +270,7 @@ parToMatricesFactory <- function(
 
       # Compute Gamma if specified
       if(forceGamma){
-        Gamma <- Theta2Gamma(Theta)
+        Gamma <- Theta2Gamma(Theta, check = FALSE)
       } else{
         Gamma <- NULL
       }
@@ -309,7 +309,7 @@ parToMatricesFactory <- function(
 
       # Compute Theta if specified
       if(forceTheta){
-        Theta <- Gamma2Theta(Gamma)
+        Theta <- Gamma2Theta(Gamma, check = FALSE)
       } else{
         Theta <- NULL
       }

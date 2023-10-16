@@ -45,10 +45,10 @@ replaceGammaSubMatrix <- function(Gamma.est, Gamma.fix){
 
   # heuristic, but safe solution:
   k <- ind[1]
-  M.est <- Gamma2Sigma(Gamma.est, k)
-  M.fix <- Gamma2Sigma(Gamma.fix, k)
+  M.est <- Gamma2Sigma(Gamma.est, k, check = FALSE)
+  M.fix <- Gamma2Sigma(Gamma.fix, k, check = FALSE)
   M <- replaceSpdSubmatrix(M.est, M.fix)
-  G <- Sigma2Gamma(M, k=k)
+  G <- Sigma2Gamma(M, k=k, check = FALSE)
   return(G)
 }
 
@@ -165,6 +165,7 @@ is_sym_cnd <- function(M, tol=get_small_tol()){
     return(FALSE)
   }
   # Check that Gamma2Sigma yields a pos. def. matrix
+  # Is there a more elegant way to do this?
   Sk <- Gamma2Sigma(M, k=1, check=FALSE)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
   return(eig[d-1] > 0)

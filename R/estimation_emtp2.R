@@ -28,7 +28,7 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
     P <- diag(d)-matrix(1,d,d)/(d)
     S <- P%*%(-Gamma/2)%*%P
     Z <- Zmatrix(S)
-    Gamma1 <- Sigma2Gamma(Z)
+    Gamma1 <- Sigma2Gamma(Z, check = FALSE)
   }
   it <- 0
   if (verbose==TRUE){

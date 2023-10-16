@@ -72,7 +72,7 @@ complete_Gamma_general_split <- function(
   Gamma <- complete_Gamma_decomposable(GammaDecomp, gDecomp)
 
   if(final_tol >= 0){
-    Theta <- Gamma2Theta(Gamma)
+    Theta <- Gamma2Theta(Gamma, check = FALSE)
     err <- max(abs(getNonEdgeEntries(Theta, graph)))
     if(err > final_tol){
       warning('Matrix completion did not converge (err = ', err, ')')
@@ -142,7 +142,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
     } else{
       # Separator is of size >1 -> we need to work with Sigma^{(k)}
       # Compute Sigma
-      Sigma <- Gamma2Sigma(Gamma, k = k, full = TRUE)
+      Sigma <- Gamma2Sigma(Gamma, k = k, full = TRUE, check = FALSE)
       # Invert Sigma_CC
       R <- chol(Sigma[sep_Sigma, sep_Sigma, drop=FALSE])
       SigmaCCinv <- chol2inv(R)
@@ -156,7 +156,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
         Sigma[vB, vA] <- t(SigmaAB)
       }
       # Convert back to Gamma
-      Gamma <- Sigma2Gamma(Sigma)
+      Gamma <- Sigma2Gamma(Sigma, check = FALSE)
     }
 
     # Continue iteration if no tol-check due
@@ -165,7 +165,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
     }
 
     # Check if tolerance has been reached
-    P <- Gamma2Theta(Gamma)
+    P <- Gamma2Theta(Gamma, check = FALSE)
     err <- max(abs(P[nonEdgeIndices]))
     if(err <= tol){
       break
@@ -219,7 +219,7 @@ complete_Gamma_general_demo <- function(Gamma, graph, N = 1000, tol=0, gList=NUL
   m <- length(gList)
 
   # Initialize ret-list with initial Gamma, Theta, etc.:
-  Theta <- Gamma2Theta(Gamma)
+  Theta <- Gamma2Theta(Gamma, check = FALSE)
   iterations <- list()
   ret <- list(
     graph = graph,
@@ -242,7 +242,7 @@ complete_Gamma_general_demo <- function(Gamma, graph, N = 1000, tol=0, gList=NUL
     GammaList <- c(GammaList, list(Gamma))
 
     # Compute Theta
-    Theta <- Gamma2Theta(Gamma)
+    Theta <- Gamma2Theta(Gamma, check = FALSE)
     err <- max(abs(getNonEdgeEntries(Theta, graph)))
 
     # Store results

@@ -37,6 +37,18 @@
             "problemMatcher": []
         },
         {
+            "label": "build pkgdown home",
+            "type": "shell",
+            "command": "R --silent --vanilla -e \"pkgdown::build_home()\"",
+            "problemMatcher": []
+        },
+        {
+            "label": "build pkgdown site",
+            "type": "shell",
+            "command": "R --silent --vanilla -e \"pkgdown::build_site()\"",
+            "problemMatcher": []
+        },
+        {
             "label": "R CMD build + check",
             "type":"shell",
             "command": ".\\R_CMD_build_check.cmd",

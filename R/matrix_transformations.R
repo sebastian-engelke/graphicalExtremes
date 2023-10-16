@@ -59,7 +59,7 @@ Theta2graph <- function(Theta, tol=get_large_tol(), k=NULL, full=FALSE, check=TR
 #' @rdname matrix2graph
 #' @export
 partialMatrixToGraph <- function(M){
-  A <- !is.na(Matrix)
+  A <- !is.na(M)
   graph <- igraph::graph_from_adjacency_matrix(
     A,
     mode = 'undirected',

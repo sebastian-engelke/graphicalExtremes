@@ -254,7 +254,7 @@ emp_vario <- function(data, k = NULL, p = NULL) {
   G.fun <- function(i, data) {
     idx <- which(data[, i] > 1)
     if (length(idx) > 1) {
-      xx <- Sigma2Gamma(stats::cov(log(data[idx, ])), full = TRUE)
+      xx <- Sigma2Gamma(stats::cov(log(data[idx, ])), full = TRUE, check = FALSE)
     } else {
       xx <- matrix(NA, d, d)
     }
