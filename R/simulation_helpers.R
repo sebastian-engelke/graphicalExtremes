@@ -41,8 +41,6 @@ simu_px_logistic <- function(n, d, idx, theta) {
     stop("Argument idx must be a scalar or a vector with n entries")
   }
 
-
-
   # function body
   res <- matrix(1 / gamma(1 - theta) * (-log(stats::runif(n * d)))^(-theta),
     nrow = n, ncol = d
