@@ -37,9 +37,9 @@
             "problemMatcher": []
         },
         {
-            "label": "build pkgdown home",
+            "label": "build pkgdown meta",
             "type": "shell",
-            "command": "R --silent --vanilla -e \"pkgdown::build_home()\"",
+            "command": "R --silent --vanilla -e \"pkgdown::build_home();pkgdown::build_reference_index()\"",
             "problemMatcher": []
         },
         {
