@@ -98,7 +98,7 @@ the input is a \dxd matrix with the kth row filled with zeros.}
 \item{full2}{Logical. If \code{TRUE} and \code{!is.null(k2)},
 the output is a \dxd matrix with the kth row filled with zeros.}
 
-\item{M}{Partial matrix with \code{NA} entries indicating missing edges.}
+\item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 
 \item{name1}{Name of the input representation.}
 

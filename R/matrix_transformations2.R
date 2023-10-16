@@ -285,6 +285,7 @@ Gamma2Gamma <- function(Gamma, check=TRUE){
 
 #' @param name1 Name of the input representation.
 #' @param name2 Name of the output representation.
+#' @param M Numeric matrix, \eGamma, \eSigma, or \eTheta.
 #' @details `matrix2matrix` is a wrapper function that calls the corresponding
 #' conversion function implied by `name1`, `name2`.
 #' 
@@ -526,13 +527,27 @@ checkSigmaTheta <- function(M, k, full, matrixName='Sigma'){
 }
 #' @rdname checkGamma
 #' @export
-checkTheta <- function(Theta, k, full){
+checkTheta <- function(Theta, k=NULL, full=FALSE){
     checkSigmaTheta(Theta, k, full, 'Theta')
 }
 #' @rdname checkGamma
 #' @export
-checkSigma <- function(Sigma, k, full){
+checkSigma <- function(Sigma, k=NULL, full=FALSE){
     checkSigmaTheta(Sigma, k, full, 'Sigma')
+}
+#' @rdname checkGamma
+#' @param M Numeric matrix, \eGamma, \eSigma, or \eTheta.
+#' @export
+checkMatrix <- function(M, name=c('Gamma', 'Sigma', 'Theta')[1], k=NULL, full=FALSE){
+    if(name == 'Gamma'){
+        checkGamma(M)
+    } else if(name == 'Sigma'){
+        checkSigma(M, k, full)
+    } else if(name == 'Theta'){
+        checkTheta(M, k, full)
+    } else{
+        stop('Invalid matrix name!')
+    }
 }
 
 computeD <- function(M, k=NULL, full=FALSE){

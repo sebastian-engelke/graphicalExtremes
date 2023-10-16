@@ -4,13 +4,16 @@
 \alias{checkGamma}
 \alias{checkTheta}
 \alias{checkSigma}
+\alias{checkMatrix}
 \title{Parameter matrix checks}
 \usage{
 checkGamma(Gamma)
 
-checkTheta(Theta, k, full)
+checkTheta(Theta, k = NULL, full = FALSE)
 
-checkSigma(Sigma, k, full)
+checkSigma(Sigma, k = NULL, full = FALSE)
+
+checkMatrix(M, name = c("Gamma", "Sigma", "Theta")[1], k = NULL, full = FALSE)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
@@ -24,6 +27,8 @@ Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK
 the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
+
+\item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 }
 \value{
 The input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}},
