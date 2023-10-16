@@ -93,17 +93,18 @@ rdunif <- function(n, a, b){
   a + floor((b - a + 1) * stats::runif(n))
 }
 
-#' Ensure matrix symmetry
+#' Ensure numerical matrix symmetry/zero values
 #' 
 #' Ensures the symmetry of a square matrix by averaging it with its transpose.
 #' Optionally verifies that the matrix was close to symmetric before.
 #' 
 #' @param M Numeric square matrix.
-#' @param tol Positive scalar. If the maximum absolute difference between `M`
+#' @param checkTol Positive scalar. If the maximum absolute difference between `M`
 #' and `t(M)` is larger, show a warning.
 #' 
-#' @return The value of `(M+t(M))/2`.
+#' @return The adjusted value of `M`.
 #' 
+#' @rdname ensure_matrix_symmetry_and_truncate_zeros
 #' @export
 ensure_matrix_symmetry <- function(M, checkTol=Inf){
   if(checkTol < Inf && max(abs(M - t(M))) > checkTol){
@@ -111,10 +112,17 @@ ensure_matrix_symmetry <- function(M, checkTol=Inf){
   }
   (M + t(M))/2
 }
+#' @description Makes sure zeros are "numerically zero", by truncating all small values.
+#' @param tol All entries with absolute value below this value are truncated to zero.
+#' 
+#' @rdname ensure_matrix_symmetry_and_truncate_zeros
+#' @export
 truncate_zeros <- function(M, tol=get_small_tol()){
   M[abs(M) < tol] <- 0
   M
 }
+#' @rdname ensure_matrix_symmetry_and_truncate_zeros
+#' @export
 ensure_matrix_symmetry_and_truncate_zeros <- function(M, tol=get_small_tol(), checkTol=Inf){
   M <- ensure_matrix_symmetry(M, checkTol)
   truncate_zeros(M, tol)
@@ -157,7 +165,7 @@ is_sym_cnd <- function(M, tol=get_small_tol()){
     return(FALSE)
   }
   # Check that Gamma2Sigma yields a pos. def. matrix
-  Sk <- Gamma2Sigma(M, k=1)
+  Sk <- Gamma2Sigma(M, k=1, check=FALSE)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
   return(eig[d-1] > 0)
 }
