@@ -34,7 +34,7 @@ alpha_wrong1 <- 43
 alpha_wrong2 <- c(1, 1, 1, -0.2)
 alpha_wrong3 <- matrix(runif(d * 2), nrow = d)
 alpha_wrong4 <- matrix(-runif((d - 1) * 2), nrow = d - 1)
-cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
+cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE, check = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
 

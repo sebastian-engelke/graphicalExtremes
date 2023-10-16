@@ -140,14 +140,14 @@ test_that("complete_Gamma works", {
 
 test_that("Sigma2Gamma works", {
   for (k in 1:NCOL(G)) {
-    S <- Gamma2Sigma(G, k = k, full = F)
-    expect_equal(Sigma2Gamma(S = S, k = k, full = F), G)
+    S <- Gamma2Sigma(G, k = k, full = F, check = FALSE)
+    expect_equal(Sigma2Gamma(S = S, k = k, full = F, check = FALSE), G)
   }
 
   for (k in 1:NCOL(G)) {
-    S <- Gamma2Sigma(G, k = k, full = T)
-    expect_equal(Sigma2Gamma(S, k = k, full = T), G)
-    expect_equal(Sigma2Gamma(S, full = T), G)
+    S <- Gamma2Sigma(G, k = k, full = T, check = FALSE)
+    expect_equal(Sigma2Gamma(S, k = k, full = T, check = FALSE), G)
+    expect_equal(Sigma2Gamma(S, full = T, check = FALSE), G)
   }
 })
 

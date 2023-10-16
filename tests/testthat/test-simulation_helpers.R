@@ -12,7 +12,7 @@ G <- cbind(
   c(1.5, 2, 0, 1.5),
   c(2, 1.5, 1.5, 0)
 )
-cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE)
+cov_mat <- Gamma2Sigma(G, k = 3, full = FALSE, check = FALSE)
 chol_mat <- matrix(0, d, d)
 chol_mat[-3, -3] <- chol(cov_mat)
 
