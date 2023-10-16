@@ -87,86 +87,6 @@ partialMatrixToGraph <- function(M){
 #' 
 #' @rdname parameterMatrixConversion
 #' @export
-Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    if(check){
-        Theta <- checkTheta(Theta, k1, full1)
-    }
-
-    # Compute full Theta matrix
-    if(full1 || is.null(k1)){
-        ThetaFull <- Theta
-    } else{
-        d <- computeD(Theta, k1, full1)
-        ThetaFull <- matrix(0, d, d)
-        ThetaFull[-k1,-k1] <- Theta
-    }
-    if(!is.null(k1)){
-        # Fill missing row/column s.t. rowSums/colSums are zero
-        ThetaFull[,k1] <- -rowSums(ThetaFull)
-        ThetaFull[k1,] <- ThetaFull[,k1]
-        ThetaFull[k1,k1] <- -sum(ThetaFull[,k1])
-    }
-    
-    # Compute return matrix
-    if(check){
-        ThetaFull <- ensure_matrix_symmetry_and_truncate_zeros(ThetaFull)
-    }
-    if(is.null(k2)){
-        return(ThetaFull)
-    }
-    if(!full2){
-        return(ThetaFull[-k2,-k2])
-    }
-    ThetaFull[k2,] <- 0
-    ThetaFull[,k2] <- 0
-    return(ThetaFull)
-}
-
-#' @rdname parameterMatrixConversion
-#' @export
-Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
-    if(check){
-        Sigma <- checkSigma(Sigma)
-    }
-
-    d <- computeD(Sigma, k1, full1)
-
-    # Compute full Sigma matrix
-    if(full1 || is.null(k1)){
-        SigmaFull <- Sigma
-    } else{
-        SigmaFull <- matrix(0, d, d)
-        SigmaFull[-k1, -k1] <- Sigma
-    }
-    
-    # Compute return matrix
-    if(identical(k1, k2)){
-        Sigma2 <- SigmaFull
-    } else if(is.null(k2)){
-        ID <- diag(d) - matrix(1/d, d, d)
-        Sigma2 <- ID %*% SigmaFull %*% ID
-    } else {
-        Sigma2 <- (
-            SigmaFull
-            - matrix(SigmaFull[,k2], d, d, byrow = FALSE)
-            - matrix(SigmaFull[,k2], d, d, byrow = TRUE)
-            + SigmaFull[k2,k2]
-        )
-
-        if(!full2){
-            Sigma2 <- Sigma2[-k2, -k2]
-        }
-    }
-
-    # If requested, ensure numerical symmetry of return matrix
-    if(check){
-        Sigma2 <- ensure_matrix_symmetry_and_truncate_zeros(Sigma2)
-    }
-    return(Sigma2)
-}
-
-#' @rdname parameterMatrixConversion
-#' @export
 Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
     if(check){
         Gamma <- checkGamma(Gamma)
@@ -267,6 +187,148 @@ Theta2Sigma <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
         Sigma <- ensure_matrix_symmetry_and_truncate_zeros(Sigma)
     }
     return(Sigma)
+}
+
+#' @rdname parameterMatrixConversion
+#' @export
+Theta2Theta <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
+    if(check){
+        Theta <- checkTheta(Theta, k1, full1)
+    }
+
+    # Compute full Theta matrix
+    if(full1 || is.null(k1)){
+        ThetaFull <- Theta
+    } else{
+        d <- computeD(Theta, k1, full1)
+        ThetaFull <- matrix(0, d, d)
+        ThetaFull[-k1,-k1] <- Theta
+    }
+    if(!is.null(k1)){
+        # Fill missing row/column s.t. rowSums/colSums are zero
+        ThetaFull[,k1] <- -rowSums(ThetaFull)
+        ThetaFull[k1,] <- ThetaFull[,k1]
+        ThetaFull[k1,k1] <- -sum(ThetaFull[,k1])
+    }
+    
+    # Compute return matrix
+    if(check){
+        ThetaFull <- ensure_matrix_symmetry_and_truncate_zeros(ThetaFull)
+    }
+    if(is.null(k2)){
+        return(ThetaFull)
+    }
+    if(!full2){
+        return(ThetaFull[-k2,-k2])
+    }
+    ThetaFull[k2,] <- 0
+    ThetaFull[,k2] <- 0
+    return(ThetaFull)
+}
+
+#' @rdname parameterMatrixConversion
+#' @export
+Sigma2Sigma <- function(Sigma, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check=TRUE){
+    if(check){
+        Sigma <- checkSigma(Sigma, k1, full1)
+    }
+
+    d <- computeD(Sigma, k1, full1)
+
+    # Compute full Sigma matrix
+    if(full1 || is.null(k1)){
+        SigmaFull <- Sigma
+    } else{
+        SigmaFull <- matrix(0, d, d)
+        SigmaFull[-k1, -k1] <- Sigma
+    }
+    
+    # Compute return matrix
+    if(identical(k1, k2)){
+        Sigma2 <- SigmaFull
+        if(!is.null(k2) && !full2){
+            Sigma2 <- Sigma2[-k2, -k2]
+        }
+    } else if(is.null(k2)){
+        ID <- diag(d) - matrix(1/d, d, d)
+        Sigma2 <- ID %*% SigmaFull %*% ID
+    } else {
+        Sigma2 <- (
+            SigmaFull
+            - matrix(SigmaFull[,k2], d, d, byrow = FALSE)
+            - matrix(SigmaFull[,k2], d, d, byrow = TRUE)
+            + SigmaFull[k2,k2]
+        )
+
+        if(!full2){
+            Sigma2 <- Sigma2[-k2, -k2]
+        }
+    }
+
+    # If requested, ensure numerical symmetry of return matrix
+    if(check){
+        Sigma2 <- ensure_matrix_symmetry_and_truncate_zeros(Sigma2)
+    }
+    return(Sigma2)
+}
+
+#' @details `Gamma2Gamma` only checks and returns the input.
+#' 
+#' @rdname parameterMatrixConversion
+#' @export
+Gamma2Gamma <- function(Gamma, check=TRUE){
+    if(!check){
+        return(Gamma) 
+    }
+    return(checkGamma(Gamma))
+}
+
+#' @param name1 Name of the input representation.
+#' @param name2 Name of the output representation.
+#' @details `matrix2matrix` is a wrapper function that calls the corresponding
+#' conversion function implied by `name1`, `name2`.
+#' 
+#' @rdname parameterMatrixConversion
+#' @export
+matrix2matrix <- function(
+    M,
+    name1=c('Gamma', 'Sigma', 'Theta')[1],
+    name2=c('Gamma', 'Sigma', 'Theta')[1],
+    k1=NULL,
+    k2=NULL,
+    full1=FALSE,
+    full2=FALSE,
+    check=TRUE
+){
+    ret <- if(name1 == 'Gamma'){
+        if(name2 == 'Gamma'){
+            Gamma2Gamma(M, check)
+        } else if(name2 == 'Sigma'){
+            Gamma2Sigma(M, k2, full2, check)
+        } else if(name2 == 'Theta'){
+            Gamma2Theta(M, k2, full2, check)
+        }
+    } else if(name1 == 'Sigma'){
+        if(name2 == 'Gamma'){
+            Sigma2Gamma(M, k1, full1, check)
+        } else if(name2 == 'Sigma'){
+            Sigma2Sigma(M, k1, k2, full1, full2, check)
+        } else if(name2 == 'Theta'){
+            Sigma2Theta(M, k1, k2, full1, full2, check)
+        }
+    } else if(name1 == 'Theta'){
+        if(name2 == 'Gamma'){
+            Theta2Gamma(M, k1, full1, check)
+        } else if(name2 == 'Sigma'){
+            Theta2Sigma(M, k1, k2, full1, full2, check)
+        } else if(name2 == 'Theta'){
+            Theta2Theta(M, k1, k2, full1, full2, check)
+        }
+    }
+    if(is.null(ret)){
+        stop('Invalid name1 or name2')
+    }
+    return(ret)
 }
 
 
@@ -443,10 +505,10 @@ checkSigmaTheta <- function(M, k, full, matrixName='Sigma'){
         if(!is_valid_Theta(M)){
             stop(matrixName, ' must be symmetric pos. def. with zero row sums.')
         }
-        return(ensure_matrix_symmetry(M))
+        return(ensure_matrix_symmetry_and_truncate_zeros(M))
     }
     if(full){
-        if(any(abs(M[,k]) > get_small_tol)){
+        if(any(abs(M[,k]) > get_small_tol())){
             stop('The k-th row/column of ', matrixName, ' must be zero!')
         }
         M_PD <- M[-k,-k]
