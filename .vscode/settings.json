@@ -5,7 +5,8 @@
         "man/*": true
     },
     "[r]": {
+        "editor.tabSize": 2,
         "editor.indentSize": 2,
         "editor.detectIndentation": false
-    }
+    },
 }

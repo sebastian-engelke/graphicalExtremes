@@ -185,7 +185,7 @@ fmpareto_graph_HR_clique_sequential <- function(
     subGammas <- parallel::mclapply(
       mc.cores = get_mc_cores(),
       cliques,
-        function(cli){
+      function(cli){
         # get margins data
         data.cli <- mparetomargins(data, cli)
         
