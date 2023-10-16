@@ -19,7 +19,7 @@ gList <- split_graph(g)
 toc()
 
 x <- lapply(gList, function(g){
-    sort(getPids(g))
+  sort(getPids(g))
 })
 
 

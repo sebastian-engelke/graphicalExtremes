@@ -2,7 +2,7 @@
 ## Try to figure out what the coordinates in danube data are
 
 if(!nchar(Sys.getenv('VSCODE_DEBUG_SESSION'))){
-    devtools::load_all('.')
+  devtools::load_all('.')
 }
 # library(igraph)
 # library(tictoc)
@@ -24,28 +24,28 @@ xLim <- range(locAll[,1])
 yLim <- range(locAll[,2])
 
 edgeData <- lapply(seq_len(nrow(danube$flow_edges)), function(i){
-    edge <- danube$flow_edges[i,]
-    loc1[c(edge, NA),]
+  edge <- danube$flow_edges[i,]
+  loc1[c(edge, NA),]
 })
 locEdges <- do.call(rbind, edgeData)
 
 lineData <- lapply(seq_len(nrow(loc1)), function(i){
-    rbind(
-        loc1[i,],
-        loc2[i,],
-        NA
-    )
+  rbind(
+    loc1[i,],
+    loc2[i,],
+    NA
+  )
 })
 locLines <- do.call(rbind, lineData)
 
 plot(loc1, xlim = xLim, ylim = yLim)
 # lines(locEdges)
 arrows(
-    c(NA, locEdges[,1]),
-    c(NA, locEdges[,2]),
-    c(locEdges[,1], NA),
-    c(locEdges[,2], NA),
-    length = 0.1
+  c(NA, locEdges[,1]),
+  c(NA, locEdges[,2]),
+  c(locEdges[,1], NA),
+  c(locEdges[,2], NA),
+  length = 0.1
 )
 points(loc2, col='red')
 lines(locLines, col='red', lty=2)

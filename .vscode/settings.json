@@ -3,5 +3,9 @@
     "files.readonlyInclude": {
         "NAMESPACE": true,
         "man/*": true
+    },
+    "[r]": {
+        "editor.indentSize": 2,
+        "editor.detectIndentation": false
     }
 }

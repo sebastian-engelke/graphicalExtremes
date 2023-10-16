@@ -12,18 +12,18 @@
 #' 
 #' @keywords internal
 getPackageData <- function(filename, isRDS=TRUE){
-    # Path of data file
-    fpath <- system.file('extdata', filename, package='graphicalExtremes')
+  # Path of data file
+  fpath <- system.file('extdata', filename, package='graphicalExtremes')
 
-    # RDS files contain a single object which is returned
-    if(isRDS){
-        return(readRDS(fpath))
-    }
+  # RDS files contain a single object which is returned
+  if(isRDS){
+    return(readRDS(fpath))
+  }
 
-    # RDA files contain one/multiple R object(s) which are returned in a new environment
-    env <- new.env(parent = emptyenv())
-    load(fpath, envir = env)
-    return(env)
+  # RDA files contain one/multiple R object(s) which are returned in a new environment
+  env <- new.env(parent = emptyenv())
+  load(fpath, envir = env)
+  return(env)
 }
 
 #' Upper Danube basin dataset
@@ -36,8 +36,8 @@ getPackageData <- function(filename, isRDS=TRUE){
 #'  \item{`data_raw`}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 #'  \item{`info`}{A data frame, containing information about each gauging station}
 #'  \item{`flow_edges`}{
-#'    A two-column numeric matrix. Each row contains the indices (in `info`)
-#'    of a pair of gauging stations that are directly connected by a river.
+#'  A two-column numeric matrix. Each row contains the indices (in `info`)
+#'  of a pair of gauging stations that are directly connected by a river.
 #'  }
 #' }
 #' 
@@ -60,7 +60,7 @@ getPackageData <- function(filename, isRDS=TRUE){
 #'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
 #'  \item{`Slope`}{Mean slope of the catchment}
 #'  \item{`PlotCoordX`, `PlotCoordY`}{
-#'    X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
+#'  X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
 #'  }
 #' }
 #' 
@@ -94,7 +94,7 @@ getPackageData <- function(filename, isRDS=TRUE){
 #'  \item{`airports`}{A `data.frame`, containing information about US airports}
 #'  \item{`delays`}{A numeric matrix, containing daily aggregated delays at the airports in the dataset}
 #'  \item{`flightCounts`}{
-#'    A numeric array, containing yearly flight numbers between airports in the dataset
+#'  A numeric array, containing yearly flight numbers between airports in the dataset
 #'  }
 #' }
 #' 

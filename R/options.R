@@ -12,28 +12,28 @@
 #' @seealso [`graphicalExtremes-package`]
 #' @export
 get_mc_cores <- function(overwrite = NULL){
-    # Always 1 on windows
-    if(.Platform$OS.typ == 'windows'){
-        return(1L)
-    }
-    # Use overwrite if specified
-    if(is.numeric(overwrite) && length(overwrite) >= 1){
-        nc_overwrite <- fitInInterval(overwrite[1], 1, Inf)
-        return(as.integer(nc_overwrite))
-    }
-    # Try to use package option
-    nc_option <- getOption('graphicalExtremes.mc.cores')
-    if(is.numeric(nc_option) && length(nc_option) >= 1){
-        nc_option <- fitInInterval(nc_option[1], 1, Inf)
-        return(as.integer(nc_option))
-    }
-    # Try to detect
-    nc_detected <- parallel::detectCores()
-    if(!is.na(nc_detected)){
-        return(nc_detected)
-    }
-    # Fall back to 1
+  # Always 1 on windows
+  if(.Platform$OS.typ == 'windows'){
     return(1L)
+  }
+  # Use overwrite if specified
+  if(is.numeric(overwrite) && length(overwrite) >= 1){
+    nc_overwrite <- fitInInterval(overwrite[1], 1, Inf)
+    return(as.integer(nc_overwrite))
+  }
+  # Try to use package option
+  nc_option <- getOption('graphicalExtremes.mc.cores')
+  if(is.numeric(nc_option) && length(nc_option) >= 1){
+    nc_option <- fitInInterval(nc_option[1], 1, Inf)
+    return(as.integer(nc_option))
+  }
+  # Try to detect
+  nc_detected <- parallel::detectCores()
+  if(!is.na(nc_detected)){
+    return(nc_detected)
+  }
+  # Fall back to 1
+  return(1L)
 }
 
 
@@ -54,36 +54,36 @@ get_mc_cores <- function(overwrite = NULL){
 #' @seealso [`graphicalExtremes-package`]
 #' @export
 get_small_tol <- function(overwrite = NULL){
-    # Use overwrite if specified
-    if(is.numeric(overwrite) && length(overwrite) >= 1){
-        tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
-        return(tol_overwrite)
-    }
-    # Try package option
-    tol_option <- getOption('graphicalExtremes.tol.small')
-    if(is.numeric(tol_option) && length(tol_option) >= 1){
-        tol_option <- fitInInterval(tol_option[1], 0, Inf)
-        return(tol_option)
-    }
-    # Fall back to some default value
-    return(1e-12)
+  # Use overwrite if specified
+  if(is.numeric(overwrite) && length(overwrite) >= 1){
+    tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
+    return(tol_overwrite)
+  }
+  # Try package option
+  tol_option <- getOption('graphicalExtremes.tol.small')
+  if(is.numeric(tol_option) && length(tol_option) >= 1){
+    tol_option <- fitInInterval(tol_option[1], 0, Inf)
+    return(tol_option)
+  }
+  # Fall back to some default value
+  return(1e-12)
 }
 
 
 #' @rdname get_tol
 #' @export
 get_large_tol <- function(overwrite = NULL){
-    # Use overwrite if specified
-    if(is.numeric(overwrite) && length(overwrite) >= 1){
-        tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
-        return(tol_overwrite)
-    }
-    # Try package option
-    tol_option <- getOption('graphicalExtremes.tol.large')
-    if(is.numeric(tol_option) && length(tol_option) >= 1){
-        tol_option <- fitInInterval(tol_option[1], 0, Inf)
-        return(tol_option)
-    }
-    # Fall back to some default value
-    return(1e-9)
+  # Use overwrite if specified
+  if(is.numeric(overwrite) && length(overwrite) >= 1){
+    tol_overwrite <- fitInInterval(overwrite[1], 0, Inf)
+    return(tol_overwrite)
+  }
+  # Try package option
+  tol_option <- getOption('graphicalExtremes.tol.large')
+  if(is.numeric(tol_option) && length(tol_option) >= 1){
+    tol_option <- fitInInterval(tol_option[1], 0, Inf)
+    return(tol_option)
+  }
+  # Fall back to some default value
+  return(1e-9)
 }

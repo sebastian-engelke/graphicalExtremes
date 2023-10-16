@@ -24,16 +24,16 @@ print(d)
 
 # plot(g0)
 # for(gg in g0List){
-#     plot(gg, vertex.label = getPids(gg))
+#   plot(gg, vertex.label = getPids(gg))
 # }
 
 
 minSeps <- igraph::min_separators(g)
 # minSeps <- igraph::min_st_separators(g) # too slow!
 ratios <- sapply(minSeps, function(ms){
-    gsSep <- split_graph_at_sep(g, ms)
-    partSizes <- sapply(gsSep, length)
-    max(partSizes) / d
+  gsSep <- split_graph_at_sep(g, ms)
+  partSizes <- sapply(gsSep, length)
+  max(partSizes) / d
 })
 
 dists <- igraph::distances(g)
