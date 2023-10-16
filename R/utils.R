@@ -209,25 +209,19 @@ upper.tri.val <- function(M, diag=FALSE){
 }
 
 
-is_eq <- function(a, b, tol=NULL) {
-  if(is.null(tol)){
-    tol <- get_small_tol()
-  }
+is_eq <- function(a, b, tol=get_small_tol()) {
   abs(a - b) < tol
 }
-is_greater <- function(a, b, tol=NULL) {
-  if(is.null(tol)){
-    tol <- get_small_tol()
-  }
+is_greater <- function(a, b, tol=get_small_tol()) {
   a - b > tol
 }
-is_less <- function(a, b, tol=NULL) {
+is_less <- function(a, b, tol=get_small_tol()) {
   is_greater(b, a, tol)
 }
-is_leq <- function(a, b, tol=NULL) {
+is_leq <- function(a, b, tol=get_small_tol()) {
   !is_greater(a, b, tol)
 }
-is_geq <- function(a, b, tol=NULL) {
+is_geq <- function(a, b, tol=get_small_tol()) {
   !is_less(a, b, tol)
 }
 

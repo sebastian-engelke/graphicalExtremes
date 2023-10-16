@@ -70,7 +70,8 @@ the input is a \dxd matrix with the kth row filled with zeros.}
 \item{full2}{Logical. If \code{TRUE} and \code{!is.null(k2)},
 the output is a \dxd matrix with the kth row filled with zeros.}
 
-\item{check}{Whether to check the inputs and ensure numerical symmetry of outputs.}
+\item{check}{Whether to check the inputs and call \code{ensure_matrix_symmetry_and_truncate_zeros}
+on the outputs.}
 
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 

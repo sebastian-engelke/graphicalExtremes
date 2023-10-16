@@ -4,7 +4,7 @@
 \alias{ensure_matrix_symmetry}
 \title{Ensure matrix symmetry}
 \usage{
-ensure_matrix_symmetry(M, tol = Inf)
+ensure_matrix_symmetry(M, checkTol = Inf)
 }
 \arguments{
 \item{M}{Numeric square matrix.}

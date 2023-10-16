@@ -18,7 +18,8 @@
 #' @param M Partial matrix with `NA` entries indicating missing edges.
 #' @param tol Numeric scalar. Entries in the precision matrix with absolute value
 #' smaller than this are considered to be zero.
-#' @param check Whether to check the inputs and ensure numerical symmetry of outputs.
+#' @param check Whether to check the inputs and call `ensure_matrix_symmetry_and_truncate_zeros`
+#' on the outputs.
 #' 
 #' @name sharedParamsMatrixTransformations
 NULL
@@ -269,16 +270,145 @@ Theta2Sigma <- function(Theta, k1=NULL, k2=NULL, full1=FALSE, full2=FALSE, check
 }
 
 
-# par2Matrix <- NULL
-# par2Gamma <- NULL
-# par2Sigma <- NULL
-# matrix2par <- NULL
+#' Create Gamma or Theta from vector
+#'
+#' Convert parameter vector `par` (upper triangular part of Gamma/Theta matrix)
+#' to full Gamma/Theta, or vice versa.
+#'
+#' @param par Numeric vector with `d` elements.
+#' Upper triangular part of a Gamma/Theta matrix.
+#' @param allowMatrix If `TRUE` and `par` is already a matrix, return it as is.
+#' @param allowNull If `TRUE` and `par` is NULL, return NULL.
+#' @param zeroRowSums If `TRUE` the diagonal is set to (-1) times the rowSums.
+#'
+#' @return Numeric matrix \dxd. Full Gamma/Theta matrix corresponding to `par`.
+#' 
+#' @rdname par2Matrix
+#' @keywords internal
+par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){
+  # Check for forbidden/trivial input
+  if(is.matrix(par)){
+    if(allowMatrix){
+      return(par)
+    }
+    stop('`par` must not be a matrix (unless allowMatrix=TRUE).')
+  }
+  if(is.null(par)){
+    if(allowNull){
+      return(NULL)
+    }
+    stop('`par` must not be NULL (unless allowNull=TRUE).')
+  }
+  # Compute dimension of matrix
+  d <- round(1 / 2 + sqrt(1 / 4 + 2 * length(par)))
+  if (d*(d-1)/2 != length(par)) {
+    stop("The length of par does not agree with the upper triangle of any square matrix.")
+  }
+  # Create matrix
+  M <- matrix(0, nrow = d, ncol = d)
+  M[upper.tri(M)] <- par
+  M <- M + t(M)
+  if(zeroRowSums){
+    diag(M) <- (-1) * rowSums(M)
+  }
+  return(M)  
+}
+#' @rdname par2Matrix
+par2Gamma <- function(par, allowMatrix = FALSE, allowNull = FALSE){
+  par2Matrix(par, allowMatrix, allowNull, zeroRowSums = FALSE)
+}
+#' @rdname par2Matrix
+par2Theta <- function(par, allowMatrix = FALSE, allowNull = FALSE){
+  par2Matrix(par, allowMatrix, allowNull, zeroRowSums = TRUE)
+}
+#' @rdname par2Matrix
+#' @param allowVector If `TRUE` and `M` is already a vector, return it as is.
+#' @param M Matrix
+#' 
+#' @return Upper triangular part of `M` (or `M` itself/NULL if allowed)
+matrix2par <- function(M, allowVector = FALSE, allowNull = FALSE){
+  if(is.null(M)){
+    if(allowNull){
+      return(NULL)
+    }
+    stop('Matrix `M` must not be NULL (unless allowNull=TRUE).')
+  }
+  if(allowVector && is.vector(M)){
+    return(M)
+  }
+  return(upper.tri.val(M))
+}
 
-# #' @param chi 
-# chi2Gamma <- NULL
-# Gamma2chi <- NULL
-# Gamma2chi_3D <- NULL
 
+#' Transformation between \eChi and \eGamma
+#'
+#' Transforms between the extremal correlation \eChi and the variogram \eGamma.
+#' Only valid for Huesler-Reiss distributions.
+#' Done elementwise, no checks of the entire matrix structure are performed.
+#'
+#' @param chi Numeric vector or matrix with entries between 0 and 1.
+#'
+#' @return Numeric vector or matrix containing the implied \eGamma.
+#'
+#' @details
+#' The formula for transformation from \eChi to \eGamma is element-wise 
+#' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
+#' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
+#'
+#' @rdname chi2Gamma
+#' @export
+chi2Gamma <- function(chi) {
+    if (any(chi < 0) || any(chi > 1)) {
+        stop("The argument chi must be between 0 and 1.")
+    }
+    Gamma <- (2 * stats::qnorm(1 - 0.5 * chi))^2
+    return(Gamma)
+}
+
+
+#' @details
+#' The formula for transformation from \eGamma to \eChi is element-wise 
+#' \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
+#' where \eqn{\Phi} is the standard normal distribution function.
+#'
+#' @param Gamma Numeric vector or matrix with non-negative entries.
+#' 
+#' @return Numeric vector or matrix containing the implied \eChi.
+#'
+#' @rdname chi2Gamma
+#' @export
+Gamma2chi <- function(Gamma) {
+    if(any(Gamma < 0)){
+        stop("Entries of Gamma must be >= 0.")
+    }
+    chi <- 2 - 2 * stats::pnorm(sqrt(Gamma) / 2)
+    return(chi)
+}
+
+
+#' Compute theoretical \eChi in 3D
+#'
+#' Computes the theoretical \eChi coefficient in 3 dimensions.
+#'
+#' @param Gamma Numeric \eXTimesY{3}{3} matrix.
+#'
+#' @return The 3-dimensional \eChi coefficient, i.e.,
+#' the extremal correlation coefficient for the HR distribution. Note that
+#' \eqn{0 \leq \chi \leq 1}.
+#'
+#' @keywords internal
+Gamma2chi_3D <- function(Gamma) {
+  d <- dim_Gamma(Gamma)
+
+  if (d != 3) {
+    stop("Gamma must be a 3 x 3 matrix.")
+  }
+  res <- 3 - V_HR(x = rep(1, times = 2), Gamma = Gamma[c(1, 2), c(1, 2)]) -
+    V_HR(x = rep(1, times = 2), Gamma = Gamma[c(1, 3), c(1, 3)]) -
+    V_HR(x = rep(1, times = 2), Gamma = Gamma[c(2, 3), c(2, 3)]) +
+    V_HR(x = rep(1, times = 3), Gamma = Gamma)
+  return(res)
+}
 
 
 checkGamma <- function(Gamma){

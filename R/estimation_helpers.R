@@ -232,7 +232,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
     d <- NCOL(data)
     n <- NROW(data)
   }
-  par <- Gamma2par(Gamma)
+  par <- matrix2par(Gamma)
 
   # if cens = FALSE (default)
   if (!cens) {

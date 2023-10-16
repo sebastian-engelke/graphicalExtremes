@@ -191,13 +191,13 @@ fmpareto_graph_HR_clique_sequential <- function(
         
         # find (already) fixed entries
         G.cli <- Ghat[cli, cli]
-        par.cli <- Gamma2par(G.cli)
+        par.cli <- matrix2par(G.cli)
         fixParams.cli <- !is.na(par.cli)
         
         # get initial parameters that agree with the fixed ones (heuristic, close to empirical variogram):
         G0 <- emp_vario(data.cli)
         G1 <- replaceGammaSubMatrix(G0, G.cli)
-        init.cli <- Gamma2par(G1)
+        init.cli <- matrix2par(G1)
         
         # estimate parameters
         opt <- fmpareto_HR_MLE(

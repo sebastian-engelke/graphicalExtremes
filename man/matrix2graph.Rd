@@ -21,7 +21,8 @@ partialMatrixToGraph(M)
 \item{tol}{Numeric scalar. Entries in the precision matrix with absolute value
 smaller than this are considered to be zero.}
 
-\item{check}{Whether to check the inputs and ensure numerical symmetry of outputs.}
+\item{check}{Whether to check the inputs and call \code{ensure_matrix_symmetry_and_truncate_zeros}
+on the outputs.}
 
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 
