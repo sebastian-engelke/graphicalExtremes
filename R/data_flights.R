@@ -354,9 +354,13 @@ plotFlights <- function(
 #' The provided lists of airports and dates correspond to the ones used in
 #' the case study of \localCiteT{hen2022}.
 #' The argument `airportFilter="tcCluster"` corresponds to the airports in the analyzed "Texas Cluster",
-#' `airportFilter="tcAll"` corresponds to all airports used in the previous clustering step.
+#' `airportFilter="tcAll"` corresponds to all airports used in the previous clustering step,
+#' `airportFilter="all"` corresponds to all airports in the dataset.
+#' 
 #' Similarly, `dateFilter="tcTrain"` selects the dates from the training set,
-#' and `dateFitler="tcTest"` the ones from the test/validation set.
+#' `dateFilter="tcTest"` the ones from the test/validation set.
+#' To get the union of these sets, specify `dateFilter=c("tcTest", "tcTrain")`.
+#' To get all dates in the dataset, specify `dateFilter="all"`.
 #' 
 #' @return
 #' If `what="delays"`, a three-dimensional array,

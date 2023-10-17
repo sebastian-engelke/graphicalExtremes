@@ -40,9 +40,13 @@ Currently, all possible selections correspond to the case study in \localCiteT{h
 The provided lists of airports and dates correspond to the ones used in
 the case study of \localCiteT{hen2022}.
 The argument \code{airportFilter="tcCluster"} corresponds to the airports in the analyzed "Texas Cluster",
-\code{airportFilter="tcAll"} corresponds to all airports used in the previous clustering step.
+\code{airportFilter="tcAll"} corresponds to all airports used in the previous clustering step,
+\code{airportFilter="all"} corresponds to all airports in the dataset.
+
 Similarly, \code{dateFilter="tcTrain"} selects the dates from the training set,
-and \code{dateFitler="tcTest"} the ones from the test/validation set.
+\code{dateFilter="tcTest"} the ones from the test/validation set.
+To get the union of these sets, specify \code{dateFilter=c("tcTest", "tcTrain")}.
+To get all dates in the dataset, specify \code{dateFitler="all"}.
 }
 \examples{
 getFlightDelayData(
