@@ -165,7 +165,7 @@ is_sym_cnd <- function(M, tol=get_small_tol()){
     return(FALSE)
   }
   # Check that Gamma2Sigma yields a pos. def. matrix
-  # Is there a more elegant way to do this?
+  # TODO: Is there a more elegant/correct way to do this?
   Sk <- Gamma2Sigma(M, k=1, check=FALSE)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
   return(eig[d-1] > 0)

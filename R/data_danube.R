@@ -322,6 +322,8 @@ plotDanube <- function(
 #' 
 #' @return An [`igraph::graph`] object.
 #' 
+#' @family danubeData
+#' 
 #' @export
 getDanubeFlowGraph <- function(stationIndices=NULL, directed=FALSE){
   # If not specified, use all indices
