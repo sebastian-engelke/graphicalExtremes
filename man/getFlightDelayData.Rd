@@ -46,7 +46,7 @@ The argument \code{airportFilter="tcCluster"} corresponds to the airports in the
 Similarly, \code{dateFilter="tcTrain"} selects the dates from the training set,
 \code{dateFilter="tcTest"} the ones from the test/validation set.
 To get the union of these sets, specify \code{dateFilter=c("tcTest", "tcTrain")}.
-To get all dates in the dataset, specify \code{dateFitler="all"}.
+To get all dates in the dataset, specify \code{dateFilter="all"}.
 }
 \examples{
 getFlightDelayData(
