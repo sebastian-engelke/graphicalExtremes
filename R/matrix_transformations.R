@@ -461,7 +461,7 @@ Gamma2chi <- function(Gamma) {
 #'
 #' @keywords internal
 Gamma2chi_3D <- function(Gamma) {
-  d <- dim_Gamma(Gamma)
+  d <- computeD(Gamma)
 
   if (d != 3) {
   stop("Gamma must be a 3 x 3 matrix.")

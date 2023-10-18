@@ -109,7 +109,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
     B <- floor(b * (stats::runif(d1**2)*2 - 1))
     B <- matrix(B, d1, d1)
     S <- B %*% t(B)
-    if(is_sym_pos_def(S)){
+    if(is_pos_def(S)){
       break
     }
     b <- b+b_step
@@ -142,7 +142,7 @@ generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   m <- floor(log(det(M), 10) / d)
   M <- M * 10**(-m)
   M <- ensure_matrix_symmetry(M)
-  if(!is_sym_pos_def(M)){
+  if(!is_pos_def(M)){
     stop('Failed to produce an SPD matrix!')
   }
   return(M)

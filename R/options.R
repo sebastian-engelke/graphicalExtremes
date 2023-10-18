@@ -87,3 +87,38 @@ get_large_tol <- function(overwrite = NULL){
   # Fall back to some default value
   return(1e-9)
 }
+
+
+ignore <- function(...){invisible()}
+
+get_default_alert <- function(overwrite = NULL){
+  OPTION_NAME_DEFAULT_ALERT <- 'graphicalExtremes.default.alert'
+  IGNORE_STRING <- 'ignore'
+
+  # Handle overwrite
+  if(is.null(overwrite)){
+    # read from options below
+  }else if(is.function(overwrite)){
+    return(overwrite)
+  }else if(identical(overwrite, IGNORE_STRING)){
+    return(ignore)
+  }else {
+    stop('`overwrite` must be NULL, a function, or "', IGNORE_STRING, '".')
+  }
+  
+  # Get from options
+  alert_option <- getOption(OPTION_NAME_DEFAULT_ALERT)
+  if(is.function(alert_option)){
+    # return as is below
+  }else if(is.null(alert_option)){
+    alert_option <- warning
+  }else if(identical(alert_option, IGNORE_STRING)){
+    alert_option <- ignore
+  }else{
+    stop('option "', OPTION_NAME_DEFAULT_ALERT, '" must be NULL, a function, or "', IGNORE_STRING, '"!')
+  }
+  
+  # Return
+  return(alert_option)
+}
+
