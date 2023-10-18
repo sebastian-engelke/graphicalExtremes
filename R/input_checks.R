@@ -149,96 +149,169 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
 #' 
 #' @rdname checkGamma
 #' @export
-checkGamma <- function(Gamma, alert=get_default_alert(), tol=get_small_tol()){
+checkGamma <- function(
+  Gamma,
+  alert=NULL,
+  tol=get_small_tol(),
+  returnBoolean=FALSE
+){
+  alert <- get_alert_function(alert)
   if(!is_symmetric_matrix(Gamma)){
     alert('Gamma must be a symmetric matrix!')
+    if(returnBoolean) return(FALSE)
   }
-  maxAbsDiag <- max(abs(diag(Gamma)))
+  maxAbsDiag <- max_without_warning(abs(diag(Gamma)))
   if(maxAbsDiag > tol){
     alert('Gamma must have 0 diagonal (err=', maxAbsDiag, ')')
+    if(returnBoolean) return(FALSE)
   }
   diag(Gamma) <- 0
   smallestEntry <- min_without_warning(upper.tri.val(Gamma))
-  if(smallestEntry < 0){
+  if(smallestEntry < -tol){
     alert('Gamma must have only non-negative entries (err=', smallestEntry, ')')
+    if(returnBoolean) return(FALSE)
   }
-  if(!is_sym_cnd(Gamma)){
+  if(!is_cnd(Gamma)){
     alert('Gamma is not a valid variogram matrix!')
+    if(returnBoolean) return(FALSE)
   }
-  return(ensure_matrix_symmetry_and_truncate_zeros(Gamma))
+  if(returnBoolean) return(TRUE)
+  return(ensure_matrix_symmetry_and_truncate_zeros(Gamma, tol))
 }
+is_sym_cnd <- function(M, tol=get_small_tol){
+  checkGamma(M, alert=FALSE, tol=tol, returnBoolean = TRUE)
+}
+
 #' @rdname checkGamma
 #' @export
-checkSigmaTheta <- function(M, k, full, matrixName='Sigma', tol=get_small_tol(), alert=get_default_alert()){
+checkSigmaTheta <- function(
+  M,
+  k,
+  full,
+  matrixName='Sigma',
+  tol=get_small_tol(),
+  alert=NULL,
+  returnBoolean=FALSE
+){
+  alert <- get_alert_function(alert)
+
   if(!is_symmetric_matrix(M)){
     alert(matrixName, ' must be a symmetric matrix!')
+    if(returnBoolean) return(FALSE)
   }
+  
+  # Compute d, check 1<=k<=d, return early for empty matrix
   d <- computeD(M, k, full)
-  if(d == 0){
-    # Empty matrix is ok?
-    return(M)
-  } else if(k < 0 || k > d){
+  if(!is.null(k) && (k < 0 || k > d)){
     alert('k (', k, ') must be in 1, ..., d (', d, ').')
+    if(returnBoolean) return(FALSE)
   }
+  if(d == 0 || (d == 1 && !full)){
+    # Empty matrix is ok
+    if(returnBoolean) return(TRUE)
+    return(M)
+  }
+  
+  # Handle positive semi-definite case with zero rowsums
   if(is.null(k)){
-    maxRowsum <- get_max_abs_rowsum(M)
-    if(maxRowsum > tol){
-      alert(matrixName, ' must have zero row sums (err=', maxRowsum, ').')
+    maxAbsRowsum <- get_max_abs_rowsum(M)
+    if(maxAbsRowsum > tol){
+      alert(matrixName, ' must have zero row sums (err=', maxAbsRowsum, ').')
+      if(returnBoolean) return(FALSE)
     }
     if(d == 1){
-      # 1d Sigma/Theta is ok, if it is 0 (i.e. <tol)
+      # 1d Sigma/Theta is ok, if it is 0 (i.e. maxRowSum<=tol)
       M[1,1] <- 0
+      if(returnBoolean) return(TRUE)
       return(M)
     }
     ev2 <- get_critical_ev_Sigma_Theta(M)
     if(ev2 <= 0){
       alert(matrixName, ' must be pos. semi-def. (eigenvalue ', ev2, ' should be >0).')
+      if(returnBoolean) return(FALSE)
     }
+    if(returnBoolean) return(TRUE)
     return(ensure_matrix_symmetry_and_truncate_zeros(M))
   }
-  if(full){
-    maxZeroEntry <- max_without_warning(abs(M[,k]))
-    if(maxZeroEntry > tol){
-      alert('The k-th row/column of ', matrixName, ' must be zero (err=', maxZeroEntry, ').')
-    }
-    M_PD <- M[-k,-k]
 
-    # Make sure k-th row/col are exactly zero
-    M[k,] <- 0
-    M[,k] <- 0
-    
-    if(d == 1){
-      return(M)
+  # k not NULL, full==FALSE -> only check pos. def.
+  if(!full){
+    ev1 <- get_smallest_ev(M)
+    if(ev1 <= 0){
+      alert(matrixName, ' without k-th row/column must be pos. def. (', ev1, ' should be >0).')
+      if(returnBoolean) return(FALSE)
     }
-  } else {
-    M_PD <- M
+    if(returnBoolean) return(TRUE)
+    return(ensure_matrix_symmetry_and_truncate_zeros(M))
   }
-  ev1 <- get_smallest_ev(M_PD)
+  
+  # Remaining case: k not NULL, full==TRUE -> check that kth row/column are zero, and rest is pos. def.
+  maxZeroEntry <- max_without_warning(abs(M[,k]))
+  if(maxZeroEntry > tol){
+    alert('The k-th row/column of ', matrixName, ' must be zero (err=', maxZeroEntry, ').')
+    if(returnBoolean) return(FALSE)
+  }
+  # Make sure k-th row/col are exactly zero
+  M[k,] <- 0
+  M[,k] <- 0
+  
+  # Zero matrix is ok
+  if(d == 1){
+    if(returnBoolean) return(TRUE)
+    return(M)
+  }
+  
+  # Check that rest is pos. def.
+  ev1 <- get_smallest_ev(M[-k,-k])
   if(ev1 <= 0){
     alert(matrixName, ' without k-th row/column must be pos. def. (', ev1, ' should be >0).')
+    if(returnBoolean) return(FALSE)
   }
+  if(returnBoolean) return(TRUE)
   return(ensure_matrix_symmetry_and_truncate_zeros(M))
 }
 #' @rdname checkGamma
 #' @export
-checkTheta <- function(Theta, k=NULL, full=FALSE, tol=get_small_tol(), alert=get_default_alert()){
-  checkSigmaTheta(Theta, k, full, 'Theta', tol, alert)
+checkTheta <- function(
+  Theta,
+  k=NULL,
+  full=FALSE,
+  tol=get_small_tol(),
+  alert=NULL,
+  returnBoolean=FALSE
+){
+  checkSigmaTheta(Theta, k, full, 'Theta', tol, alert, returnBoolean)
 }
 #' @rdname checkGamma
 #' @export
-checkSigma <- function(Sigma, k=NULL, full=FALSE, tol=get_small_tol(), alert=get_default_alert()){
-  checkSigmaTheta(Sigma, k, full, 'Sigma', tol, alert)
+checkSigma <- function(
+  Sigma,
+  k=NULL,
+  full=FALSE,
+  tol=get_small_tol(),
+  alert=NULL,
+  returnBoolean=FALSE
+){
+  checkSigmaTheta(Sigma, k, full, 'Sigma', tol, alert, returnBoolean)
 }
 #' @rdname checkGamma
 #' @param M Numeric matrix, \eGamma, \eSigma, or \eTheta.
 #' @export
-checkMatrix <- function(M, name=c('Gamma', 'Sigma', 'Theta')[1], k=NULL, full=FALSE){
+checkMatrix <- function(
+  M,
+  name=c('Gamma', 'Sigma', 'Theta')[1],
+  k=NULL,
+  full=FALSE,
+  tol=get_small_tol(),
+  alert=NULL,
+  returnBoolean=FALSE
+){
   if(name == 'Gamma'){
-    checkGamma(M)
+    checkGamma(M, alert=alert, returnBoolean=returnBoolean)
   } else if(name == 'Sigma'){
-    checkSigma(M, k, full)
+    checkSigma(M, k, full, alert=alert, returnBoolean=returnBoolean)
   } else if(name == 'Theta'){
-    checkTheta(M, k, full)
+    checkTheta(M, k, full, alert=alert, returnBoolean=returnBoolean)
   } else{
     stop('Invalid matrix name!')
   }
@@ -280,7 +353,7 @@ ensure_matrix_symmetry <- function(M, checkTol=Inf){
 #' @rdname ensure_matrix_symmetry_and_truncate_zeros
 #' @export
 truncate_zeros <- function(M, tol=get_small_tol()){
-  M[abs(M) < tol] <- 0
+  M[abs(M) <= tol] <- 0
   M
 }
 #' @rdname ensure_matrix_symmetry_and_truncate_zeros
@@ -299,36 +372,13 @@ is_symmetric_matrix <- function(M, tol=get_small_tol()){
   )
 }
 
-is_sym_cnd <- function(M, tol=get_small_tol()){
-  # M must be symmetric
-  if(!is_symmetric_matrix(M, tol)){
-    return(FALSE)
-  }
-  d <- nrow(M)
-  # Empty matrix is cnd
-  if(d == 0){
-    return(TRUE)
-  }
-  # Diagonal must be zeros
-  if(any(abs(diag(M)) > tol)){
-    return(FALSE)
-  }
-  # 1x1 matrix is just 0 => ok
-  if(d == 1){
-    return(TRUE)
-  }
-  # All entries must be positive
-  if(any(upper.tri.val(M) <= 0)){
-    return(FALSE)
-  }
-  # Check that Gamma2Sigma yields a pos. def. matrix
-  # TODO: Is there a more elegant/correct way to do this?
-  Sk <- Gamma2Sigma(M, k=1, check=FALSE)
+is_cnd <- function(M){
+  Sk <- Gamma2Sigma(M, k=1, full=FALSE, check=FALSE)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
-  return(eig[d-1] > 0)
+  return(eig[length(eig)] > 0)
 }
 
-check_pos_def <- function(M, alert=get_default_alert()){
+check_pos_def <- function(M, alert=get_alert_function()){
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
   smallestEV <- eig[length(eig)]
   if(smallestEV <= 0){
@@ -371,14 +421,14 @@ min_without_warning <- function(..., na.rm = FALSE){
   if(length(c(...)) == 0){
     return(Inf)
   }
-  min(..., na.rm)
+  min(..., na.rm = na.rm)
 }
 
 max_without_warning <- function(..., na.rm = FALSE){
   if(length(c(...)) == 0){
     return(-Inf)
   }
-  max(..., na.rm)
+  max(..., na.rm = na.rm)
 }
 
 

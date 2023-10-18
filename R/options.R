@@ -91,33 +91,32 @@ get_large_tol <- function(overwrite = NULL){
 
 ignore <- function(...){invisible()}
 
-get_default_alert <- function(overwrite = NULL){
+get_alert_function <- function(overwrite = NULL){
   OPTION_NAME_DEFAULT_ALERT <- 'graphicalExtremes.default.alert'
-  IGNORE_STRING <- 'ignore'
 
   # Handle overwrite
-  if(is.null(overwrite)){
+  if(is.null(overwrite) || isTRUE(overwrite)){
     # read from options below
   }else if(is.function(overwrite)){
     return(overwrite)
-  }else if(identical(overwrite, IGNORE_STRING)){
+  }else if(isFALSE(overwrite)){
     return(ignore)
   }else {
-    stop('`overwrite` must be NULL, a function, or "', IGNORE_STRING, '".')
+    stop('`overwrite` must be a function, boolean, or NULL')
   }
-  
+
   # Get from options
   alert_option <- getOption(OPTION_NAME_DEFAULT_ALERT)
   if(is.function(alert_option)){
     # return as is below
-  }else if(is.null(alert_option)){
+  }else if(is.null(alert_option) || isTRUE(alert_option)){
     alert_option <- warning
-  }else if(identical(alert_option, IGNORE_STRING)){
+  }else if(isFALSE(overwrite)){
     alert_option <- ignore
   }else{
-    stop('option "', OPTION_NAME_DEFAULT_ALERT, '" must be NULL, a function, or "', IGNORE_STRING, '"!')
+    stop('option "', OPTION_NAME_DEFAULT_ALERT, '" must a function, boolean, or NULL')
   }
-  
+
   # Return
   return(alert_option)
 }

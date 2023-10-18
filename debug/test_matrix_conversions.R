@@ -1,5 +1,7 @@
 
-devtools::load_all()
+# devtools::load_all()
+
+options(warn = 2)
 
 set.seed(1)
 
