@@ -156,8 +156,13 @@ checkGamma <- function(
   returnBoolean=FALSE
 ){
   alert <- get_alert_function(alert)
-  if(!is_symmetric_matrix(Gamma)){
-    alert('Gamma must be a symmetric matrix!')
+  if(!is_square_matrix(Gamma)){
+    alert('Gamma must be a square matrix!')
+    if(returnBoolean) return(FALSE)
+  }
+  maxAsymmetry <- get_max_asymmetry(Gamma)
+  if(maxAsymmetry > tol){
+    alert('Gamma must be a symmetric matrix (err=', maxAsymmetry, ')!')
     if(returnBoolean) return(FALSE)
   }
   maxAbsDiag <- max_without_warning(abs(diag(Gamma)))
@@ -195,11 +200,16 @@ checkSigmaTheta <- function(
 ){
   alert <- get_alert_function(alert)
 
-  if(!is_symmetric_matrix(M)){
-    alert(matrixName, ' must be a symmetric matrix!')
+  if(!is_square_matrix(M)){
+    alert(matrixName, ' must be a square matrix!')
     if(returnBoolean) return(FALSE)
   }
-  
+  maxAsymmetry <- get_max_asymmetry(M)
+  if(maxAsymmetry > tol){
+    alert(matrixName, ' must be a symmetric matrix (err=', maxAsymmetry, ')!')
+    if(returnBoolean) return(FALSE)
+  }
+
   # Compute d, check 1<=k<=d, return early for empty matrix
   d <- computeD(M, k, full)
   if(!is.null(k) && (k < 0 || k > d)){
@@ -363,12 +373,22 @@ ensure_matrix_symmetry_and_truncate_zeros <- function(M, tol=get_small_tol(), ch
   truncate_zeros(M, tol)
 }
 
-
+is_square_matrix <- function(M){
+  (
+    is.matrix(M)
+    && ncol(M) == nrow(M)
+    && all(is.na(M) == t(is.na(M)))
+  )
+}
+get_max_asymmetry <- function(M){
+  max_without_warning(M - t(M), na.rm = TRUE)
+}
 is_symmetric_matrix <- function(M, tol=get_small_tol()){
   (
-    is.matrix(M) && ncol(M) == nrow(M)
+    is.matrix(M)
+    && ncol(M) == nrow(M)
     && all(is.na(M) == t(is.na(M)))
-    && max_without_warning(M - t(M), na.rm = TRUE) < tol
+    && max_without_warning(M - t(M), na.rm = TRUE) <= tol
   )
 }
 
