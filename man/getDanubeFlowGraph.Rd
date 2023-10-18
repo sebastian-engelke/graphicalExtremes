@@ -17,3 +17,9 @@ An \code{\link[igraph:make_graph]{igraph::graph}} object.
 \description{
 Returns an \code{\link[igraph:make_graph]{igraph::graph}} object representing the flow graph of the \code{\link{danube}} dataset.
 }
+\seealso{
+Other danubeData: 
+\code{\link{danube}},
+\code{\link{plotDanube}()}
+}
+\concept{danubeData}

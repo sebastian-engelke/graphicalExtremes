@@ -111,6 +111,7 @@ graphicalExtremes::plotDanube(
 \code{\link{plotFlights}}
 
 Other danubeData: 
-\code{\link{danube}}
+\code{\link{danube}},
+\code{\link{getDanubeFlowGraph}()}
 }
 \concept{danubeData}

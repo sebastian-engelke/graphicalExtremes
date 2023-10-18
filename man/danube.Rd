@@ -59,6 +59,7 @@ plot(g, layout = loc)
 }
 \seealso{
 Other danubeData: 
+\code{\link{getDanubeFlowGraph}()},
 \code{\link{plotDanube}()}
 
 Other datasets:
