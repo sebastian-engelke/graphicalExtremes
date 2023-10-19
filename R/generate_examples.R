@@ -1,4 +1,4 @@
-#' Generate random Huesler--Reiss Models
+#' Generate random Huesler-Reiss Models
 #'
 #' Generates a random connected graph and Gamma matrix with conditional independence
 #' structure corresponding to that graph.

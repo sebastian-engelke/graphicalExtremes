@@ -26,7 +26,7 @@
 #'
 #' @details
 #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -238,7 +238,7 @@ rmpareto <- function(
 #'
 #' @details
 #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -481,7 +481,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #'
 #' @details
 #' The simulation follows the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -706,7 +706,7 @@ rmstable <- function(
 #' @details
 #' The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
 #' and the theory in \insertCite{eng2019;textual}{graphicalExtremes} to sample from a single extremal function.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'

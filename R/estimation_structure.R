@@ -198,7 +198,7 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' Fitting extremal minimum spanning tree
 #'
 #' Fits an extremal minimum spanning tree, where the edge weights are:
-#' - negative maximized log-likelihoods of the bivariate Huesler--Reiss distributions, 
+#' - negative maximized log-likelihoods of the bivariate Huesler-Reiss distributions, 
 #'   if `method = "ML"`. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #' - empirical extremal variogram, if `method = "vario"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 #' - empirical extremal correlation, if `method = "chi"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.

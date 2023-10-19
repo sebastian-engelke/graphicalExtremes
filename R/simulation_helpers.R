@@ -1,6 +1,6 @@
 #' Simulate HR extremal functions
 #'
-#' Simulates the Huessler--Reiss extremal functions
+#' Simulates the Huesler-Reiss extremal functions
 #'
 #' @inheritParams rmpareto
 #' @param idx Integer. Index corresponding to the variable over which
@@ -111,7 +111,7 @@ simu_px_dirichlet <- function(n, d, idx, alpha) {
 
 #' Simulate HR extremal functions on a tree
 #'
-#' Simulates the Huessler--Reiss extremal functions on a tree
+#' Simulates the Huesler-Reiss extremal functions on a tree
 #'
 #' @inheritParams rmpareto
 #' @param Gamma_vec Numeric vector with `d-1` elements, where `d` is the

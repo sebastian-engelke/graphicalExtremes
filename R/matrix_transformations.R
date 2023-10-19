@@ -70,10 +70,10 @@ partialMatrixToGraph <- function(M){
 }
 
 
-#' Conversion between Hüsler-Reiss parameter matrices
+#' Conversion between Huesler-Reiss parameter matrices
 #' 
 #' Converts between different matrices that parametrize the same
-#' Hüsler-Reiss distribution:
+#' Huesler-Reiss distribution:
 #' \eGamma, \eSigma, \eTheta, \eSigmaK, \eThetaK.
 #' The \d1xd1 matrices \eSigmaK and \eThetaK can also be given/returned
 #' as \dxd matrices with the kth row and column filled with zeros.

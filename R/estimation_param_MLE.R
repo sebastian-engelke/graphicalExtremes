@@ -1,7 +1,7 @@
 
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
+#' Parameter fitting for multivariate Huesler-Reiss Pareto distribution
 #'
-#' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
+#' Fits the parameters of a multivariate Huesler-Reiss Pareto distribution
 #' using (censored) maximum likelihood estimation.
 #'
 #' Only the parameters corresponding to edges in `graph` are optimized, the remaining

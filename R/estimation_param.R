@@ -1,8 +1,8 @@
 
 
-#' Parameter fitting for Huesler--Reiss graphical models
+#' Parameter fitting for Huesler-Reiss graphical models
 #' 
-#' Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
+#' Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distirubtion
 #' with a given graphical structure, using maximum-likelihood estimation
 #' or the empirical variogram.
 #' 
@@ -10,7 +10,7 @@
 #' number of observations and `d` is the number of dimensions.
 #'
 #' @param graph Undirected, connected \[`igraph::graph`\] object with `d` vertices,
-#' representing the graphical structure of the fitted Huesler--Reiss model.
+#' representing the graphical structure of the fitted Huesler-Reiss model.
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` is already on a multivariate Pareto scale.
@@ -238,9 +238,9 @@ combine_clique_estimates_by_averaging <- function(cliques, subGammas){
 
 
 
-#' Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution
+#' Estimation of the variogram matrix \eGamma of a Huesler-Reiss distribution
 #'
-#' Estimates the variogram of the Huesler--Reiss distribution empirically.
+#' Estimates the variogram of the Huesler-Reiss distribution empirically.
 #'
 #' @param data Numeric \nxd matrix, where `n` is the
 #' number of observations and `d` is the dimension.
@@ -256,7 +256,7 @@ combine_clique_estimates_by_averaging <- function(cliques, subGammas){
 #' `emp_vario_pairwise` calls `emp_vario` for each pair of observations.
 #' This is more robust if the data contains many `NA`s, but can take rather long.
 #'
-#' @return Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
+#' @return Numeric \dxd matrix. The estimated variogram of the Huesler-Reiss distribution.
 #' 
 #' @rdname emp_vario
 #' @family parameterEstimation
@@ -487,9 +487,9 @@ emp_chi_multdim <- function(data, p = NULL) {
 
 
 
-#' Compute Huesler--Reiss log-likelihood, AIC, and BIC
+#' Compute Huesler-Reiss log-likelihood, AIC, and BIC
 #'
-#' Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.
+#' Computes (censored) Huesler-Reiss log-likelihood, AIC, and BIC values.
 #'
 #' @param data Numeric \nxd matrix. It contains
 #' observations following a multivariate HR Pareto distribution.
