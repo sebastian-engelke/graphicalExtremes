@@ -2,23 +2,59 @@
 % Please edit documentation in R/input_checks.R
 \name{checkGamma}
 \alias{checkGamma}
+\alias{checkSigmaTheta}
 \alias{checkTheta}
 \alias{checkSigma}
 \alias{checkMatrix}
 \title{Parameter matrix checks}
 \usage{
-checkGamma(Gamma)
+checkGamma(Gamma, alert = NULL, tol = get_small_tol(), returnBoolean = FALSE)
 
-checkTheta(Theta, k = NULL, full = FALSE)
+checkSigmaTheta(
+  M,
+  k,
+  full,
+  matrixName = "Sigma",
+  tol = get_small_tol(),
+  alert = NULL,
+  returnBoolean = FALSE
+)
 
-checkSigma(Sigma, k = NULL, full = FALSE)
+checkTheta(
+  Theta,
+  k = NULL,
+  full = FALSE,
+  tol = get_small_tol(),
+  alert = NULL,
+  returnBoolean = FALSE
+)
 
-checkMatrix(M, name = c("Gamma", "Sigma", "Theta")[1], k = NULL, full = FALSE)
+checkSigma(
+  Sigma,
+  k = NULL,
+  full = FALSE,
+  tol = get_small_tol(),
+  alert = NULL,
+  returnBoolean = FALSE
+)
+
+checkMatrix(
+  M,
+  name = c("Gamma", "Sigma", "Theta")[1],
+  k = NULL,
+  full = FALSE,
+  tol = get_small_tol(),
+  alert = NULL,
+  returnBoolean = FALSE
+)
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
 
-\item{Theta}{Numeric \dxd or \d1xd1 precision matrix.}
+\item{tol}{Numeric scalar. Entries in the precision matrix with absolute value
+smaller than this are considered to be zero.}
+
+\item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 
 \item{k}{\code{NULL} if the input/output matrix is \eSigma/\eTheta.
 Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK.}
@@ -26,9 +62,9 @@ Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK
 \item{full}{Logical. If \code{TRUE} and \code{!is.null(k)},
 the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 
-\item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
+\item{Theta}{Numeric \dxd or \d1xd1 precision matrix.}
 
-\item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
+\item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 }
 \value{
 The input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}},

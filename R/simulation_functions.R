@@ -513,10 +513,12 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #'  \insertAllCited{}
 #'
 #' @export
-rmstable <- function(n,
-                     model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
-                     d, par) {
-
+rmstable <- function(
+  n,
+  model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
+  d,
+  par
+){
   # methods
   model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 

@@ -28,6 +28,11 @@
 #'     mathematically not supposed to be equal to zero. This value is used e.g.
 #'     when converting a precision matrix \eTheta to an adjacency matrix of a graph.
 #'   }
+#'   \item{`"graphicalExtremes.default.alert`}{
+#'     The default alert function to be used in validity checks of Huesler-Reiss parameter matrix transformations.
+#'     Can be a function that takes an arbitrary number of strings as arguments (e.g. `cat()`, `stop()`),
+#'     `FALSE` to ignore the alerts, or `TRUE`/`NULL` to use the default function `warning()`.
+#'   }
 #' }
 #' 
 #' 

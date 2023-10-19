@@ -36,6 +36,11 @@ The "large" tolerance is used for values that \strong{converge to zero}, but are
 mathematically not supposed to be equal to zero. This value is used e.g.
 when converting a precision matrix \eTheta to an adjacency matrix of a graph.
 }
+\item{\verb{"graphicalExtremes.default.alert}}{
+The default alert function to be used in validity checks of Huesler-Reiss parameter matrix transformations.
+Can be a function that takes an arbitrary number of strings as arguments (e.g. \code{cat()}, \code{stop()}),
+\code{FALSE} to ignore the alerts, or \code{TRUE}/\code{NULL} to use the default function \code{warning()}.
+}
 }
 }
 \references{

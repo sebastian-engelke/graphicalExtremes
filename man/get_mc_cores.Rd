@@ -19,4 +19,9 @@ Will always be 1 on windows. On other systems, this value can be set using
 }
 \seealso{
 \code{\link{graphicalExtremes-package}}
+
+Other getOptions: 
+\code{\link{get_alert_function}()},
+\code{\link{get_small_tol}()}
 }
+\concept{getOptions}

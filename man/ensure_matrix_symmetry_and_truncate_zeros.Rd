@@ -6,7 +6,7 @@
 \alias{ensure_matrix_symmetry_and_truncate_zeros}
 \title{Ensure numerical matrix symmetry/zero values}
 \usage{
-ensure_matrix_symmetry(M, checkTol = Inf)
+ensure_matrix_symmetry(M, checkTol = Inf, alert = NULL)
 
 truncate_zeros(M, tol = get_small_tol())
 

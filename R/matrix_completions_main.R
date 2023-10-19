@@ -79,8 +79,8 @@ complete_Gamma <- function(
   graph = NULL,
   ...
 ){
-  tmp <- check_Gamma_and_graph(Gamma, graph)
-  Gamma <- tmp$Gamma
+  tmp <- check_partial_matrix_and_graph(Gamma, graph)
+  Gamma <- tmp$matrix
   graph <- tmp$graph
 
   # Return completion if graph is decomposable (=chordal)

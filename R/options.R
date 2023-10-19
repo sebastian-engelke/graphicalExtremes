@@ -10,6 +10,7 @@
 #' @return An integer to be used as number of cores
 #' 
 #' @seealso [`graphicalExtremes-package`]
+#' @family getOptions
 #' @export
 get_mc_cores <- function(overwrite = NULL){
   # Always 1 on windows
@@ -52,6 +53,7 @@ get_mc_cores <- function(overwrite = NULL){
 #' 
 #' @rdname get_tol
 #' @seealso [`graphicalExtremes-package`]
+#' @family getOptions
 #' @export
 get_small_tol <- function(overwrite = NULL){
   # Use overwrite if specified
@@ -89,8 +91,23 @@ get_large_tol <- function(overwrite = NULL){
 }
 
 
-ignore <- function(...){invisible()}
 
+#' Get alert function
+#' 
+#' Get a function that can be used to alert the user of invalid inputs.
+#' Returns the value implied by the `overwrite` argument,
+#' or the option `"graphicalExtremes.default.alert"`,
+#' falling back to `warning()` if neither is specified.
+#' 
+#' @param overwrite `NULL` or `TRUE` to read the option value,
+#' `FALSE` to return a dummy function,
+#' or a function that takes an arbitrary number of strings as arguments (e.g. `stop()`).
+#' 
+#' @return A function that takes an arbitrary number of strings as arguments.
+#' 
+#' @seealso [`graphicalExtremes-package`]
+#' @family getOptions
+#' @export
 get_alert_function <- function(overwrite = NULL){
   OPTION_NAME_DEFAULT_ALERT <- 'graphicalExtremes.default.alert'
 
@@ -121,3 +138,4 @@ get_alert_function <- function(overwrite = NULL){
   return(alert_option)
 }
 
+ignore <- function(...){invisible()}

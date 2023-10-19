@@ -70,28 +70,26 @@ check_graph <- function(
   return(graph)
 }
 
-#' Check input graph and Gamma matrix
+#' Check input graph and partial matrix
 #'
-#' Checks and converts the (incomplete) Gamma matrix and graph given for a
+#' Checks and converts the partial matrix and graph given for a
 #' HR graphical model.
 #'
-#' @param Gamma A Gamma matrix or vector of entries corresponding to the edges
-#' of `graph`
-#' @param graph A graph object or `NULL` if the graph structure is specified by
-#' `NA` in the Gamma matrix
+#' @param M A partial matrix or a vector of entries corresponding to the edges of `graph`
+#' @param graph A graph object or `NULL` if the graph structure is implied by the `NA` structure of `M`
 #' @param graph_type Passed to [check_graph()].
 #'
 #' @return A list consisting of
-#' \item{`Gamma`}{The Gamma matrix given as input or implied by the input}
+#' \item{`matrix`}{The matrix given as input or implied by the input}
 #' \item{`graph`}{The graph given as input or implied by the input}
 #' Throws an error if the input is not valid.
 #'
 #' @family Input checks
 #' @keywords internal
-check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
+check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'general'){
   # make graph from Gamma if necessary
-  if (is.null(graph) && is.matrix(Gamma)) {
-    graph <- partialMatrixToGraph(Gamma)
+  if (is.null(graph) && is.matrix(M)) {
+    graph <- partialMatrixToGraph(M)
   } else if (is.null(graph)) {
     stop("Supply a graph or a valid Gamma matrix")
   }
@@ -100,40 +98,38 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
   graph <- check_graph(graph, graph_type)
   d <- igraph::vcount(graph)
   e <- igraph::ecount(graph)
-  
+
   GAMMA_ERROR_TEXT <- paste(
     "The argument Gamma must be a symmetric d x d matrix,",
     "(d = number of vertices) or a vector with as many entries",
     "as edges in the graph."
   )
-  
-  if(is.matrix(Gamma)){
+
+  if(is.matrix(M)){
     # check Gamma matrix
-    if(nrow(Gamma) != d || !is_symmetric_matrix(Gamma)) {
+    if(nrow(M) != d || !is_symmetric_matrix(M)) {
       stop(GAMMA_ERROR_TEXT)
     }
-    Gamma <- ensure_matrix_symmetry(Gamma, alert=FALSE)
-  } else if (is.vector(Gamma)) {
+    M <- ensure_matrix_symmetry(M, alert=FALSE)
+  } else if (is.vector(M)) {
     # transform Gamma vector to matrix
-    if (length(Gamma) != e) {
+    if (length(M) != e) {
       stop(GAMMA_ERROR_TEXT)
     }
-    G <- matrix(NA, d, d)
+    M_from_vec <- matrix(NA, d, d)
     edgeList <- igraph::as_edgelist(graph)
-    diag(G) <- 0 # diagonal = 0
-    G[edgeList] <- Gamma # upper tri
-    G[edgeList[,c(2,1),drop=FALSE]] <- Gamma # lower tri
-    Gamma <- G
+    diag(M_from_vec) <- 0 # diagonal = 0
+    M_from_vec[edgeList] <- M # upper tri
+    M_from_vec[edgeList[,c(2,1),drop=FALSE]] <- M # lower tri
+    M <- M_from_vec
   } else {
     # Only vector and matrix are valid inputs
     stop(GAMMA_ERROR_TEXT)
   }
 
-  # check that Gamma is d x d:
-
   # return Gamma and graph
   return(list(
-    Gamma = Gamma,
+    matrix = M,
     graph = graph
   ))
 }
