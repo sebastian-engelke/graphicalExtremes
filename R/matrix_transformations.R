@@ -351,28 +351,28 @@ matrix2matrix <- function(
 par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){
   # Check for forbidden/trivial input
   if(is.matrix(par)){
-  if(allowMatrix){
-    return(par)
-  }
-  stop('`par` must not be a matrix (unless allowMatrix=TRUE).')
+    if(allowMatrix){
+      return(par)
+    }
+    stop('`par` must not be a matrix (unless allowMatrix=TRUE).')
   }
   if(is.null(par)){
-  if(allowNull){
-    return(NULL)
-  }
-  stop('`par` must not be NULL (unless allowNull=TRUE).')
+    if(allowNull){
+      return(NULL)
+    }
+    stop('`par` must not be NULL (unless allowNull=TRUE).')
   }
   # Compute dimension of matrix
   d <- round(1 / 2 + sqrt(1 / 4 + 2 * length(par)))
   if (d*(d-1)/2 != length(par)) {
-  stop("The length of par does not agree with the upper triangle of any square matrix.")
+    stop("The length of par does not agree with the upper triangle of any square matrix.")
   }
   # Create matrix
   M <- matrix(0, nrow = d, ncol = d)
   M[upper.tri(M)] <- par
   M <- M + t(M)
   if(zeroRowSums){
-  diag(M) <- (-1) * rowSums(M)
+    diag(M) <- (-1) * rowSums(M)
   }
   return(M)  
 }

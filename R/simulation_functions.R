@@ -10,8 +10,8 @@
 #'   \item `neglogistic`,
 #'   \item `dirichlet`.
 #' }
-#' @param d Dimension of the multivariate Pareto
-#' distribution.
+#' @param d Dimension of the multivariate Pareto distribution.
+#' In some cases this can be `NULL` and will be inferred from `par`.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
 #'   \item \eGamma, numeric \dxd variogram matrix, if `model = HR`.
@@ -67,14 +67,14 @@
 rmpareto <- function(
   n,
   model = c("HR", "logistic", "neglogistic", "dirichlet"),
-  d,
+  d = NULL,
   par
 ){
   model <- match.arg(model)
 
   # check arguments ####
-  if (d != round(d) | d < 1) {
-    stop("The argument d must be a positive integer.")
+  if (!is.null(d) && (d != round(d) || d < 1)) {
+    stop("The argument d must be NULL or a positive integer.")
   }
 
   if (n != round(n) | n < 1) {
@@ -82,35 +82,40 @@ rmpareto <- function(
   }
 
   if (model == "HR") {
+    par <- par2Gamma(par, allowMatrix = TRUE)
     if (!is.matrix(par)) {
       stop("The argument par must be a matrix, when model = HR.")
     }
-
-    if (NROW(par) != d | NCOL(par) != d) {
+    if(is.null(d)){
+      d <- nrow(par)
+    }
+    if (nrow(par) != d || NCOL(par) != d) {
       stop("The argument par must be a d x d matrix, when model = HR.")
     }
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12) {
+    if (length(par) != 1 || par <= 1e-12 || par >= (1-1e-12)) {
       stop(paste(
         "The argument par must be scalar between 1e-12 and 1 - 1e-12,",
         "when model = logistic."
       ))
     }
   } else if (model == "neglogistic") {
-    if (par <= 1e-12) {
+    if (length(par) != 1 || par <= 1e-12) {
       stop(paste(
         "The argument par must be scalar greater than 1e-12,",
         "when model = neglogistic."
       ))
     }
   } else if (model == "dirichlet") {
+    if(is.null(d)){
+      d <- length(par)
+    }
     if (length(par) != d) {
       stop(paste(
         "The argument par must be a vector with d elements,",
         "when model = dirichlet."
       ))
     }
-
     if (any(par <= 1e-12)) {
       stop(paste(
         "The elements of par must be greater than 1e-12,",
@@ -274,8 +279,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   # set graph theory objects
-  adj <- as.matrix(igraph::as_adj(tree))
-  d <- NROW(adj)
+  d <- igraph::vcount(tree)
   e <- igraph::ecount(tree)
   ends.mat <- igraph::ends(tree, igraph::E(tree))
 
