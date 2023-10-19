@@ -7,9 +7,9 @@
 generate_random_graphical_Gamma(graph, ...)
 }
 \arguments{
-\item{graph}{An [\code{igraph::graph}] object}
+\item{graph}{An \code{\link[igraph:make_graph]{igraph::graph}} object}
 
-\item{...}{Furhter arguments passed to \code{\link[=generate_random_spd_matrix]{generate_random_spd_matrix()}}}
+\item{...}{Further arguments passed to \code{\link[=generate_random_spd_matrix]{generate_random_spd_matrix()}}}
 }
 \description{
 Generates a valid Gamma matrix with conditional independence structure
@@ -18,12 +18,9 @@ specified by a graph
 \seealso{
 Other example generation functions:
 \code{\link{generate_random_Gamma}()},
-\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
-\code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_integer_Gamma}()},
 \code{\link{generate_random_model}()},
-\code{\link{generate_random_spd_matrix}()},
-\code{\link{generate_random_tree}()}
+\code{\link{generate_random_spd_matrix}()}
 }
 \concept{exampleGenerations}

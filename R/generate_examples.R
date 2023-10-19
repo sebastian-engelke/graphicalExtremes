@@ -47,8 +47,8 @@ generate_random_model <- function(d, graph_type='general', ...){
 #' Generates a valid Gamma matrix with conditional independence structure
 #' specified by a graph
 #'
-#' @param graph An \[`igraph::graph`\] object
-#' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
+#' @param graph An [`igraph::graph`] object
+#' @param ... Further arguments passed to [generate_random_spd_matrix()]
 #' 
 #' @family exampleGenerations
 #' @export
@@ -163,15 +163,20 @@ generate_random_spsd_matrix <- function(d, ...){
   return(Theta)
 }
 
-#' Generate a random chordal graph
+#' Generate random graphs
+#' 
+#' Generate random graphs with different structures.
+#' These do not follow well-defined distributions and are mostly meant for quickly
+#' generating test models.
 #'
-#' Generates a random chordal graph by starting with a (small) complete graph
+#' @details
+#' `generate_random_chordal_graph` generates a random chordal graph by starting with a (small) complete graph
 #' and then adding new cliques until the specified size is reached.
 #' The sizes of cliques and separators can be specified.
 #'
 #' @param d Number of vertices in the graph
-#' @param cMin Minimal size of cliques (last clique might be smaller if necessary)
-#' @param cMax Maximal size of cliques
+#' @param cMin Minimal size of cliques/blocks (last one might be smaller if necessary)
+#' @param cMax Maximal size of cliques/blocks
 #' @param sMin Minimal size of separators
 #' @param sMax Maximal size of separators
 #' @param block_graph Force `sMin == sMax == 1` to produce a block graph
@@ -179,6 +184,7 @@ generate_random_spsd_matrix <- function(d, ...){
 #'
 #' @return An \[`igraph::graph`\] object
 #' @family exampleGenerations
+#' @rdname generateRandomGraph
 #' @export
 generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
   if(block_graph){
@@ -225,21 +231,16 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 }
 
 
-#' Generate a random connected graph
-#'
-#' Generates a random connected graph.
-#' First tries to generate an Erdoes-Renyi graph, if that fails, falls back
+#' @details
+#' `generate_random_connected_graph` first tries to generate an Erdoes-Renyi graph, if that fails, falls back
 #' to producing a tree and adding random edges to that tree.
 #'
-#' @param d Number of vertices in the graph
 #' @param m Number of edges in the graph (specify this or `p`)
 #' @param p Probability of each edge being in the graph (specify this or `m`)
-#' @param maxTries Maximum number of tries to produce a connected Eroes-Renyi graph
+#' @param maxTries Maximum number of tries to produce a connected Erdoes-Renyi graph
 #' @param ... Ignored, only allowed for compatibility
 #'
-#' @return An \[`igraph::graph`\] object
-#'
-#' @family exampleGenerations
+#' @rdname generateRandomGraph
 #' @export
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
@@ -282,14 +283,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
   return(g)
 }
 
-#' Generate a random tree
-#'
-#' Generates a random tree from a random Pruefer sequence
-#'
-#' @param d Number of vertices in the graph
-#'
-#' @return An \[`igraph::graph`\] object
-#' @family exampleGenerations
+#' @rdname generateRandomGraph
 #' @export
 generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))
@@ -316,16 +310,10 @@ pruefer_to_graph <- function(pruefer){
 }
 
 
-
-#' Generate a random cactus graph
+#' @details
+#' `generate_random_cactus` generates a random cactus graph (mostly useful for benchmarking).
 #' 
-#' Generates a random cactus graph (mostly useful for benchmarking).
-#' 
-#' @param d Number of vertices in the graph
-#' @param cMin Minimal size of each block (last block might be smaller)
-#' @param cMax Maximal size of each block
-#' 
-#' @family exampleGenerations
+#' @rdname generateRandomGraph
 #' @export
 generate_random_cactus <- function(d, cMin = 2, cMax = 6){
   if(cMin > cMax || cMin < 2){
