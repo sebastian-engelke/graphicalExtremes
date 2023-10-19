@@ -47,8 +47,7 @@ check_graph <- function(
   }
 
   # check if it is connected
-  is_connected <- igraph::is_connected(graph)
-  if (!is_connected && check_connected) {
+  if (check_connected && !igraph::is_connected(graph)) {
     stop("The given graph is not connected.")
   }
 
@@ -99,18 +98,25 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
 
   # check graph
   graph <- check_graph(graph, graph_type)
-
   d <- igraph::vcount(graph)
   e <- igraph::ecount(graph)
-
-  # transform Gamma if needed
-  if (is.vector(Gamma)) {
+  
+  GAMMA_ERROR_TEXT <- paste(
+    "The argument Gamma must be a symmetric d x d matrix,",
+    "(d = number of vertices) or a vector with as many entries",
+    "as edges in the graph."
+  )
+  
+  if(is.matrix(Gamma)){
+    # check Gamma matrix
+    if(nrow(Gamma) != d || !is_symmetric_matrix(Gamma)) {
+      stop(GAMMA_ERROR_TEXT)
+    }
+    Gamma <- ensure_matrix_symmetry(Gamma, alert=FALSE)
+  } else if (is.vector(Gamma)) {
+    # transform Gamma vector to matrix
     if (length(Gamma) != e) {
-      stop(paste(
-        "The argument Gamma must be a symmetric d x d matrix,",
-        "or a vector with as many entries as the number of edges",
-        "in the graph."
-      ))
+      stop(GAMMA_ERROR_TEXT)
     }
     G <- matrix(NA, d, d)
     edgeList <- igraph::as_edgelist(graph)
@@ -118,16 +124,12 @@ check_Gamma_and_graph <- function(Gamma, graph = NULL, graph_type = 'general'){
     G[edgeList] <- Gamma # upper tri
     G[edgeList[,c(2,1),drop=FALSE]] <- Gamma # lower tri
     Gamma <- G
+  } else {
+    # Only vector and matrix are valid inputs
+    stop(GAMMA_ERROR_TEXT)
   }
 
   # check that Gamma is d x d:
-  if (!is_symmetric_matrix(Gamma)) {
-    stop(paste(
-      "The argument Gamma must be a symmetric d x d matrix,",
-      "or a vector with as many entries as the number of edges",
-      "in the graph."
-    ))
-  }
 
   # return Gamma and graph
   return(list(
@@ -351,9 +353,15 @@ computeD <- function(M, k=NULL, full=FALSE){
 #' 
 #' @rdname ensure_matrix_symmetry_and_truncate_zeros
 #' @export
-ensure_matrix_symmetry <- function(M, checkTol=Inf){
-  if(checkTol < Inf && max_without_warning(abs(M - t(M))) > checkTol){
-    warning('Matrix not symmetric (up to tolerance: ', checkTol, ')!')
+ensure_matrix_symmetry <- function(M, checkTol=Inf, alert=NULL){
+  alert <- get_alert_function(alert)
+  if(checkTol < Inf){
+    naPattern <- is.na(M)
+    if(any(naPattern) && any(naPattern != t(naPattern))){
+      alert('Matrix not symmetric (asymmetric NA pattern)!')
+    } else if(max_without_warning(abs(M - t(M)), na.rm = TRUE) > checkTol){
+      alert('Matrix not symmetric (up to tolerance: ', checkTol, ')!')
+    }
   }
   (M + t(M))/2
 }
