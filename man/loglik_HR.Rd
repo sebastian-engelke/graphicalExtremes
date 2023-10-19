@@ -31,3 +31,14 @@ log-likelihood, AIC, and BIC values.
 \description{
 Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emp_chi_multdim}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_HR_MLE}()},
+\code{\link{fmpareto_graph_HR}()}
+}
+\concept{parameterEstimation}

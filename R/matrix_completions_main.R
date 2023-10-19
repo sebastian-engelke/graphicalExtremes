@@ -72,7 +72,7 @@
 #'
 #' @seealso [Gamma2Theta()]
 #'
-#' @family Matrix completions
+#' @family matrixCompletions
 #' @export
 complete_Gamma <- function(
   Gamma,
@@ -120,7 +120,7 @@ complete_Gamma <- function(
 #' The corresponding \eTheta matrix produced by [Gamma2Theta()] has zeros
 #' in the remaining entries.
 #'
-#' @family Matrix completions
+#' @family matrixCompletions
 #' @export
 complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
   # Compute graph if not specified

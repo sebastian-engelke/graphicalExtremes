@@ -23,7 +23,7 @@ falling back to \code{warning()} if neither is specified.
 \seealso{
 \code{\link{graphicalExtremes-package}}
 
-Other getOptions: 
+Other default parameters:
 \code{\link{get_mc_cores}()},
 \code{\link{get_small_tol}()}
 }

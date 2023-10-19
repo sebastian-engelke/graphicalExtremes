@@ -76,8 +76,7 @@ the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 }
 \value{
-For \verb{check*}, the input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}},
-if it is ok, or throws an error, otherwise.
+For \verb{check*}, the input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}}.
 
 For \verb{is_valid_*}, a boolean indicating whether the input isa valid parameter matrix.
 }
@@ -89,3 +88,10 @@ in the role of \eGamma, \eTheta, or \eSigma, respectively.
 The function \verb{is_valid_*} are a wrapper around \verb{check*}, with arguments
 \code{alert=FALSE} and \code{returnBoolean=TRUE}.
 }
+\seealso{
+Other input validation functions:
+\code{\link{check_graph}()},
+\code{\link{check_partial_matrix_and_graph}()},
+\code{\link{ensure_matrix_symmetry}()}
+}
+\concept{inputChecks}

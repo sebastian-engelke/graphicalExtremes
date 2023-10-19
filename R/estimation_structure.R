@@ -54,6 +54,7 @@
 #'   graph is not connected, it returns a list of `NA`.
 #' }
 #'
+#' @family structureEstimation
 #' @export
 eglearn <- function(
   data,
@@ -242,6 +243,7 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family structureEstimation
 #' @export
 emst <- function(
     data,
@@ -302,7 +304,8 @@ emst <- function(
 #'
 #' @return A list containing an \[`igraph::graph`\] object and a fitted `Gamma` matrix
 #'
-#' @keywords internal
+#' @family structureEstimation
+#' @export
 fit_graph_to_Theta <- function(data, m=NULL, Gamma_emp=NULL){
 
   if(is.null(Gamma_emp)){

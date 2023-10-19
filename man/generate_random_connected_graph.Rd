@@ -32,7 +32,7 @@ First tries to generate an Erdoes-Renyi graph, if that fails, falls back
 to producing a tree and adding random edges to that tree.
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
@@ -42,4 +42,4 @@ Other Example generations:
 \code{\link{generate_random_spd_matrix}()},
 \code{\link{generate_random_tree}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

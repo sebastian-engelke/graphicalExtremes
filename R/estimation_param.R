@@ -47,6 +47,7 @@
 #' of the graph (if `handleCliques='full'`) or the size of the cliques,
 #' and can already take a significant amount of time for modest dimensions (e.g. `d=3`).
 #' 
+#' @family parameterEstimation
 #' @export
 fmpareto_graph_HR <- function(
   data,
@@ -104,6 +105,12 @@ fmpareto_graph_HR <- function(
   return(Gamma)
 }
 
+#' HR Parameter fitting - Helper functions
+#' 
+#' Helper functions called by [`fmpareto_HR_MLE`].
+#' 
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
 fmpareto_graph_HR_clique_average <- function(
   data,
   graph,
@@ -145,21 +152,8 @@ fmpareto_graph_HR_clique_average <- function(
   return(Gamma)
 }
 
-combine_clique_estimates_by_averaging <- function(cliques, subGammas){
-  d <- do.call(max, cliques)
-  Gamma <- matrix(0, d, d)
-  overlaps <- matrix(0, d, d)
-  for(i in seq_along(cliques)){
-    cli <- cliques[[i]]
-    Gamma[cli, cli] <- Gamma[cli, cli] + subGammas[[i]]
-    overlaps[cli, cli] <- overlaps[cli, cli] + 1
-  }
-  Gamma[overlaps == 0] <- NA
-  Gamma <- Gamma / overlaps
-  return(Gamma)
-}
-
-
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
 fmpareto_graph_HR_clique_sequential <- function(
   data,
   graph,
@@ -226,6 +220,23 @@ fmpareto_graph_HR_clique_sequential <- function(
   return(G_comp)
 }
 
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
+combine_clique_estimates_by_averaging <- function(cliques, subGammas){
+  d <- do.call(max, cliques)
+  Gamma <- matrix(0, d, d)
+  overlaps <- matrix(0, d, d)
+  for(i in seq_along(cliques)){
+    cli <- cliques[[i]]
+    Gamma[cli, cli] <- Gamma[cli, cli] + subGammas[[i]]
+    overlaps[cli, cli] <- overlaps[cli, cli] + 1
+  }
+  Gamma[overlaps == 0] <- NA
+  Gamma <- Gamma / overlaps
+  return(Gamma)
+}
+
+
 
 #' Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution
 #'
@@ -245,8 +256,10 @@ fmpareto_graph_HR_clique_sequential <- function(
 #' `emp_vario_pairwise` calls `emp_vario` for each pair of observations.
 #' This is more robust if the data contains many `NA`s, but can take rather long.
 #'
-#' @rdname emp_vario
 #' @return Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
+#' 
+#' @rdname emp_vario
+#' @family parameterEstimation
 #' @export
 emp_vario <- function(data, k = NULL, p = NULL) {
 
@@ -362,6 +375,7 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
 #' emp_chi(my_data, p)
 #' 
 #' @rdname emp_chi
+#' @family parameterEstimation
 #' @export
 emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
@@ -444,6 +458,8 @@ emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = G)
 #' emp_chi_multdim(my_data, p)
+#' 
+#' @family parameterEstimation
 #' @export
 emp_chi_multdim <- function(data, p = NULL) {
   if (!is.matrix(data)) {
@@ -495,6 +511,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated
 #' log-likelihood, AIC, and BIC values.
 #'
+#' @family parameterEstimation
 #' @export
 loglik_HR <- function(data, p = NULL, graph = NULL, Gamma, cens = FALSE){
   if (!is.null(p)) {

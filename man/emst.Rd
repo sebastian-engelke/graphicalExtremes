@@ -61,3 +61,10 @@ my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other structure estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{eglearn}()},
+\code{\link{fit_graph_to_Theta}()}
+}
+\concept{structureEstimation}

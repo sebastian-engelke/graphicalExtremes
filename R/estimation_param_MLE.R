@@ -40,6 +40,7 @@
 #' \item{`nllik`}{Numeric. Optimal value of the negative log-likelihood function.}
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 #'
+#' @family parameterEstimation
 #' @export 
 fmpareto_HR_MLE <- function(
   data,

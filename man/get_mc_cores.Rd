@@ -20,7 +20,7 @@ Will always be 1 on windows. On other systems, this value can be set using
 \seealso{
 \code{\link{graphicalExtremes-package}}
 
-Other getOptions: 
+Other default parameters:
 \code{\link{get_alert_function}()},
 \code{\link{get_small_tol}()}
 }

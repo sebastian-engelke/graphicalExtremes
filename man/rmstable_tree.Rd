@@ -73,3 +73,10 @@ rmstable_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other sampling functions:
+\code{\link{rmpareto_tree}()},
+\code{\link{rmpareto}()},
+\code{\link{rmstable}()}
+}
+\concept{samplingFunctions}

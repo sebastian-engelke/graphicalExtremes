@@ -38,4 +38,11 @@ Upper triangular part of \code{M} (or \code{M} itself/NULL if allowed)
 Convert parameter vector \code{par} (upper triangular part of Gamma/Theta matrix)
 to full Gamma/Theta, or vice versa.
 }
+\seealso{
+Other parameter matrix transformations:
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2graph}()},
+\code{\link{chi2Gamma}()}
+}
+\concept{matrixTransformations}
 \keyword{internal}

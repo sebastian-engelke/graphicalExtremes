@@ -40,10 +40,10 @@ DEMO VERSION: Returns a lot of details and allows specifying the graph list
 that is used. Is way slower than other functions.
 }
 \seealso{
-Other Matrix completions: 
+Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma}()}
 }
-\concept{Matrix completions}
+\concept{matrixCompletions}

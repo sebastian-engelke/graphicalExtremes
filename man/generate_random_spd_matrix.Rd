@@ -22,7 +22,7 @@ then computing \code{B \%*\% t(B)},
 and then normalizing the matrix to approximately single digit entries.
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
@@ -32,4 +32,4 @@ Other Example generations:
 \code{\link{generate_random_model}()},
 \code{\link{generate_random_tree}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

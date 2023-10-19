@@ -75,3 +75,10 @@ rmstable(n, "dirichlet", d, par = alpha)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other sampling functions:
+\code{\link{rmpareto_tree}()},
+\code{\link{rmpareto}()},
+\code{\link{rmstable_tree}()}
+}
+\concept{samplingFunctions}

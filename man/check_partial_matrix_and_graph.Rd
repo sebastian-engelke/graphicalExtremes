@@ -24,8 +24,10 @@ Checks and converts the partial matrix and graph given for a
 HR graphical model.
 }
 \seealso{
-Other Input checks: 
-\code{\link{check_graph}()}
+Other input validation functions:
+\code{\link{checkGamma}()},
+\code{\link{check_graph}()},
+\code{\link{ensure_matrix_symmetry}()}
 }
-\concept{Input checks}
+\concept{inputChecks}
 \keyword{internal}

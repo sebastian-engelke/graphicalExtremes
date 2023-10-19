@@ -85,10 +85,10 @@ complete_Gamma(G, g)
 \seealso{
 \code{\link[=Gamma2Theta]{Gamma2Theta()}}
 
-Other Matrix completions: 
+Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma_general}()}
 }
-\concept{Matrix completions}
+\concept{matrixCompletions}

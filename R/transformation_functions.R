@@ -37,6 +37,8 @@
 #' my_data <- rmstable(n, "HR", d = d, par = G)
 #' data2mpareto(my_data, p)
 #' 
+#' @family parameterEstimation
+#' @family structureEstimation
 #' @export
 data2mpareto <- function(data, p, na.rm=FALSE) {
   # If specified, remove all rows that contain >=1 NA:

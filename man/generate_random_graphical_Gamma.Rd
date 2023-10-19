@@ -16,7 +16,7 @@ Generates a valid Gamma matrix with conditional independence structure
 specified by a graph
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
@@ -26,4 +26,4 @@ Other Example generations:
 \code{\link{generate_random_spd_matrix}()},
 \code{\link{generate_random_tree}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

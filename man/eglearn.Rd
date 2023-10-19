@@ -69,3 +69,10 @@ Fits an extremal graph structure using the neighborhood selection approach
 (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 (see \insertCite{friedman2008;textual}{graphicalExtremes}).
 }
+\seealso{
+Other structure estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emst}()},
+\code{\link{fit_graph_to_Theta}()}
+}
+\concept{structureEstimation}

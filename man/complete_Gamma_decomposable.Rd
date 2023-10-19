@@ -25,10 +25,10 @@ Given a decomposable \code{graph} and incomplete variogram matrix \code{Gamma},
 returns the full \code{Gamma} matrix implied by the conditional independencies.
 }
 \seealso{
-Other Matrix completions: 
+Other matrix completion related topics:
 \code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma}()}
 }
-\concept{Matrix completions}
+\concept{matrixCompletions}

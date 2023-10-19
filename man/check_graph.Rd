@@ -30,8 +30,10 @@ If necessary, converts the graph to an undirected graph.
 Removes vertex labels if present.
 }
 \seealso{
-Other Input checks: 
-\code{\link{check_partial_matrix_and_graph}()}
+Other input validation functions:
+\code{\link{checkGamma}()},
+\code{\link{check_partial_matrix_and_graph}()},
+\code{\link{ensure_matrix_symmetry}()}
 }
-\concept{Input checks}
+\concept{inputChecks}
 \keyword{internal}

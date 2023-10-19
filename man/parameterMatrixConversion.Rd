@@ -122,3 +122,10 @@ If \code{k}, \code{k1}, or \code{k2} is \code{NULL}, the corresponding \verb{ful
 \code{matrix2matrix} is a wrapper function that calls the corresponding
 conversion function implied by \code{name1}, \code{name2}.
 }
+\seealso{
+Other parameter matrix transformations:
+\code{\link{Gamma2graph}()},
+\code{\link{chi2Gamma}()},
+\code{\link{par2Matrix}()}
+}
+\concept{matrixTransformations}

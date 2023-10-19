@@ -4,7 +4,12 @@
 \alias{rmpareto}
 \title{Sampling of a multivariate Pareto distribution}
 \usage{
-rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet"), d, par)
+rmpareto(
+  n,
+  model = c("HR", "logistic", "neglogistic", "dirichlet"),
+  d = NULL,
+  par
+)
 }
 \arguments{
 \item{n}{Number of simulations.}
@@ -17,8 +22,8 @@ rmpareto(n, model = c("HR", "logistic", "neglogistic", "dirichlet"), d, par)
 \item \code{dirichlet}.
 }}
 
-\item{d}{Dimension of the multivariate Pareto
-distribution.}
+\item{d}{Dimension of the multivariate Pareto distribution.
+In some cases this can be \code{NULL} and will be inferred from \code{par}.}
 
 \item{par}{Respective parameter for the given \code{model}, that is,
 \itemize{
@@ -75,3 +80,10 @@ rmpareto(n, "dirichlet", d, par = alpha)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other sampling functions:
+\code{\link{rmpareto_tree}()},
+\code{\link{rmstable_tree}()},
+\code{\link{rmstable}()}
+}
+\concept{samplingFunctions}

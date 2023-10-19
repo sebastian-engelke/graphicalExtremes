@@ -17,3 +17,4 @@ graphs_equal(g1, g2)
 \description{
 Produce true if two graphs have same vertices and edges (ordered)
 }
+\keyword{internal}

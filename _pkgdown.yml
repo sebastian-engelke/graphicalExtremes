@@ -1,10 +1,43 @@
 template:
   bootstrap: 5
 reference:
-- title: Danube
+- title: Datasets
 - contents:
+  - flights
+  - danube
+  - has_concept('flightData')
   - has_concept('danubeData')
-- title: All others (TODO)
+- title: Parameter and structure estimation
 - contents:
-  - lacks_concepts('danubeData')
+  - has_concept('parameterEstimation')
+  - has_concept('structureEstimation')
+- title: Parameter matrix transformations and completions
+- contents:
+  - has_concept('matrixCompletions')
+  - has_concept('matrixTransformations')
+  - has_concept('inputChecks')
+- title: Example generations
+- contents:
+  - has_concept('exampleGenerations')
+- title: Sampling functions
+- contents:
+  - has_concept('samplingFunctions')
+- title: Utility functions
+- contents:
+  - has_concept('getOptions')
+- title: Uncategorized
+  desc: Uncategorized topics, possibly empty.
+- contents:
+  - lacks_concepts(c(
+      'danubeData',
+      'flightData',
+      'parameterEstimation',
+      'structureEstimation',
+      'matrixCompletions',
+      'matrixTransformations',
+      'inputChecks',
+      'exampleGenerations',
+      'samplingFunctions',
+      'getOptions'
+    ))
 

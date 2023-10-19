@@ -33,3 +33,10 @@ The formula for transformation from \eGamma to \eChi is element-wise
 \deqn{\chi = 2 - 2 \Phi(\sqrt{\Gamma} / 2),}{\chi = 2 - 2 \Phi(sqrt(\Gamma) / 2),}
 where \eqn{\Phi} is the standard normal distribution function.
 }
+\seealso{
+Other parameter matrix transformations:
+\code{\link{Gamma2Sigma}()},
+\code{\link{Gamma2graph}()},
+\code{\link{par2Matrix}()}
+}
+\concept{matrixTransformations}

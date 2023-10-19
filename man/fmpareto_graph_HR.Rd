@@ -61,3 +61,14 @@ If \code{method='ML'}, the computational cost is mostly influenced by the total 
 of the graph (if \code{handleCliques='full'}) or the size of the cliques,
 and can already take a significant amount of time for modest dimensions (e.g. \code{d=3}).
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emp_chi_multdim}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_HR_MLE}()},
+\code{\link{loglik_HR}()}
+}
+\concept{parameterEstimation}

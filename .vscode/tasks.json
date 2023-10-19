@@ -10,7 +10,7 @@
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
-                "reveal": "silent",
+                // "reveal": "silent",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,

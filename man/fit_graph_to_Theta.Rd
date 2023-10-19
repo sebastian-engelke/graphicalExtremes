@@ -22,4 +22,10 @@ Fits a graph to an empirical Gamma matrix by computing the corresponding
 Theta matrix using \code{\link[=Gamma2Theta]{Gamma2Theta()}} and greedily chooses \code{m} edges that
 correspond to high absolute values in Theta.
 }
-\keyword{internal}
+\seealso{
+Other structure estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{eglearn}()},
+\code{\link{emst}()}
+}
+\concept{structureEstimation}

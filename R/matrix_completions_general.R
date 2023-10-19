@@ -22,7 +22,7 @@
 #'
 #' @return A completed \dxd variogram matrix.
 #' 
-#' @family Matrix completions
+#' @family matrixCompletions
 #' @export
 complete_Gamma_general_split <- function(
   Gamma,
@@ -97,7 +97,7 @@ complete_Gamma_general_split <- function(
 #'
 #' @return A completed \dxd variogram matrix.
 #' 
-#' @family Matrix completions
+#' @family matrixCompletions
 #' @export
 complete_Gamma_general <- function(Gamma, graph, N=10000, tol=get_large_tol(), check_tol=100){
   
@@ -208,7 +208,7 @@ iterateIndList <- function(Gamma, sepList, nonEdgeIndices, N, tol, check_tol){
 #'  }
 #' }
 #' 
-#' @family Matrix completions
+#' @family matrixCompletions
 #' @export
 complete_Gamma_general_demo <- function(Gamma, graph, N = 1000, tol=0, gList=NULL) {
   # Compute gList if not provided:

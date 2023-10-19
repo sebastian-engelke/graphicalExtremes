@@ -32,6 +32,7 @@ NULL
 #' 
 #' @return An [`igraph::graph`] object.
 #' 
+#' @family matrixTransformations
 #' @rdname matrix2graph
 #' @export
 Gamma2graph <- function(Gamma, tol=get_large_tol(), check=TRUE){
@@ -85,6 +86,7 @@ partialMatrixToGraph <- function(M){
 #' @return
 #' The desired parameter matrix corresponding to the specified inputs.
 #' 
+#' @family matrixTransformations
 #' @rdname parameterMatrixConversion
 #' @export
 Gamma2Sigma <- function(Gamma, k=NULL, full=FALSE, check=TRUE){
@@ -346,6 +348,7 @@ matrix2matrix <- function(
 #'
 #' @return Numeric matrix \dxd. Full Gamma/Theta matrix corresponding to `par`.
 #' 
+#' @family matrixTransformations
 #' @rdname par2Matrix
 #' @keywords internal
 par2Matrix <- function(par, allowMatrix = FALSE, allowNull = FALSE, zeroRowSums = FALSE){
@@ -418,6 +421,7 @@ matrix2par <- function(M, allowVector = FALSE, allowNull = FALSE){
 #' \deqn{\Gamma = (2 \Phi^{-1}(1 - 0.5 \chi))^2,}
 #' where \eqn{\Phi^{-1}} is the inverse of the standard normal distribution function.
 #'
+#' @family matrixTransformations
 #' @rdname chi2Gamma
 #' @export
 chi2Gamma <- function(chi) {

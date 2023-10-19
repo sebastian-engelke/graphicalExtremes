@@ -13,7 +13,7 @@
 #' @return The given `graph`, if necessary converted to undirected.
 #' If the graph is not valid an error is thrown.
 #'
-#' @family Input checks
+#' @family inputChecks
 #' @keywords internal
 check_graph <- function(
   graph,
@@ -84,7 +84,7 @@ check_graph <- function(
 #' \item{`graph`}{The graph given as input or implied by the input}
 #' Throws an error if the input is not valid.
 #'
-#' @family Input checks
+#' @family inputChecks
 #' @keywords internal
 check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'general'){
   # make graph from Gamma if necessary
@@ -146,6 +146,7 @@ check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'genera
 #' 
 #' @return For `check*`, the input matrix, passed through [`ensure_matrix_symmetry_and_truncate_zeros`].
 #' 
+#' @family inputChecks
 #' @rdname checkGamma
 #' @export
 checkGamma <- function(
@@ -367,6 +368,7 @@ computeD <- function(M, k=NULL, full=FALSE){
 #' 
 #' @return The adjusted value of `M`.
 #' 
+#' @family inputChecks
 #' @rdname ensure_matrix_symmetry_and_truncate_zeros
 #' @export
 ensure_matrix_symmetry <- function(M, checkTol=Inf, alert=NULL){

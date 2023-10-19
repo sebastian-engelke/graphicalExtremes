@@ -43,10 +43,10 @@ and calling \code{complete_Gamma_general} for each subgraph/submatrix,
 using multiple cores if available.
 }
 \seealso{
-Other Matrix completions: 
+Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma}()}
 }
-\concept{Matrix completions}
+\concept{matrixCompletions}

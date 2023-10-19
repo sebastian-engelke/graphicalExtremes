@@ -33,3 +33,10 @@ Optionally verifies that the matrix was close to symmetric before.
 
 Makes sure zeros are "numerically zero", by truncating all small values.
 }
+\seealso{
+Other input validation functions:
+\code{\link{checkGamma}()},
+\code{\link{check_graph}()},
+\code{\link{check_partial_matrix_and_graph}()}
+}
+\concept{inputChecks}

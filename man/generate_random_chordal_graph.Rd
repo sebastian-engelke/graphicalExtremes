@@ -38,7 +38,7 @@ and then adding new cliques until the specified size is reached.
 The sizes of cliques and separators can be specified.
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_cactus}()},
 \code{\link{generate_random_connected_graph}()},
@@ -48,4 +48,4 @@ Other Example generations:
 \code{\link{generate_random_spd_matrix}()},
 \code{\link{generate_random_tree}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

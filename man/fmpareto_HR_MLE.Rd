@@ -69,3 +69,14 @@ The optimization is done either in terms of the variogram (Gamma) or precision m
 depending on the value of \code{useTheta}. If \code{graph} is non-decomposable,
 \code{useTheta=TRUE} is significantly faster, otherwise they are similar in performance.
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emp_chi_multdim}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_graph_HR}()},
+\code{\link{loglik_HR}()}
+}
+\concept{parameterEstimation}

@@ -17,6 +17,7 @@
 #' 
 #' @references \insertAllCited{}
 #' 
+#' @family parameterEstimation
 #' @export
 emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
   d <- nrow(Gamma)

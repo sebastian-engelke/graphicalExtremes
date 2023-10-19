@@ -7,8 +7,6 @@
 #' @param graph_type `"tree"`, `"block"`, `"decomposable"`, `"complete"`, or `"general"`
 #' @param ... Further arguments passed to functions generating the graph and Gamma matrix
 #'
-#' @family Example generations
-#'
 #' @examples
 #' set.seed(1)
 #' d <- 12
@@ -19,6 +17,7 @@
 #' generate_random_model(d, 'general')
 #' generate_random_model(d, 'complete')
 #'
+#' @family exampleGenerations
 #' @export
 generate_random_model <- function(d, graph_type='general', ...){
   graph <- if(graph_type == 'tree'){
@@ -50,7 +49,8 @@ generate_random_model <- function(d, graph_type='general', ...){
 #'
 #' @param graph An \[`igraph::graph`\] object
 #' @param ... Furhter arguments passed to [generate_random_spd_matrix()]
-#' @family Example generations
+#' 
+#' @family exampleGenerations
 #' @export
 generate_random_graphical_Gamma <- function(graph, ...){
   d <- igraph::vcount(graph)
@@ -71,8 +71,8 @@ generate_random_graphical_Gamma <- function(graph, ...){
 #' 
 #' @param d Size of the matrix
 #' @param ... Further arguments passed to [generate_random_spd_matrix()]
-#' @family Example generations
 #' 
+#' @family exampleGenerations
 #' @export
 generate_random_Gamma <- function(d, ...){
   g <- igraph::make_full_graph(d)
@@ -93,7 +93,7 @@ generate_random_Gamma <- function(d, ...){
 #'
 #' @return A numeric \dxd variogram matrix with integer entries
 #'
-#' @family Example generations
+#' @family exampleGenerations
 #'
 #' @examples
 #'
@@ -131,7 +131,7 @@ generate_random_integer_Gamma <- function(d, b=2, b_step=1){
 #' @param bMin Minimum value of entries in `B`
 #' @param bMax Maximum value of entries in `B`
 #' @param ... Ignored, only allowed for compatibility
-#' @family Example generations
+#' @family exampleGenerations
 #' @export
 generate_random_spd_matrix <- function(d, bMin=-10, bMax=10, ...){
   B <- matrix(bMin + stats::runif(d**2) * (bMax-bMin), d, d)
@@ -178,7 +178,7 @@ generate_random_spsd_matrix <- function(d, ...){
 #' @param ... Ignored, only allowed for compatibility
 #'
 #' @return An \[`igraph::graph`\] object
-#' @family Example generations
+#' @family exampleGenerations
 #' @export
 generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, block_graph=FALSE, ...){
   if(block_graph){
@@ -239,7 +239,7 @@ generate_random_chordal_graph <- function(d, cMin=2, cMax=6, sMin=1, sMax=4, blo
 #'
 #' @return An \[`igraph::graph`\] object
 #'
-#' @family Example generations
+#' @family exampleGenerations
 #' @export
 generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000, ...){
   # Try producing an Erdoesz-Renyi graph
@@ -289,7 +289,7 @@ generate_random_connected_graph <- function(d, m=NULL, p=2/(d+1), maxTries=1000,
 #' @param d Number of vertices in the graph
 #'
 #' @return An \[`igraph::graph`\] object
-#' @family Example generations
+#' @family exampleGenerations
 #' @export
 generate_random_tree <- function(d){
   pruefer <- floor(stats::runif(d-2, 1, d-1))
@@ -325,7 +325,7 @@ pruefer_to_graph <- function(pruefer){
 #' @param cMin Minimal size of each block (last block might be smaller)
 #' @param cMax Maximal size of each block
 #' 
-#' @family Example generations
+#' @family exampleGenerations
 #' @export
 generate_random_cactus <- function(d, cMin = 2, cMax = 6){
   if(cMin > cMax || cMin < 2){

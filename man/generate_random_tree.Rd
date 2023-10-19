@@ -16,7 +16,7 @@ An [\code{igraph::graph}] object
 Generates a random tree from a random Pruefer sequence
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
 \code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
@@ -26,4 +26,4 @@ Other Example generations:
 \code{\link{generate_random_model}()},
 \code{\link{generate_random_spd_matrix}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

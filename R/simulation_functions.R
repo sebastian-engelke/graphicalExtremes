@@ -63,6 +63,7 @@
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmpareto <- function(
   n,
@@ -264,6 +265,7 @@ rmpareto <- function(
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
@@ -516,6 +518,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmstable <- function(
   n,
@@ -729,6 +732,7 @@ rmstable <- function(
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {

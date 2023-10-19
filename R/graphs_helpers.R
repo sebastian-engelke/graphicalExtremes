@@ -141,7 +141,7 @@ is_complete_graph <- function(graph){
 #' @param g1 `igraph::graph`
 #' @param g2 `igraph::graph`
 #' @return `logical` indicating if the graphs are equal
-#' @export
+#' @keywords internal
 graphs_equal <- function(g1, g2) {
 
   # Return early if graph sizes are different

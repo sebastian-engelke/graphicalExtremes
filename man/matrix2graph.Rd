@@ -42,3 +42,10 @@ An \code{\link[igraph:make_graph]{igraph::graph}} object.
 \description{
 Creates a graph object representing the graph structure implied by a parameter matrix.
 }
+\seealso{
+Other parameter matrix transformations:
+\code{\link{Gamma2Sigma}()},
+\code{\link{chi2Gamma}()},
+\code{\link{par2Matrix}()}
+}
+\concept{matrixTransformations}
