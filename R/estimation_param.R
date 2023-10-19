@@ -97,7 +97,7 @@ fmpareto_graph_HR <- function(
       method,
       ...
     )
-    if(!is_sym_cnd(Gamma)){
+    if(!is_valid_Gamma(Gamma)){
       stop('Averaging on the separators did not yield a valid variogram matrix!')
     }
   }

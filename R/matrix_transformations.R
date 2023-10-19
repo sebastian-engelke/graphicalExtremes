@@ -15,8 +15,6 @@
 #' the input is a \dxd matrix with the kth row filled with zeros.
 #' @param full2 Logical. If `TRUE` and `!is.null(k2)`,
 #' the output is a \dxd matrix with the kth row filled with zeros.
-#' @param tol Numeric scalar. Entries in the precision matrix with absolute value
-#' smaller than this are considered to be zero.
 #' @param check Whether to check the inputs and call `ensure_matrix_symmetry_and_truncate_zeros`
 #' on the outputs.
 #' 
@@ -28,6 +26,8 @@ NULL
 #' Creates a graph object representing the graph structure implied by a parameter matrix.
 #' 
 #' @param M Partial matrix with `NA` entries indicating missing edges.
+#' @param tol Numeric scalar. Entries in the precision matrix with absolute value
+#' smaller than this are considered to be zero.
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
 #' @return An [`igraph::graph`] object.

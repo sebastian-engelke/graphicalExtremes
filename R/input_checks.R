@@ -135,15 +135,16 @@ check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'genera
 }
 
 
-#' Parameter matrix checks
+#' HR parameter matrix checks
 #' 
 #' Checks wheter the matrix given is a valid Huesler-Reiss parameter matrix
 #' in the role of \eGamma, \eTheta, or \eSigma, respectively.
 #' 
+#' @param tol Numeric scalar. Values below this are considered as zero,
+#' when zeros are requried (e.g. row-sums).
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
-#' @return The input matrix, passed through [`ensure_matrix_symmetry_and_truncate_zeros`],
-#' if it is ok, or throws an error, otherwise.
+#' @return For `check*`, the input matrix, passed through [`ensure_matrix_symmetry_and_truncate_zeros`].
 #' 
 #' @rdname checkGamma
 #' @export
@@ -180,9 +181,6 @@ checkGamma <- function(
   }
   if(returnBoolean) return(TRUE)
   return(ensure_matrix_symmetry_and_truncate_zeros(Gamma, tol))
-}
-is_sym_cnd <- function(M, tol=get_small_tol){
-  checkGamma(M, alert=FALSE, tol=tol, returnBoolean = TRUE)
 }
 
 #' @rdname checkGamma
@@ -325,6 +323,28 @@ checkMatrix <- function(
   }
 }
 
+#' @rdname checkGamma
+#' 
+#' @return For `is_valid_*`, a boolean indicating whether the input isa valid parameter matrix.
+#' 
+#' @details The function `is_valid_*` are a wrapper around `check*`, with arguments
+#' `alert=FALSE` and `returnBoolean=TRUE`.
+#' 
+#' @export
+is_valid_Gamma <- function(M, tol=get_small_tol){
+  checkGamma(M, alert=FALSE, tol=tol, returnBoolean = TRUE)
+}
+#' @rdname checkGamma
+#' @export
+is_valid_Theta <- function(Theta, k=NULL, full=FALSE, tol=get_small_tol()){
+  checkTheta(Theta, k, full, tol, alert=FALSE, returnBoolean=TRUE)
+}
+#' @rdname checkGamma
+#' @export
+is_valid_Sigma <- function(Sigma, k=NULL, full=FALSE, tol=get_small_tol()){
+  checkSigma(Sigma, k, full, tol, alert=FALSE, returnBoolean=TRUE)
+}
+
 computeD <- function(M, k=NULL, full=FALSE){
   # M is full matrix -> return number of rows/columns
   if(is.null(k) || full){
@@ -413,32 +433,6 @@ check_pos_def <- function(M, alert=get_alert_function()){
 
 get_max_abs_rowsum <- function(M){
   return(max_without_warning(abs(rowSums(M))))
-}
-
-is_valid_Theta <- function(M, tol=get_small_tol()){
-  # Must be symmetric
-  if(!is_symmetric_matrix(M, tol)){
-    return(FALSE)
-  }
-  d <- nrow(M)
-  # Empty matrix is valid
-  if(d == 0){
-    return(TRUE)
-  }
-  # Check that rowsums are zero
-  if(any(abs(rowSums(M)) > tol)){
-    return(FALSE)
-  }
-  # 1x1 matrix is just 0 => ok
-  if(d == 1){
-    return(TRUE)
-  }
-  # Check that there are d-1 positive and one zero eigenvalue
-  eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
-  if(abs(eig[d]) > tol || abs(eig[d-1]) <= 0){
-    return(FALSE)
-  }
-  return(TRUE)
 }
 
 min_without_warning <- function(..., na.rm = FALSE){

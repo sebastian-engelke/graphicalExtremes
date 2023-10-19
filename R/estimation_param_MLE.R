@@ -303,7 +303,7 @@ parToMatricesFactory <- function(
       }
 
       # Return NULL if par implies an invalid Gamma
-      if(checkValidity && !is_sym_cnd(Gamma)){
+      if(checkValidity && !is_valid_Gamma(Gamma)){
         return(NULL)
       }
 

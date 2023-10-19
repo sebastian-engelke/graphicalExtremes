@@ -6,7 +6,10 @@
 \alias{checkTheta}
 \alias{checkSigma}
 \alias{checkMatrix}
-\title{Parameter matrix checks}
+\alias{is_valid_Gamma}
+\alias{is_valid_Theta}
+\alias{is_valid_Sigma}
+\title{HR parameter matrix checks}
 \usage{
 checkGamma(Gamma, alert = NULL, tol = get_small_tol(), returnBoolean = FALSE)
 
@@ -47,12 +50,18 @@ checkMatrix(
   alert = NULL,
   returnBoolean = FALSE
 )
+
+is_valid_Gamma(M, tol = get_small_tol)
+
+is_valid_Theta(Theta, k = NULL, full = FALSE, tol = get_small_tol())
+
+is_valid_Sigma(Sigma, k = NULL, full = FALSE, tol = get_small_tol())
 }
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
 
-\item{tol}{Numeric scalar. Entries in the precision matrix with absolute value
-smaller than this are considered to be zero.}
+\item{tol}{Numeric scalar. Values below this are considered as zero,
+when zeros are requried (e.g. row-sums).}
 
 \item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 
@@ -67,10 +76,16 @@ the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
 }
 \value{
-The input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}},
+For \verb{check*}, the input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}},
 if it is ok, or throws an error, otherwise.
+
+For \verb{is_valid_*}, a boolean indicating whether the input isa valid parameter matrix.
 }
 \description{
 Checks wheter the matrix given is a valid Huesler-Reiss parameter matrix
 in the role of \eGamma, \eTheta, or \eSigma, respectively.
+}
+\details{
+The function \verb{is_valid_*} are a wrapper around \verb{check*}, with arguments
+\code{alert=FALSE} and \code{returnBoolean=TRUE}.
 }

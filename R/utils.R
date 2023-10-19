@@ -39,7 +39,7 @@ replaceGammaSubMatrix <- function(Gamma.est, Gamma.fix){
   # naive attempt:
   G1 <- Gamma.est
   G1[ind, ind] <- Gamma.fix[ind, ind]
-  if(is_sym_cnd(G1)){
+  if(is_valid_Gamma(G1)){
     return(G1)
   }
 
