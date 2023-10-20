@@ -23,10 +23,23 @@ vignette: >
 \DeclareMathOperator{\argmax}{arg\,max}
 
 ```{r, include = FALSE}
+rightAlign <- function(txt){
+    paste0('<div style="text-align: right">', txt, '</div>')
+}
+now <- Sys.time()
+knitr::knit_hooks$set(timeit = function(before, options, envir) {
+    if (before) {
+        now <<- Sys.time()
+    } else {
+        rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
+    }
+})
+
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = '#>',
-    error = TRUE
+    error = TRUE,
+    timeit = TRUE
 )
 ```
 
