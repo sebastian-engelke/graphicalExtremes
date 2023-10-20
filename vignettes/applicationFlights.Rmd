@@ -41,6 +41,9 @@ knitr::opts_chunk$set(
 library(graphicalExtremes)
 library(ggplot2)
 library(igraph)
+```
+
+```{r, include = FALSE}
 theme_set(theme_bw() +
             theme(plot.background = element_blank(),
                   legend.background = element_blank(),
@@ -79,10 +82,10 @@ flightsPerAirport <- rowSums(flightsPerConnection) + colSums(flightsPerConnectio
 # Select airports (more than minNFlights and rough westcoast coordinates)
 ind <- (
     flightsPerAirport >= minNFlights &
-        flights$airports$Longitude < -119 &
-        flights$airports$Longitude > -130 &
-        flights$airports$Latitude > 25 &
-        flights$airports$Latitude < 50
+    flights$airports$Longitude < -119 &
+    flights$airports$Longitude > -130 &
+    flights$airports$Latitude > 25 &
+    flights$airports$Latitude < 50
 )
 IATAs <- flights$airports$IATA[ind]
 
@@ -211,7 +214,7 @@ mat <- mat[!rowHasNA, ]
 
 1. Fit an extremal graphical lasso model with `eglearn()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
     ```{r, message=FALSE, warning=FALSE}
-    rholist <- seq(1e-4, 0.10, length.out = 10)
+    rholist <- seq(1e-4, 0.50, length.out = 20)
     flights_eglasso_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
     ```
 
