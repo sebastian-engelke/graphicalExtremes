@@ -50,6 +50,8 @@ theme_set(theme_bw() +
                   text = element_text(size = 11),
                   axis.ticks = element_blank(),
                   panel.grid.major = element_line(size = 0.25)))
+
+source('memoise.R')
 ```
 
 The `flights` dataset contains daily total delays of major U.S. airlines.

@@ -61,6 +61,7 @@ theme_set(theme_bw() +
         panel.grid.major = element_line(size = 0.25)
     )
 )
+source('memoise.R')
 ```
 
 # Danube Data
