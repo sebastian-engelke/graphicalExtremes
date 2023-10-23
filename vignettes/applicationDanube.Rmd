@@ -22,7 +22,13 @@ vignette: >
 \DeclareMathOperator{\argmin}{arg\,min}
 \DeclareMathOperator{\argmax}{arg\,max}
 
-```{r, include = FALSE}
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(graphicalExtremes)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r, include=FALSE}
 rightAlign <- function(txt){
     paste0('<div style="text-align: right">', txt, '</div>')
 }
@@ -34,34 +40,28 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
         rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
     }
 })
-
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = '#>',
     error = TRUE,
     timeit = TRUE
 )
+source('memoise.R')
 ```
 
-```{r setup, include=FALSE}
-library(graphicalExtremes)
-library(dplyr)
-library(ggplot2)
-theme_set(theme_bw() +
-    theme(
+```{r, include=FALSE}
+theme_set(
+    theme_bw()
+    + theme(
         plot.background = element_blank(),
         legend.background = element_blank(),
         strip.background = element_rect(fill = "white"),
-        plot.caption = element_text(
-            size = 7.5, hjust = 0,
-            margin = margin(t = 15)
-        ),
+        plot.caption = element_text( size = 7.5, hjust = 0, margin = margin(t = 15)),
         text = element_text(size = 11),
         axis.ticks = element_blank(),
         panel.grid.major = element_line(size = 0.25)
     )
 )
-source('memoise.R')
 ```
 
 # Danube Data
@@ -121,13 +121,16 @@ Pareto distribution with density
 f_{\g Y}(\g y) = \frac{1}{d^{\theta}} \left(y_1^{-1/\theta}+\dots+y_d^{-1/\theta}\right)^{\theta-d}\prod_{i=1}^{d-1}\left(\frac{i}{\theta}-1\right) \prod_{i=1}^{d} y_i^{-1/\theta-1}, \quad \g y \in \mathcal L.
 \end{equation}
 The parameter $\theta$ governs the extremal dependence, ranging from complete dependence for $\theta\to 0$ and independence for $\theta \to 1$. 
+
+The function `rmpareto()` generates samples from a MPD $\g Y$ based on the exact algorithm described in @eng2019.
+```{r}
+theta <- .5
+Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
+```
 :::
 
-
-
-
 ::: {.example}
-The $d$-dimensional H&uuml;sler--Reiss distribution [@hue1989] is parameterized by the variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
+The $d$-dimensional Hüsler--Reiss distribution [@hue1989] is parameterized by the variogram matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$. The corresponding density of the exponent measure can be written for any $k\in\{1,\dots, d\}$ as \citep[cf.,][]{Engelke2015}
 \begin{equation}
     \lambda(\g y) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\g{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \g y \in \mathcal L,  (\#eq:fYHR)
 \end{equation}
@@ -136,25 +139,20 @@ where $\phi_p(\cdot; \Sigma)$ is the density of a centred $p$-dimensional normal
     \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}. (\#eq:Sigmak)
 \end{equation}
 The matrix $\Sigma^{(k)}$ is positive definite and will play an important role in the theory of extremal graphical models. The representation of the density in \@ref(eq:fYHR) seems to depend on the choice of $k$, but, in fact, the value of the right-hand side of this equation is independent of $k$. 
-The H&uuml;sler--Reiss multivariate Pareto distribution has density 
+The Hüsler--Reiss multivariate Pareto distribution has density 
 $f_{\g Y}(\g y) \propto \lambda(\g y)$ and the
 strength of dependence between the $i$th and $j$th component is parameterized by $\Gamma_{ij}$, ranging from complete dependence for $\Gamma_{ij} \to 0$ and independence for $\Gamma_{ij} \to \infty$. 
 
-The extension of H&uuml;sler--Reiss distributions to random fields are
+The extension of Hüsler--Reiss distributions to random fields are
 Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
-:::
-
-The function `rmpareto()` generates samples from a MPD $\g Y$ based on the exact algorithm described in @eng2019.
-
 
 ```{r, fig.align='center'}
 G <- cbind(c(0, 1.5), c(1.5, 0))
-Ysim <- rmpareto(n = 100, model = "HR", d = 2, par = G)
-
-theta <- .5
-Ysim <- rmpareto(n = 100, model = "logistic", d = 2, par = theta)
+Ysim <- rmpareto(n = 100, model = "HR", par = G)
 ```
+:::
+
 
 Note that we can also generate samples from the corresponding max-stable distribution with the function `rmstable()`, following the exact algorithm in @dom2016.
 
@@ -183,7 +181,7 @@ chi_hat <- emp_chi(data = Y)
 
 
 ::: {.example}
-For the H&uuml;sler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
+For the Hüsler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
     where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
 :::
@@ -191,7 +189,7 @@ $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
 
 ### Extremal variogram
 
-There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in \cite{engvolg} and turns out to be particularly useful for inference of extremal graphical models discussed below. 
+There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in @eng2020 and turns out to be particularly useful for inference of extremal graphical models discussed below. 
 
 For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as the matrix $\Gamma^{(k)}$ with entries
 \begin{equation*}
@@ -209,11 +207,11 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 Gamma_1_hat <- emp_vario(data = X, k = 1, p = 0.8)
 ```
 
-In general, the matrices $\Gamma^{(k)}$ can be different for $k \in V$, but for example for the H&uuml;sler--Reiss distribution, they all coincide.
+In general, the matrices $\Gamma^{(k)}$ can be different for $k \in V$, but for example for the Hüsler--Reiss distribution, they all coincide.
 
 
 ::: {.example}
-For the H&uuml;sler--Reiss distribution with parameter matrix $\Gamma$, the extremal variogram matrices satisfy
+For the Hüsler--Reiss distribution with parameter matrix $\Gamma$, the extremal variogram matrices satisfy
 $$ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.$$
 :::
 
@@ -232,7 +230,7 @@ Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edg
 $$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
 
-If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extr emal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
+If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
 ```{r, echo = FALSE, fig.align='center', out.width="50%"}
 # All defaults
@@ -257,7 +255,7 @@ where $\text{ph}(ij)$ denotes the path between node $i$ and $j$ on the tree $T$.
 
 ### Simulation
 
-By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate H&uuml;sler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again H&uuml;sler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
+By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Hüsler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Hüsler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
 
 The function `rmpareto_tree()` generates samples from an extremal tree model $\g Y$.
 
@@ -285,7 +283,7 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a H&uuml;sler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
 
 ```{r, fig.align='center'}
 danube_tree <- igraph::as.undirected(danube_flow)
@@ -327,33 +325,30 @@ ggplot() +
 ```
 
 
-## H&uuml;sler--Reiss graphical models
+## Hüsler--Reiss graphical models
 
-The H&uuml;sler--Reiss Pareto distribution $\g Y$
-is parametrized by the variogram matrix $\Gamma$. Using the linear transformation \@ref(eq:Sigmak), we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$. @eng2019 showed that for any $k\in V$ this precision matrix contains the conditional independence structure of $\g Y$, since for $i,j\in V$ with $i\neq j$,
-    \begin{equation*}
-        Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
-        \begin{cases}
-             \Theta^{(k)}_{ij}= 0,  &\text{ if } i,j \neq k,\\
-             \sum_{l\neq k} \Theta^{(k)}_{jl} = 0, & \text{ if } i = k,j \neq k.
-        \end{cases} 
-    \end{equation*}
-This means, if $Y$ is an extremal graphical on the graph $G = (V,E)$, the missing edges can be read off from the matrix $\Theta^{(k)}$ as zeros on the off-diagonal and zero row sums. 
-
-Note that the matrices $\Theta^{(k)}$ are $(d-1)\times(d-1)$ dimensional. To combine all these precision matrices for $k\in V$, we may in fact a positive semi-definite precision matrix $\Theta \in \mathbb R^{d\times d}$ as
+The Hüsler--Reiss Pareto distribution $\g Y$
+is parametrized by the variogram matrix $\Gamma$. Using the linear transformation \@ref(eq:Sigmak), we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$.
+Following @hen2022, these $(d-1) \times (d-1)$ matrices can be combined into the $d \times d$ precision matrix $\Theta$ by
 \begin{equation*}
- \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j,
+    \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j.
 \end{equation*}
-which contains all extremal conditional independencies as zeros on the off-diagonal:
-    \begin{equation*}
-        Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
-             \Theta_{ij}= 0,  \quad i,j \in V.
+@eng2019 show that this matrix is well-defined and encodes extremal conditional independence as zeros on the off-diagonal:
+\begin{equation*}
+    Y_i\perp_e Y_j\mid \g Y_{V\setminus \{i,j\}} \quad \iff \quad
+    \Theta_{ij}= 0,  \quad i,j \in V.
 \end{equation*}
-
 
 ### Transformations
 
-While the H&uuml;sler--Reiss distribution is parameterized by the variogram matrix $\Gamma$, other objects such as $\Sigma^{(k)}$, $\Theta^{(k)}$ and $\Theta$ are often required, for instance, to identify the extremal graphical structure. The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()` and `Theta2Gamma()` are often useful. Note that all of these function are bijections. The function `Gamma2graph()` creates an `igraph::graph()` object and plots it.
+While the Hüsler--Reiss distribution is parameterized by the variogram matrix $\Gamma$,
+other objects such as $\Theta^{(k)}$, $\Sigma^{(k)}$, $\Theta$,
+and its Moore--Penrose inverse $\Sigma := \Theta^+$ are often required,
+for instance, to identify the extremal graphical structure.
+The functions `Gamma2Sigma()`, `Sigma2Gamma()`, `Gamma2Theta()`, etc. perform these transformations.
+Note that all of these function are bijections.
+The functions `Gamma2graph()`, `Theta2graph()` etc. create an `igraph::graph()` object,
+which represents the corresponding extremal graph structure.
 
 ```{r, eval=FALSE}
 Gamma <- cbind(
@@ -367,25 +362,13 @@ Gamma2Theta(Gamma)
 my_graph <- Gamma2graph(Gamma)
 ```
 
-```{r, fig.align='center', echo=FALSE}
-Gamma <- cbind(
-    c(0, 1.5, 1.5, 2),
-    c(1.5, 0, 2, 1.5),
-    c(1.5, 2, 0, 1.5),
-    c(2, 1.5, 1.5, 0)
-)
-Gamma2Sigma(Gamma, k = 1)
-round(Gamma2Theta(Gamma), 3)
-my_graph <- Gamma2graph(Gamma)
-```
-
-
-
 ### Completion of $\Gamma$
 
-For H&uuml;sler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implicitely implied by the graph structure. 
+For Hüsler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implied by the graph structure. 
 
-The function `complete_Gamma()` takes as an input the partially specified $\Gamma$ matrix and the corresponding graph structure $G$, and completes the $\Gamma$ matrix. The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
+The function `complete_Gamma()` takes as inputs a partially specified $\Gamma$ matrix and the corresponding graph structure,
+and completes the $\Gamma$ matrix.
+The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
 
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).
@@ -410,6 +393,7 @@ G <- rbind(
 )
 complete_Gamma(Gamma = G)
 my_graph <- Gamma2graph(complete_Gamma(G))
+plot(my_graph)
 ```
 
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
@@ -432,7 +416,7 @@ plot(my_graph)
 
 ### Estimation
 
-Let us first suppose that a connected graph $G$ is given. For some data set, the function `fmpareto_graph_HR()` fits a H&uuml;sler--Reiss graphical model on the graph $G$.
+Let us first suppose that a connected graph $G$ is given. For some data set, the function `fmpareto_graph_HR()` fits a Hüsler--Reiss graphical model on the graph $G$.
 
 If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full $\Gamma$ matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
 Combining the clique estimates relies on the same principle as in the `complete_Gamma()` function, but with some care required to ensure that the $\Gamma_{ij}$ estimates are consistent if $(i,j)$ belongs to a separator set between two or more cliques. 
@@ -457,7 +441,7 @@ If the graph $G$ is non-decomposable, then the empirical extremal variogram is f
 
 
 ```{r, fig.align='center'}
-set.seed(42)
+set.seed(1)
 d <- 20
 my_model <- generate_random_model(d = d, graph_type = "general")
 plot(my_model$graph)
@@ -472,23 +456,27 @@ ggplot() +
 ```
 
 
-### Extremal graphical lasso
+### General structure learning
 
-For structure learning of more general, possibly non-decomposable graphs, we can use the extremal graphical lasso for H&uuml;sler--Reiss distributions. Given an estimate $\widehat \Gamma$ of the parameter matrix, e.g., obtained by `emp_vario()`, we compute the corresponding matrices $\widehat \Sigma^{(k)}$ through the function `Gamma2Sigma()`.
-
-In order to enforce sparsity, we compute the $\ell_1$-penalized precision matrices for each $k\in V$. For a tuning parameter $\rho\geq 0$, the extremal graphical lasso is 
+For structure learning of more general, possibly non-decomposable graphs, we can use the `eglearn` method.
+Given an estimate $\widehat \Gamma$ of the parameter matrix, e.g.,
+obtained by `emp_vario()`, we compute the corresponding matrices $\widehat \Sigma^{(k)}$ through the function `Gamma2Sigma()`.
+In order to enforce sparsity, we compute the $\ell_1$-penalized precision matrices for each $k\in V$.
+For a tuning parameter $\rho\geq 0$ and choice of $k$, the estimated $(d-1) \times (d-1)$ precision matrix is
 \begin{align*}  
 \widehat \Theta^{(k)}_{\rho} = \underset{{\Theta} \succeq 0}{\argmax} \,\,   \log \det{\Theta}-\operatorname{tr}(\widehat \Sigma^{(k)}\Theta) -\rho \sum_{\substack{i\neq j \\ i,j\neq k}} \left|\Theta_{ij}\right|.
 \end{align*}
 Since we run $d$ different graphical lasso algorithms and the $k$th only enforces sparsity for all edges that do not involve the $k$th node, we determine the estimated graph structure $\widehat{G}_\rho = (\widehat E_\rho,V)$ by majority vote:
  $$ (i,j) \in \widehat E_\rho \quad \Leftrightarrow \quad \frac1{d-2} \# \left\{k \in V \setminus \{i,j\}: \right(\widehat\Theta^{(k)}_\rho \left)_{ij} \neq 0 \right\} \geq 1/2.$$
 
-The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models. The extremal graphical lasso is implemented in the `eglasso()` function. It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
+The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC of the resulting models.
+The extremal graphical lasso is implemented in the `eglearn()` function.
+It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
 ```{r, fig.align='center', message=FALSE, warning=FALSE}
 set.seed(42)
 # (Ysim from previous example is used)
-rholist <- seq(1e-5, 0.04, length.out = 10)
+rholist <- seq(0, 0.1, length.out = 10)
 eglasso_fit <- eglearn(
     data = Ysim,
     rholist = rholist,

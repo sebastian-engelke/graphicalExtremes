@@ -34,7 +34,6 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
         rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
     }
 })
-
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = '#>',
@@ -45,15 +44,18 @@ source('memoise.R')
 ```
 
 ```{r, include = FALSE}
-theme_set(theme_bw() +
-            theme(plot.background = element_blank(),
-                  legend.background = element_blank(),
-                  strip.background = element_rect(fill = "white"),
-                  plot.caption=element_text(size=7.5, hjust=0, 
-                                            margin=margin(t=15)),
-                  text = element_text(size = 11),
-                  axis.ticks = element_blank(),
-                  panel.grid.major = element_line(size = 0.25)))
+theme_set(
+    theme_bw()
+    + theme(
+        plot.background = element_blank(),
+        legend.background = element_blank(),
+        strip.background = element_rect(fill = "white"),
+        plot.caption=element_text( size=7.5, hjust=0, margin=margin(t=15)),
+        text = element_text(size = 11),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(size = 0.25)
+    )
+)
 
 ```
 
