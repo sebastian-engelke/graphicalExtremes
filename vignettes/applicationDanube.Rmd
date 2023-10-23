@@ -66,24 +66,28 @@ theme_set(
 
 # Danube Data
 
-```{r, fig.show='hold', out.width="50%"}
-danube <- graphicalExtremes::danube
+Throughout this document, where applicable,
+we will use the Danube dataset from @asadi2015 to illustrate functions and concepts.
+The dataset is provided in the package as `flights`,
+see the corresponding help page for details and related functions.
 
-X <- danube$data_clustered
-
-ggplot(X %>% as_tibble()) +
-    geom_point(aes(x = X1, y = X2))
-ggplot(X %>% as_tibble()) +
-    geom_point(aes(x = X22, y = X28))
+```{r, fig.width=6, fig.height=4, fig.align='center'}
+# Plot the physical locations of measuring stations, indicating flow volume by width
+plotDanube(useStationVolume = TRUE, useConnectionVolume = TRUE, xyRatio = 1.5)
 ```
 
 ```{r, fig.align='center'}
-danube_flow <- igraph::graph_from_edgelist(danube$flow_edges)
-danube_plot_coords <- as.matrix(danube$info[, c("PlotCoordX", "PlotCoordY")])
-plot(danube_flow, layout = danube_plot_coords, edge.arrow.size = .3)
+# Plot only the flow graph
+danube_flow <- getDanubeFlowGraph()
+plotDanubeIGraph(graph = danube_flow, labelStations = TRUE)
 ```
 
-
+```{r, fig.show='hold', out.width="50%"}
+# Plot some pairwise scatter plots
+X <- as_tibble(danube$data_clustered)
+ggplot(X) + geom_point(aes(x = X1, y = X2))
+ggplot(X) + geom_point(aes(x = X22, y = X28))
+```
 
 # Multivariate Pareto distributions
 
