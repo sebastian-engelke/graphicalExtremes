@@ -51,7 +51,7 @@ checkMatrix(
   returnBoolean = FALSE
 )
 
-is_valid_Gamma(M, tol = get_small_tol)
+is_valid_Gamma(M, tol = get_small_tol())
 
 is_valid_Theta(Theta, k = NULL, full = FALSE, tol = get_small_tol())
 

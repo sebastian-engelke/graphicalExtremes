@@ -332,7 +332,7 @@ checkMatrix <- function(
 #' `alert=FALSE` and `returnBoolean=TRUE`.
 #' 
 #' @export
-is_valid_Gamma <- function(M, tol=get_small_tol){
+is_valid_Gamma <- function(M, tol=get_small_tol()){
   checkGamma(M, alert=FALSE, tol=tol, returnBoolean = TRUE)
 }
 #' @rdname checkGamma

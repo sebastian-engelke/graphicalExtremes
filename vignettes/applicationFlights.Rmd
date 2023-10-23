@@ -214,7 +214,7 @@ mat <- mat[!rowHasNA, ]
 
 1. Fit an extremal graphical lasso model with `eglearn()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
     ```{r, message=FALSE, warning=FALSE}
-    rholist <- seq(1e-4, 0.50, length.out = 20)
+    rholist <- seq(0, 0.50, length.out = 10)
     flights_eglasso_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
     ```
 
