@@ -138,4 +138,5 @@ get_alert_function <- function(overwrite = NULL){
   return(alert_option)
 }
 
+#' Helper function that ignores all input arguments
 ignore <- function(...){invisible()}
