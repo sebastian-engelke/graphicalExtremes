@@ -16,6 +16,12 @@ vignette: >
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
 
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+library(graphicalExtremes)
+library(ggplot2)
+library(igraph)
+```
+
 ```{r, include = FALSE}
 rightAlign <- function(txt){
     paste0('<div style="text-align: right">', txt, '</div>')
@@ -35,12 +41,7 @@ knitr::opts_chunk$set(
     error = TRUE,
     timeit = TRUE
 )
-```
-
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
-library(graphicalExtremes)
-library(ggplot2)
-library(igraph)
+source('memoise.R')
 ```
 
 ```{r, include = FALSE}
@@ -54,7 +55,6 @@ theme_set(theme_bw() +
                   axis.ticks = element_blank(),
                   panel.grid.major = element_line(size = 0.25)))
 
-source('memoise.R')
 ```
 
 The `flights` dataset contains daily total delays of major U.S. airlines.
@@ -73,54 +73,44 @@ airports from the westcoast with a large number of flights per year.
 ```{r, fig.align='center', fig.width=10}
 # Specify years
 yearNames <- as.character(seq(2010, 2013))
-minNFlights <- length(yearNames) * 1000
 
 # Compute departures + arrivals per airport
 flightsPerConnection <- apply(flights$flightCounts[, , yearNames], c(1, 2), sum)
 flightsPerAirport <- rowSums(flightsPerConnection) + colSums(flightsPerConnection)
 
-# Select airports (more than minNFlights and rough westcoast coordinates)
-ind <- (
-    flightsPerAirport >= minNFlights &
-    flights$airports$Longitude < -119 &
-    flights$airports$Longitude > -130 &
-    flights$airports$Latitude > 25 &
-    flights$airports$Latitude < 50
+# Select airports (more than 1000 flights/year and rough westcoast coordinates)
+indKeep <- (
+    flightsPerAirport >= length(yearNames) * 1000
+    & flights$airports$Longitude < -119 & flights$airports$Longitude > -130
+    & flights$airports$Latitude > 25 & flights$airports$Latitude < 50
 )
-IATAs <- flights$airports$IATA[ind]
+IATAs <- flights$airports$IATA[indKeep]
 
-# Plot airports + connections with at least monthly flights
-minNConnections <- length(yearNames) * 12
+# Plot airports + connections (indicating number of flights by thickness)
 plotFlights(
     IATAs,
-    minNFlights = minNConnections,
     useAirportNFlights = TRUE,
     useConnectionNFlights = TRUE
 )
 ```
 
-Also, it is useful to create an `igraph::graph()` object for the flights connections.
+As a baseline for graphical modelling, we consider the graph with edges
+representing at least monthly connections between airports.
 ```{r, fig.align='center'}
-# Compute undirected flights per connection
+# Compute undirected flights per connection between selected airports
 flightsPerConnectionUD <- flightsPerConnection + t(flightsPerConnection)
-# Consider only connections between selected airports
 flightsPerConnectionUD <- flightsPerConnectionUD[IATAs, IATAs]
 
-# Make flight graph
-A <- 1 * (flightsPerConnectionUD > minNConnections)
+# Make flight graph from adjacency matrix
+A <- 1 * (flightsPerConnectionUD > length(yearNames) * 12)
 flight_graph <- graph_from_adjacency_matrix(A, diag = FALSE, mode = "undirected")
 
 # Plot flight graph
-plotFlights(
-    IATAs,
-    graph = flight_graph,
-    clipMap = 1.3,
-    xyRatio = 1
-)
+plotFlights(IATAs, graph = flight_graph, clipMap = 1.3, xyRatio = 1)
 ```
 
+Next, we create the matrix containing (departing) flight delays for the considered airports and dates.
 ```{r}
-# We use only departure delays, at selected airports, within the selected years
 dates <- as.Date(dimnames(flights$delays)[[1]])
 indDates <- format(dates, "%Y") %in% yearNames
 mat <- flights$delays[indDates, IATAs, "departures"]
@@ -131,13 +121,13 @@ mat <- mat[!rowHasNA, ]
 
 
 # Fitting a tree model
-1. Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
+1.  Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
     ```{r, collapse=TRUE, fig.align='center'}
     p <- .7
     flights_emst_fit <- emst(data = mat, p = p, method = "vario")
     ```
 
-2. Plot the estimated tree on the US map and interpret the results.
+2.  Plot the estimated tree on the US map and interpret the results.
     ```{r, fig.align='center'}
     plotFlights(
         IATAs,
@@ -147,7 +137,7 @@ mat <- mat[!rowHasNA, ]
     )
     ```
 
-3. Compute the BIC value of the fitted tree model.
+3.  Compute the BIC value of the fitted tree model.
     ```{r}
     flights_loglik_tree <- loglik_HR(
         data = mat,
@@ -155,26 +145,24 @@ mat <- mat[!rowHasNA, ]
         Gamma = flights_emst_fit$Gamma,
         graph = flights_emst_fit$graph
     )
-    cat("Tree BIC =", round(flights_loglik_tree[3], 2), "\n")
+    cat("Tree BIC =", round(flights_loglik_tree['bic'], 2), "\n")
     ```
 
-4. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
+4.  Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
     ```{r, fig.align='center'}
     emp_chi_mat <- emp_chi(mat, p = p)
 
     ggplot() +
-        geom_point(
-            aes(
-                x = c(Gamma2chi(flights_emst_fit$Gamma)),
-                y = c(emp_chi_mat)
-            )
-        ) +
+        geom_point( aes(
+            x = c(Gamma2chi(flights_emst_fit$Gamma)),
+            y = c(emp_chi_mat)
+        )) +
         geom_abline(slope = 1, intercept = 0) +
         xlab("Fitted") +
         ylab("Empirical")
     ```
 
-5. Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
+5.  Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
     ```{r, message=FALSE, warning=FALSE}
     model_fit <- fmpareto_graph_HR(
         data = mat,
@@ -184,7 +172,7 @@ mat <- mat[!rowHasNA, ]
     )
     ```
 
-6. Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
+6.  Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
     ```{r}
     flights_loglik_graph <- loglik_HR(
         data = mat,
@@ -192,11 +180,11 @@ mat <- mat[!rowHasNA, ]
         graph = flight_graph,
         Gamma = model_fit
     )
-    cat("BIC =", round(flights_loglik_graph[3], 2), "\n")
+    cat("BIC =", round(flights_loglik_graph['bic'], 2), "\n")
     ```
 
 
-7. Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model of Step 5.
+7.  Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model of Step 5.
     ```{r, fig.align='center'}
     ggplot() +
         geom_point(aes(
@@ -212,18 +200,14 @@ mat <- mat[!rowHasNA, ]
 
 # Fitting a general model
 
-1. Fit an extremal graphical lasso model with `eglearn()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
+1.  Fit an extremal graphical lasso model with `eglearn()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
     ```{r, message=FALSE, warning=FALSE}
-    rholist <- seq(0, 0.50, length.out = 10)
+    rholist <- seq(0, 0.40, length.out = 11)
     flights_eglasso_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
     ```
 
-2. Plot the estimated graph on the US map for different values of `rho` and interpret the results.
-    ```{r, fig.align='center'}
-    plotFlights(IATAs, graph = flights_eglasso_fit$graph[[10]], clipMap = 1.3, xyRatio = 1)
-    ```
-
-3. Compute and plot the BIC values of the estimated models for different values of `rho`.
+2.  Compute and plot the BIC values of the estimated models for different values of `rho`.
+    What is the best model (w.r.t. the BIC)?
     ```{r, fig.align='center'}
     flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
         loglik_HR(
@@ -233,10 +217,10 @@ mat <- mat[!rowHasNA, ]
         )
     })
 
-    ggplot(mapping = aes(x = rholist, y = flights_loglik[3, ])) +
+    ggplot(
+        mapping = aes(x = rholist, y = flights_loglik['bic', ])) +
         geom_line() +
         geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-        # geom_hline(aes(yintercept = flights_loglik_tree[3]), lty = "dashed") +
         xlab("rho") +
         ylab("BIC") +
         scale_x_continuous(
@@ -250,17 +234,28 @@ mat <- mat[!rowHasNA, ]
                 ),
                 name = "Number of edges"
             )
-        )
+    )
+
+    best_index <- which.min(flights_loglik['bic',])
+    cat('Best rho =', rholist[best_index], '\n')
+    cat('Corresponding BIC =', flights_loglik['bic', best_index])
+    ```
+
+3.  Plot the estimated graph of the best fitted model.
+    ```{r, fig.align='center'}
+    best_graph <- flights_eglasso_fit$graph[[best_index]]
+    plotFlights(IATAs, graph = best_graph, clipMap = 1.3, xyRatio = 1)
     ```
 
 
-4. Plot the $\chi$ coefficients implied by the *best* fitted model against the empirical $\chi$ coefficients.
+4.  Plot the $\chi$ coefficients implied by the best fitted model against the empirical $\chi$ coefficients.
     ```{r, fig.align='center'}
-    best_Gamma <- flights_eglasso_fit$Gamma[[which.min(flights_loglik[3,])]]
-
+    best_Gamma <- flights_eglasso_fit$Gamma[[best_index]]
     ggplot() +
-        geom_point(aes(x = c(Gamma2chi(best_Gamma)),
-                                     y = c(emp_chi_mat))) +
+        geom_point(aes(
+            x = c(Gamma2chi(best_Gamma)),
+            y = c(emp_chi_mat)
+        )) +
         geom_abline(slope = 1, intercept = 0) +
         xlab("Fitted") +
         ylab("Empirical")
