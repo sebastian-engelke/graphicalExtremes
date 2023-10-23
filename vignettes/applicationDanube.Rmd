@@ -26,6 +26,7 @@ vignette: >
 library(graphicalExtremes)
 library(dplyr)
 library(ggplot2)
+library(igraph)
 ```
 
 ```{r, include=FALSE}
@@ -44,6 +45,7 @@ knitr::opts_chunk$set(
     collapse = TRUE,
     comment = '#>',
     error = TRUE,
+    fig.align = 'center',
     timeit = TRUE
 )
 source('memoise.R')
@@ -71,18 +73,18 @@ we will use the Danube dataset from @asadi2015 to illustrate functions and conce
 The dataset is provided in the package as `flights`,
 see the corresponding help page for details and related functions.
 
-```{r, fig.width=6, fig.height=4, fig.align='center'}
+```{r, fig.width=6, fig.height=4}
 # Plot the physical locations of measuring stations, indicating flow volume by width
 plotDanube(useStationVolume = TRUE, useConnectionVolume = TRUE, xyRatio = 1.5)
 ```
 
-```{r, fig.align='center'}
+```{r}
 # Plot only the flow graph
 danube_flow <- getDanubeFlowGraph()
 plotDanubeIGraph(graph = danube_flow, labelStations = TRUE)
 ```
 
-```{r, fig.show='hold', out.width="50%"}
+```{r, fig.show='hold', out.width="50%", fig.align=''}
 # Plot some pairwise scatter plots
 X <- as_tibble(danube$data_clustered)
 ggplot(X) + geom_point(aes(x = X1, y = X2))
@@ -111,7 +113,7 @@ In practice, we use the approximation $\g Y \approx \g X_u$ for some large value
 Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function `data2mpareto()` first computes the standardization in \@ref(eq:pareto) based on the empirical distribution functions $\hat F_j$ and then selects the exceedances $\g X_u$ according to \@ref(eq:exc). 
 
 
-```{r, fig.align='center'}
+```{r}
 Y <- data2mpareto(data = X, p = .8)
 ```
 
@@ -151,7 +153,7 @@ The extension of Hüsler--Reiss distributions to random fields are
 Brown--Resnick processes [@kab2009], which are widely used models for spatial
 extremes.   
 
-```{r, fig.align='center'}
+```{r}
 G <- cbind(c(0, 1.5), c(1.5, 0))
 Ysim <- rmpareto(n = 100, model = "HR", par = G)
 ```
@@ -236,8 +238,9 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
-```{r, echo = FALSE, fig.align='center', out.width="50%"}
+```{r, echo = FALSE, out.width="50%"}
 # All defaults
+# TODO: directly plot igraph graphs
 knitr::include_graphics("images/graphs.png")
 ```
 
@@ -289,7 +292,8 @@ For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \t
 
 If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
 
-```{r, fig.align='center'}
+```{r}
+# TODO: use function from package
 danube_tree <- igraph::as.undirected(danube_flow)
 danube_flow_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
 ```
@@ -314,12 +318,12 @@ In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using thi
 The function `emst()` estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
 
 
-```{r, fig.align='center'}
+```{r}
 danube_emst_fit <- emst(data = X, p = .8, method = "vario")
 plot(danube_emst_fit$graph, layout = danube_plot_coords)
 ```
 
-```{r, fig.align='center'}
+```{r}
 ggplot() +
     geom_point(aes(x = c(Gamma2chi(danube_flow_fit)), y = c(chi_hat))) +
     geom_abline(slope = 1, intercept = 0) +
@@ -377,7 +381,7 @@ The mathematical theory for completion is different depening on whether the grap
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).
 
-```{r, fig.align='center'}
+```{r}
 set.seed(42)
 my_tree <- generate_random_model(d = 4, graph_type = "tree")$graph
 Gamma_vec <- c(.5, 1.4, .8)
@@ -387,7 +391,7 @@ plot(my_tree)
 
 This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
 
-```{r, fig.align='center'}
+```{r}
 G <- rbind(
     c(0, 5, 7, 6, NA),
     c(5, 0, 14, 15, NA),
@@ -403,7 +407,7 @@ plot(my_graph)
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
 
 
-```{r, fig.align='center'}
+```{r}
 set.seed(42)
 G <- rbind(
     c(0, 5, 7, 6, 6),
@@ -425,7 +429,7 @@ Let us first suppose that a connected graph $G$ is given. For some data set, the
 If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full $\Gamma$ matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
 Combining the clique estimates relies on the same principle as in the `complete_Gamma()` function, but with some care required to ensure that the $\Gamma_{ij}$ estimates are consistent if $(i,j)$ belongs to a separator set between two or more cliques. 
 
-```{r, fig.align='center'}
+```{r}
 set.seed(42)
 d <- 10
 my_model <- generate_random_model(d = d, graph_type = "decomposable")
@@ -444,7 +448,7 @@ ggplot() +
 If the graph $G$ is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of $G$ using the function `complete_Gamma()`.
 
 
-```{r, fig.align='center'}
+```{r}
 set.seed(1)
 d <- 20
 my_model <- generate_random_model(d = d, graph_type = "general")
@@ -477,7 +481,8 @@ The best parameter $\rho$ can be chosen for instance as the minimizer of the BIC
 The extremal graphical lasso is implemented in the `eglearn()` function.
 It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
-```{r, fig.align='center', message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
+# TODO: redo with Danube data
 set.seed(42)
 # (Ysim from previous example is used)
 rholist <- seq(0, 0.1, length.out = 10)
@@ -518,7 +523,7 @@ ggplot(mapping = aes(x = rholist, y = eglasso_loglik[3, ])) +
     )
 ```
 
-```{r, fig.align='center', message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 best_Gamma <- eglasso_fit$Gamma[[which.min(eglasso_loglik[3, ])]]
 chi_hat <- emp_chi(Ysim)
 
