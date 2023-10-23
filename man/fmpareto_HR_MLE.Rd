@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimation_param_MLE.R
 \name{fmpareto_HR_MLE}
 \alias{fmpareto_HR_MLE}
-\title{Parameter fitting for multivariate Huesler--Reiss Pareto distribution}
+\title{Parameter fitting for multivariate Huesler-Reiss Pareto distribution}
 \usage{
 fmpareto_HR_MLE(
   data,
@@ -59,7 +59,7 @@ List consisting of:
 \item{\code{hessian}}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 }
 \description{
-Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
+Fits the parameters of a multivariate Huesler-Reiss Pareto distribution
 using (censored) maximum likelihood estimation.
 }
 \details{

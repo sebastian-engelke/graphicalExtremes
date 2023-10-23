@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_examples.R
 \name{generate_random_model}
 \alias{generate_random_model}
-\title{Generate random Huesler--Reiss Models}
+\title{Generate random Huesler-Reiss Models}
 \usage{
 generate_random_model(d, graph_type = "general", ...)
 }

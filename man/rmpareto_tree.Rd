@@ -45,7 +45,7 @@ is an extremal graphical model on a tree as defined in \insertCite{eng2019;textu
 }
 \details{
 The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-For details on the parameters of the Huesler--Reiss, logistic
+For details on the parameters of the Huesler-Reiss, logistic
 and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }

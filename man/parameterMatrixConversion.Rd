@@ -11,7 +11,7 @@
 \alias{Sigma2Sigma}
 \alias{Gamma2Gamma}
 \alias{matrix2matrix}
-\title{Conversion between Hüsler-Reiss parameter matrices}
+\title{Conversion between Huesler-Reiss parameter matrices}
 \usage{
 Gamma2Sigma(Gamma, k = NULL, full = FALSE, check = TRUE)
 
@@ -109,7 +109,7 @@ The desired parameter matrix corresponding to the specified inputs.
 }
 \description{
 Converts between different matrices that parametrize the same
-Hüsler-Reiss distribution:
+Huesler-Reiss distribution:
 \eGamma, \eSigma, \eTheta, \eSigmaK, \eThetaK.
 The \d1xd1 matrices \eSigmaK and \eThetaK can also be given/returned
 as \dxd matrices with the kth row and column filled with zeros.

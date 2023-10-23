@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimation_param.R
 \name{fmpareto_graph_HR}
 \alias{fmpareto_graph_HR}
-\title{Parameter fitting for Huesler--Reiss graphical models}
+\title{Parameter fitting for Huesler-Reiss graphical models}
 \usage{
 fmpareto_graph_HR(
   data,
@@ -18,7 +18,7 @@ fmpareto_graph_HR(
 number of observations and \code{d} is the number of dimensions.}
 
 \item{graph}{Undirected, connected [\code{igraph::graph}] object with \code{d} vertices,
-representing the graphical structure of the fitted Huesler--Reiss model.}
+representing the graphical structure of the fitted Huesler-Reiss model.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} is already on a multivariate Pareto scale.
@@ -38,7 +38,7 @@ See details.}
 The estiamted parameter matrix.
 }
 \description{
-Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
+Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distirubtion
 with a given graphical structure, using maximum-likelihood estimation
 or the empirical variogram.
 }

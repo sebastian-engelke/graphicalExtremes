@@ -3,7 +3,7 @@
 \name{emp_vario}
 \alias{emp_vario}
 \alias{emp_vario_pairwise}
-\title{Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution}
+\title{Estimation of the variogram matrix \eGamma of a Huesler-Reiss distribution}
 \usage{
 emp_vario(data, k = NULL, p = NULL)
 
@@ -25,10 +25,10 @@ to standardize the \code{data}.}
 \item{verbose}{Print verbose progress information}
 }
 \value{
-Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
+Numeric \dxd matrix. The estimated variogram of the Huesler-Reiss distribution.
 }
 \description{
-Estimates the variogram of the Huesler--Reiss distribution empirically.
+Estimates the variogram of the Huesler-Reiss distribution empirically.
 }
 \details{
 \code{emp_vario_pairwise} calls \code{emp_vario} for each pair of observations.

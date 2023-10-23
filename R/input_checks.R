@@ -399,7 +399,7 @@ ensure_matrix_symmetry_and_truncate_zeros <- function(M, tol=get_small_tol(), ch
   truncate_zeros(M, tol)
 }
 
-#' Check if an object is a square matrix
+# Check if an object is a square matrix
 is_square_matrix <- function(M){
   (
     is.matrix(M)
@@ -408,13 +408,13 @@ is_square_matrix <- function(M){
   )
 }
 
-#' Get the max deviation from symmetry
+# Get the max deviation from symmetry
 get_max_asymmetry <- function(M){
   if(length(M) == 0) return(0)
   max(M - t(M), na.rm = TRUE)
 }
 
-#' Check if an object is a square, symmetric matrix
+# Check if an object is a square, symmetric matrix
 is_symmetric_matrix <- function(M, tol=get_small_tol()){
   (
     is.matrix(M)
@@ -424,14 +424,14 @@ is_symmetric_matrix <- function(M, tol=get_small_tol()){
   )
 }
 
-#' Check if a square, symmetric matrix is conditionally negative definite
+# Check if a square, symmetric matrix is conditionally negative definite
 is_cnd <- function(M){
   Sk <- Gamma2Sigma(M, k=1, full=FALSE, check=FALSE)
   eig <- eigen(Sk, symmetric = TRUE, only.values = TRUE)$values
   return(eig[length(eig)] > 0)
 }
 
-#' Check if a square, symmetric matrix is positive definite
+# Check if a square, symmetric matrix is positive definite
 check_pos_def <- function(M, alert=get_alert_function()){
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
   smallestEV <- eig[length(eig)]
@@ -441,39 +441,39 @@ check_pos_def <- function(M, alert=get_alert_function()){
   return(M)
 }
 
-#' Compute the maximum absolute rowsum of a matrix
+# Compute the maximum absolute rowsum of a matrix
 get_max_abs_rowsum <- function(M){
   return(max_without_warning(abs(rowSums(M))))
 }
 
-#' Check if a symmetric matrix is positive definite
+# Check if a symmetric matrix is positive definite
 is_pos_def <- function(M){
   # Assumes that input is symmetric!
   # If M is symmetric, pos.def. is equivalent to all positive eigenvalues
   get_smallest_ev(M) > 0
 }
 
-#' Returns the smallest eigenvalue of a matrix
+# Returns the smallest eigenvalue of a matrix
 get_smallest_ev <- function(M){
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
   return(eig[length(eig)])
 }
 
-#' Returns the second smallest eigenvalue of a matrix
+# Returns the second smallest eigenvalue of a matrix
 get_second_smallest_ev <- function(M){
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
   d <- length(eig)
   return(eig[d-1])
 }
 
-#' Assumest one 0-eigenvalue and returns the smallest other eigenvalue of a matrix
+# Assumest one 0-eigenvalue and returns the smallest other eigenvalue of a matrix
 get_critical_ev_Sigma_Theta <- function(M){
   eig <- eigen(M, symmetric = TRUE, only.values = TRUE)$values
   eig <- eig[-which.min(abs(eig))]
   return(min(eig))
 }
 
-#' Compute the minimum without warning about `min(c()) = Inf`
+# Compute the minimum without warning about `min(c()) = Inf`
 min_without_warning <- function(..., na.rm = FALSE){
   if(length(c(...)) == 0){
     return(Inf)
@@ -481,7 +481,7 @@ min_without_warning <- function(..., na.rm = FALSE){
   min(..., na.rm = na.rm)
 }
 
-#' Compute the maximum without warning about `max(c()) = -Inf`
+# Compute the maximum without warning about `max(c()) = -Inf`
 max_without_warning <- function(..., na.rm = FALSE){
   if(length(c(...)) == 0){
     return(-Inf)

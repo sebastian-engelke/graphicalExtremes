@@ -42,7 +42,7 @@ Simulates exact samples of a multivariate Pareto distribution.
 }
 \details{
 The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-For details on the parameters of the Huesler--Reiss, logistic
+For details on the parameters of the Huesler-Reiss, logistic
 and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }
