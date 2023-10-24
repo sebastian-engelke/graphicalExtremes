@@ -18,6 +18,8 @@ vignette: >
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
 
+# The dataset
+
 ```{r, echo = TRUE, message=FALSE, warning=FALSE}
 library(graphicalExtremes)
 library(ggplot2)
@@ -37,7 +39,7 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
     }
 })
 ```
-```{r, include=FALSE, eval=FALSE}
+```{r, include=FALSE, eval=TRUE}
 source('memoise.R')
 ```
 
@@ -76,6 +78,8 @@ plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 To perform an example application,
 we consider the years 2010 - 2013 and choose (somewhat arbitrarily)
 airports from the westcoast with a large number of flights per year.
+A similar analysis is perform in @hen2022.
+For more detailed explanations see Vignette "applicationDanube" and the help pages of applied functions.
 *Note: In the CRAN version of this package, these are the only available years.*
 *A version of this package with a larger dataset is available on GitHub*
 ```{r, fig.width=10}
@@ -102,6 +106,42 @@ plotFlights(
 )
 ```
 
+Next, we create the matrix containing (departing) flight delays for the considered airports and dates.
+```{r}
+dates <- as.Date(dimnames(flights$delays)[[1]])
+indDates <- format(dates, "%Y") %in% yearNames
+mat <- flights$delays[indDates, IATAs, "departures"]
+# We remove all rows containing NAs
+rowHasNA <- apply(is.na(mat), 1, any)
+mat <- mat[!rowHasNA, ]
+
+# Percentile used as threshold when transforming to multivariate Pareto distribution
+p <- 0.7
+
+# Empirical extremal correlation matrix
+emp_chi_mat <- emp_chi(mat, p = p)
+
+```
+
+This function will be used later to compare fitted parameters to empirical ones.
+```{r}
+# Utility function to plot fitted parameters against true/empirical ones
+plot_fitted_params <- function(G0, G1, xlab = 'Empirical', ylab = 'Fitted'){
+    return(
+        ggplot()
+        + geom_point(aes(
+            x = G0[upper.tri(G0)],
+            y = G1[upper.tri(G1)]
+        ))
+        + geom_abline(slope = 1, intercept = 0)
+        + xlab(xlab)
+        + ylab(ylab)
+    )
+}
+```
+
+# Fitting a model to the flight graph
+
 As a baseline for graphical modelling, we consider the graph with edges
 representing at least monthly connections between airports.
 ```{r}
@@ -117,155 +157,109 @@ flight_graph <- graph_from_adjacency_matrix(A, diag = FALSE, mode = "undirected"
 plotFlights(IATAs, graph = flight_graph, clipMap = 1.3, xyRatio = 1)
 ```
 
-Next, we create the matrix containing (departing) flight delays for the considered airports and dates.
-```{r}
-dates <- as.Date(dimnames(flights$delays)[[1]])
-indDates <- format(dates, "%Y") %in% yearNames
-mat <- flights$delays[indDates, IATAs, "departures"]
-# We remove all rows containing NAs
-rowHasNA <- apply(is.na(mat), 1, any)
-mat <- mat[!rowHasNA, ]
+Given the `flight_graph` object, we fit a Hüsler--Reiss model with that graphical structure.
+```{r, message=FALSE, warning=FALSE}
+# Fit the model
+model_fit <- fmpareto_graph_HR(
+    data = mat,
+    graph = flight_graph,
+    p = p,
+    method = "vario"
+)
+
+# Compute likelihood/ICs
+flights_loglik_graph <- loglik_HR(
+    data = mat,
+    p = p,
+    graph = flight_graph,
+    Gamma = model_fit
+)
+cat("Flight graph BIC =", round(flights_loglik_graph['bic'], 2), "\n")
+
+# Plot fitted parameters
+plot_fitted_params(emp_chi_mat, Gamma2chi(model_fit))
 ```
 
 
 # Fitting a tree model
-1.  Fit an extremal tree model to the flight delays using `emst()`, choosing the threshold `p = 0.7`. 
-    ```{r, collapse=TRUE}
-    p <- .7
-    flights_emst_fit <- emst(data = mat, p = p, method = "vario")
-    ```
+Next, we fit an extremal tree model to the flight delays using `emst()`.
+```{r, collapse=TRUE, fig.align='', fig.show='hold', out.width='50%'}
+# Fit the model
+flights_emst_fit <- emst(data = mat, p = p, method = "vario")
 
-2.  Plot the estimated tree on the US map and interpret the results.
-    ```{r}
-    plotFlights(
-        IATAs,
-        graph = flights_emst_fit$graph,
-        xyRatio = 1,
-        clipMap = 1.3
-    )
-    ```
+# Compute likelihood/ICs
+flights_loglik_tree <- loglik_HR(
+    data = mat,
+    p = p,
+    Gamma = flights_emst_fit$Gamma,
+    graph = flights_emst_fit$graph
+)
+cat("Tree BIC =", round(flights_loglik_tree['bic'], 2), "\n")
 
-3.  Compute the BIC value of the fitted tree model.
-    ```{r}
-    flights_loglik_tree <- loglik_HR(
-        data = mat,
-        p = p,
-        Gamma = flights_emst_fit$Gamma,
-        graph = flights_emst_fit$graph
-    )
-    cat("Tree BIC =", round(flights_loglik_tree['bic'], 2), "\n")
-    ```
-
-4.  Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model.
-    ```{r}
-    emp_chi_mat <- emp_chi(mat, p = p)
-
-    ggplot() +
-        geom_point( aes(
-            x = c(Gamma2chi(flights_emst_fit$Gamma)),
-            y = c(emp_chi_mat)
-        )) +
-        geom_abline(slope = 1, intercept = 0) +
-        xlab("Fitted") +
-        ylab("Empirical")
-    ```
-
-5.  Given the `flight_graph` object, fit a HR graphical model using `fmpareto_graph_HR()`.
-    ```{r, message=FALSE, warning=FALSE}
-    model_fit <- fmpareto_graph_HR(
-        data = mat,
-        graph = flight_graph,
-        p = p,
-        method = "vario"
-    )
-    ```
-
-6.  Compute the BIC value for the `flight_graph` object and the corresponding `Gamma` matrix obtained at Step 5.
-    ```{r}
-    flights_loglik_graph <- loglik_HR(
-        data = mat,
-        p = p,
-        graph = flight_graph,
-        Gamma = model_fit
-    )
-    cat("BIC =", round(flights_loglik_graph['bic'], 2), "\n")
-    ```
-
-
-7.  Plot the empirical $\chi$ coefficient against the $\chi$ coefficient implied by the fitted model of Step 5.
-    ```{r}
-    ggplot() +
-        geom_point(aes(
-            x = c(Gamma2chi(model_fit)),
-            y = c(emp_chi_mat)
-        )) +
-        geom_abline(slope = 1, intercept = 0) +
-        xlab("Fitted") +
-        ylab("Empirical")
-    ```
-
+# Plot fitted graph, parameters
+plotFlights(
+    IATAs,
+    graph = flights_emst_fit$graph,
+    xyRatio = 1,
+    clipMap = 1.3
+)
+plot_fitted_params(emp_chi_mat, Gamma2chi(flights_emst_fit$Gamma))
+```
 
 
 # Fitting a general model
 
-1.  Fit an extremal graphical lasso model with `eglearn()`, choosing threshold `p = 0.7`, and `rholist = seq(1e-4, 0.10, length.out = 10)`.
-    ```{r, message=FALSE, warning=FALSE}
-    rholist <- seq(0, 0.40, length.out = 11)
-    flights_eglearn_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
-    ```
+Lastly, we fit a general graphical model with `eglearn()`, using a suitable list of penalization parameters.
+```{r, message=FALSE, warning=FALSE}
+# Fit the model
+rholist <- seq(0, 0.40, length.out = 11)
+flights_eglearn_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
 
-2.  Compute and plot the BIC values of the estimated models for different values of `rho`.
-    What is the best model (w.r.t. the BIC)?
-    ```{r}
-    flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
-        loglik_HR(
-            data = mat, p = p,
-            Gamma = flights_eglearn_fit$Gamma[[j]],
-            graph = flights_eglearn_fit$graph[[j]]
-        )
-    })
-
-    ggplot(
-        mapping = aes(x = rholist, y = flights_loglik['bic', ])) +
-        geom_line() +
-        geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-        xlab("rho") +
-        ylab("BIC") +
-        scale_x_continuous(
-            breaks = rholist,
-            labels = round(rholist, 3),
-            sec.axis = sec_axis(
-                trans = ~., breaks = rholist,
-                labels = sapply(
-                    flights_eglearn_fit$graph,
-                    igraph::gsize
-                ),
-                name = "Number of edges"
-            )
+# Compute likelihood/ICs
+flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
+    loglik_HR(
+        data = mat,
+        p = p,
+        Gamma = flights_eglearn_fit$Gamma[[j]],
+        graph = flights_eglearn_fit$graph[[j]]
     )
+})
+```
 
-    best_index <- which.min(flights_loglik['bic',])
-    cat('Best rho =', rholist[best_index], '\n')
-    cat('Corresponding BIC =', flights_loglik['bic', best_index])
-    ```
+The "best" penalization parameter can be chosen e.g. such that the BIC is minimized.
+```{r}
+ggplot(
+    mapping = aes(x = rholist, y = flights_loglik['bic', ])) +
+    geom_line() +
+    geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
+    geom_hline(aes(yintercept = flights_loglik_graph['bic']), lty = "dashed") +
+    geom_hline(aes(yintercept = flights_loglik_tree['bic']), lty = "dotted") +
+    xlab("rho") +
+    ylab("BIC") +
+    scale_x_continuous(
+        breaks = rholist,
+        labels = round(rholist, 3),
+        sec.axis = sec_axis(
+            trans = ~., breaks = rholist,
+            labels = sapply(
+                flights_eglearn_fit$graph,
+                igraph::gsize
+            ),
+            name = "Number of edges"
+        )
+)
 
-3.  Plot the estimated graph of the best fitted model.
-    ```{r}
-    best_graph <- flights_eglearn_fit$graph[[best_index]]
-    plotFlights(IATAs, graph = best_graph, clipMap = 1.3, xyRatio = 1)
-    ```
+best_index <- which.min(flights_loglik['bic',])
+cat('Best rho =', rholist[best_index], '\n')
+cat('Corresponding BIC =', flights_loglik['bic', best_index])
+```
 
+We plot the estimated graph and parameters of the best fitted model.
+```{r, fig.align='', fig.show='hold', out.width='50%'}
+best_graph <- flights_eglearn_fit$graph[[best_index]]
+best_Gamma <- flights_eglearn_fit$Gamma[[best_index]]
+plotFlights(IATAs, graph = best_graph, clipMap = 1.3, xyRatio = 1)
+plot_fitted_params(emp_chi_mat, Gamma2chi(best_Gamma))
+```
 
-4.  Plot the $\chi$ coefficients implied by the best fitted model against the empirical $\chi$ coefficients.
-    ```{r}
-    best_Gamma <- flights_eglearn_fit$Gamma[[best_index]]
-    ggplot() +
-        geom_point(aes(
-            x = c(Gamma2chi(best_Gamma)),
-            y = c(emp_chi_mat)
-        )) +
-        geom_abline(slope = 1, intercept = 0) +
-        xlab("Fitted") +
-        ylab("Empirical")
-
-    ```
+# References

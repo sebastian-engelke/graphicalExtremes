@@ -44,7 +44,7 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
     }
 })
 ```
-```{r, include=FALSE, eval=FALSE}
+```{r, include=FALSE, eval=TRUE}
 source('memoise.R')
 ```
 
@@ -557,10 +557,12 @@ ggplot(mapping = aes(x = rholist, y = logliks_eglearn['bic', ])) +
     )
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, nomargin=TRUE, fig.align='', fig.show='hold', out.width='50%'}
 # Compare fitted chi to empirical one
-best_Gamma <- eglearn_fit$Gamma[[which.min(logliks_eglearn['bic', ])]]
-chi_hat <- emp_chi(Y)
+best_index <- which.min(logliks_eglearn['bic', ])
+best_Gamma <- eglearn_fit$Gamma[[best_index]]
+best_graph <- eglearn_fit$graph[[best_index]]
+plotDanubeIGraph(graph = best_graph)
 plot_fitted_params(chi_hat, Gamma2chi(best_Gamma), xlab='Empirical')
 ```
 
