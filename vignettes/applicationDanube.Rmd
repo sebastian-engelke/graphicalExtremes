@@ -31,7 +31,7 @@ library(ggplot2)
 library(igraph)
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 rightAlign <- function(txt){
     paste0('<div style="text-align: right">', txt, '</div>')
 }
