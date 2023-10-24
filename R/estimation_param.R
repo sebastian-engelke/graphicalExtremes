@@ -26,7 +26,7 @@
 #' @param ... Arguments passed to [fmpareto_HR_MLE()]. Currently `cens`, `maxit`,
 #' `optMethod`, and `useTheta` are supported.
 #' 
-#' @return The estiamted parameter matrix.
+#' @return The estimated parameter matrix.
 #' 
 #' @details
 #' If `handleCliques='average'`, the marginal parameter matrix is estimated for

@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Extremal Graphical Models"
+title: "Introduction and application to danube data"
 output:
     bookdown::html_document2:
         fig_width: 5
@@ -9,7 +9,7 @@ output:
         toc_depth: 1
 bibliography: ../inst/REFERENCES.bib
 vignette: >
-    %\VignetteIndexEntry{Introduction to Extremal Graphical Models}
+    %\VignetteIndexEntry{Introduction and application to danube data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
@@ -39,6 +39,14 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
         now <<- Sys.time()
     } else {
         rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
+    }
+})
+par0 <- par()
+knitr::knit_hooks$set(nomargin = function(before) {
+    if(before){
+        par0 <<- par(mar=c(0,0,0,0))
+    } else{
+        par(par0)
     }
 })
 knitr::opts_chunk$set(
@@ -78,17 +86,17 @@ see the corresponding help page for details and related functions.
 plotDanube(useStationVolume = TRUE, useConnectionVolume = TRUE, xyRatio = 1.5)
 ```
 
-```{r}
+```{r, nomargin=TRUE}
 # Plot only the flow graph
 danube_flow <- getDanubeFlowGraph()
-plotDanubeIGraph(graph = danube_flow, labelStations = TRUE)
+plotDanubeIGraph(graph = danube_flow)
 ```
 
 ```{r, fig.show='hold', out.width="50%", fig.align=''}
 # Plot some pairwise scatter plots
-X <- as_tibble(danube$data_clustered)
-ggplot(X) + geom_point(aes(x = X1, y = X2))
-ggplot(X) + geom_point(aes(x = X22, y = X28))
+plotData <- as_tibble(danube$data_clustered)
+ggplot(plotData) + geom_point(aes(x = X1, y = X2))
+ggplot(plotData) + geom_point(aes(x = X22, y = X28))
 ```
 
 # Multivariate Pareto distributions
@@ -114,6 +122,7 @@ Given $n$ oberservations $\g X_1, \dots, \g X_n$ of $\g X$, the function `data2m
 
 
 ```{r}
+X <- danube$data_clustered
 Y <- data2mpareto(data = X, p = .8)
 ```
 
@@ -179,7 +188,8 @@ For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can 
 chi_hat <- emp_chi(data = X, p = .8)
 ```
 
-In this function, and in all subsequent functions, if the variable `p = NULL` then the data is already expected to be on MPD scale, and no thresholding is performed. For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
+In this and other functions, the argument `p = NULL` implies that the data is already expected to be on MPD scale, and no thresholding is performed.
+For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
 chi_hat <- emp_chi(data = Y)
@@ -189,7 +199,7 @@ chi_hat <- emp_chi(data = Y)
 ::: {.example}
 For the Hüsler--Reiss distribution with parameter matrix $\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}$, the extremal correlation is given by
 $$ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),$$
-    where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
+where $\Phi$ is the standard normal distribution function. We can use the functions `Gamma2chi()` and `chi2Gamma()` to switch between the two coefficients.
 :::
 
 
@@ -228,8 +238,6 @@ Gamma_hat <- emp_vario(data = Y)
 ```
 
 
-
-
 # Extremal graphical models
 
 Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
@@ -238,10 +246,11 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
-```{r, echo = FALSE, out.width="50%"}
-# All defaults
-# TODO: directly plot igraph graphs
-knitr::include_graphics("images/graphs.png")
+```{r, out.width="33%", fig.align='', fig.show='hold', nomargin=TRUE}
+# A tree graph, a decomposable graph, and a non-decomposable (cycle) graph
+plot(graph_from_literal(1--2--3, 2--4))
+plot(graph_from_literal(1--2--3--1, 2--4))
+plot(graph_from_literal(1--2--3--4--1))
 ```
 
 
@@ -271,14 +280,16 @@ set.seed(42)
 
 my_model <- generate_random_model(d = 4, graph_type = "tree")
 Ysim <- rmpareto_tree(
-    n = 100, model = "HR",
+    n = 100,
+    model = "HR",
     tree = my_model$graph,
     par = my_model$Gamma
 )
 
 theta_vec <- c(.2, .8, .3)
 Ysim <- rmpareto_tree(
-    n = 100, model = "logistic",
+    n = 100,
+    model = "logistic",
     tree = my_model$graph,
     par = theta_vec
 )
@@ -293,9 +304,35 @@ For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \t
 If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
 
 ```{r}
-# TODO: use function from package
-danube_tree <- igraph::as.undirected(danube_flow)
-danube_flow_fit <- fmpareto_graph_HR(data = X, graph = danube_tree, p = .8)
+# Utility function to plot fitted parameters against true/empirical ones
+plot_fitted_params <- function(G0, G1, xlab = 'True', ylab = 'Fitted'){
+    return(
+        ggplot()
+        + geom_point(aes(
+            x = G0[upper.tri(G0)],
+            y = G1[upper.tri(G1)]
+        ))
+        + geom_abline(slope = 1, intercept = 0)
+        + xlab(xlab)
+        + ylab(ylab)
+    )
+}
+```
+
+```{r}
+# Get flow graph from package
+flow_graph <- getDanubeFlowGraph()
+
+# Fit parameter matrix with this graph structure
+flow_Gamma <- fmpareto_graph_HR(data = Y, graph = flow_graph)
+
+# Compute likelihood/ICs and plot parameters
+flow_loglik <- loglik_HR(
+    data = Y,
+    Gamma = flow_Gamma,
+    graph = flow_graph
+)
+plot_fitted_params(chi_hat, Gamma2chi(flow_Gamma), xlab = 'Empirical')
 ```
 
 
@@ -314,22 +351,22 @@ that minimizes the sum of distances on that tree.
 
 In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empircal extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
 
-
 The function `emst()` estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
 
 
-```{r}
-danube_emst_fit <- emst(data = X, p = .8, method = "vario")
-plot(danube_emst_fit$graph, layout = danube_plot_coords)
-```
 
-```{r}
-ggplot() +
-    geom_point(aes(x = c(Gamma2chi(danube_flow_fit)), y = c(chi_hat))) +
-    geom_abline(slope = 1, intercept = 0) +
-    xlab("Fitted") +
-    ylab("Empirical") +
-    coord_cartesian(xlim = c(0.4, 1), ylim = c(0.4, 1))
+```{r, nomargin=TRUE, fig.align='', fig.show='hold', out.width='50%'}
+# Fit tree grpah to the data
+emst_fit <- emst(data = Y, method = "vario")
+
+# Compute likelihood/ICs, and plot fitted graph, parameters
+loglik_emst <- loglik_HR(
+    data = Y,
+    Gamma = emst_fit$Gamma,
+    graph = emst_fit$graph
+)
+plotDanubeIGraph(graph = emst_fit$graph)
+plot_fitted_params(chi_hat, Gamma2chi(emst_fit$Gamma), xlab = 'Empirical')
 ```
 
 
@@ -358,7 +395,7 @@ Note that all of these function are bijections.
 The functions `Gamma2graph()`, `Theta2graph()` etc. create an `igraph::graph()` object,
 which represents the corresponding extremal graph structure.
 
-```{r, eval=FALSE}
+```{r, nomargin=TRUE}
 Gamma <- cbind(
     c(0, 1.5, 1.5, 2),
     c(1.5, 0, 2, 1.5),
@@ -367,7 +404,7 @@ Gamma <- cbind(
 )
 Gamma2Sigma(Gamma, k = 1)
 Gamma2Theta(Gamma)
-my_graph <- Gamma2graph(Gamma)
+Gamma2graph(Gamma)
 ```
 
 ### Completion of $\Gamma$
@@ -381,17 +418,18 @@ The mathematical theory for completion is different depening on whether the grap
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).
 
-```{r}
+```{r, nomargin=TRUE, out.width='30%'}
 set.seed(42)
-my_tree <- generate_random_model(d = 4, graph_type = "tree")$graph
+my_tree <- generate_random_tree(d = 4)
 Gamma_vec <- c(.5, 1.4, .8)
-complete_Gamma(Gamma = Gamma_vec, graph = my_tree)
-plot(my_tree)
+Gamma_comp <- complete_Gamma(Gamma = Gamma_vec, graph = my_tree)
+print(Gamma_comp)
+plot(Gamma2graph(Gamma_comp))
 ```
 
 This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
 
-```{r}
+```{r, nomargin=TRUE, out.width='30%'}
 G <- rbind(
     c(0, 5, 7, 6, NA),
     c(5, 0, 14, 15, NA),
@@ -399,15 +437,14 @@ G <- rbind(
     c(6, 15, 5, 0, 6),
     c(NA, NA, 5, 6, 0)
 )
-complete_Gamma(Gamma = G)
-my_graph <- Gamma2graph(complete_Gamma(G))
-plot(my_graph)
+Gamma_comp <- complete_Gamma(Gamma = G)
+plot(Gamma2graph(Gamma_comp))
 ```
 
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
 
 
-```{r}
+```{r, nomargin=TRUE, out.width='30%'}
 set.seed(42)
 G <- rbind(
     c(0, 5, 7, 6, 6),
@@ -416,51 +453,42 @@ G <- rbind(
     c(6, 15, 5, 0, 6),
     c(6, 13, 5, 6, 0)
 )
-my_graph <- generate_random_model(d = 5, graph_type = "general", m = 5)$graph
-complete_Gamma(Gamma = G, graph = my_graph)
-plot(my_graph)
+my_graph <- generate_random_connected_graph(d = 5, m = 5)
+Gamma_comp <- complete_Gamma(Gamma = G, graph = my_graph)
+plot(Gamma2graph(Gamma_comp))
 ```
 
 
 ### Estimation
 
-Let us first suppose that a connected graph $G$ is given. For some data set, the function `fmpareto_graph_HR()` fits a Hüsler--Reiss graphical model on the graph $G$.
+Let us first suppose that a connected graph $G$ is given.
+For some data set, the function `fmpareto_graph_HR()` fits a Hüsler--Reiss graphical model on the graph $G$.
 
 If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full $\Gamma$ matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
 Combining the clique estimates relies on the same principle as in the `complete_Gamma()` function, but with some care required to ensure that the $\Gamma_{ij}$ estimates are consistent if $(i,j)$ belongs to a separator set between two or more cliques. 
 
-```{r}
+```{r, nomargin=TRUE}
 set.seed(42)
 d <- 10
 my_model <- generate_random_model(d = d, graph_type = "decomposable")
 plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
 my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL)
-ggplot() +
-    geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
-    geom_abline(slope = 1, intercept = 0) +
-    xlab("Fitted") +
-    ylab("True") +
-    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+plot_fitted_params(Gamma2chi(my_model$Gamma), Gamma2chi(my_fit))
 ```
 
 
 If the graph $G$ is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of $G$ using the function `complete_Gamma()`.
 
 
-```{r}
+```{r, nomargin=TRUE}
 set.seed(1)
 d <- 20
 my_model <- generate_random_model(d = d, graph_type = "general")
 plot(my_model$graph)
 Ysim <- rmpareto(n = 100, d = d, model = "HR", par = my_model$Gamma)
 my_fit <- fmpareto_graph_HR(data = Ysim, graph = my_model$graph, p = NULL, method = "vario")
-ggplot() +
-    geom_point(aes(x = c(Gamma2chi(my_fit)), y = c(Gamma2chi(my_model$Gamma)))) +
-    geom_abline(slope = 1, intercept = 0) +
-    xlab("Fitted") +
-    ylab("True") +
-    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+plot_fitted_params(Gamma2chi(my_model$Gamma), Gamma2chi(my_fit))
 ```
 
 
@@ -482,34 +510,34 @@ The extremal graphical lasso is implemented in the `eglearn()` function.
 It returns the (sequence) of estimated graphs and, if desired, the corresponding $\widehat \Gamma_\rho$ estimates.
 
 ```{r, message=FALSE, warning=FALSE}
-# TODO: redo with Danube data
-set.seed(42)
-# (Ysim from previous example is used)
-rholist <- seq(0, 0.1, length.out = 10)
-eglasso_fit <- eglearn(
-    data = Ysim,
+# Run eglearn for a suitable list of penalization parameters
+rholist <- seq(0, 0.1, length.out = 11)
+eglearn_fit <- eglearn(
+    data = Y,
     rholist = rholist,
     complete_Gamma = TRUE
 )
 
-eglasso_loglik <- sapply(1:length(rholist), FUN = function(j) {
-    loglik_HR(
-        data = Ysim, p = .8, Gamma = eglasso_fit$Gamma[[j]],
-        graph = eglasso_fit$graph[[j]]
-    )
-})
-
-emst_fit <- emst(Ysim)
-
-danube_loglik_tree <- loglik_HR(
-    data = Ysim, p = .8, Gamma = emst_fit$Gamma,
-    graph = emst_fit$graph
+# Compute the corresponding likelihoods/ICs
+logliks_eglearn <- sapply(
+    seq_along(rholist),
+    FUN = function(j) {
+        Gamma <- eglearn_fit$Gamma[[j]]
+        if(is.null(Gamma)) return(c(NA, NA, NA))
+        loglik_HR(
+            data = Y,
+            Gamma = Gamma,
+            graph = eglearn_fit$graph[[j]]
+        )
+    }
 )
 
-ggplot(mapping = aes(x = rholist, y = eglasso_loglik[3, ])) +
+# Plot the BIC vs rho/number of edges
+ggplot(mapping = aes(x = rholist, y = logliks_eglearn['bic', ])) +
     geom_line() +
     geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-    geom_hline(aes(yintercept = danube_loglik_tree[3]), lty = "dashed") +
+    geom_hline(aes(yintercept = flow_loglik['bic']), lty = "dashed") +
+    geom_hline(aes(yintercept = loglik_emst['bic']), lty = "dotted") +
     xlab("rho") +
     ylab("BIC") +
     scale_x_continuous(
@@ -517,29 +545,18 @@ ggplot(mapping = aes(x = rholist, y = eglasso_loglik[3, ])) +
         labels = round(rholist, 3),
         sec.axis = sec_axis(
             trans = ~., breaks = rholist,
-            labels = sapply(eglasso_fit$graph, igraph::gsize),
+            labels = sapply(eglearn_fit$graph, igraph::gsize),
             name = "Number of edges"
         )
     )
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-best_Gamma <- eglasso_fit$Gamma[[which.min(eglasso_loglik[3, ])]]
-chi_hat <- emp_chi(Ysim)
-
-ggplot() +
-    geom_point(aes(x = c(Gamma2chi(best_Gamma)), y = c(chi_hat))) +
-    geom_abline(slope = 1, intercept = 0) +
-    xlab("Fitted") +
-    ylab("Empirical") +
-    coord_cartesian(
-        ylim = c(0, 1),
-        xlim = c(0, 1)
-    )
+# Compare fitted chi to empirical one
+best_Gamma <- eglearn_fit$Gamma[[which.min(logliks_eglearn['bic', ])]]
+chi_hat <- emp_chi(Y)
+plot_fitted_params(chi_hat, Gamma2chi(best_Gamma), xlab='Empirical')
 ```
-
-## Exercises
-For some exercises and solutions see `vignette("exercises")`.
 
 
 # References

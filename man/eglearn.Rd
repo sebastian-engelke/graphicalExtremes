@@ -54,14 +54,14 @@ The list of penalty coefficients.
 A list of [\code{igraph::graph}] objects
 representing the optimal graph
 according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
-If \code{reg_method = "glasso"}, it returns a list of \code{NA}.
+If \code{reg_method = "glasso"}, it returns a list of \code{NULL}.
 }
 \item{\code{Gamma_ic}}{
 A list of numeric \dxd estimated
 variogram matrices \eGamma corresponding
 to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, \code{complete_Gamma = FALSE}, or the underlying
-graph is not connected, it returns a list of \code{NA}.
+graph is not connected, it returns a list of \code{NULL}.
 }
 }
 \description{

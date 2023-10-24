@@ -35,7 +35,7 @@ See details.}
 \code{optMethod}, and \code{useTheta} are supported.}
 }
 \value{
-The estiamted parameter matrix.
+The estimated parameter matrix.
 }
 \description{
 Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distirubtion

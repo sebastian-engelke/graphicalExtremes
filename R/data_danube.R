@@ -356,7 +356,7 @@ plotDanubeIGraph <- function(
   stationIndices = NULL,
   graph = NULL,
   directed = NULL,
-  labelStations = FALSE,
+  labelStations = TRUE,
   vertexColors = NULL,
   vertexShapes = NULL,
   edgeColors = NULL,

@@ -44,14 +44,14 @@
 #'   A list of \[`igraph::graph`\] objects
 #'   representing the optimal graph
 #'   according to the `aic`, `bic`, and `mbic` information criteria.
-#'   If `reg_method = "glasso"`, it returns a list of `NA`.
+#'   If `reg_method = "glasso"`, it returns a list of `NULL`.
 #' }
 #' \item{`Gamma_ic`}{
 #'   A list of numeric \dxd estimated
 #'   variogram matrices \eGamma corresponding
 #'   to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
-#'   graph is not connected, it returns a list of `NA`.
+#'   graph is not connected, it returns a list of `NULL`.
 #' }
 #'
 #' @family structureEstimation
@@ -118,20 +118,19 @@ eglearn <- function(
       adj.est[, ,j], mode = "undirected", diag = FALSE)
 
     if (complete_Gamma == FALSE) {
-
-      Gamma_curr <- NA
+      Gamma_curr <- NULL
     } else {
       Gamma_curr <- try_complete_Gamma(est_graph, Gamma, "rho", round(rho, 3))
     }
 
-    graphs[[j]] <- est_graph
-    Gammas[[j]] <- Gamma_curr
-    rhos[[j]] <- rho
+    graphs[j] <- list(est_graph)
+    Gammas[j] <- list(Gamma_curr)
+    rhos[j] <- list(rho)
   }
 
   # complete Gamma for ns
-  graphs_ic <-  list(aic = NA, bic = NA, mbic = NA)
-  Gammas_ic <-  list(aic = NA, bic = NA, mbic = NA)
+  graphs_ic <-  list(aic = NULL, bic = NULL, mbic = NULL)
+  Gammas_ic <-  list(aic = NULL, bic = NULL, mbic = NULL)
 
   if (reg_method == "ns") {
     for (l in seq_along(sel_methods)){
@@ -143,14 +142,15 @@ eglearn <- function(
         Gamma_curr <- NULL
       } else {
         Gamma_curr <- try_complete_Gamma(
-          est_graph, Gamma,
+          est_graph,
+          Gamma,
           key = "information criterion",
           val = sel_methods[l]
         )
       }
 
-      graphs_ic[[l]] <- est_graph
-      Gammas_ic[[l]] <- Gamma_curr
+      graphs_ic[l] <- list(est_graph)
+      Gammas_ic[l] <- list(Gamma_curr)
     }
   }
 
