@@ -212,7 +212,7 @@ plot_fitted_params(emp_chi_mat, Gamma2chi(flights_emst_fit$Gamma))
 Lastly, we fit a general graphical model with `eglearn()`, using a suitable list of penalization parameters.
 ```{r, message=FALSE, warning=FALSE}
 # Fit the model
-rholist <- seq(0, 0.40, length.out = 11)
+rholist <- seq(0, 0.50, length.out = 11)
 flights_eglearn_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
 
 # Compute likelihood/ICs

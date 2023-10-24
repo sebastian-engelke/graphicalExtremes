@@ -10,7 +10,6 @@
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
-                // "reveal": "silent",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
@@ -37,6 +36,15 @@
             "problemMatcher": []
         },
         {
+            "label": "install package with vignettes",
+            "type": "shell",
+            "dependsOn": [
+                "document package"
+            ],
+            "command": "R --silent --vanilla -e \"devtools::install(dependencies=FALSE,upgrade=FALSE,build_vignettes=TRUE,force=TRUE)\"",
+            "problemMatcher": []
+        },
+        {
             "label": "build pkgdown meta",
             "type": "shell",
             "command": "R --silent --vanilla -e \"pkgdown::build_home();pkgdown::build_reference_index()\"",
@@ -50,7 +58,7 @@
         },
         {
             "label": "R CMD build + check",
-            "type":"shell",
+            "type": "shell",
             "command": ".\\R_CMD_build_check.cmd",
             "problemMatcher": []
         }
