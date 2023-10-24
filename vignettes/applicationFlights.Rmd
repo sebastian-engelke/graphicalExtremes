@@ -7,22 +7,24 @@ output:
         number_sections: true
         toc: true
         toc_depth: 1
+pkgdown:
+    as_is: true
 bibliography: ../inst/REFERENCES.bib
 vignette: >
-    %\VignetteIndexEntry{Introduction and application to danube data}
+    %\VignetteIndexEntry{Application to flight data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
 
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
+```{r, echo = TRUE, message=FALSE, warning=FALSE}
 library(graphicalExtremes)
 library(ggplot2)
 library(igraph)
 ```
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 rightAlign <- function(txt){
     paste0('<div style="text-align: right">', txt, '</div>')
 }
@@ -34,6 +36,12 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
         rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
     }
 })
+```
+```{r, include=FALSE, eval=FALSE}
+source('memoise.R')
+```
+
+```{r, include=FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = '#>',
@@ -41,10 +49,7 @@ knitr::opts_chunk$set(
     fig.align = 'center',
     timeit = TRUE
 )
-source('memoise.R')
-```
 
-```{r, include = FALSE}
 theme_set(
     theme_bw()
     + theme(

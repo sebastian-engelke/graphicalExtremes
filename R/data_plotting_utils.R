@@ -48,6 +48,8 @@ decDegToDegMinSec <- function(decDeg, asString = FALSE){
   return(cbind(deg, min, decSec))
 }
 
+#' Compute plot limits
+#' 
 #' Helper function to compute the axis limits of a plot
 #' with given x, y data and optionally a fixed x-y-ratio and
 #' correcting the latitude/longitude scale at different latitudes

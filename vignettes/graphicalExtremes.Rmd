@@ -1,3 +1,9 @@
+---
+output:
+    bookdown::html_document2
+---
+
+
 # Three arguments in chunk hooks
 
 A chunk hook has three arguments: `before`, `options` and `envir`. We show how they work through some simple examples.
@@ -6,37 +12,9 @@ A chunk hook has three arguments: `before`, `options` and `envir`. We show how t
 
 It is a logical argument: `before == TRUE` executes code before a chunk.
 
-```{r,include=FALSE}
-rightAlign <- function(txt){
-    paste0('<div style="text-align: right">', txt, '</div>')
-}
-now <- Sys.time()
-knitr::knit_hooks$set(timeit = function(before, options, envir) {
-    if (before) {
-        now <<- Sys.time()
-    } else {
-        rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now, digits = 3)) 
-    }
-})
+\begin{equation}
+    x = y + 1
+    (\#eq:emc)
+\end{equation}
 
-knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = '#>',
-    error = TRUE,
-    timeit = TRUE
-)
-```
-
-
-```{r,timeit=FALSE}
-Sys.sleep(1)
-x <- 100
-print(x)
-```
-
-
-Test the `foo1` hook:
-
-```{r foo1='whatever'}
-1+1
-```
+In equation \@ref(eq:emc) yada yada yada.

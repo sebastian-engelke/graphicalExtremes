@@ -25,6 +25,7 @@ myMemoise <- function(f){
 }
 
 # Memoise expensive functions:
+fmpareto_graph_HR <- myMemoise(fmpareto_graph_HR)
 complete_Gamma <- myMemoise(complete_Gamma)
 loglik_HR <- myMemoise(loglik_HR)
 emp_chi <- myMemoise(emp_chi)

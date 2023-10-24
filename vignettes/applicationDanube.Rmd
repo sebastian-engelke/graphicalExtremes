@@ -7,6 +7,8 @@ output:
         number_sections: true
         toc: true
         toc_depth: 1
+pkgdown:
+    as_is: true
 bibliography: ../inst/REFERENCES.bib
 vignette: >
     %\VignetteIndexEntry{Introduction and application to danube data}
@@ -41,6 +43,12 @@ knitr::knit_hooks$set(timeit = function(before, options, envir) {
         rightAlign(sprintf("\n_Code execution time: %.3f seconds._\n", Sys.time() - now)) 
     }
 })
+```
+```{r, include=FALSE, eval=FALSE}
+source('memoise.R')
+```
+
+```{r, include=FALSE}
 par0 <- par()
 knitr::knit_hooks$set(nomargin = function(before) {
     if(before){
@@ -56,10 +64,6 @@ knitr::opts_chunk$set(
     fig.align = 'center',
     timeit = TRUE
 )
-source('memoise.R')
-```
-
-```{r, include=FALSE}
 theme_set(
     theme_bw()
     + theme(
@@ -105,13 +109,15 @@ ggplot(plotData) + geom_point(aes(x = X22, y = X28))
 
 The goal is to study the extremal tail of a multivariate random vector $\g{X} = (X_1,\dots, X_d)$. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions $F_j$ of $X_j$ to standard Pareto distributions by
 \begin{equation}
-1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d. (\#eq:pareto)
+    1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d.
+    (\#eq:pareto)
 \end{equation}
 We assume in the sequel that the vector $X$ has been normalized to standard Pareto margins.
 
 A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of $\g{X}$ over a high threshold, where the multivariate threshold is chosen in terms of the $l_\infty$-norm. For any $u>0$, we define exceedance distribution as
 \begin{equation}
-\g{X}_u = \g{X} \mid \| \g{X} \|_\infty > u  (\#eq:exc)
+    \g{X}_u = \g{X} \mid \| \g{X} \|_\infty > u
+    (\#eq:exc)
 \end{equation}
 By sending $u\to \infty$ and normalizing properly, the random vector $\g X_u$ converges to a limiting distribution $\g Y$ called the MPD:
 $$ \g{Y} = \lim_{u\to \infty} \g{X}_u /u,$$
@@ -418,7 +424,7 @@ The mathematical theory for completion is different depening on whether the grap
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).
 
-```{r, nomargin=TRUE, out.width='30%'}
+```{r, nomargin=TRUE}
 set.seed(42)
 my_tree <- generate_random_tree(d = 4)
 Gamma_vec <- c(.5, 1.4, .8)
@@ -429,7 +435,7 @@ plot(Gamma2graph(Gamma_comp))
 
 This also works for more general decomposable graphs, where the matrix $\Gamma$ has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by $\Gamma_{ij} = \text{NA}$ for $(i,j)\notin E$.
 
-```{r, nomargin=TRUE, out.width='30%'}
+```{r, nomargin=TRUE}
 G <- rbind(
     c(0, 5, 7, 6, NA),
     c(5, 0, 14, 15, NA),
@@ -444,7 +450,7 @@ plot(Gamma2graph(Gamma_comp))
 For non-decomposable graphs, a valid $\Gamma$ matrix and an undirected, connected graph has to be provided.
 
 
-```{r, nomargin=TRUE, out.width='30%'}
+```{r, nomargin=TRUE}
 set.seed(42)
 G <- rbind(
     c(0, 5, 7, 6, 6),
