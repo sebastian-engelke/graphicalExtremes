@@ -29,7 +29,7 @@ Fields/Forms used in the raw data:
 
 Airports (includes license information):
 \itemize{
-\item \url{https://openflights.org/data.html}
+\item \url{https://openflights.org/data}
 }
 }
 \usage{

@@ -163,5 +163,5 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' - <https://esubmit.rita.dot.gov/On-Time-Form3A.aspx>
 #' 
 #' Airports (includes license information):
-#' - <https://openflights.org/data.html>
+#' - <https://openflights.org/data>
 "flights"

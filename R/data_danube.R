@@ -22,7 +22,7 @@
 #' The values of `vertexColors`, `vertexShapes`, and `edgeColors` are intepreted differently
 #' by [`ggplot2::geom_point`]/[`ggplot2::geom_segment`] and [`igraph::plot.igraph()`].
 #' 
-#' `plotDanube` uses a combination of [`ggplot2`] functions to plot the graph.
+#' `plotDanube` uses a combination of `ggplot2` functions to plot the graph.
 #' 
 #' @examples
 #' # Basic plot

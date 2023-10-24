@@ -48,14 +48,6 @@ Similarly, \code{dateFilter="tcTrain"} selects the dates from the training set,
 To get the union of these sets, specify \code{dateFilter=c("tcTest", "tcTrain")}.
 To get all dates in the dataset, specify \code{dateFilter="all"}.
 }
-\examples{
-getFlightDelayData(
-    airportFilter = 'tcCluster',
-    dateFilter = 'tcTrain',
-    delayFilter = c('totals')
-)
-
-}
 \references{
 \insertAllCited{}
 }

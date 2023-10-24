@@ -142,6 +142,9 @@ check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'genera
 #' 
 #' @param tol Numeric scalar. Values below this are considered as zero,
 #' when zeros are requried (e.g. row-sums).
+#' @param alert Passed to `get_alert_function`: `NULL` or `TRUE` to read the option value,
+#' `FALSE` to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. `stop()`).
+#' @param returnBoolean Logical scaler, set to `TRUE` to return a boolean instead of the (adjusted) input.
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
 #' @return For `check*`, the input matrix, passed through [`ensure_matrix_symmetry_and_truncate_zeros`].
@@ -184,6 +187,7 @@ checkGamma <- function(
   return(ensure_matrix_symmetry_and_truncate_zeros(Gamma, tol))
 }
 
+#' @param matrixName Name of the matrix to be used in alerts/error messages.
 #' @rdname checkGamma
 #' @export
 checkSigmaTheta <- function(
@@ -303,6 +307,7 @@ checkSigma <- function(
 }
 #' @rdname checkGamma
 #' @param M Numeric matrix, \eGamma, \eSigma, or \eTheta.
+#' @param name Name of the input matrix, indicating which other function to call.
 #' @export
 checkMatrix <- function(
   M,
@@ -365,6 +370,8 @@ computeD <- function(M, k=NULL, full=FALSE){
 #' @param M Numeric square matrix.
 #' @param checkTol Positive scalar. If the maximum absolute difference between `M`
 #' and `t(M)` is larger, show a warning.
+#' @param alert Passed to `get_alert_function`: `NULL` or `TRUE` to read the option value,
+#' `FALSE` to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. `stop()`).
 #' 
 #' @return The adjusted value of `M`.
 #' 

@@ -371,13 +371,6 @@ plotFlights <- function(
 #' If `what="IATAs"` or `what="dates"`, a character vector.
 #' If required, it can be converted to [`Date`] objects using [`as.Date()`].
 #' 
-#' @examples
-#' getFlightDelayData(
-#'     airportFilter = 'tcCluster',
-#'     dateFilter = 'tcTrain',
-#'     delayFilter = c('totals')
-#' )
-#' 
 #' @references \insertAllCited{}
 #' 
 #' @family flightData

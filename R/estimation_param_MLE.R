@@ -167,7 +167,7 @@ fmpareto_HR_MLE <- function(
     if(any(init_opt >= 0)){
       init_opt <- init_opt - 1
     } else {
-      init_opt <- init_opt - runif(length(init_opt))
+      init_opt <- init_opt - stats::runif(length(init_opt))
       nAttemptsFixInit <- nAttemptsFixInit - 1
     }
   }

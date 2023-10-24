@@ -60,8 +60,13 @@ is_valid_Sigma(Sigma, k = NULL, full = FALSE, tol = get_small_tol())
 \arguments{
 \item{Gamma}{Numeric \dxd variogram matrix.}
 
+\item{alert}{Passed to \code{get_alert_function}: \code{NULL} or \code{TRUE} to read the option value,
+\code{FALSE} to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. \code{stop()}).}
+
 \item{tol}{Numeric scalar. Values below this are considered as zero,
 when zeros are requried (e.g. row-sums).}
+
+\item{returnBoolean}{Logical scaler, set to \code{TRUE} to return a boolean instead of the (adjusted) input.}
 
 \item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 
@@ -71,9 +76,13 @@ Else, an integer between 1 and d indicating the value of k in \eSigmaK, \eThetaK
 \item{full}{Logical. If \code{TRUE} and \code{!is.null(k)},
 the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 
+\item{matrixName}{Name of the matrix to be used in alerts/error messages.}
+
 \item{Theta}{Numeric \dxd or \d1xd1 precision matrix.}
 
 \item{Sigma}{Numeric \dxd or \d1xd1 covariance matrix.}
+
+\item{name}{Name of the input matrix, indicating which other function to call.}
 }
 \value{
 For \verb{check*}, the input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}}.

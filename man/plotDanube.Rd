@@ -82,7 +82,7 @@ Requires \code{ggplot2} to be installed.
 The values of \code{vertexColors}, \code{vertexShapes}, and \code{edgeColors} are intepreted differently
 by \code{\link[ggplot2:geom_point]{ggplot2::geom_point}}/\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment}} and \code{\link[igraph:plot.igraph]{igraph::plot.igraph()}}.
 
-\code{plotDanube} uses a combination of \code{\link{ggplot2}} functions to plot the graph.
+\code{plotDanube} uses a combination of \code{ggplot2} functions to plot the graph.
 
 \code{plotDanubeIGraph} uses \code{\link[igraph:plot.igraph]{igraph::plot.igraph}} to plot the graph.
 }

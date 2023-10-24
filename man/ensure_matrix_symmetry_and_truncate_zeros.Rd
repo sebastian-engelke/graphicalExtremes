@@ -22,6 +22,9 @@ ensure_matrix_symmetry_and_truncate_zeros(
 \item{checkTol}{Positive scalar. If the maximum absolute difference between \code{M}
 and \code{t(M)} is larger, show a warning.}
 
+\item{alert}{Passed to \code{get_alert_function}: \code{NULL} or \code{TRUE} to read the option value,
+\code{FALSE} to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. \code{stop()}).}
+
 \item{tol}{All entries with absolute value below this value are truncated to zero.}
 }
 \value{
