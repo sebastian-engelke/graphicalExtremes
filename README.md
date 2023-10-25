@@ -10,7 +10,8 @@ Pareto distributions on graphical structures.
 
 Furthermore contains implementations of statistical methods from Engelke
 and Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022), and
-Hentschel et al. (2022).
+Hentschel et al. (2022), as well as datasets from Asadi et al. (2015)
+and Hentschel et al. (2022).
 
 ## Installation
 
@@ -34,6 +35,14 @@ devtools::install_github("sebastian-engelke/graphicalExtremes")
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 line-spacing="2">
+
+<div id="ref-asadi2015" class="csl-entry">
+
+Asadi, P., Davison, A. C., and Engelke, S. (2015). <span
+class="nocase">Extremes on river networks</span>. *The Annals of Applied
+Statistics*, *9*(4), 2023–2050. <https://doi.org/10.1214/15-AOAS863>
+
+</div>
 
 <div id="ref-eng2019" class="csl-entry">
 

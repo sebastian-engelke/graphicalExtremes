@@ -17,7 +17,8 @@ Includes exact simulation algorithms and statistical
 inference methods for multivariate Pareto distributions on graphical structures.
 
 Furthermore contains implementations of statistical methods from
-@eng2020, @roe2021, @eng2022a, and @hen2022.
+@eng2020, @roe2021, @eng2022a, and @hen2022,
+as well as datasets from @asadi2015 and @hen2022.
 
 
 ## Installation
