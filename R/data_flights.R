@@ -332,7 +332,7 @@ plotFlights <- function(
   }
 
   # Call plot:
-  plot(ggp)
+  graphics::plot(ggp)
   return(invisible(NULL))
 }
 
