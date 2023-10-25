@@ -20,4 +20,8 @@
 \.tar\.gz$
 \.txt$
 
+^temp\.
+\.temp$
+^vignettes/memoise
+
 ^data-raw$
