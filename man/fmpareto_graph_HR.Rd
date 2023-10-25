@@ -38,7 +38,7 @@ See details.}
 The estimated parameter matrix.
 }
 \description{
-Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distirubtion
+Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distribution
 with a given graphical structure, using maximum-likelihood estimation
 or the empirical variogram.
 }

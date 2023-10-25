@@ -64,9 +64,9 @@ is_valid_Sigma(Sigma, k = NULL, full = FALSE, tol = get_small_tol())
 \code{FALSE} to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. \code{stop()}).}
 
 \item{tol}{Numeric scalar. Values below this are considered as zero,
-when zeros are requried (e.g. row-sums).}
+when zeros are required (e.g. row-sums).}
 
-\item{returnBoolean}{Logical scaler, set to \code{TRUE} to return a boolean instead of the (adjusted) input.}
+\item{returnBoolean}{Logical scalar, set to \code{TRUE} to return a boolean instead of the (adjusted) input.}
 
 \item{M}{Numeric matrix, \eGamma, \eSigma, or \eTheta.}
 
@@ -87,10 +87,10 @@ the input/output matrix is a \dxd matrix with the kth row filled with zeros.}
 \value{
 For \verb{check*}, the input matrix, passed through \code{\link{ensure_matrix_symmetry_and_truncate_zeros}}.
 
-For \verb{is_valid_*}, a boolean indicating whether the input isa valid parameter matrix.
+For \verb{is_valid_*}, a boolean indicating whether the input is a valid parameter matrix.
 }
 \description{
-Checks wheter the matrix given is a valid Huesler-Reiss parameter matrix
+Checks whether the matrix given is a valid Huesler-Reiss parameter matrix
 in the role of \eGamma, \eTheta, or \eSigma, respectively.
 }
 \details{

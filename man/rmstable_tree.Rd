@@ -31,7 +31,7 @@ to the edges of the given \code{tree}.
 containing the logistic parameters corresponding
 to the edges of the given \code{tree}, if \code{model = logistic}.
 \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-contain the parameter vectors \eqn{\alpha} of size 2 with positve entries
+contain the parameter vectors \eqn{\alpha} of size 2 with positive entries
 for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }

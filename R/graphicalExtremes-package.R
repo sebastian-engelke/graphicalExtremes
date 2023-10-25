@@ -12,7 +12,7 @@
 #' \describe{
 #'   \item{`"graphicalExtremes.mc.cores"`}{
 #'     The (maximal) number of cores to use in parallel tasks.
-#'     Will always be overwritten by 1 on windows.
+#'     Will always be overwritten by 1 on Windows.
 #'   }
 #'   \item{`"graphicalExtremes.tol.small"`}{
 #'     The "small" tolerance is used in internal computations for values that should

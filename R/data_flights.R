@@ -445,7 +445,7 @@ getFlightDelayData <- function(
 
 #' Convert flight counts to connection list
 #' 
-#' Convert a numeric matrix containing flight counts between ariports to a data
+#' Convert a numeric matrix containing flight counts between airports to a data
 #' frame containing a list of connections.
 #' 
 #' @param nFlightsPerConnection A square, numeric matrix with identical column- and row-names.

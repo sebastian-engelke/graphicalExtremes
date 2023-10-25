@@ -19,7 +19,7 @@
 #' @inheritParams plotFlights
 #' 
 #' @details
-#' The values of `vertexColors`, `vertexShapes`, and `edgeColors` are intepreted differently
+#' The values of `vertexColors`, `vertexShapes`, and `edgeColors` are interpreted differently
 #' by [`ggplot2::geom_point`]/[`ggplot2::geom_segment`] and [`igraph::plot.igraph()`].
 #' 
 #' `plotDanube` uses a combination of `ggplot2` functions to plot the graph.

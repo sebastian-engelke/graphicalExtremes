@@ -3,17 +3,17 @@
 #' Number of cores to be used in parallel computations
 #' 
 #' Helper function that returns the number of cores to be used in parallel computations.
-#' Will always be 1 on windows. On other systems, this value can be set using
+#' Will always be 1 on Windows. On other systems, this value can be set using
 #' `setOption('graphicalExtremes.mc.cores', ...)`.
 #' 
-#' @param overwrite Use this value (if it is valid and not on windows)
+#' @param overwrite Use this value (if it is valid and not on Windows)
 #' @return An integer to be used as number of cores
 #' 
 #' @seealso [`graphicalExtremes-package`]
 #' @family getOptions
 #' @export
 get_mc_cores <- function(overwrite = NULL){
-  # Always 1 on windows
+  # Always 1 on Windows
   if(.Platform$OS.typ == 'windows'){
     return(1L)
   }

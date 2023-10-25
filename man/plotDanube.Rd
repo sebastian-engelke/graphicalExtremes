@@ -79,7 +79,7 @@ Plotting function to visualize the river flow data from the \code{\link{danube}}
 Requires \code{ggplot2} to be installed.
 }
 \details{
-The values of \code{vertexColors}, \code{vertexShapes}, and \code{edgeColors} are intepreted differently
+The values of \code{vertexColors}, \code{vertexShapes}, and \code{edgeColors} are interpreted differently
 by \code{\link[ggplot2:geom_point]{ggplot2::geom_point}}/\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment}} and \code{\link[igraph:plot.igraph]{igraph::plot.igraph()}}.
 
 \code{plotDanube} uses a combination of \code{ggplot2} functions to plot the graph.

@@ -137,14 +137,14 @@ check_partial_matrix_and_graph <- function(M, graph = NULL, graph_type = 'genera
 
 #' HR parameter matrix checks
 #' 
-#' Checks wheter the matrix given is a valid Huesler-Reiss parameter matrix
+#' Checks whether the matrix given is a valid Huesler-Reiss parameter matrix
 #' in the role of \eGamma, \eTheta, or \eSigma, respectively.
 #' 
 #' @param tol Numeric scalar. Values below this are considered as zero,
-#' when zeros are requried (e.g. row-sums).
+#' when zeros are required (e.g. row-sums).
 #' @param alert Passed to `get_alert_function`: `NULL` or `TRUE` to read the option value,
 #' `FALSE` to return a dummy function, or a function that takes an arbitrary number of strings as arguments (e.g. `stop()`).
-#' @param returnBoolean Logical scaler, set to `TRUE` to return a boolean instead of the (adjusted) input.
+#' @param returnBoolean Logical scalar, set to `TRUE` to return a boolean instead of the (adjusted) input.
 #' @inheritParams sharedParamsMatrixTransformations
 #' 
 #' @return For `check*`, the input matrix, passed through [`ensure_matrix_symmetry_and_truncate_zeros`].
@@ -331,7 +331,7 @@ checkMatrix <- function(
 
 #' @rdname checkGamma
 #' 
-#' @return For `is_valid_*`, a boolean indicating whether the input isa valid parameter matrix.
+#' @return For `is_valid_*`, a boolean indicating whether the input is a valid parameter matrix.
 #' 
 #' @details The function `is_valid_*` are a wrapper around `check*`, with arguments
 #' `alert=FALSE` and `returnBoolean=TRUE`.

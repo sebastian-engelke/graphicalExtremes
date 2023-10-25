@@ -18,7 +18,7 @@ A data frame with columns \code{departureAirport}, \code{arrivalAirport}, \code{
 Each row represents one connection with >=1 flights in the input matrix.
 }
 \description{
-Convert a numeric matrix containing flight counts between ariports to a data
+Convert a numeric matrix containing flight counts between airports to a data
 frame containing a list of connections.
 }
 \seealso{

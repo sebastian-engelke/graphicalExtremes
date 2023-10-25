@@ -87,7 +87,7 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' and pre-processed as described in
 #' \insertCite{hen2022;textual}{graphicalExtremes}.
 #' *Note: The CRAN version of this package contains only data from 2010-2013.*
-#' *The full dataset is available in the Github version of this package.*
+#' *The full dataset is available in the GitHub version of this package.*
 #' 
 #' @format A named `list` with three entries:
 #' \describe{
