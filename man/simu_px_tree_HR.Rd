@@ -22,6 +22,6 @@ equal to 1 if the edge in position \code{j} is on the directed path from node
 Numeric \nxd matrix. Simulated data.
 }
 \description{
-Simulates the Huessler--Reiss extremal functions on a tree
+Simulates the Huesler-Reiss extremal functions on a tree
 }
 \keyword{internal}

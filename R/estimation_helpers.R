@@ -19,7 +19,7 @@ V_HR <- function(x, Gamma = NULL, Theta = NULL) {
   # Convert Theta -> Gamma if necessary (Theta is ignored otherwise)
   if(is.null(Gamma)){
     Theta <- par2Theta(Theta, TRUE)
-    Gamma <- Theta2Gamma(Theta)
+    Gamma <- Theta2Gamma(Theta, check = FALSE)
   } else{
     Gamma <- par2Gamma(Gamma, TRUE)
   }
@@ -30,7 +30,7 @@ V_HR <- function(x, Gamma = NULL, Theta = NULL) {
 
   # helper function
   f1 <- function(k) {
-    Sk <- Gamma2Sigma(Gamma, k = k)
+    Sk <- Gamma2Sigma(Gamma, k = k, check = FALSE)
     return(1 / x[k] * mvtnorm::pmvnorm(
       upper = (log(x / x[k]) + Gamma[, k] / 2)[-k],
       mean = rep(0, d - 1),
@@ -75,7 +75,7 @@ logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
     stop('Specify at least one of Gamma, Theta.')
   }
   if(is.null(Theta)){ # -> Gamma must be specified
-    Sigma_k <- Gamma2Sigma(Gamma, k = k)
+    Sigma_k <- Gamma2Sigma(Gamma, k = k, check = FALSE)
     cholS <- chol(Sigma_k)
     Theta_k <- chol2inv(cholS)
     logdetSigma_k <- 2 * sum(log(diag(cholS)))
@@ -85,7 +85,7 @@ logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
     logdetSigma_k <- (-1) * c(tmp$modulus) # `c()` removes attributes, tmp$sign is always +1
   }
   if(is.null(Gamma)){ # -> Theta must be specified
-    Gamma <- Theta2Gamma(Theta)
+    Gamma <- Theta2Gamma(Theta, check = FALSE)
   }
   if (NROW(Gamma) != d) {
     stop("`par` must be a vector of length `d * (d - 1) / 2` or a d x d matrix.")
@@ -108,6 +108,8 @@ logdV_HR <- function(x, Gamma = NULL, Theta = NULL) {
 #' @param y Numeric matrix
 #' @param M Numeric matrix
 #' @return Numeric vector
+#' 
+#' @keywords internal
 fast_diag <- function(y, M) {
   n <- nrow(y)
   if(n == 0){
@@ -164,7 +166,7 @@ logdVK_HR <- function(x, K, Gamma) {
     stop("The length of Gamma must be d * (d - 1) / 2.")
   }
 
-  S <- Gamma2Sigma(Gamma, k = i, full = TRUE)
+  S <- Gamma2Sigma(Gamma, k = i, full = TRUE, check = FALSE)
   if (k > 1) {
     SK <- S[K[-idxK], K[-idxK]]
     cholSK <- chol(SK)
@@ -230,7 +232,7 @@ logLH_HR <- function(data, Gamma, cens = FALSE) {
     d <- NCOL(data)
     n <- NROW(data)
   }
-  par <- Gamma2par(Gamma)
+  par <- matrix2par(Gamma)
 
   # if cens = FALSE (default)
   if (!cens) {

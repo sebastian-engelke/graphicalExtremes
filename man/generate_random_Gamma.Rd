@@ -15,14 +15,11 @@ generate_random_Gamma(d, ...)
 Generates a valid Gamma matrix with a given dimension
 }
 \seealso{
-Other Example generations: 
-\code{\link{generate_random_cactus}()},
+Other example generation functions:
 \code{\link{generate_random_chordal_graph}()},
-\code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},
 \code{\link{generate_random_integer_Gamma}()},
 \code{\link{generate_random_model}()},
-\code{\link{generate_random_spd_matrix}()},
-\code{\link{generate_random_tree}()}
+\code{\link{generate_random_spd_matrix}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

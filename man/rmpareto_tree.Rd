@@ -31,7 +31,7 @@ to the edges of the given \code{tree}.
 containing the logistic parameters corresponding
 to the edges of the given \code{tree}, if \code{model = logistic}.
 \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+contain the parameters vectors \eqn{\alpha} of size 2 with positive entries
 for each of the edges in \code{tree}, if \code{model = dirichlet}.
 }}
 }
@@ -45,7 +45,7 @@ is an extremal graphical model on a tree as defined in \insertCite{eng2019;textu
 }
 \details{
 The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-For details on the parameters of the Huesler--Reiss, logistic
+For details on the parameters of the Huesler-Reiss, logistic
 and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 }
@@ -73,3 +73,10 @@ rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other sampling functions:
+\code{\link{rmpareto}()},
+\code{\link{rmstable_tree}()},
+\code{\link{rmstable}()}
+}
+\concept{samplingFunctions}

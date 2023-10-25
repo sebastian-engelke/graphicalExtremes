@@ -17,6 +17,7 @@
 #' 
 #' @references \insertAllCited{}
 #' 
+#' @family parameterEstimation
 #' @export
 emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
   d <- nrow(Gamma)
@@ -28,7 +29,7 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
     P <- diag(d)-matrix(1,d,d)/(d)
     S <- P%*%(-Gamma/2)%*%P
     Z <- Zmatrix(S)
-    Gamma1 <- Sigma2Gamma(Z)
+    Gamma1 <- Sigma2Gamma(Z, check = FALSE)
   }
   it <- 0
   if (verbose==TRUE){
@@ -66,8 +67,9 @@ emtp2 <- function(Gamma, tol = 1e-6, verbose = TRUE, initial_point = TRUE){
 #'
 #' Copied from the R package "golazo" with kind permission by Piotr Zwiernik <piotr.zwiernik@utoronto.ca>.
 #' This function outputs the Z matrix, that is, the unique ultrametric matrix dominating S.
-#' This matrix is used to connstruct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
+#' This matrix is used to construct a starting point in the GOLAZO algorithm when L=0 but U has strictly positive (off-diagonal entries).
 #' @param S a covariance matrix
+#' @keywords internal
 Zmatrix <- function(S){
   p <- nrow(S)
   R <- stats::cov2cor(S)

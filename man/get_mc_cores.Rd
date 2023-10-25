@@ -7,16 +7,21 @@
 get_mc_cores(overwrite = NULL)
 }
 \arguments{
-\item{overwrite}{Use this value (if it is valid and not on windows)}
+\item{overwrite}{Use this value (if it is valid and not on Windows)}
 }
 \value{
 An integer to be used as number of cores
 }
 \description{
 Helper function that returns the number of cores to be used in parallel computations.
-Will always be 1 on windows. On other systems, this value can be set using
+Will always be 1 on Windows. On other systems, this value can be set using
 \code{setOption('graphicalExtremes.mc.cores', ...)}.
 }
 \seealso{
 \code{\link{graphicalExtremes-package}}
+
+Other default parameters:
+\code{\link{get_alert_function}()},
+\code{\link{get_small_tol}()}
 }
+\concept{getOptions}

@@ -33,4 +33,16 @@ G <- cbind(
 set.seed(123)
 my_data <- rmstable(n, "HR", d = d, par = G)
 emp_chi_multdim(my_data, p)
+
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_HR_MLE}()},
+\code{\link{fmpareto_graph_HR}()},
+\code{\link{loglik_HR}()}
+}
+\concept{parameterEstimation}

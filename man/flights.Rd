@@ -29,7 +29,7 @@ Fields/Forms used in the raw data:
 
 Airports (includes license information):
 \itemize{
-\item \url{https://openflights.org/data.html}
+\item \url{https://openflights.org/data}
 }
 }
 \usage{
@@ -42,7 +42,7 @@ The raw data was obtained from the U.S.
 and pre-processed as described in
 \insertCite{hen2022;textual}{graphicalExtremes}.
 \emph{Note: The CRAN version of this package contains only data from 2010-2013.}
-\emph{The full dataset is available in the Github version of this package.}
+\emph{The full dataset is available in the GitHub version of this package.}
 }
 \details{
 \code{flightCounts} is a three-dimensional array, containing the number of flights in the dataset
@@ -99,6 +99,14 @@ totalDelays <- apply(flights$delays, c(1,2), sum)
 \insertAllCited{}
 }
 \seealso{
-\code{\link{danube}}, \code{\link{flightCountMatrixToConnectionList}}, \code{\link{plotFlights}}
+Other flight data related topics:
+\code{\link{flightCountMatrixToConnectionList}()},
+\code{\link{getFlightDelayData}()},
+\code{\link{plotFlights}()}
+
+Other datasets:
+\code{\link{danube}}
 }
+\concept{datasets}
+\concept{flightData}
 \keyword{datasets}

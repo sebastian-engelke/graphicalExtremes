@@ -46,4 +46,22 @@ G <- cbind(
 set.seed(123)
 my_data <- rmstable(n, "HR", d = d, par = G)
 data2mpareto(my_data, p)
+
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{emp_chi_multdim}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_HR_MLE}()},
+\code{\link{fmpareto_graph_HR}()},
+\code{\link{loglik_HR}()}
+
+Other structure estimation methods:
+\code{\link{eglearn}()},
+\code{\link{emst}()},
+\code{\link{fit_graph_to_Theta}()}
+}
+\concept{parameterEstimation}
+\concept{structureEstimation}

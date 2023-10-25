@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimation_param.R
 \name{fmpareto_graph_HR}
 \alias{fmpareto_graph_HR}
-\title{Parameter fitting for Huesler--Reiss graphical models}
+\title{Parameter fitting for Huesler-Reiss graphical models}
 \usage{
 fmpareto_graph_HR(
   data,
@@ -18,7 +18,7 @@ fmpareto_graph_HR(
 number of observations and \code{d} is the number of dimensions.}
 
 \item{graph}{Undirected, connected [\code{igraph::graph}] object with \code{d} vertices,
-representing the graphical structure of the fitted Huesler--Reiss model.}
+representing the graphical structure of the fitted Huesler-Reiss model.}
 
 \item{p}{Numeric between 0 and 1 or \code{NULL}. If \code{NULL} (default),
 it is assumed that the \code{data} is already on a multivariate Pareto scale.
@@ -35,10 +35,10 @@ See details.}
 \code{optMethod}, and \code{useTheta} are supported.}
 }
 \value{
-The estiamted parameter matrix.
+The estimated parameter matrix.
 }
 \description{
-Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
+Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distribution
 with a given graphical structure, using maximum-likelihood estimation
 or the empirical variogram.
 }
@@ -61,3 +61,14 @@ If \code{method='ML'}, the computational cost is mostly influenced by the total 
 of the graph (if \code{handleCliques='full'}) or the size of the cliques,
 and can already take a significant amount of time for modest dimensions (e.g. \code{d=3}).
 }
+\seealso{
+Other parameter estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emp_chi_multdim}()},
+\code{\link{emp_chi}()},
+\code{\link{emp_vario}()},
+\code{\link{emtp2}()},
+\code{\link{fmpareto_HR_MLE}()},
+\code{\link{loglik_HR}()}
+}
+\concept{parameterEstimation}

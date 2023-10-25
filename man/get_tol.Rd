@@ -27,4 +27,9 @@ set using the options \code{"graphicalExtremes.tol.small"} and
 }
 \seealso{
 \code{\link{graphicalExtremes-package}}
+
+Other default parameters:
+\code{\link{get_alert_function}()},
+\code{\link{get_mc_cores}()}
 }
+\concept{getOptions}

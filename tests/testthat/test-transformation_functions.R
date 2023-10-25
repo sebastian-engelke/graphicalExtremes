@@ -140,14 +140,14 @@ test_that("complete_Gamma works", {
 
 test_that("Sigma2Gamma works", {
   for (k in 1:NCOL(G)) {
-    S <- Gamma2Sigma(G, k = k, full = F)
-    expect_equal(Sigma2Gamma(S = S, k = k, full = F), G)
+    S <- Gamma2Sigma(G, k = k, full = F, check = FALSE)
+    expect_equal(Sigma2Gamma(S = S, k = k, full = F, check = FALSE), G)
   }
 
   for (k in 1:NCOL(G)) {
-    S <- Gamma2Sigma(G, k = k, full = T)
-    expect_equal(Sigma2Gamma(S, k = k, full = T), G)
-    expect_equal(Sigma2Gamma(S, full = T), G)
+    S <- Gamma2Sigma(G, k = k, full = T, check = FALSE)
+    expect_equal(Sigma2Gamma(S, k = k, full = T, check = FALSE), G)
+    expect_equal(Sigma2Gamma(S, full = T, check = FALSE), G)
   }
 })
 
@@ -159,9 +159,9 @@ test_that("par2Gamma works", {
   expect_equal(par2Gamma(par = par), G1)
 })
 
-test_that("Gamma2par works", {
-  expect_equal(Gamma2par(Gamma = G), G[upper.tri(G)])
-  expect_equal(Gamma2par(Gamma = c(1.5, 2, 1.5)), c(1.5, 2, 1.5))
+test_that("matrix2par works", {
+  expect_equal(matrix2par(G), G[upper.tri(G)])
+  expect_equal(matrix2par(c(1.5, 2, 1.5), allowVector = TRUE), c(1.5, 2, 1.5))
 })
 
 test_that("chi2Gamma works", {

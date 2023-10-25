@@ -1,7 +1,7 @@
 
-#' Parameter fitting for multivariate Huesler--Reiss Pareto distribution
+#' Parameter fitting for multivariate Huesler-Reiss Pareto distribution
 #'
-#' Fits the parameters of a multivariate Huesler--Reiss Pareto distribution
+#' Fits the parameters of a multivariate Huesler-Reiss Pareto distribution
 #' using (censored) maximum likelihood estimation.
 #'
 #' Only the parameters corresponding to edges in `graph` are optimized, the remaining
@@ -22,10 +22,14 @@
 #' vector with one entry per edge in `graph`, or a complete variogram/precision matrix.
 #' @param fixParams Numeric or logical vector. Indices of the parameter vectors that are kept
 #' fixed (identical to `init`) during the optimization. Default is `integer(0)`.
+#' @param useTheta Logical. Whether to perform the MLE optimization in terms of Theta or Gamma.
 #' @param maxit Positive integer. The maximum number of iterations in the optimization.
 #' @param graph Graph object from `igraph` package or `NULL` (implying the complete graph).
-#' @param method String. A valid optimization method used by the function
+#' @param optMethod String. A valid optimization method used by the function
 #' [stats::optim]. By default, `method = "BFGS"`.
+#' @param nAttemptsFixInit Numeric. If `useTheta=TRUE` and the initial parameter `init` is not valid,
+#' attempt to fix it first by making sure all off-diagonal entries are negative and then adding some random noise
+#' at most this many times.
 #'
 #' @return List consisting of:
 #' \item{`convergence`}{Logical. Indicates whether the optimization converged or not.}
@@ -36,7 +40,8 @@
 #' \item{`nllik`}{Numeric. Optimal value of the negative log-likelihood function.}
 #' \item{`hessian`}{Numeric matrix. Estimated Hessian matrix of the estimated parameters.}
 #'
-#' @keywords internal
+#' @family parameterEstimation
+#' @export 
 fmpareto_HR_MLE <- function(
   data,
   p = NULL,
@@ -46,7 +51,8 @@ fmpareto_HR_MLE <- function(
   useTheta = TRUE,
   maxit = 100,
   graph = NULL,
-  optMethod = "BFGS"
+  optMethod = "BFGS",
+  nAttemptsFixInit = 3
 ){
   # if p provided -> data not Pareto -> to convert
   if(!is.null(p)) {
@@ -67,7 +73,7 @@ fmpareto_HR_MLE <- function(
   if(is.null(init)){
     Gamma0 <- emp_vario(data)
     if(useTheta){
-      Theta0 <- Gamma2Theta(Gamma0)
+      Theta0 <- Gamma2Theta(Gamma0, check = FALSE)
       init <- getEdgeEntries(Theta0, graph, type = 'upper')
     } else{
       init <- getEdgeEntries(Gamma0, graph, type = 'upper')
@@ -157,6 +163,14 @@ fmpareto_HR_MLE <- function(
 
   # Check that initial parameters are actually valid
   init_opt <- init[!fixParams]
+  while(useTheta && nAttemptsFixInit > 0 && is.null(parToMatrices(init_opt))){
+    if(any(init_opt >= 0)){
+      init_opt <- init_opt - 1
+    } else {
+      init_opt <- init_opt - stats::runif(length(init_opt))
+      nAttemptsFixInit <- nAttemptsFixInit - 1
+    }
+  }
   if(is.null(parToMatrices(init_opt))){
     stop('Invalid initial parameters!')
   }
@@ -193,6 +207,8 @@ fmpareto_HR_MLE <- function(
 #' @param par Numeric vector. The parameters that are optimized
 #' @param init Numeric vector. The initial parameters (including the ones optimized over)
 #' @param fixParams Numeric or logical vector. Positions of fixed parameters in the full parameter vector.
+#' 
+#' @keywords internal
 fillFixedParams <- function(par, init, fixParams){
   if(!is.logical(fixParams)){
     fixParams <- seq_along(init) %in% fixParams
@@ -219,7 +235,6 @@ fillFixedParams <- function(par, init, fixParams){
 #' `Gamma` and `Theta` are matrices implied by `par`.
 #' 
 #' @keywords internal
-#' 
 parToMatricesFactory <- function(
   graph,
   init = NULL,
@@ -256,7 +271,7 @@ parToMatricesFactory <- function(
 
       # Compute Gamma if specified
       if(forceGamma){
-        Gamma <- Theta2Gamma(Theta)
+        Gamma <- Theta2Gamma(Theta, check = FALSE)
       } else{
         Gamma <- NULL
       }
@@ -289,13 +304,13 @@ parToMatricesFactory <- function(
       }
 
       # Return NULL if par implies an invalid Gamma
-      if(checkValidity && !is_sym_cnd(Gamma)){
+      if(checkValidity && !is_valid_Gamma(Gamma)){
         return(NULL)
       }
 
       # Compute Theta if specified
       if(forceTheta){
-        Theta <- Gamma2Theta(Gamma)
+        Theta <- Gamma2Theta(Gamma, check = FALSE)
       } else{
         Theta <- NULL
       }

@@ -14,7 +14,7 @@
 #' @param ... Further arguments passed to [complete_Gamma_general_split()] if `graph`
 #' is not decomposable
 #'
-#' @return Completed \dxd `Gamma` matrix.
+#' @return Completed \dxd variogram matrix.
 #'
 #' @details
 #' If `graph` is decomposable, `Gamma` only needs to be specified on
@@ -71,16 +71,16 @@
 #' @references \insertAllCited{}
 #'
 #' @seealso [Gamma2Theta()]
-#' @family Matrix completions
 #'
+#' @family matrixCompletions
 #' @export
 complete_Gamma <- function(
   Gamma,
   graph = NULL,
   ...
 ){
-  tmp <- check_Gamma_and_graph(Gamma, graph)
-  Gamma <- tmp$Gamma
+  tmp <- check_partial_matrix_and_graph(Gamma, graph)
+  Gamma <- tmp$matrix
   graph <- tmp$graph
 
   # Return completion if graph is decomposable (=chordal)
@@ -93,7 +93,7 @@ complete_Gamma <- function(
     A <- 1*!is.na(Gamma)
     tmp <- edmcr::npf(Gamma, A, d = NROW(Gamma)-1)
     Gamma <- tmp$D
-    if(!is_sym_cnd(Gamma)){
+    if(!is_valid_Gamma(Gamma)){
       stop('Did not find an initial non-graphical completion (using edmcr::npf)!')
     }
   }
@@ -120,8 +120,7 @@ complete_Gamma <- function(
 #' The corresponding \eTheta matrix produced by [Gamma2Theta()] has zeros
 #' in the remaining entries.
 #'
-#' @family Matrix completions
-#'
+#' @family matrixCompletions
 #' @export
 complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
   # Compute graph if not specified
@@ -151,7 +150,7 @@ complete_Gamma_decomposable <- function(Gamma, graph = NULL) {
 
     oldVertices <- union(oldVertices, newVertices)
   }
-  Gamma <- ensure_symmetry(Gamma)
+  Gamma <- ensure_matrix_symmetry(Gamma)
   return(Gamma)
 }
 
@@ -188,7 +187,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   }
 
   ## Larger separator -> convert to Sigma, complete, convert back
-  Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE)
+  Sigma <- Gamma2Sigma(Gamma, k = k0, full = TRUE, check = FALSE)
 
   # Invert separator submatrix
   R <- chol(Sigma[vC_Sigma, vC_Sigma, drop=FALSE])
@@ -201,7 +200,7 @@ complete_Gamma_one_step <- function(Gamma, nA, nC, nB) {
   Sigma[vB, vA] <- t(SigmaAB)
 
   # Convert back
-  Gamma <- Sigma2Gamma(Sigma)
+  Gamma <- Sigma2Gamma(Sigma, check = FALSE)
   return(Gamma)
 }
 

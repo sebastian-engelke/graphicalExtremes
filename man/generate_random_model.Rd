@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_examples.R
 \name{generate_random_model}
 \alias{generate_random_model}
-\title{Generate random Huesler--Reiss Models}
+\title{Generate random Huesler-Reiss Models}
 \usage{
 generate_random_model(d, graph_type = "general", ...)
 }
@@ -29,14 +29,11 @@ generate_random_model(d, 'complete')
 
 }
 \seealso{
-Other Example generations: 
+Other example generation functions:
 \code{\link{generate_random_Gamma}()},
-\code{\link{generate_random_cactus}()},
 \code{\link{generate_random_chordal_graph}()},
-\code{\link{generate_random_connected_graph}()},
 \code{\link{generate_random_graphical_Gamma}()},
 \code{\link{generate_random_integer_Gamma}()},
-\code{\link{generate_random_spd_matrix}()},
-\code{\link{generate_random_tree}()}
+\code{\link{generate_random_spd_matrix}()}
 }
-\concept{Example generations}
+\concept{exampleGenerations}

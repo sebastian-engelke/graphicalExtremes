@@ -19,3 +19,4 @@ Numeric vector
 \description{
 Fit value(s) in interval, all arguments are recycled where necessary.
 }
+\keyword{internal}

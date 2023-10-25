@@ -58,6 +58,13 @@ plot(g, layout = loc)
 \insertAllCited{}
 }
 \seealso{
-\code{\link{flights}}, \code{vignette('graphicalExtremes')}
+Other danubeData: 
+\code{\link{getDanubeFlowGraph}()},
+\code{\link{plotDanube}()}
+
+Other datasets:
+\code{\link{flights}}
 }
+\concept{danubeData}
+\concept{datasets}
 \keyword{datasets}

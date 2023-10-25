@@ -1,8 +1,8 @@
 
 
-#' Parameter fitting for Huesler--Reiss graphical models
+#' Parameter fitting for Huesler-Reiss graphical models
 #' 
-#' Fits the parameter matrix (variogram) of a multivariate Huesler--Reiss Pareto distirubtion
+#' Fits the parameter matrix (variogram) of a multivariate Huesler-Reiss Pareto distribution
 #' with a given graphical structure, using maximum-likelihood estimation
 #' or the empirical variogram.
 #' 
@@ -10,7 +10,7 @@
 #' number of observations and `d` is the number of dimensions.
 #'
 #' @param graph Undirected, connected \[`igraph::graph`\] object with `d` vertices,
-#' representing the graphical structure of the fitted Huesler--Reiss model.
+#' representing the graphical structure of the fitted Huesler-Reiss model.
 #'
 #' @param p Numeric between 0 and 1 or `NULL`. If `NULL` (default),
 #' it is assumed that the `data` is already on a multivariate Pareto scale.
@@ -26,7 +26,7 @@
 #' @param ... Arguments passed to [fmpareto_HR_MLE()]. Currently `cens`, `maxit`,
 #' `optMethod`, and `useTheta` are supported.
 #' 
-#' @return The estiamted parameter matrix.
+#' @return The estimated parameter matrix.
 #' 
 #' @details
 #' If `handleCliques='average'`, the marginal parameter matrix is estimated for
@@ -47,6 +47,7 @@
 #' of the graph (if `handleCliques='full'`) or the size of the cliques,
 #' and can already take a significant amount of time for modest dimensions (e.g. `d=3`).
 #' 
+#' @family parameterEstimation
 #' @export
 fmpareto_graph_HR <- function(
   data,
@@ -97,13 +98,19 @@ fmpareto_graph_HR <- function(
       method,
       ...
     )
-    if(!is_sym_cnd(Gamma)){
+    if(!is_valid_Gamma(Gamma)){
       stop('Averaging on the separators did not yield a valid variogram matrix!')
     }
   }
   return(Gamma)
 }
 
+#' HR Parameter fitting - Helper functions
+#' 
+#' Helper functions called by [`fmpareto_HR_MLE`].
+#' 
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
 fmpareto_graph_HR_clique_average <- function(
   data,
   graph,
@@ -145,21 +152,8 @@ fmpareto_graph_HR_clique_average <- function(
   return(Gamma)
 }
 
-combine_clique_estimates_by_averaging <- function(cliques, subGammas){
-  d <- do.call(max, cliques)
-  Gamma <- matrix(0, d, d)
-  overlaps <- matrix(0, d, d)
-  for(i in seq_along(cliques)){
-    cli <- cliques[[i]]
-    Gamma[cli, cli] <- Gamma[cli, cli] + subGammas[[i]]
-    overlaps[cli, cli] <- overlaps[cli, cli] + 1
-  }
-  Gamma[overlaps == 0] <- NA
-  Gamma <- Gamma / overlaps
-  return(Gamma)
-}
-
-
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
 fmpareto_graph_HR_clique_sequential <- function(
   data,
   graph,
@@ -185,19 +179,19 @@ fmpareto_graph_HR_clique_sequential <- function(
     subGammas <- parallel::mclapply(
       mc.cores = get_mc_cores(),
       cliques,
-        function(cli){
+      function(cli){
         # get margins data
         data.cli <- mparetomargins(data, cli)
         
         # find (already) fixed entries
         G.cli <- Ghat[cli, cli]
-        par.cli <- Gamma2par(G.cli)
+        par.cli <- matrix2par(G.cli)
         fixParams.cli <- !is.na(par.cli)
         
         # get initial parameters that agree with the fixed ones (heuristic, close to empirical variogram):
         G0 <- emp_vario(data.cli)
         G1 <- replaceGammaSubMatrix(G0, G.cli)
-        init.cli <- Gamma2par(G1)
+        init.cli <- matrix2par(G1)
         
         # estimate parameters
         opt <- fmpareto_HR_MLE(
@@ -226,10 +220,27 @@ fmpareto_graph_HR_clique_sequential <- function(
   return(G_comp)
 }
 
+#' @rdname fmpareto_HR_helpers
+#' @keywords internal
+combine_clique_estimates_by_averaging <- function(cliques, subGammas){
+  d <- do.call(max, cliques)
+  Gamma <- matrix(0, d, d)
+  overlaps <- matrix(0, d, d)
+  for(i in seq_along(cliques)){
+    cli <- cliques[[i]]
+    Gamma[cli, cli] <- Gamma[cli, cli] + subGammas[[i]]
+    overlaps[cli, cli] <- overlaps[cli, cli] + 1
+  }
+  Gamma[overlaps == 0] <- NA
+  Gamma <- Gamma / overlaps
+  return(Gamma)
+}
 
-#' Estimation of the variogram matrix \eGamma of a Huesler--Reiss distribution
+
+
+#' Estimation of the variogram matrix \eGamma of a Huesler-Reiss distribution
 #'
-#' Estimates the variogram of the Huesler--Reiss distribution empirically.
+#' Estimates the variogram of the Huesler-Reiss distribution empirically.
 #'
 #' @param data Numeric \nxd matrix, where `n` is the
 #' number of observations and `d` is the dimension.
@@ -245,8 +256,10 @@ fmpareto_graph_HR_clique_sequential <- function(
 #' `emp_vario_pairwise` calls `emp_vario` for each pair of observations.
 #' This is more robust if the data contains many `NA`s, but can take rather long.
 #'
+#' @return Numeric \dxd matrix. The estimated variogram of the Huesler-Reiss distribution.
+#' 
 #' @rdname emp_vario
-#' @return Numeric \dxd matrix. The estimated variogram of the Huesler--Reiss distribution.
+#' @family parameterEstimation
 #' @export
 emp_vario <- function(data, k = NULL, p = NULL) {
 
@@ -254,7 +267,7 @@ emp_vario <- function(data, k = NULL, p = NULL) {
   G.fun <- function(i, data) {
     idx <- which(data[, i] > 1)
     if (length(idx) > 1) {
-      xx <- Sigma2Gamma(stats::cov(log(data[idx, ])), full = TRUE)
+      xx <- Sigma2Gamma(stats::cov(log(data[idx, ])), full = TRUE, check = FALSE)
     } else {
       xx <- matrix(NA, d, d)
     }
@@ -362,6 +375,7 @@ emp_vario_pairwise <- function(data, k = NULL, p = NULL, verbose = FALSE){
 #' emp_chi(my_data, p)
 #' 
 #' @rdname emp_chi
+#' @family parameterEstimation
 #' @export
 emp_chi <- function(data, p = NULL) {
   if (!is.matrix(data)) {
@@ -444,6 +458,8 @@ emp_chi_pairwise <- function(data, p = NULL, verbose=FALSE){
 #' set.seed(123)
 #' my_data <- rmstable(n, "HR", d = d, par = G)
 #' emp_chi_multdim(my_data, p)
+#' 
+#' @family parameterEstimation
 #' @export
 emp_chi_multdim <- function(data, p = NULL) {
   if (!is.matrix(data)) {
@@ -471,9 +487,9 @@ emp_chi_multdim <- function(data, p = NULL) {
 
 
 
-#' Compute Huesler--Reiss log-likelihood, AIC, and BIC
+#' Compute Huesler-Reiss log-likelihood, AIC, and BIC
 #'
-#' Computes (censored) Huesler--Reiss log-likelihood, AIC, and BIC values.
+#' Computes (censored) Huesler-Reiss log-likelihood, AIC, and BIC values.
 #'
 #' @param data Numeric \nxd matrix. It contains
 #' observations following a multivariate HR Pareto distribution.
@@ -495,6 +511,7 @@ emp_chi_multdim <- function(data, p = NULL) {
 #' @return Numeric vector `c("loglik"=..., "aic"=..., "bic"=...)` with the evaluated
 #' log-likelihood, AIC, and BIC values.
 #'
+#' @family parameterEstimation
 #' @export
 loglik_HR <- function(data, p = NULL, graph = NULL, Gamma, cens = FALSE){
   if (!is.null(p)) {

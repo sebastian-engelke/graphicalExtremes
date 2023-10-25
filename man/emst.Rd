@@ -33,7 +33,7 @@ corresponding to the fitted minimum spanning tree.
 \description{
 Fits an extremal minimum spanning tree, where the edge weights are:
 \itemize{
-\item negative maximized log-likelihoods of the bivariate Huesler--Reiss distributions,
+\item negative maximized log-likelihoods of the bivariate Huesler-Reiss distributions,
 if \code{method = "ML"}. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 \item empirical extremal variogram, if \code{method = "vario"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 \item empirical extremal correlation, if \code{method = "chi"}. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
@@ -61,3 +61,10 @@ my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other structure estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{eglearn}()},
+\code{\link{fit_graph_to_Theta}()}
+}
+\concept{structureEstimation}

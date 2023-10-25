@@ -15,5 +15,6 @@ graphs_equal(g1, g2)
 \code{logical} indicating if the graphs are equal
 }
 \description{
-Produce true if two graphs have same vertices and edges (labelled)
+Produce true if two graphs have same vertices and edges (ordered)
 }
+\keyword{internal}

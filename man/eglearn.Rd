@@ -54,18 +54,29 @@ The list of penalty coefficients.
 A list of [\code{igraph::graph}] objects
 representing the optimal graph
 according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
-If \code{reg_method = "glasso"}, it returns a list of \code{NA}.
+If \code{reg_method = "glasso"}, it returns a list of \code{NULL}.
 }
 \item{\code{Gamma_ic}}{
 A list of numeric \dxd estimated
 variogram matrices \eGamma corresponding
 to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, \code{complete_Gamma = FALSE}, or the underlying
-graph is not connected, it returns a list of \code{NA}.
+graph is not connected, it returns a list of \code{NULL}.
 }
 }
 \description{
-Fits an extremal graph structure using the neighborhood selection approach
+Following the methodology from \insertCite{eng2022a;textual}{graphicalExtremes},
+fits an extremal graph structure using the neighborhood selection approach
 (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 (see \insertCite{friedman2008;textual}{graphicalExtremes}).
 }
+\references{
+\insertAllCited{}
+}
+\seealso{
+Other structure estimation methods:
+\code{\link{data2mpareto}()},
+\code{\link{emst}()},
+\code{\link{fit_graph_to_Theta}()}
+}
+\concept{structureEstimation}

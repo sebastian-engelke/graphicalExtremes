@@ -392,7 +392,7 @@ test_that("eglearn works", {
 
   expect_length(res1, 5)
   expect_equal(class(res1$graph[[1]]), "igraph")
-  expect_equal(res3$Gamma[[1]], NA)
+  expect_equal(res3$Gamma[[1]], NULL)
   expect_error(eglearn(data, rholist = -1))
   expect_error(eglearn(data, rholist = c(2, -1)))
   expect_message(eglearn(data, rholist = c(1, 200),

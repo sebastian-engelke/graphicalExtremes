@@ -10,8 +10,8 @@
 #'   \item `neglogistic`,
 #'   \item `dirichlet`.
 #' }
-#' @param d Dimension of the multivariate Pareto
-#' distribution.
+#' @param d Dimension of the multivariate Pareto distribution.
+#' In some cases this can be `NULL` and will be inferred from `par`.
 #' @param par Respective parameter for the given `model`, that is,
 #' \itemize{
 #'   \item \eGamma, numeric \dxd variogram matrix, if `model = HR`.
@@ -26,7 +26,7 @@
 #'
 #' @details
 #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -63,18 +63,19 @@
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmpareto <- function(
   n,
   model = c("HR", "logistic", "neglogistic", "dirichlet"),
-  d,
+  d = NULL,
   par
 ){
   model <- match.arg(model)
 
   # check arguments ####
-  if (d != round(d) | d < 1) {
-    stop("The argument d must be a positive integer.")
+  if (!is.null(d) && (d != round(d) || d < 1)) {
+    stop("The argument d must be NULL or a positive integer.")
   }
 
   if (n != round(n) | n < 1) {
@@ -82,35 +83,40 @@ rmpareto <- function(
   }
 
   if (model == "HR") {
+    par <- par2Gamma(par, allowMatrix = TRUE)
     if (!is.matrix(par)) {
       stop("The argument par must be a matrix, when model = HR.")
     }
-
-    if (NROW(par) != d | NCOL(par) != d) {
+    if(is.null(d)){
+      d <- nrow(par)
+    }
+    if (nrow(par) != d || NCOL(par) != d) {
       stop("The argument par must be a d x d matrix, when model = HR.")
     }
   } else if (model == "logistic") {
-    if (length(par) != 1 | par <= 1e-12 | par >= 1 - 1e-12) {
+    if (length(par) != 1 || par <= 1e-12 || par >= (1-1e-12)) {
       stop(paste(
         "The argument par must be scalar between 1e-12 and 1 - 1e-12,",
         "when model = logistic."
       ))
     }
   } else if (model == "neglogistic") {
-    if (par <= 1e-12) {
+    if (length(par) != 1 || par <= 1e-12) {
       stop(paste(
         "The argument par must be scalar greater than 1e-12,",
         "when model = neglogistic."
       ))
     }
   } else if (model == "dirichlet") {
+    if(is.null(d)){
+      d <- length(par)
+    }
     if (length(par) != d) {
       stop(paste(
         "The argument par must be a vector with d elements,",
         "when model = dirichlet."
       ))
     }
-
     if (any(par <= 1e-12)) {
       stop(paste(
         "The elements of par must be greater than 1e-12,",
@@ -124,7 +130,7 @@ rmpareto <- function(
     Gamma <- par
 
     # compute cholesky decomposition
-    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE, check = FALSE)
     chol_mat <- matrix(0, d, d)
 
     result <- tryCatch(
@@ -222,7 +228,7 @@ rmpareto <- function(
 #'     containing the logistic parameters corresponding
 #'     to the edges of the given `tree`, if `model = logistic`.
 #'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-#'     contain the parameters vectors \eqn{\alpha} of size 2 with positve entries
+#'     contain the parameters vectors \eqn{\alpha} of size 2 with positive entries
 #'     for each of the edges in `tree`, if `model = dirichlet`.
 #' }
 #'
@@ -232,7 +238,7 @@ rmpareto <- function(
 #'
 #' @details
 #' The simulation follows the algorithm in \insertCite{eng2019;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -259,6 +265,7 @@ rmpareto <- function(
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {
@@ -274,8 +281,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
   }
 
   # set graph theory objects
-  adj <- as.matrix(igraph::as_adj(tree))
-  d <- NROW(adj)
+  d <- igraph::vcount(tree)
   e <- igraph::ecount(tree)
   ends.mat <- igraph::ends(tree, igraph::E(tree))
 
@@ -475,7 +481,7 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #'
 #' @details
 #' The simulation follows the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -512,11 +518,14 @@ rmpareto_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
-rmstable <- function(n,
-                     model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
-                     d, par) {
-
+rmstable <- function(
+  n,
+  model = c("HR", "logistic", "neglogistic", "dirichlet")[1],
+  d,
+  par
+){
   # methods
   model_nms <- c("HR", "logistic", "neglogistic", "dirichlet")
 
@@ -579,7 +588,7 @@ rmstable <- function(n,
     Gamma <- par
 
     # compute cholesky decomposition
-    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE)
+    cov.mat <- Gamma2Sigma(Gamma, k = 1, full = FALSE, check = FALSE)
     chol_mat <- matrix(0, d, d)
 
     result <- tryCatch(
@@ -686,7 +695,7 @@ rmstable <- function(n,
 #'     containing the logistic parameters corresponding
 #'     to the edges of the given `tree`, if `model = logistic`.
 #'   \item a matrix of size \eqn{(d - 1) \times 2}{(d - 1) x 2}, where the rows
-#'     contain the parameter vectors \eqn{\alpha} of size 2 with positve entries
+#'     contain the parameter vectors \eqn{\alpha} of size 2 with positive entries
 #'     for each of the edges in `tree`, if `model = dirichlet`.
 #' }
 #'
@@ -697,7 +706,7 @@ rmstable <- function(n,
 #' @details
 #' The simulation follows a combination of the extremal function algorithm in \insertCite{dom2016;textual}{graphicalExtremes}
 #' and the theory in \insertCite{eng2019;textual}{graphicalExtremes} to sample from a single extremal function.
-#' For details on the parameters of the Huesler--Reiss, logistic
+#' For details on the parameters of the Huesler-Reiss, logistic
 #' and negative logistic distributions see \insertCite{dom2016;textual}{graphicalExtremes}, and for the Dirichlet
 #' distribution see \insertCite{coles1991modelling;textual}{graphicalExtremes}.
 #'
@@ -723,6 +732,7 @@ rmstable <- function(n,
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family samplingFunctions
 #' @export
 rmstable_tree <- function(n, model = c("HR", "logistic", "dirichlet")[1],
                           tree, par) {

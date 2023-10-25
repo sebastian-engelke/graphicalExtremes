@@ -9,8 +9,8 @@ simu_px_HR(n, d, idx, trend, chol_mat)
 \arguments{
 \item{n}{Number of simulations.}
 
-\item{d}{Dimension of the multivariate Pareto
-distribution.}
+\item{d}{Dimension of the multivariate Pareto distribution.
+In some cases this can be \code{NULL} and will be inferred from \code{par}.}
 
 \item{idx}{Integer. Index corresponding to the variable over which
 the extremal function is simulated.}
@@ -24,6 +24,6 @@ Cholesky decomposition of the desired covariance matrix.}
 Numeric \nxd matrix. Simulated data.
 }
 \description{
-Simulates the Huessler--Reiss extremal functions
+Simulates the Huesler-Reiss extremal functions
 }
 \keyword{internal}

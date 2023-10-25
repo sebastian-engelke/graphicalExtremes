@@ -32,10 +32,10 @@ modifies \code{Gamma} in non-edge entries, such that the resulting matrix is a
 variogram matrix with graphical structure described by \code{graph}.
 }
 \seealso{
-Other Matrix completions: 
+Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
 \code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma}()}
 }
-\concept{Matrix completions}
+\concept{matrixCompletions}

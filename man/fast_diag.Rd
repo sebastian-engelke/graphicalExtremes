@@ -17,3 +17,4 @@ Numeric vector
 \description{
 Fast computation of diag(y \%\emph{\% M \%}\% t(y))
 }
+\keyword{internal}

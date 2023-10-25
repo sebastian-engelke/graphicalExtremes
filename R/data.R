@@ -1,3 +1,31 @@
+
+#' Get package data
+#' 
+#' Get private data sets from `inst/extdata`.
+#' 
+#' @param filename Base name of the file. E.g. `"FILENAME"` for a file `inst/extdata/FILENAME`.
+#' @param isRDS Whether the file is an `.RDS` file.
+#' 
+#' @return
+#' If `isRDS=TRUE` an R object.
+#' If `isRDS=FALSE` an environment, containing the R objects from the file.
+#' 
+#' @keywords internal
+getPackageData <- function(filename, isRDS=TRUE){
+  # Path of data file
+  fpath <- system.file('extdata', filename, package='graphicalExtremes')
+
+  # RDS files contain a single object which is returned
+  if(isRDS){
+    return(readRDS(fpath))
+  }
+
+  # RDA files contain one/multiple R object(s) which are returned in a new environment
+  env <- new.env(parent = emptyenv())
+  load(fpath, envir = env)
+  return(env)
+}
+
 #' Upper Danube basin dataset
 #'
 #' A dataset containing river discharge data for tributaries of the Danube.
@@ -8,8 +36,8 @@
 #'  \item{`data_raw`}{A numeric matrix, containing daily (raw) discharge data for each gauging station}
 #'  \item{`info`}{A data frame, containing information about each gauging station}
 #'  \item{`flow_edges`}{
-#'    A two-column numeric matrix. Each row contains the indices (in `info`)
-#'    of a pair of gauging stations that are directly connected by a river.
+#'  A two-column numeric matrix. Each row contains the indices (in `info`)
+#'  of a pair of gauging stations that are directly connected by a river.
 #'  }
 #' }
 #' 
@@ -32,7 +60,7 @@
 #'  \item{`Area`}{Area of the catchment corresponding to the gauging station}
 #'  \item{`Slope`}{Mean slope of the catchment}
 #'  \item{`PlotCoordX`, `PlotCoordY`}{
-#'    X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
+#'  X-Y-coordinates which can be used to arrange the gauging stations when plotting a flow graph.
 #'  }
 #' }
 #' 
@@ -41,13 +69,13 @@
 #' loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
 #' plot(g, layout = loc)
 #' 
-#' @seealso [`flights`], `vignette('graphicalExtremes')`
+#' @family danubeData
+#' @family datasets
 #' 
 #' @references
 #' \insertAllCited{}
 #'
 #' @source Bavarian Environmental Agency <https://www.gkd.bayern.de>.
-#'
 "danube"
 
 
@@ -59,14 +87,14 @@
 #' and pre-processed as described in
 #' \insertCite{hen2022;textual}{graphicalExtremes}.
 #' *Note: The CRAN version of this package contains only data from 2010-2013.*
-#' *The full dataset is available in the Github version of this package.*
+#' *The full dataset is available in the GitHub version of this package.*
 #' 
 #' @format A named `list` with three entries:
 #' \describe{
 #'  \item{`airports`}{A `data.frame`, containing information about US airports}
 #'  \item{`delays`}{A numeric matrix, containing daily aggregated delays at the airports in the dataset}
 #'  \item{`flightCounts`}{
-#'    A numeric array, containing yearly flight numbers between airports in the dataset
+#'  A numeric array, containing yearly flight numbers between airports in the dataset
 #'  }
 #' }
 #' 
@@ -122,7 +150,8 @@
 #' totalDelays <- apply(flights$delays, c(1,2), sum)
 #' }
 #' 
-#' @seealso [`danube`], [`flightCountMatrixToConnectionList`], [`plotFlights`]
+#' @family flightData
+#' @family datasets
 #' 
 #' @source
 #' Raw delays data:
@@ -134,6 +163,5 @@
 #' - <https://esubmit.rita.dot.gov/On-Time-Form3A.aspx>
 #' 
 #' Airports (includes license information):
-#' - <https://openflights.org/data.html>
-#' 
+#' - <https://openflights.org/data>
 "flights"

@@ -1,2 +1,4 @@
 *.html
 *.R
+!memoise.R
+memoise_cache

@@ -1,6 +1,7 @@
 #' Learning extremal graph structure
 #'
-#' Fits an extremal graph structure using the neighborhood selection approach
+#' Following the methodology from \insertCite{eng2022a;textual}{graphicalExtremes},
+#' fits an extremal graph structure using the neighborhood selection approach
 #' (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 #' (see \insertCite{friedman2008;textual}{graphicalExtremes}).
 #'
@@ -44,18 +45,20 @@
 #'   A list of \[`igraph::graph`\] objects
 #'   representing the optimal graph
 #'   according to the `aic`, `bic`, and `mbic` information criteria.
-#'   If `reg_method = "glasso"`, it returns a list of `NA`.
+#'   If `reg_method = "glasso"`, it returns a list of `NULL`.
 #' }
 #' \item{`Gamma_ic`}{
 #'   A list of numeric \dxd estimated
 #'   variogram matrices \eGamma corresponding
 #'   to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
-#'   graph is not connected, it returns a list of `NA`.
+#'   graph is not connected, it returns a list of `NULL`.
 #' }
+#' 
+#' @references \insertAllCited{}
 #'
+#' @family structureEstimation
 #' @export
-#'
 eglearn <- function(
   data,
   p = NULL,
@@ -90,7 +93,7 @@ eglearn <- function(
   # Loop through variables
   for (k in 1:d) {
     if (reg_method == "glasso") {
-      Sk <- Gamma2Sigma(Gamma = Gamma, k = k)
+      Sk <- Gamma2Sigma(Gamma = Gamma, k = k, check = FALSE)
       gl.fit <- lapply(1:length(rholist), FUN = function(i) {
         glassoFast::glassoFast(S = Sk, rho = rholist[i], thr = 1e-8, maxIt = 100000)$wi
       })
@@ -118,20 +121,19 @@ eglearn <- function(
       adj.est[, ,j], mode = "undirected", diag = FALSE)
 
     if (complete_Gamma == FALSE) {
-
-      Gamma_curr <- NA
+      Gamma_curr <- NULL
     } else {
       Gamma_curr <- try_complete_Gamma(est_graph, Gamma, "rho", round(rho, 3))
     }
 
-    graphs[[j]] <- est_graph
-    Gammas[[j]] <- Gamma_curr
-    rhos[[j]] <- rho
+    graphs[j] <- list(est_graph)
+    Gammas[j] <- list(Gamma_curr)
+    rhos[j] <- list(rho)
   }
 
   # complete Gamma for ns
-  graphs_ic <-  list(aic = NA, bic = NA, mbic = NA)
-  Gammas_ic <-  list(aic = NA, bic = NA, mbic = NA)
+  graphs_ic <-  list(aic = NULL, bic = NULL, mbic = NULL)
+  Gammas_ic <-  list(aic = NULL, bic = NULL, mbic = NULL)
 
   if (reg_method == "ns") {
     for (l in seq_along(sel_methods)){
@@ -143,14 +145,15 @@ eglearn <- function(
         Gamma_curr <- NULL
       } else {
         Gamma_curr <- try_complete_Gamma(
-          est_graph, Gamma,
+          est_graph,
+          Gamma,
           key = "information criterion",
           val = sel_methods[l]
         )
       }
 
-      graphs_ic[[l]] <- est_graph
-      Gammas_ic[[l]] <- Gamma_curr
+      graphs_ic[l] <- list(est_graph)
+      Gammas_ic[l] <- list(Gamma_curr)
     }
   }
 
@@ -198,7 +201,7 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' Fitting extremal minimum spanning tree
 #'
 #' Fits an extremal minimum spanning tree, where the edge weights are:
-#' - negative maximized log-likelihoods of the bivariate Huesler--Reiss distributions, 
+#' - negative maximized log-likelihoods of the bivariate Huesler-Reiss distributions, 
 #'   if `method = "ML"`. See \insertCite{eng2019;textual}{graphicalExtremes} for details.
 #' - empirical extremal variogram, if `method = "vario"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
 #' - empirical extremal correlation, if `method = "chi"`. See \insertCite{eng2020;textual}{graphicalExtremes} for details.
@@ -243,8 +246,8 @@ try_complete_Gamma <- function(graph, Gamma, key, val){
 #' @references
 #'  \insertAllCited{}
 #'
+#' @family structureEstimation
 #' @export
-#'
 emst <- function(
     data,
     p = NULL,
@@ -304,14 +307,15 @@ emst <- function(
 #'
 #' @return A list containing an \[`igraph::graph`\] object and a fitted `Gamma` matrix
 #'
-#' @keywords internal
+#' @family structureEstimation
+#' @export
 fit_graph_to_Theta <- function(data, m=NULL, Gamma_emp=NULL){
 
   if(is.null(Gamma_emp)){
     Gamma_emp <- emp_vario(data)
   }
 
-  Theta_emp <- Gamma2Theta(Gamma_emp)
+  Theta_emp <- Gamma2Theta(Gamma_emp, check = FALSE)
 
   d <- nrow(Gamma_emp)
 
