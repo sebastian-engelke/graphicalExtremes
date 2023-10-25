@@ -14,7 +14,7 @@ Removes vertex labels if present."><!-- mathjax --><script src="https://cdnjs.cl
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,16 +22,14 @@ Removes vertex labels if present."><!-- mathjax --><script src="https://cdnjs.cl
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -74,7 +72,7 @@ Removes vertex labels if present.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>graph</dt>
-<dd><p>An [<code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code>] object.</p></dd>
+<dd><p>An [<code><a href="https://r.igraph.org/reference/make_graph.html" class="external-link">igraph::graph</a></code>] object.</p></dd>
 
 
 <dt>graph_type</dt>
@@ -98,8 +96,10 @@ If the graph is not valid an error is thrown.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other Input checks: 
-<code><a href="check_Gamma_and_graph.html">check_Gamma_and_graph</a>()</code></p></div>
+    <div class="dont-index"><p>Other input validation functions:
+<code><a href="checkGamma.html">checkGamma</a>()</code>,
+<code><a href="check_partial_matrix_and_graph.html">check_partial_matrix_and_graph</a>()</code>,
+<code><a href="ensure_matrix_symmetry_and_truncate_zeros.html">ensure_matrix_symmetry</a>()</code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

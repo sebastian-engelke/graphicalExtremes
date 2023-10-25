@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -57,7 +55,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rmpareto</span><span class="op">(</span><span class="va">n</span>, model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"logistic"</span>, <span class="st">"neglogistic"</span>, <span class="st">"dirichlet"</span><span class="op">)</span>, <span class="va">d</span>, <span class="va">par</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rmpareto</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"logistic"</span>, <span class="st">"neglogistic"</span>, <span class="st">"dirichlet"</span><span class="op">)</span>,</span>
+<span>  d <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">par</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -75,8 +78,8 @@
 
 
 <dt>d</dt>
-<dd><p>Dimension of the multivariate Pareto
-distribution.</p></dd>
+<dd><p>Dimension of the multivariate Pareto distribution.
+In some cases this can be <code>NULL</code> and will be inferred from <code>par</code>.</p></dd>
 
 
 <dt>par</dt>
@@ -98,7 +101,7 @@ multivariate Pareto distribution.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The simulation follows the algorithm in Engelke and Hitz (2020)
 .
-For details on the parameters of the Huesler--Reiss, logistic
+For details on the parameters of the Huesler-Reiss, logistic
 and negative logistic distributions see Dombry et al. (2016)
 , and for the Dirichlet
 distribution see Coles and Tawn (1991)
@@ -114,6 +117,13 @@ distribution see Coles and Tawn (1991)
 “Graphical models for extremes (with discussion).”
 <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>, <b>82</b>, 871--932.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other sampling functions:
+<code><a href="rmpareto_tree.html">rmpareto_tree</a>()</code>,
+<code><a href="rmstable_tree.html">rmstable_tree</a>()</code>,
+<code><a href="rmstable.html">rmstable</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -128,68 +138,68 @@ distribution see Coles and Tawn (1991)
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">rmpareto</span><span class="op">(</span><span class="va">n</span>, <span class="st">"HR"</span>, d <span class="op">=</span> <span class="va">d</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]       [,2]       [,3]       [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 16.3548939 51.8914647 26.5360057 11.9100801</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 20.9130951 32.0792224  7.2794536  5.6055372</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  1.2241391  0.3447070  0.7496115  0.2745461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.7394802  0.4819105  2.1271742  0.3886519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  1.0288000  0.6176337  4.4626858  3.2288565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  4.3463725  2.2569587  1.5039667  0.4394725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.3639499  0.5788987  0.1448434  1.0622063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.2240812  0.7406062  1.6868892  1.0045579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  2.5227895  2.7013269  1.2707881  6.1357386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  5.0506833  0.6972832  2.9392381  0.7087562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]       [,2]        [,3]       [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.6242115  1.2340786  0.28424553  0.4945530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  7.7306138  0.5739548  5.36225882  0.9660429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  6.3546256 12.9548933  4.73217785  4.2658041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.6558634  1.5353209  0.49389134  0.5448121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 42.8554548  8.5273448 31.33763315 55.9390571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  1.6246369  0.1199755  2.05703805  0.6370474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  1.1139422  0.2996312  0.36922986  0.8431961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  1.3597143  1.6552748  5.86433799  1.1239351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  1.6800225  0.2931093  0.08781558  0.1119706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  0.6128817  1.2130212  0.90993956  0.4373595</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A 3-dimensional logistic distribution</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">3</span></span></span>
 <span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">.6</span></span></span>
 <span class="r-in"><span><span class="fu">rmpareto</span><span class="op">(</span><span class="va">n</span>, <span class="st">"logistic"</span>, <span class="va">d</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]       [,2]       [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.05348099 1.43118239 0.05389678</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.01689916 0.01781006 1.99043774</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  6.44522829 3.84192615 4.75185297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 11.15086927 0.16993262 0.24024980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  2.25358425 4.15025057 0.98266205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.79767190 1.01037069 0.22238741</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  2.78516354 0.21910546 1.20811417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.04791265 0.10796482 1.68464391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.30041421 0.34682216 3.42222481</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  1.07739392 1.31927799 3.78082996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]      [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 8.24837685 10.69857583 2.4734847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 1.14082522  0.58671413 1.2991381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 1.05199869  0.01952548 0.1518117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.09815916  2.09836473 0.9171968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 1.44549755  0.03732527 0.1230960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.87907805  2.96681227 1.6638072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.25061503  1.47779913 0.2151474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 1.05973104  0.40336846 0.1357882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.21627479  1.27101068 0.5378615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.76093562  0.58420217 1.3596907</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A 5-dimensional negative logistic distribution</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span></span>
 <span class="r-in"><span><span class="fu">rmpareto</span><span class="op">(</span><span class="va">n</span>, <span class="st">"neglogistic"</span>, <span class="va">d</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]       [,2]      [,3]      [,4]       [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.9134682  0.4193091 0.7498344 1.7362368 0.08409103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.7208462  3.3963208 1.7810699 0.3657981 2.16306778</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 1.3045793  2.5554570 0.5059166 1.9259453 1.72207737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.2339351  0.4125991 0.8470116 1.2650381 0.42853321</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.2743498  1.2312591 0.5132162 0.4067593 0.07696845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 1.1723923 15.6433440 2.5125949 4.3020861 1.53768302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.2016467  0.8811418 1.5944097 0.9142069 0.75295434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 1.1345907 13.6006050 7.5408809 1.6431343 0.70043126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 1.3882851  1.3071895 0.1377822 0.7802426 0.35501419</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.7799429  1.2795155 1.3238882 4.6093305 1.16572037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]      [,2]      [,3]      [,4]       [,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  1.0410953 1.0368430 3.0641360 0.4899866  0.3413277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.8043985 1.4684191 0.3371993 2.4377260  2.0067296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  0.8398382 1.3174039 0.3297471 1.1210441  0.7363261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  1.6320666 0.4856634 0.2237380 0.1971754  0.6634043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  1.6686381 0.2726166 0.7718576 0.7949440  0.2269781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.7743841 1.7759363 4.0861415 0.3360490  3.0394581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.8424968 0.8434586 1.6880089 0.2612004  0.4319269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  4.2622232 5.1144089 1.3030681 5.3718415  1.0723264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 10.4418632 3.3544738 5.1462313 2.2192071 17.9442460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  1.1775948 0.5574875 1.1206045 6.1359100  1.2798100</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## A 4-dimensional Dirichlet distribution</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">4</span></span></span>
 <span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">1</span>, <span class="fl">.5</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">rmpareto</span><span class="op">(</span><span class="va">n</span>, <span class="st">"dirichlet"</span>, <span class="va">d</span>, par <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]      [,2]       [,3]      [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.57371501 1.2714518 0.05502085 0.4254865</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.27543374 1.1791533 0.71491748 0.1394769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.18748175 1.0704765 0.20897389 0.2447078</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.03798897 0.5333116 0.77020255 1.0527140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 5.90239676 7.4359643 3.69547405 9.2465348</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 1.64891085 0.7637040 0.73301231 2.4138431</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.22732093 4.1917728 0.31475693 1.2420307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.55205514 0.3883455 1.07991041 0.2559198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.40841575 0.3063875 0.73968876 1.0118474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.05650611 0.9281560 1.79495680 0.5093663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]       [,2]       [,3]      [,4]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.54438164 0.03495636 0.89308764 1.6750301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  4.66487201 0.28122718 2.04269019 1.5075597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  2.60696064 1.67971723 1.70213708 1.5252516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.07793149 0.38886068 1.15564558 0.1560207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  2.97816809 0.28430839 0.77949134 1.9339135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  1.44739369 1.33222612 0.01962053 0.3117005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  1.08362319 0.32159735 0.52307518 0.1984790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.03959297 0.01409648 0.60053325 4.2018204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 17.73588870 0.15360482 9.95951584 8.4454189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  4.03849379 0.94996230 1.76963146 1.4442792</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

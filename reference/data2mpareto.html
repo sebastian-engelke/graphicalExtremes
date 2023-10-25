@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -93,6 +91,21 @@ of the standard Pareto distribution to standardize them to the multivariate Pare
 <p>If <code>na.rm</code> is <code>FALSE</code>, missing entries are left as such during the transformation of univariate marginals.
 In the thresholding step, missing values are considered as <code>-Inf</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other parameter estimation methods:
+<code><a href="emp_chi_multdim.html">emp_chi_multdim</a>()</code>,
+<code><a href="emp_chi.html">emp_chi</a>()</code>,
+<code><a href="emp_vario.html">emp_vario</a>()</code>,
+<code><a href="emtp2.html">emtp2</a>()</code>,
+<code><a href="fmpareto_HR_MLE.html">fmpareto_HR_MLE</a>()</code>,
+<code><a href="fmpareto_graph_HR.html">fmpareto_graph_HR</a>()</code>,
+<code><a href="loglik_HR.html">loglik_HR</a>()</code></p>
+<p>Other structure estimation methods:
+<code><a href="eglearn.html">eglearn</a>()</code>,
+<code><a href="emst.html">emst</a>()</code>,
+<code><a href="fit_graph_to_Theta.html">fit_graph_to_Theta</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -120,6 +133,7 @@ In the thresholding step, missing values are considered as <code>-Inf</code>.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 1.4000000 0.8400000 4.2000000 0.4666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 4.2000000 1.0500000 2.1000000 4.2000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.3230769 4.2000000 0.2100000 0.2470588</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

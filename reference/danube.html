@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -125,12 +123,16 @@ each of the gauging stations or its corresponding catchment area:</p><dl><dt><co
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="flights.html">flights</a></code>, <code><a href="../articles/graphicalExtremes.html">vignette('graphicalExtremes')</a></code></p></div>
+    <div class="dont-index"><p>Other danubeData: 
+<code><a href="getDanubeFlowGraph.html">getDanubeFlowGraph</a>()</code>,
+<code><a href="plotDanube.html">plotDanube</a>()</code></p>
+<p>Other datasets:
+<code><a href="flights.html">flights</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html" class="external-link">graph_from_edgelist</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">flow_edges</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_edgelist.html" class="external-link">graph_from_edgelist</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">flow_edges</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">info</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PlotCoordX'</span>, <span class="st">'PlotCoordY'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span>, layout <span class="op">=</span> <span class="va">loc</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="danube-1.png" alt="" width="700" height="433"></span>

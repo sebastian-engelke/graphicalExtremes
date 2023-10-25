@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -50,7 +48,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
       
       
 
@@ -62,55 +60,117 @@
 
       <dl><dt>
           
-          <code><a href="Gamma2Sigma.html">Gamma2Sigma()</a></code> 
+          <code><a href="flights.html">flights</a></code> 
         </dt>
-        <dd>Transformation of \(\Gamma\) matrix to \(\Sigma\) or \(\Sigma^k\) matrix</dd>
+        <dd>Flights delay data</dd>
       </dl><dl><dt>
           
-          <code><a href="Gamma2Theta.html">Gamma2Theta()</a></code> 
+          <code><a href="danube.html">danube</a></code> 
         </dt>
-        <dd>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix</dd>
+        <dd>Upper Danube basin dataset</dd>
       </dl><dl><dt>
           
-          <code><a href="Gamma2chi.html">Gamma2chi()</a></code> 
+          <code><a href="flightCountMatrixToConnectionList.html">flightCountMatrixToConnectionList()</a></code> 
         </dt>
-        <dd>Transformation of the Huesler--Reiss variogram \(\Gamma\) to extremal correlation \(\chi\)</dd>
+        <dd>Convert flight counts to connection list</dd>
       </dl><dl><dt>
           
-          <code><a href="Gamma2graph.html">Gamma2graph()</a></code> <code><a href="Gamma2graph.html">Theta2graph()</a></code> 
+          <code><a href="getFlightDelayData.html">getFlightDelayData()</a></code> 
         </dt>
-        <dd>Transformation of matrix to graph object</dd>
+        <dd>Get filtered flight delays</dd>
       </dl><dl><dt>
           
-          <code><a href="Sigma2Gamma.html">Sigma2Gamma()</a></code> 
+          <code><a href="plotFlights.html">plotFlights()</a></code> 
         </dt>
-        <dd>Transformation of \(\Sigma\) and \(\Sigma^k\) matrix to \(\Gamma\) matrix</dd>
+        <dd>Plot flight data</dd>
       </dl><dl><dt>
           
-          <code><a href="Theta2Gamma.html">Theta2Gamma()</a></code> 
+          <code><a href="getDanubeFlowGraph.html">getDanubeFlowGraph()</a></code> 
         </dt>
-        <dd>Transformation of \(\Gamma\) matrix to \(\Theta\) matrix</dd>
+        <dd>Get Danube flow graph</dd>
       </dl><dl><dt>
           
-          <code><a href="Zmatrix.html">Zmatrix()</a></code> 
+          <code><a href="plotDanube.html">plotDanube()</a></code> <code><a href="plotDanube.html">plotDanubeIGraph()</a></code> 
         </dt>
-        <dd>Computes the Z-matrix</dd>
+        <dd>Plot Danube River Flow Data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="parameter-and-structure-estimation">Parameter and structure estimation<a class="anchor" aria-label="anchor" href="#parameter-and-structure-estimation"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="data2mpareto.html">data2mpareto()</a></code> 
+        </dt>
+        <dd>Data standardization to multivariate Pareto scale</dd>
       </dl><dl><dt>
           
-          <code><a href="check_Gamma_and_graph.html">check_Gamma_and_graph()</a></code> 
+          <code><a href="emp_chi.html">emp_chi()</a></code> <code><a href="emp_chi.html">emp_chi_pairwise()</a></code> 
         </dt>
-        <dd>Check input graph and Gamma matrix</dd>
+        <dd>Empirical estimation of extremal correlation matrix \(\chi\)</dd>
       </dl><dl><dt>
           
-          <code><a href="check_graph.html">check_graph()</a></code> 
+          <code><a href="emp_chi_multdim.html">emp_chi_multdim()</a></code> 
         </dt>
-        <dd>Check input graph</dd>
+        <dd>Empirical estimation of extremal correlation \(\chi\)</dd>
       </dl><dl><dt>
           
-          <code><a href="chi2Gamma.html">chi2Gamma()</a></code> 
+          <code><a href="emp_vario.html">emp_vario()</a></code> <code><a href="emp_vario.html">emp_vario_pairwise()</a></code> 
         </dt>
-        <dd>Transformation of extremal correlation \(\chi\) to the Huesler--Reiss variogram \(\Gamma\)</dd>
+        <dd>Estimation of the variogram matrix \(\Gamma\) of a Huesler-Reiss distribution</dd>
       </dl><dl><dt>
+          
+          <code><a href="emtp2.html">emtp2()</a></code> 
+        </dt>
+        <dd>Performs Gaussian likelihood optimization under Laplacian matrix constraints.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fmpareto_HR_MLE.html">fmpareto_HR_MLE()</a></code> 
+        </dt>
+        <dd>Parameter fitting for multivariate Huesler-Reiss Pareto distribution</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> 
+        </dt>
+        <dd>Parameter fitting for Huesler-Reiss graphical models</dd>
+      </dl><dl><dt>
+          
+          <code><a href="loglik_HR.html">loglik_HR()</a></code> 
+        </dt>
+        <dd>Compute Huesler-Reiss log-likelihood, AIC, and BIC</dd>
+      </dl><dl><dt>
+          
+          <code><a href="eglearn.html">eglearn()</a></code> 
+        </dt>
+        <dd>Learning extremal graph structure</dd>
+      </dl><dl><dt>
+          
+          <code><a href="emst.html">emst()</a></code> 
+        </dt>
+        <dd>Fitting extremal minimum spanning tree</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fit_graph_to_Theta.html">fit_graph_to_Theta()</a></code> 
+        </dt>
+        <dd>Experimental: Fit graph using empirical Theta matrix</dd>
+      </dl></div><div class="section level2">
+      <h2 id="parameter-matrix-transformations-and-completions">Parameter matrix transformations and completions<a class="anchor" aria-label="anchor" href="#parameter-matrix-transformations-and-completions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="complete_Gamma.html">complete_Gamma()</a></code> 
         </dt>
@@ -137,94 +197,50 @@
         <dd>Non-decomposable completion of variogram matrices</dd>
       </dl><dl><dt>
           
-          <code><a href="danube.html">danube</a></code> 
+          <code><a href="chi2Gamma.html">chi2Gamma()</a></code> <code><a href="chi2Gamma.html">Gamma2chi()</a></code> 
         </dt>
-        <dd>Upper Danube basin dataset</dd>
+        <dd>Transformation between \(\chi\) and \(\Gamma\)</dd>
       </dl><dl><dt>
           
-          <code><a href="data2mpareto.html">data2mpareto()</a></code> 
+          <code><a href="matrix2graph.html">Gamma2graph()</a></code> <code><a href="matrix2graph.html">Sigma2graph()</a></code> <code><a href="matrix2graph.html">Theta2graph()</a></code> <code><a href="matrix2graph.html">partialMatrixToGraph()</a></code> 
         </dt>
-        <dd>Data standardization to multivariate Pareto scale</dd>
+        <dd>Convert matrix to graph</dd>
       </dl><dl><dt>
           
-          <code><a href="eglearn.html">eglearn()</a></code> 
+          <code><a href="parameterMatrixConversion.html">Gamma2Sigma()</a></code> <code><a href="parameterMatrixConversion.html">Gamma2Theta()</a></code> <code><a href="parameterMatrixConversion.html">Sigma2Gamma()</a></code> <code><a href="parameterMatrixConversion.html">Theta2Gamma()</a></code> <code><a href="parameterMatrixConversion.html">Sigma2Theta()</a></code> <code><a href="parameterMatrixConversion.html">Theta2Sigma()</a></code> <code><a href="parameterMatrixConversion.html">Theta2Theta()</a></code> <code><a href="parameterMatrixConversion.html">Sigma2Sigma()</a></code> <code><a href="parameterMatrixConversion.html">Gamma2Gamma()</a></code> <code><a href="parameterMatrixConversion.html">matrix2matrix()</a></code> 
         </dt>
-        <dd>Learning extremal graph structure</dd>
+        <dd>Conversion between Huesler-Reiss parameter matrices</dd>
       </dl><dl><dt>
           
-          <code><a href="emp_chi.html">emp_chi()</a></code> <code><a href="emp_chi.html">emp_chi_pairwise()</a></code> 
+          <code><a href="checkGamma.html">checkGamma()</a></code> <code><a href="checkGamma.html">checkSigmaTheta()</a></code> <code><a href="checkGamma.html">checkTheta()</a></code> <code><a href="checkGamma.html">checkSigma()</a></code> <code><a href="checkGamma.html">checkMatrix()</a></code> <code><a href="checkGamma.html">is_valid_Gamma()</a></code> <code><a href="checkGamma.html">is_valid_Theta()</a></code> <code><a href="checkGamma.html">is_valid_Sigma()</a></code> 
         </dt>
-        <dd>Empirical estimation of extremal correlation matrix \(\chi\)</dd>
+        <dd>HR parameter matrix checks</dd>
       </dl><dl><dt>
           
-          <code><a href="emp_chi_multdim.html">emp_chi_multdim()</a></code> 
+          <code><a href="ensure_matrix_symmetry_and_truncate_zeros.html">ensure_matrix_symmetry()</a></code> <code><a href="ensure_matrix_symmetry_and_truncate_zeros.html">truncate_zeros()</a></code> <code><a href="ensure_matrix_symmetry_and_truncate_zeros.html">ensure_matrix_symmetry_and_truncate_zeros()</a></code> 
         </dt>
-        <dd>Empirical estimation of extremal correlation \(\chi\)</dd>
-      </dl><dl><dt>
+        <dd>Ensure numerical matrix symmetry/zero values</dd>
+      </dl></div><div class="section level2">
+      <h2 id="example-generations">Example generations<a class="anchor" aria-label="anchor" href="#example-generations"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
-          <code><a href="emp_vario.html">emp_vario()</a></code> <code><a href="emp_vario.html">emp_vario_pairwise()</a></code> 
+          <code><a href="generateRandomGraph.html">generate_random_chordal_graph()</a></code> <code><a href="generateRandomGraph.html">generate_random_connected_graph()</a></code> <code><a href="generateRandomGraph.html">generate_random_tree()</a></code> <code><a href="generateRandomGraph.html">generate_random_cactus()</a></code> 
         </dt>
-        <dd>Estimation of the variogram matrix \(\Gamma\) of a Huesler--Reiss distribution</dd>
-      </dl><dl><dt>
-          
-          <code><a href="emst.html">emst()</a></code> 
-        </dt>
-        <dd>Fitting extremal minimum spanning tree</dd>
-      </dl><dl><dt>
-          
-          <code><a href="emtp2.html">emtp2()</a></code> 
-        </dt>
-        <dd>Performs Gaussian likelihood optimization under Laplacian matrix constraints.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fast_diag.html">fast_diag()</a></code> 
-        </dt>
-        <dd>Fast computation of diag(y %<em>% M %</em>% t(y))</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fillFixedParams.html">fillFixedParams()</a></code> 
-        </dt>
-        <dd>Helper function to combine par with fixed params (in init)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fitInInterval.html">fitInInterval()</a></code> 
-        </dt>
-        <dd>Fit value(s) in interval</dd>
-      </dl><dl><dt>
-          
-          <code><a href="flightCountMatrixToConnectionList.html">flightCountMatrixToConnectionList()</a></code> 
-        </dt>
-        <dd>Convert flight counts to connection list</dd>
-      </dl><dl><dt>
-          
-          <code><a href="flights.html">flights</a></code> 
-        </dt>
-        <dd>Flights delay data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> 
-        </dt>
-        <dd>Parameter fitting for Huesler--Reiss graphical models</dd>
+        <dd>Generate random graphs</dd>
       </dl><dl><dt>
           
           <code><a href="generate_random_Gamma.html">generate_random_Gamma()</a></code> 
         </dt>
         <dd>Generate a random Gamma matrix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_random_cactus.html">generate_random_cactus()</a></code> 
-        </dt>
-        <dd>Generate a random cactus graph</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_random_chordal_graph.html">generate_random_chordal_graph()</a></code> 
-        </dt>
-        <dd>Generate a random chordal graph</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_random_connected_graph.html">generate_random_connected_graph()</a></code> 
-        </dt>
-        <dd>Generate a random connected graph</dd>
       </dl><dl><dt>
           
           <code><a href="generate_random_graphical_Gamma.html">generate_random_graphical_Gamma()</a></code> 
@@ -239,48 +255,24 @@
           
           <code><a href="generate_random_model.html">generate_random_model()</a></code> 
         </dt>
-        <dd>Generate random Huesler--Reiss Models</dd>
+        <dd>Generate random Huesler-Reiss Models</dd>
       </dl><dl><dt>
           
           <code><a href="generate_random_spd_matrix.html">generate_random_spd_matrix()</a></code> 
         </dt>
         <dd>Generate a random symmetric positive definite matrix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_random_tree.html">generate_random_tree()</a></code> 
-        </dt>
-        <dd>Generate a random tree</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_mc_cores.html">get_mc_cores()</a></code> 
-        </dt>
-        <dd>Number of cores to be used in parallel computations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_tol.html">get_small_tol()</a></code> <code><a href="get_tol.html">get_large_tol()</a></code> 
-        </dt>
-        <dd>Tolerances to be used in computations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="graphs_equal.html">graphs_equal()</a></code> 
-        </dt>
-        <dd>Graph equality</dd>
-      </dl><dl><dt>
-          
-          <code><a href="loglik_HR.html">loglik_HR()</a></code> 
-        </dt>
-        <dd>Compute Huesler--Reiss log-likelihood, AIC, and BIC</dd>
-      </dl><dl><dt>
-          
-          <code><a href="partialMatrixToGraph.html">partialMatrixToGraph()</a></code> 
-        </dt>
-        <dd>Transformation of a partial matrix to a graph</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plotFlights.html">plotFlights()</a></code> 
-        </dt>
-        <dd>Plot flight data</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="sampling-functions">Sampling functions<a class="anchor" aria-label="anchor" href="#sampling-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="rmpareto.html">rmpareto()</a></code> 
         </dt>
@@ -300,8 +292,47 @@
           <code><a href="rmstable_tree.html">rmstable_tree()</a></code> 
         </dt>
         <dd>Sampling of a multivariate max-stable distribution on a tree</dd>
-      </dl></div>
-  </main></div>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions">Utility functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_alert_function.html">get_alert_function()</a></code> 
+        </dt>
+        <dd>Get alert function</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_mc_cores.html">get_mc_cores()</a></code> 
+        </dt>
+        <dd>Number of cores to be used in parallel computations</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_tol.html">get_small_tol()</a></code> <code><a href="get_tol.html">get_large_tol()</a></code> 
+        </dt>
+        <dd>Tolerances to be used in computations</dd>
+      </dl></div><div class="section level2">
+      <h2 id="uncategorized">Uncategorized<a class="anchor" aria-label="anchor" href="#uncategorized"></a></h2>
+      
+      <p class="section-desc"></p><p>Uncategorized topics, possibly empty.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      
+    </div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

@@ -14,7 +14,7 @@ is an extremal graphical model on a tree as defined in Engelke and Hitz (2020)
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,16 +22,14 @@ is an extremal graphical model on a tree as defined in Engelke and Hitz (2020)
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -95,7 +93,7 @@ to the edges of the given <code>tree</code>.</p></li>
 containing the logistic parameters corresponding
 to the edges of the given <code>tree</code>, if <code>model = logistic</code>.</p></li>
 <li><p>a matrix of size \((d - 1) \times 2\), where the rows
-contain the parameter vectors \(\alpha\) of size 2 with positve entries
+contain the parameter vectors \(\alpha\) of size 2 with positive entries
 for each of the edges in <code>tree</code>, if <code>model = dirichlet</code>.</p></li>
 </ul></dd>
 
@@ -113,7 +111,7 @@ multivariate max-stable distribution.</p>
 
 and the theory in Engelke and Hitz (2020)
  to sample from a single extremal function.
-For details on the parameters of the Huesler--Reiss, logistic
+For details on the parameters of the Huesler-Reiss, logistic
 and negative logistic distributions see Dombry et al. (2016)
 , and for the Dirichlet
 distribution see Coles and Tawn (1991)
@@ -129,12 +127,19 @@ distribution see Coles and Tawn (1991)
 “Graphical models for extremes (with discussion).”
 <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>, <b>82</b>, 871--932.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other sampling functions:
+<code><a href="rmpareto_tree.html">rmpareto_tree</a>()</code>,
+<code><a href="rmpareto.html">rmpareto</a>()</code>,
+<code><a href="rmstable.html">rmstable</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## A 4-dimensional HR tree model</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">my_tree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">my_tree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>

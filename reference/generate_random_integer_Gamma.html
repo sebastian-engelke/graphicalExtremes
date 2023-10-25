@@ -18,7 +18,7 @@ is produced."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,16 +26,14 @@ is produced."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -62,7 +60,7 @@ is produced."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
     <div class="ref-description section level2">
     <p>Generates a random variogram Matrix by producing a \((d-1) \times (d-1)\) matrix <code>B</code> with random
 integer entries between <code>-b</code> and <code>b</code>, computing <code>S = B %*% t(B)</code>,
-and passing this <code>S</code> to <code><a href="Sigma2Gamma.html">Sigma2Gamma()</a></code>.
+and passing this <code>S</code> to <code><a href="parameterMatrixConversion.html">Sigma2Gamma()</a></code>.
 This process is repeated with an increasing <code>b</code> until a valid Gamma matrix
 is produced.</p>
     </div>
@@ -94,15 +92,12 @@ is produced.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other Example generations: 
+    <div class="dont-index"><p>Other example generation functions:
 <code><a href="generate_random_Gamma.html">generate_random_Gamma</a>()</code>,
-<code><a href="generate_random_cactus.html">generate_random_cactus</a>()</code>,
-<code><a href="generate_random_chordal_graph.html">generate_random_chordal_graph</a>()</code>,
-<code><a href="generate_random_connected_graph.html">generate_random_connected_graph</a>()</code>,
+<code><a href="generateRandomGraph.html">generate_random_chordal_graph</a>()</code>,
 <code><a href="generate_random_graphical_Gamma.html">generate_random_graphical_Gamma</a>()</code>,
 <code><a href="generate_random_model.html">generate_random_model</a>()</code>,
-<code><a href="generate_random_spd_matrix.html">generate_random_spd_matrix</a>()</code>,
-<code><a href="generate_random_tree.html">generate_random_tree</a>()</code></p></div>
+<code><a href="generate_random_spd_matrix.html">generate_random_spd_matrix</a>()</code></p></div>
     </div>
 
     <div class="section level2">

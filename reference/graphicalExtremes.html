@@ -28,7 +28,7 @@ Engelke and Volgushev (2022)
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,16 +36,14 @@ Engelke and Volgushev (2022)
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -88,7 +86,7 @@ Engelke and Volgushev (2022)
     <p>The following global options are used by functions in the package.
 Their values can be changed using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">base::options()</a></code>.</p><dl><dt><code>"graphicalExtremes.mc.cores"</code></dt>
 <dd><p>The (maximal) number of cores to use in parallel tasks.
-Will always be overwritten by 1 on windows.</p></dd>
+Will always be overwritten by 1 on Windows.</p></dd>
 
 <dt><code>"graphicalExtremes.tol.small"</code></dt>
 <dd><p>The "small" tolerance is used in internal computations for values that should
@@ -103,6 +101,11 @@ it has to be zero, its absolute value is compared to this tolerance.</p></dd>
 <dd><p>The "large" tolerance is used for values that <strong>converge to zero</strong>, but are
 mathematically not supposed to be equal to zero. This value is used e.g.
 when converting a precision matrix \(\Theta\) to an adjacency matrix of a graph.</p></dd>
+
+<dt><code>"graphicalExtremes.default.alert</code></dt>
+<dd><p>The default alert function to be used in validity checks of Huesler-Reiss parameter matrix transformations.
+Can be a function that takes an arbitrary number of strings as arguments (e.g. <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>, <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>),
+<code>FALSE</code> to ignore the alerts, or <code>TRUE</code>/<code>NULL</code> to use the default function <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>.</p></dd>
 
 
 </dl></div>

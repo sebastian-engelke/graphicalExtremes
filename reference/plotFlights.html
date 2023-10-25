@@ -12,7 +12,7 @@ This function requires the package ggplot2 to be installed."><!-- mathjax --><sc
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,16 +20,14 @@ This function requires the package ggplot2 to be installed."><!-- mathjax --><sc
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -49,7 +47,7 @@ This function requires the package ggplot2 to be installed."><!-- mathjax --><sc
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Plot flight data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/flight_plotting.R" class="external-link"><code>R/flight_plotting.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/R/data_flights.R" class="external-link"><code>R/data_flights.R</code></a></small>
       <div class="d-none name"><code>plotFlights.Rd</code></div>
     </div>
 
@@ -100,7 +98,7 @@ If <code>NULL</code>, then <code><a href="flights.html">flights</a></code><code>
 
 
 <dt>graph</dt>
-<dd><p>An optional <code><a href="https://rdrr.io/pkg/igraph/man/make_graph.html" class="external-link">igraph::graph</a></code> object, containing a flight graph to plot.
+<dd><p>An optional <code><a href="https://r.igraph.org/reference/make_graph.html" class="external-link">igraph::graph</a></code> object, containing a flight graph to plot.
 Vertices should either match the selected airports in number and order,
 or be named with the corresponding IATA codes of the airports they represent.</p></dd>
 
@@ -149,7 +147,7 @@ according to the number of flights on that connection.</p></dd>
 
 <dt>edgeColors</dt>
 <dd><p>Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
-If this is a vector, its entries must match the plotted connections (in the order specified in <code>connections_sel</code> or implied by <code><a href="https://rdrr.io/pkg/igraph/man/as_edgelist.html" class="external-link">igraph::get.edgelist</a></code>).
+If this is a vector, its entries must match the plotted connections (in the order specified in <code>connections_sel</code> or implied by <code><a href="https://r.igraph.org/reference/as_edgelist.html" class="external-link">igraph::get.edgelist</a></code>).
 If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).</p></dd>
 
 
@@ -176,12 +174,19 @@ If it is a positive scalar, the plot limits are extended by that factor.</p></dd
 
 <p>If <code>returnGGPlot</code> is <code>TRUE</code>, a <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot</a></code> object, otherwise <code>NULL</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="plotDanube.html">plotDanube</a></code></p>
+<p>Other flight data related topics:
+<code><a href="flightCountMatrixToConnectionList.html">flightCountMatrixToConnectionList</a>()</code>,
+<code><a href="flights.html">flights</a></code>,
+<code><a href="getFlightDelayData.html">getFlightDelayData</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Plot all airports in the dataset</span></span></span>
 <span class="r-in"><span><span class="fu">plotFlights</span><span class="op">(</span>plotConnections <span class="op">=</span> <span class="cn">FALSE</span>, map <span class="op">=</span> <span class="st">'world'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: ggplot2</span>
 <span class="r-plt img"><img src="plotFlights-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot a selection of airports</span></span></span>
@@ -190,7 +195,7 @@ If it is a positive scalar, the plot limits are extended by that factor.</p></dd
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot airports with a custom connections graph</span></span></span>
 <span class="r-in"><span><span class="va">IATAs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'ACV'</span>, <span class="st">'BFL'</span>, <span class="st">'EUG'</span>, <span class="st">'SFO'</span>, <span class="st">'MRY'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/make_full_graph.html" class="external-link">make_full_graph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">IATAs</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/make_full_graph.html" class="external-link">make_full_graph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">IATAs</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">plotFlights</span><span class="op">(</span><span class="va">IATAs</span>, graph<span class="op">=</span><span class="va">graph</span>, clipMap <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotFlights-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

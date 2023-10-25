@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/graphicalExtremes.html">Get started</a>
-</li>
-<li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/exercises.html">Exercises</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -82,6 +80,17 @@ it is assumed that the <code>data</code> are already on multivariate Pareto scal
 
 <p>for the <code>data</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other parameter estimation methods:
+<code><a href="data2mpareto.html">data2mpareto</a>()</code>,
+<code><a href="emp_chi.html">emp_chi</a>()</code>,
+<code><a href="emp_vario.html">emp_vario</a>()</code>,
+<code><a href="emtp2.html">emtp2</a>()</code>,
+<code><a href="fmpareto_HR_MLE.html">fmpareto_HR_MLE</a>()</code>,
+<code><a href="fmpareto_graph_HR.html">fmpareto_graph_HR</a>()</code>,
+<code><a href="loglik_HR.html">loglik_HR</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -97,6 +106,7 @@ it is assumed that the <code>data</code> are already on multivariate Pareto scal
 <span class="r-in"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="rmstable.html">rmstable</a></span><span class="op">(</span><span class="va">n</span>, <span class="st">"HR"</span>, d <span class="op">=</span> <span class="va">d</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">emp_chi_multdim</span><span class="op">(</span><span class="va">my_data</span>, <span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.55</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

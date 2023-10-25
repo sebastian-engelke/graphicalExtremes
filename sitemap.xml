@@ -4,10 +4,10 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/articles/exercises.html</loc>
+    <loc>/articles/applicationDanube.html</loc>
   </url>
   <url>
-    <loc>/articles/graphicalExtremes.html</loc>
+    <loc>/articles/applicationFlights.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
@@ -19,28 +19,7 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/reference/Gamma2Sigma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Gamma2Theta.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Gamma2chi.html</loc>
-  </url>
-  <url>
     <loc>/reference/Gamma2chi_3D.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Gamma2graph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Gamma2par.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Sigma2Gamma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Theta2Gamma.html</loc>
   </url>
   <url>
     <loc>/reference/V_HR.html</loc>
@@ -52,10 +31,13 @@
     <loc>/reference/censor.html</loc>
   </url>
   <url>
-    <loc>/reference/check_Gamma_and_graph.html</loc>
+    <loc>/reference/checkGamma.html</loc>
   </url>
   <url>
     <loc>/reference/check_graph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_partial_matrix_and_graph.html</loc>
   </url>
   <url>
     <loc>/reference/check_split_by_sep.html</loc>
@@ -91,9 +73,6 @@
     <loc>/reference/data2mpareto.html</loc>
   </url>
   <url>
-    <loc>/reference/dim_Gamma.html</loc>
-  </url>
-  <url>
     <loc>/reference/eglearn.html</loc>
   </url>
   <url>
@@ -110,6 +89,9 @@
   </url>
   <url>
     <loc>/reference/emtp2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ensure_matrix_symmetry_and_truncate_zeros.html</loc>
   </url>
   <url>
     <loc>/reference/fast_diag.html</loc>
@@ -136,19 +118,16 @@
     <loc>/reference/fmpareto_HR_MLE.html</loc>
   </url>
   <url>
+    <loc>/reference/fmpareto_HR_helpers.html</loc>
+  </url>
+  <url>
     <loc>/reference/fmpareto_graph_HR.html</loc>
   </url>
   <url>
+    <loc>/reference/generateRandomGraph.html</loc>
+  </url>
+  <url>
     <loc>/reference/generate_random_Gamma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generate_random_cactus.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generate_random_chordal_graph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generate_random_connected_graph.html</loc>
   </url>
   <url>
     <loc>/reference/generate_random_graphical_Gamma.html</loc>
@@ -163,10 +142,19 @@
     <loc>/reference/generate_random_spd_matrix.html</loc>
   </url>
   <url>
-    <loc>/reference/generate_random_tree.html</loc>
+    <loc>/reference/getDanubeFlowGraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getFlightDelayData.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getPackageData.html</loc>
   </url>
   <url>
     <loc>/reference/getSubMatrixForSubgraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_alert_function.html</loc>
   </url>
   <url>
     <loc>/reference/get_cliques_and_separators.html</loc>
@@ -202,7 +190,13 @@
     <loc>/reference/loglik_HR.html</loc>
   </url>
   <url>
+    <loc>/reference/make_numeric_indices.html</loc>
+  </url>
+  <url>
     <loc>/reference/make_sep_list.html</loc>
+  </url>
+  <url>
+    <loc>/reference/matrix2graph.html</loc>
   </url>
   <url>
     <loc>/reference/mparetomargins.html</loc>
@@ -217,7 +211,10 @@
     <loc>/reference/parToMatricesFactory.html</loc>
   </url>
   <url>
-    <loc>/reference/partialMatrixToGraph.html</loc>
+    <loc>/reference/parameterMatrixConversion.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plotDanube.html</loc>
   </url>
   <url>
     <loc>/reference/plotFlights.html</loc>
