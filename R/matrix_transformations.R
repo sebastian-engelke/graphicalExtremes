@@ -394,13 +394,16 @@ par2Theta <- function(par, allowMatrix = FALSE, allowNull = FALSE){
 #' @return Upper triangular part of `M` (or `M` itself/NULL if allowed)
 matrix2par <- function(M, allowVector = FALSE, allowNull = FALSE){
   if(is.null(M)){
-  if(allowNull){
-    return(NULL)
+    if(allowNull){
+      return(NULL)
+    }
+    stop('Matrix `M` must not be NULL (unless allowNull=TRUE).')
   }
-  stop('Matrix `M` must not be NULL (unless allowNull=TRUE).')
-  }
-  if(allowVector && is.vector(M)){
-  return(M)
+  if(is.vector(M)){
+    if(allowVector){
+      return(M)
+    }
+    stop('Matrix `M` must not be a vector (unless allowVector=TRUE).')
   }
   return(upper.tri.val(M))
 }

@@ -160,8 +160,8 @@ test_that("par2Gamma works", {
 })
 
 test_that("matrix2par works", {
-  expect_equal(matrix2par(Gamma = G), G[upper.tri(G)])
-  expect_equal(matrix2par(Gamma = c(1.5, 2, 1.5)), c(1.5, 2, 1.5))
+  expect_equal(matrix2par(G), G[upper.tri(G)])
+  expect_equal(matrix2par(c(1.5, 2, 1.5), allowVector = TRUE), c(1.5, 2, 1.5))
 })
 
 test_that("chi2Gamma works", {
