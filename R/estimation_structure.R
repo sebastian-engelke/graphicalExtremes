@@ -1,6 +1,7 @@
 #' Learning extremal graph structure
 #'
-#' Fits an extremal graph structure using the neighborhood selection approach
+#' Following the methodology from \insertCite{eng2022a;textual}{graphicalExtremes},
+#' fits an extremal graph structure using the neighborhood selection approach
 #' (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 #' (see \insertCite{friedman2008;textual}{graphicalExtremes}).
 #'
@@ -53,6 +54,8 @@
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
 #'   graph is not connected, it returns a list of `NULL`.
 #' }
+#' 
+#' @references \insertAllCited{}
 #'
 #' @family structureEstimation
 #' @export

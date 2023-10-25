@@ -9,8 +9,8 @@ simulation algorithms and statistical inference methods for multivariate
 Pareto distributions on graphical structures.
 
 Furthermore contains implementations of statistical methods from Engelke
-and Volgushev (2022), Röttger et al. (2021), and Hentschel et al.
-(2022).
+and Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022), and
+Hentschel et al. (2022).
 
 ## Installation
 
@@ -39,6 +39,14 @@ line-spacing="2">
 
 Engelke, S., and Hitz, A. S. (2020). Graphical models for extremes (with
 discussion). *J. R. Stat. Soc. Ser. B Stat. Methodol.*, *82*, 871–932.
+
+</div>
+
+<div id="ref-eng2022a" class="csl-entry">
+
+Engelke, S., Lalancette, M., and Volgushev, S. (2022). *Learning
+extremal graphical structures in high dimensions*. arXiv.
+<https://doi.org/10.48550/ARXIV.2111.00840>
 
 </div>
 
