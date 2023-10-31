@@ -16,3 +16,4 @@
 - check all new matrix transformations!
     - keep/export Gamma2chi_3D?
 
+- check copy lins in vignettes
