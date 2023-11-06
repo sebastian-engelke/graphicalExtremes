@@ -73,10 +73,10 @@ plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 ```
 
 To perform an example application,
-we consider the years 2010 - 2013 and choose (somewhat arbitrarily)
+we consider the years 2010 - 2013 and choose, as an example,
 airports from the westcoast with a large number of flights per year.
-A similar analysis is perform in @hen2022.
-For more detailed explanations see Vignette "applicationDanube" and the help pages of applied functions.
+A similar analysis is performed in @hen2022 for airports in Texas.
+For more detailed explanations concerning usage of the methods see Vignette "applicationDanube" and the help pages of applied functions.
 *Note: In the CRAN version of this package, these are the only available years.*
 *A version of this package with a larger dataset is available on GitHub*
 ```{r, fig.width=10}
@@ -140,7 +140,7 @@ plot_fitted_params <- function(G0, G1, xlab = 'Empirical', ylab = 'Fitted'){
 # Fitting a model to the flight graph
 
 As a baseline for graphical modelling, we consider the graph with edges
-representing at least monthly connections between airports.
+representing at least monthly connections between airports. 
 ```{r}
 # Compute undirected flights per connection between selected airports
 flightsPerConnectionUD <- flightsPerConnection + t(flightsPerConnection)

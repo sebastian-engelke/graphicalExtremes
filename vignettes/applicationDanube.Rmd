@@ -1,5 +1,5 @@
 ---
-title: "Introduction and application to danube data"
+title: "Introduction and application to Danube data"
 output:
     bookdown::html_document2:
         fig_width: 5
@@ -11,7 +11,7 @@ pkgdown:
     as_is: true
 bibliography: ../inst/REFERENCES.bib
 vignette: >
-    %\VignetteIndexEntry{Introduction and application to danube data}
+    %\VignetteIndexEntry{Introduction and application to Danube data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
@@ -77,9 +77,9 @@ theme_set(
 
 # Danube Data
 
-Throughout this document, where applicable,
-we will use the Danube dataset from @asadi2015 to illustrate functions and concepts.
-The dataset is provided in the package as `flights`,
+Throughout this document
+we use the Danube dataset from @asadi2015 to illustrate functions and concepts.
+The dataset is provided in the package as `danube`,
 see the corresponding help page for details and related functions.
 
 ```{r, fig.width=6, fig.height=4}
@@ -104,12 +104,12 @@ ggplot(plotData) + geom_point(aes(x = X22, y = X28))
 
 ## Definition
 
-The goal is to study the extremal tail of a multivariate random vector $\g{X} = (X_1,\dots, X_d)$. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions $F_j$ of $X_j$ to standard Pareto distributions by
+The goal is to study the extremal tail of a multivariate random vector $\g{X} = (X_1,\dots, X_d)$. Here, we are interested only in the extremal dependence and therefore normalize the marginal distributions $F_j$ of $X_j$ to standard Pareto distributions by
 \begin{equation}
     1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d.
     (\#eq:pareto)
 \end{equation}
-We assume in the sequel that the vector $X$ has been normalized to standard Pareto margins.
+We assume in the sequel that the vector $\g X$ has been normalized to standard Pareto margins.
 
 A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of $\g{X}$ over a high threshold, where the multivariate threshold is chosen in terms of the $l_\infty$-norm. For any $u>0$, we define exceedance distribution as
 \begin{equation}
@@ -191,7 +191,7 @@ For $n$ observations $X_1,\dots, X_n$ of the $d$-dimensional vector $X$, we can 
 chi_hat <- emp_chi(data = X, p = .8)
 ```
 
-In this and other functions, the argument `p = NULL` implies that the data is already expected to be on MPD scale, and no thresholding is performed.
+In this and other functions, the default argument `p = NULL` implies that the data is already expected to be on MPD scale, and no thresholding is performed.
 For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
@@ -208,7 +208,7 @@ where $\Phi$ is the standard normal distribution function. We can use the functi
 
 ### Extremal variogram
 
-There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in @eng2020 and turns out to be particularly useful for inference of extremal graphical models discussed below. 
+There exist several other summary statistics for extremal dependence. The extremal variogram is introduced in @eng2020 and turns out to be particularly useful for inference of extremal graphical models discussed below. 
 
 For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as the matrix $\Gamma^{(k)}$ with entries
 \begin{equation*}
@@ -243,8 +243,8 @@ Gamma_hat <- emp_vario(data = Y)
 
 # Extremal graphical models
 
-Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. @eng2019 introduce a new notion of extremal conditional independence for MTPs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
-$$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.$$
+Let $G=(V,E)$ be an undirected graph with index set $V = \{1,\dots, d\}$ and edges $E \subset V \times V$. The figure below shows examples of different graphical structures: a tree, a decomposable graph and a non-decomposable graph. @eng2019 introduce a new notion of extremal conditional independence for MPDs, denoted by $\perp_e$. They define an extremal graphical model on $G$ as a MPD $Y = (Y_j : j\in V)$ that satisfies the pairwise Markov property
+$$   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad \text{ if } (i,j)\notin E,$$
 that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\perp_e$ given all other nodes whenever there is no edge between $i$ and $j$ in $G$.
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
@@ -274,7 +274,7 @@ where $\text{ph}(ij)$ denotes the path between node $i$ and $j$ on the tree $T$.
 
 ### Simulation
 
-By representation \@ref(eq:treedens) we can specify any models bivariate $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Hüsler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Hüsler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the results extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
+By representation \@ref(eq:treedens) we can specify any bivariate models $\lambda_{ij}$ for $(i,j) \in E$ and combine them to a valid tree model. For instance, if we use bivariate Hüsler--Reiss distributions on all edges of the tree $T$, the resulting $d$-dimensional tree model is again Hüsler--Reiss and its parameter matrix $\Gamma$ is implied by \@ref(eq:treemetric). If we use bivariate logistic distributions on all edges, the resulting extremal tree model is not a $d$-dimensional logistic model, but a more flexible model with $d-1$ parameters.
 
 The function `rmpareto_tree()` generates samples from an extremal tree model $\g Y$.
 
@@ -302,9 +302,9 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 ### Estimation
 
-For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. 
+For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.  
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the the fitted with the empirical extremal coefficients.
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the fitted with the empirical extremal coefficients.
 
 ```{r}
 # Utility function to plot fitted parameters against true/empirical ones
@@ -350,7 +350,7 @@ The method is based on the notion of a minimum spanning tree. For a set of symme
 \end{align}
 that minimizes the sum of distances on that tree.
 
-@eng2020 showed that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
+@eng2020 show that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
 
 In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empircal extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
 
