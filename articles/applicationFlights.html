@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to Danube data</a>
     <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
@@ -92,10 +92,10 @@ Below, we plot all airports in the dataset.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotFlights.html">plotFlights</a></span><span class="op">(</span>plotConnections <span class="op">=</span> <span class="cn">FALSE</span>, map <span class="op">=</span> <span class="st">"world"</span>, xyRatio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>To perform an example application,
-we consider the years 2010 - 2013 and choose (somewhat arbitrarily)
+we consider the years 2010 - 2013 and choose, as an example,
 airports from the westcoast with a large number of flights per year.
-A similar analysis is perform in <span class="citation">Hentschel, Engelke, and Segers (2022)</span>.
-For more detailed explanations see Vignette “applicationDanube” and the help pages of applied functions.
+A similar analysis is performed in <span class="citation">Hentschel, Engelke, and Segers (2022)</span> for airports in Texas.
+For more detailed explanations concerning usage of the methods see Vignette “applicationDanube” and the help pages of applied functions.
 <em>Note: In the CRAN version of this package, these are the only available years.</em>
 <em>A version of this package with a larger dataset is available on GitHub</em></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -187,7 +187,7 @@ representing at least monthly connections between airports.</p>
 <span>    Gamma <span class="op">=</span> <span class="va">model_fit</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Flight graph BIC ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_graph</span><span class="op">[</span><span class="st">'bic'</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Flight graph BIC = 30156.59</span></span>
+<span><span class="co">#&gt; Flight graph BIC = 30156.6</span></span>
 <span></span>
 <span><span class="co"># Plot fitted parameters</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">emp_chi_mat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -210,7 +210,7 @@ representing at least monthly connections between airports.</p>
 <span>    graph <span class="op">=</span> <span class="va">flights_emst_fit</span><span class="op">$</span><span class="va">graph</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tree BIC ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_tree</span><span class="op">[</span><span class="st">'bic'</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Tree BIC = 30837.64</span></span>
+<span><span class="co">#&gt; Tree BIC = 30837.56</span></span>
 <span></span>
 <span><span class="co"># Plot fitted graph, parameters</span></span>
 <span><span class="fu"><a href="../reference/plotFlights.html">plotFlights</a></span><span class="op">(</span></span>
@@ -270,7 +270,7 @@ representing at least monthly connections between airports.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Best rho ='</span>, <span class="va">rholist</span><span class="op">[</span><span class="va">best_index</span><span class="op">]</span>, <span class="st">'\n'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Best rho = 0.15</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Corresponding BIC ='</span>, <span class="va">flights_loglik</span><span class="op">[</span><span class="st">'bic'</span>, <span class="va">best_index</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Corresponding BIC = 25232.24</span></span></code></pre></div>
+<span><span class="co">#&gt; Corresponding BIC = 25232.17</span></span></code></pre></div>
 <p>We plot the estimated graph and parameters of the best fitted model.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best_graph</span> <span class="op">&lt;-</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>

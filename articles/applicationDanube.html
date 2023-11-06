@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="graphicalExtremes">
-<title>Introduction and application to danube data • graphicalExtremes</title>
+<title>Introduction and application to Danube data • graphicalExtremes</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction and application to danube data">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction and application to Danube data">
 <meta property="og:description" content="graphicalExtremes">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to danube data</a>
+    <a class="dropdown-item" href="../articles/applicationDanube.html">Introduction and application to Danube data</a>
     <a class="dropdown-item" href="../articles/applicationFlights.html">Application to flight data</a>
   </div>
 </li>
@@ -67,7 +67,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Introduction and application to danube data</h1>
+      <img src="" class="logo" alt=""><h1>Introduction and application to Danube data</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/sebastian-engelke/graphicalExtremes/blob/HEAD/vignettes/applicationDanube.Rmd" class="external-link"><code>vignettes/applicationDanube.Rmd</code></a></small>
@@ -86,9 +86,9 @@
 <h2 id="danube-data">
 <span class="header-section-number">1</span> Danube Data<a class="anchor" aria-label="anchor" href="#danube-data"></a>
 </h2>
-<p>Throughout this document, where applicable,
-we will use the Danube dataset from <span class="citation">Asadi, Davison, and Engelke (2015)</span> to illustrate functions and concepts.
-The dataset is provided in the package as <code>flights</code>,
+<p>Throughout this document
+we use the Danube dataset from <span class="citation">Asadi, Davison, and Engelke (2015)</span> to illustrate functions and concepts.
+The dataset is provided in the package as <code>danube</code>,
 see the corresponding help page for details and related functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the physical locations of measuring stations, indicating flow volume by width</span></span>
@@ -114,12 +114,12 @@ see the corresponding help page for details and related functions.</p>
 <h3 id="definition">
 <span class="header-section-number">2.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
 </h3>
-<p>The goal is to study the extremal tail of a multivariate random vector <span class="math inline">\(\mathbf{X} = (X_1,\dots, X_d)\)</span>. Here, we are interested only in the extremal dependence and therefore normlaize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
+<p>The goal is to study the extremal tail of a multivariate random vector <span class="math inline">\(\mathbf{X} = (X_1,\dots, X_d)\)</span>. Here, we are interested only in the extremal dependence and therefore normalize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
 <span class="math display" id="eq:pareto">\[\begin{equation}
     1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d.
     \tag{2.1}
 \end{equation}\]</span>
-We assume in the sequel that the vector <span class="math inline">\(X\)</span> has been normalized to standard Pareto margins.</p>
+We assume in the sequel that the vector <span class="math inline">\(\mathbf{X}\)</span> has been normalized to standard Pareto margins.</p>
 <p>A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of <span class="math inline">\(\mathbf{X}\)</span> over a high threshold, where the multivariate threshold is chosen in terms of the <span class="math inline">\(l_\infty\)</span>-norm. For any <span class="math inline">\(u&gt;0\)</span>, we define exceedance distribution as
 <span class="math display" id="eq:exc">\[\begin{equation}
     \mathbf{X}_u = \mathbf{X} \mid \| \mathbf{X} \|_\infty &gt; u
@@ -188,7 +188,7 @@ where the boundary cases <span class="math inline">\(0\)</span> and <span class=
 <p>For <span class="math inline">\(n\)</span> observations <span class="math inline">\(X_1,\dots, X_n\)</span> of the <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(X\)</span>, we can empirically estimate the <span class="math inline">\(d\times d\)</span> matrix of all pairwise extremal correlations for a fixed threshold <span class="math inline">\(p\)</span> close to 1.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
-<p>In this and other functions, the argument <code>p = NULL</code> implies that the data is already expected to be on MPD scale, and no thresholding is performed.
+<p>In this and other functions, the default argument <code>p = NULL</code> implies that the data is already expected to be on MPD scale, and no thresholding is performed.
 For the <code><a href="../reference/danube.html">danube()</a></code> data, we may therefore directly use <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span></code></pre></div>
@@ -202,7 +202,7 @@ where <span class="math inline">\(\Phi\)</span> is the standard normal distribut
 <h4 id="extremal-variogram">
 <span class="header-section-number">2.3.2</span> Extremal variogram<a class="anchor" aria-label="anchor" href="#extremal-variogram"></a>
 </h4>
-<p>There exist several other summary statistics for extremal dependence. The extremal variogram was introduced in <span class="citation">Engelke and Volgushev (2022)</span> and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
+<p>There exist several other summary statistics for extremal dependence. The extremal variogram is introduced in <span class="citation">Engelke and Volgushev (2022)</span> and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
 <p>For any root node <span class="math inline">\(k\in V\)</span>, the pre-asymptotic extremal variogram is defined as the matrix <span class="math inline">\(\Gamma^{(k)}\)</span> with entries
 <span class="math display">\[\begin{equation*}
     \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) &gt; p\right], \quad i,j\in V,
@@ -231,8 +231,8 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 <h2 id="extremal-graphical-models">
 <span class="header-section-number">3</span> Extremal graphical models<a class="anchor" aria-label="anchor" href="#extremal-graphical-models"></a>
 </h2>
-<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. The figure below shows examples of different graphical structure: a tree, a decomposable graph and a non-decomposable graph. <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MTPs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
-<span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad  (i,j)\notin E.\]</span>
+<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. The figure below shows examples of different graphical structures: a tree, a decomposable graph and a non-decomposable graph. <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MPDs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
+<span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad \text{ if } (i,j)\notin E,\]</span>
 that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
 <p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a Hammersley–Clifford theorem stating that for an extremal graphical model on a decomposable graph <span class="math inline">\(G\)</span>, the density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes into the marginal density on the cliques.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -258,7 +258,7 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <h4 id="simulation">
 <span class="header-section-number">3.1.1</span> Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h4>
-<p>By representation <a href="#eq:treedens">(3.1)</a> we can specify any models bivariate <span class="math inline">\(\lambda_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span> and combine them to a valid tree model. For instance, if we use bivariate Hüsler–Reiss distributions on all edges of the tree <span class="math inline">\(T\)</span>, the resulting <span class="math inline">\(d\)</span>-dimensional tree model is again Hüsler–Reiss and its parameter matrix <span class="math inline">\(\Gamma\)</span> is implied by <a href="#eq:treemetric">(3.2)</a>. If we use bivariate logistic distributions on all edges, the results extremal tree model is not a <span class="math inline">\(d\)</span>-dimensional logistic model, but a more flexible model with <span class="math inline">\(d-1\)</span> parameters.</p>
+<p>By representation <a href="#eq:treedens">(3.1)</a> we can specify any bivariate models <span class="math inline">\(\lambda_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span> and combine them to a valid tree model. For instance, if we use bivariate Hüsler–Reiss distributions on all edges of the tree <span class="math inline">\(T\)</span>, the resulting <span class="math inline">\(d\)</span>-dimensional tree model is again Hüsler–Reiss and its parameter matrix <span class="math inline">\(\Gamma\)</span> is implied by <a href="#eq:treemetric">(3.2)</a>. If we use bivariate logistic distributions on all edges, the resulting extremal tree model is not a <span class="math inline">\(d\)</span>-dimensional logistic model, but a more flexible model with <span class="math inline">\(d-1\)</span> parameters.</p>
 <p>The function <code><a href="../reference/rmpareto_tree.html">rmpareto_tree()</a></code> generates samples from an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
@@ -284,8 +284,8 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <h4 id="estimation">
 <span class="header-section-number">3.1.2</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
 </h4>
-<p>For a given tree <span class="math inline">\(T= (V,E)\)</span> and a parametric model <span class="math inline">\(\{f_{\mathbf{Y}}(\mathbf{y}; \theta): \theta \in \Theta\}\)</span> of MPDs on the tree <span class="math inline">\(T\)</span>, estimation of the model parameters is fairly straight-forward. If <span class="math inline">\(\theta = \{ \theta_{ij}: (i,j) \in E\}\)</span> consists of one parameter per edge, then thanks to the factorization <a href="#eq:treedens">(3.1)</a> we may fit each parameter <span class="math inline">\(\theta_{ij}\)</span> separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.</p>
-<p>If provided with a tree and data, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> estimates the <span class="math inline">\(d-1\)</span> parametres of a Hüsler–Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the <code><a href="../reference/danube.html">danube()</a></code> data set and compare the the fitted with the empirical extremal coefficients.</p>
+<p>For a given tree <span class="math inline">\(T= (V,E)\)</span> and a parametric model <span class="math inline">\(\{f_{\mathbf{Y}}(\mathbf{y}; \theta): \theta \in \Theta\}\)</span> of MPDs on the tree <span class="math inline">\(T\)</span>, estimation of the model parameters is fairly straight-forward. If <span class="math inline">\(\theta = \{ \theta_{ij}: (i,j) \in E\}\)</span> consists of one parameter per edge, then thanks to the factorization <a href="#eq:treedens">(3.1)</a> we may fit each parameter <span class="math inline">\(\theta_{ij}\)</span> separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.</p>
+<p>If provided with a tree and data, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> estimates the <span class="math inline">\(d-1\)</span> parametres of a Hüsler–Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the <code><a href="../reference/danube.html">danube()</a></code> data set and compare the fitted with the empirical extremal coefficients.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Utility function to plot fitted parameters against true/empirical ones</span></span>
 <span><span class="va">plot_fitted_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">G0</span>, <span class="va">G1</span>, <span class="va">xlab</span> <span class="op">=</span> <span class="st">'True'</span>, <span class="va">ylab</span> <span class="op">=</span> <span class="st">'Fitted'</span><span class="op">)</span><span class="op">{</span></span>
@@ -326,7 +326,7 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
     T_{\mathop{\mathrm{mst}}} = \mathop{\mathrm{arg\,min}}_{T' = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
 \end{align}\]</span>
 that minimizes the sum of distances on that tree.</p>
-<p><span class="citation">Engelke and Volgushev (2022)</span> showed that if <span class="math inline">\(\mathbf{Y}\)</span> is an extremal graphical model on an unkown tree <span class="math inline">\(T\)</span>, then the minimum spanning tree with the extremal variogram <span class="math inline">\(\rho_{ij} = \Gamma_{ij}^{(k)}\)</span> as weights is unique and satisfies <span class="math inline">\(T_{\mathop{\mathrm{mst}}} = T\)</span>. Using empircal estimates <span class="math inline">\(\hat \Gamma_{ij}^{(k)}\)</span> as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.</p>
+<p><span class="citation">Engelke and Volgushev (2022)</span> show that if <span class="math inline">\(\mathbf{Y}\)</span> is an extremal graphical model on an unkown tree <span class="math inline">\(T\)</span>, then the minimum spanning tree with the extremal variogram <span class="math inline">\(\rho_{ij} = \Gamma_{ij}^{(k)}\)</span> as weights is unique and satisfies <span class="math inline">\(T_{\mathop{\mathrm{mst}}} = T\)</span>. Using empircal estimates <span class="math inline">\(\hat \Gamma_{ij}^{(k)}\)</span> as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.</p>
 <p>In fact, taking the average of all <span class="math inline">\(\hat \Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, and using this as weights <span class="math inline">\(\rho_{ij} = \hat \Gamma_{ij}\)</span> makes better use of the data and usually improves the performance of structure estimation significantly. <span class="citation">Engelke and Volgushev (2022)</span> further show that the empircal extremal correlation <span class="math inline">\(\rho_{ij} = \hat \chi_{ij}\)</span> may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.</p>
 <p>The function <code><a href="../reference/emst.html">emst()</a></code> estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through <a href="#eq:treemetric">(3.2)</a>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -390,8 +390,8 @@ which represents the corresponding extremal graph structure.</p>
 <span><span class="co">#&gt; [3,] -0.5  0.0  1.0 -0.5</span></span>
 <span><span class="co">#&gt; [4,]  0.0 -0.5 -0.5  1.0</span></span>
 <span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH 9d4685f U--- 4 4 -- </span></span>
-<span><span class="co">#&gt; + edges from 9d4685f:</span></span>
+<span><span class="co">#&gt; IGRAPH f253fff U--- 4 4 -- </span></span>
+<span><span class="co">#&gt; + edges from f253fff:</span></span>
 <span><span class="co">#&gt; [1] 1--2 1--3 2--4 3--4</span></span></code></pre></div>
 </div>
 <div class="section level4" number="3.2.2">
