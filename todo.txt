@@ -1,19 +1,15 @@
 
-- add symmetry/definiteness checks to inputs and outputs
-- rework vignettes
-    - one for introduction of methods, theory etc.
-    - one per dataset
-    - one for literature overview
-- update, clean up documentation
-    - summarize for Gamma2Theta etc.?
-- update bibliography
-    - contents
-    - formatting
-- unify x2y
-    - xy: Gamma, Sigma, SigmaK, Theta, ThetaK, chi, par?
-    - y: graph
-    - others: chi_3d, NA
-- check all new matrix transformations!
-    - keep/export Gamma2chi_3D?
+- Use journal abbreviation in references (also for help files)
+- Fix the copy sign for code in the applicationDanube.Rmd file
+- Spell check
+- Show first level of subsections in applicationDanube.Rmd
+- In the first paragraph of Section 1, make "danube" the object that on can click on?
+- emp_vario help file: add a small example?
+- 3.2.2: mention Hentschel et al. after first paragraph for more details
+- eglearn: example in the help file?
+- Fix references in applicationDanube.Rmd (e.g., first names are written out, capitalization)
 
-- check copy lins in vignettes
+In flights data file:
+- in the first paragraph of Section 1, make "flight" the object that on can click on?
+- why "see Vignette "applicationDanube" "?
+- Rather Texas data?

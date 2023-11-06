@@ -6,7 +6,7 @@ output:
         fig_height: 5
         number_sections: true
         toc: true
-        toc_depth: 1
+        toc_depth: 2
 pkgdown:
     as_is: true
 bibliography: ../inst/REFERENCES.bib
@@ -14,6 +14,7 @@ vignette: >
     %\VignetteIndexEntry{Introduction and application to Danube data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+csl: ../apa-no-ampersand.csl
 ---
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
@@ -29,6 +30,7 @@ library(graphicalExtremes)
 library(dplyr)
 library(ggplot2)
 library(igraph)
+source('memoise.R')
 ```
 
 ```{r, include=FALSE, eval=FALSE}
@@ -192,7 +194,7 @@ chi_hat <- emp_chi(data = X, p = .8)
 ```
 
 In this and other functions, the default argument `p = NULL` implies that the data is already expected to be on MPD scale, and no thresholding is performed.
-For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
+For the `danube` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
 chi_hat <- emp_chi(data = Y)
@@ -412,7 +414,8 @@ Gamma2graph(Gamma)
 
 ### Completion of $\Gamma$
 
-For Hüsler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implied by the graph structure. 
+For Hüsler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$.
+The remaining entries of the matrix $\Gamma$ are then implied by the graph structure [@hen2022].
 
 The function `complete_Gamma()` takes as inputs a partially specified $\Gamma$ matrix and the corresponding graph structure,
 and completes the $\Gamma$ matrix.

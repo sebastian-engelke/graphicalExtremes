@@ -57,6 +57,12 @@
             "problemMatcher": []
         },
         {
+            "label": "build pkgdown articles",
+            "type": "shell",
+            "command": "R --silent --vanilla -e \"pkgdown::build_articles()\"",
+            "problemMatcher": []
+        },
+        {
             "label": "R CMD build + check",
             "type": "shell",
             "command": ".\\R_CMD_build_check.cmd",

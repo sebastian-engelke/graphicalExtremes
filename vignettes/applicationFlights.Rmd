@@ -14,6 +14,7 @@ vignette: >
     %\VignetteIndexEntry{Application to flight data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+csl: ../apa-no-ampersand.csl
 ---
 
 <!-- Rmarkdown requries 4 spaces of indentation -->
@@ -24,6 +25,7 @@ vignette: >
 library(graphicalExtremes)
 library(ggplot2)
 library(igraph)
+source('memoise.R')
 ```
 
 ```{r, include=FALSE, eval=FALSE}

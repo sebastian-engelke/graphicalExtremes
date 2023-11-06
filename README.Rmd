@@ -18,7 +18,7 @@ inference methods for multivariate Pareto distributions on graphical structures.
 
 Contains also implementations of statistical methods from
 @eng2020, @roe2021, @eng2022a, and @hen2022,
-and data sets from @asadi2015 and @hen2022.
+as well as data sets from @asadi2015 and @hen2022.
 
 
 ## Installation
