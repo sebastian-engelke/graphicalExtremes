@@ -6,15 +6,8 @@
         {
             "label": "document package",
             "type": "shell",
-            "command": "R --silent --vanilla -e \"devtools::document()\"",
+            "command": "R --silent --vanilla -e \"devtools::document();rmarkdown::render('README.Rmd')\"",
             "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
             "group": {
                 "kind": "build",
                 "isDefault": true
