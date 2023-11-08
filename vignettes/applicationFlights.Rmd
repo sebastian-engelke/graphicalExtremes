@@ -17,7 +17,7 @@ vignette: >
 csl: ../apa-no-ampersand.csl
 ---
 
-<!-- Rmarkdown requries 4 spaces of indentation -->
+<!-- Rmarkdown requires 4 spaces of indentation -->
 
 # The dataset
 

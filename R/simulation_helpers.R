@@ -29,7 +29,7 @@ simu_px_HR <- function(n, d, idx, trend, chol_mat) {
 #' Simulates logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' @param idx Integer or numeric vector with `n` elements. Index/indices from
 #' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{0 < \theta < 1}.
 #' @return Numeric \nxd matrix. Simulated data.
@@ -57,7 +57,7 @@ simu_px_logistic <- function(n, d, idx, theta) {
 #' Simulates negative logistic extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' @param idx Integer or numeric vector with `n` elements. Index/indices from
 #' 1 to `d`, that determine which extremal function to simulate.
 #' @param theta Numeric --- assume \eqn{\theta > 0}.
 #' @return Numeric \nxd matrix. Simulated data.
@@ -84,7 +84,7 @@ simu_px_neglogistic <- function(n, d, idx, theta) {
 #' Simulates Dirichlet extremal functions
 #'
 #' @inheritParams simu_px_HR
-#' @param idx Integer or numeric vector with `n` elements. Inde(x|ces) from
+#' @param idx Integer or numeric vector with `n` elements. Index/indices from
 #' 1 to `d`, that determine which extremal function to simulate.
 #' @param alpha Numeric vector of size `d`.
 #' @return Numeric \nxd matrix. Simulated data.

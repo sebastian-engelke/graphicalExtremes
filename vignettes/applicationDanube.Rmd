@@ -216,7 +216,7 @@ For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as 
 \begin{equation*}
     \Gamma_{ij}^{(k)}(p) = \Var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
     \end{equation*}  
-whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, condtioned on the $k$th variable being large. 
+whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, conditioned on the $k$th variable being large. 
 
 The limit as $p\to 1$ is called the extremal variogram and can be expressed in terms of the MPD $\g Y$:
 \begin{equation*}
