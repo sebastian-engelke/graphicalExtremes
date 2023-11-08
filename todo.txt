@@ -10,6 +10,6 @@
 - Fix references in applicationDanube.Rmd (e.g., first names are written out, capitalization)
 
 In flights data file:
-- in the first paragraph of Section 1, make "flight" the object that on can click on?
+x- in the first paragraph of Section 1, make "flight" the object that on can click on? -> not feasible
 - why "see Vignette "applicationDanube" "?
 - Rather Texas data?

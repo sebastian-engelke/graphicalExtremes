@@ -9,4 +9,21 @@
         "editor.indentSize": 2,
         "editor.detectIndentation": false
     },
+    "cSpell.enableFiletypes": [
+        "rmd"
+    ],
+    "cSpell.languageSettings": [
+        {
+            "languageId": "rmd",
+            "ignoreRegExpList": [
+                "```\\{.*\\n(^[^`].*\\n)*^```"
+            ],
+        },
+        {
+            "languageId": "r",
+            "ignoreRegExpList": [
+                "^[^#][^'].*$"
+            ]
+        }
+    ]
 }

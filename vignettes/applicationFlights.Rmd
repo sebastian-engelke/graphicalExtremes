@@ -76,7 +76,7 @@ plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 
 To perform an example application,
 we consider the years 2010 - 2013 and choose, as an example,
-airports from the westcoast with a large number of flights per year.
+airports from the Westcoast with a large number of flights per year.
 A similar analysis is performed in @hen2022 for airports in Texas.
 For more detailed explanations concerning usage of the methods see Vignette "applicationDanube" and the help pages of applied functions.
 *Note: In the CRAN version of this package, these are the only available years.*

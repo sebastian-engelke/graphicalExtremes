@@ -306,7 +306,7 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.  
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the fitted with the empirical extremal coefficients.
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parameters of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the fitted with the empirical extremal coefficients.
 
 ```{r}
 # Utility function to plot fitted parameters against true/empirical ones
@@ -344,7 +344,7 @@ plot_fitted_params(chi_hat, Gamma2chi(flow_Gamma), xlab = 'Empirical')
 
 ### Structure learning
 
-In practice, the underlying conditonal independence tree $T = (V,E)$ is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see @eng2020 for details.
+In practice, the underlying conditional independence tree $T = (V,E)$ is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see @eng2020 for details.
 
 The method is based on the notion of a minimum spanning tree. For a set of symmetric weights $\rho_{ij} > 0$ associated with any pair of nodes $i,j\in V$, $i\neq j$, the latter is defined as the tree structure
 \begin{align}\label{Tmin}
@@ -352,9 +352,9 @@ The method is based on the notion of a minimum spanning tree. For a set of symme
 \end{align}
 that minimizes the sum of distances on that tree.
 
-@eng2020 show that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
+@eng2020 show that if $\g Y$ is an extremal graphical model on an unknown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empirical estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
 
-In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empircal extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
+In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empirical extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
 
 The function `emst()` estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
 
@@ -419,7 +419,7 @@ The remaining entries of the matrix $\Gamma$ are then implied by the graph struc
 
 The function `complete_Gamma()` takes as inputs a partially specified $\Gamma$ matrix and the corresponding graph structure,
 and completes the $\Gamma$ matrix.
-The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
+The mathematical theory for completion is different depending on whether the graph is decomposable or non-decomposable.
 
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).
