@@ -3,8 +3,6 @@
 
 # Graphical Extremes
 
-Test
-
 An implementation of the statistical methodology paper Engelke and Hitz
 (2020) for sparse multivariate extreme value models. Includes exact
 simulation algorithms and statistical inference methods for multivariate

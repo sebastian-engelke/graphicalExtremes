@@ -404,8 +404,9 @@ getFlightDelayData <- function(
   }
 
   # Compute filtered date list (if necessary)
+  allDates <- dimnames(graphicalExtremes::flights$delays)[[1]]
   if(what == 'IATAs' || dateFilter == 'all'){
-    dates <- dimnames(graphicalExtremes::flights$delays)[[1]]
+    dates <- allDates
   } else{
     dates <- c()
     if('tcTrain' %in% dateFilter){
@@ -413,6 +414,12 @@ getFlightDelayData <- function(
     }
     if('tcTest' %in% dateFilter){
       dates <- c(dates, getPackageData(TC_DATES_TEST))
+    }
+    if(length(setdiff(dates, allDates)) > 0){
+      stop(
+        'The installed version of the package does not contain the full `flights` dataset. ',
+        'Make sure to install from GitHub to include the full dataset.'
+      )
     }
   }
 

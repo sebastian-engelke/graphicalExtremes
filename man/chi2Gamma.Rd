@@ -22,7 +22,7 @@ Numeric vector or matrix containing the implied \eChi.
 \description{
 Transforms between the extremal correlation \eChi and the variogram \eGamma.
 Only valid for Huesler-Reiss distributions.
-Done elementwise, no checks of the entire matrix structure are performed.
+Done element-wise, no checks of the entire matrix structure are performed.
 }
 \details{
 The formula for transformation from \eChi to \eGamma is element-wise
