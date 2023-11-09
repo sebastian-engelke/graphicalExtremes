@@ -346,9 +346,9 @@ plotFlights <- function(
 #' or just the vector of airport codes (`"IATAs"`, strings)
 #' or dates (as strings). Specify exactly one.
 #' @param airportFilter Which airports to include. Specify exactly one. See details below.
-#' @param dateFilter Which dates to include. Specify one or more. See details below.
-#' @param delayFilter Which kinds of delays to include. Possible values are `"arrivals"`,
-#' `"departures"`, and `"totals"` (computed as sum of arrival and departure delays).
+#' @param dateFilter Which dates to include. Specify exactly one. See details below.
+#' @param delayFilter Which kinds of delays to include. Specify one or more.
+#' Possible values are `"arrivals"`, `"departures"`, and `"totals"` (computed as sum of arrival and departure delays).
 #' 
 #' @details
 #' The provided lists of airports and dates correspond to the ones used in
@@ -359,17 +359,17 @@ plotFlights <- function(
 #' 
 #' Similarly, `dateFilter="tcTrain"` selects the dates from the training set,
 #' `dateFilter="tcTest"` the ones from the test/validation set.
-#' To get the union of these sets, specify `dateFilter=c("tcTest", "tcTrain")`.
-#' To get all dates in the dataset, specify `dateFilter="all"`.
+#' To get the union of these sets, specify `dateFilter="tcAll"`.
+#' To get all dates in the dataset (possibly more than for "tcAll"),
+#' specify `dateFilter="all"`.
 #' 
 #' @return
-#' If `what="delays"`, a three-dimensional array,
-#' with dimensions corresponding to dates, airports, and delay types.
-#' If only one value is specified for `delayFilter`, the result can be
-#' converted to a matrix by calling `drop(...)`.
-#' 
 #' If `what="IATAs"` or `what="dates"`, a character vector.
 #' If required, it can be converted to [`Date`] objects using [`as.Date()`].
+#' 
+#' If `what="delays"`, a three-dimensional array or two-dimensional matrix,
+#' with dimensions corresponding to dates, airports, and delay types.
+#' 
 #' 
 #' @references \insertAllCited{}
 #' 
@@ -379,7 +379,7 @@ plotFlights <- function(
 getFlightDelayData <- function(
   what = c('delays', 'IATAs', 'dates'),
   airportFilter = c('all', 'tcCluster', 'tcAll'),
-  dateFilter = c('all', 'tcTrain', 'tcTest')[1],
+  dateFilter = c('all', 'tcTrain', 'tcTest', 'tcAll'),
   delayFilter = c('totals', 'arrivals', 'departures')[1]
 ){
   # Filenames of internal data files
@@ -391,7 +391,7 @@ getFlightDelayData <- function(
   # Check args
   what <- match.arg(what)
   airportFilter <- match.arg(airportFilter)
-  dateFilter <- match.arg(dateFilter, c('all', 'tcTrain', 'tcTest'), several.ok = TRUE)
+  dateFilter <- match.arg(dateFilter)
   delayFilter <- match.arg(delayFilter, c('totals', 'arrivals', 'departures'), several.ok = TRUE)
   
   # Compute filtered IATA list (if necessary)
@@ -409,10 +409,10 @@ getFlightDelayData <- function(
     dates <- allDates
   } else{
     dates <- c()
-    if('tcTrain' %in% dateFilter){
+    if(dateFilter == 'tcTrain' || dateFilter == 'tcAll'){
       dates <- c(dates, getPackageData(TC_DATES_TRAIN))
     }
-    if('tcTest' %in% dateFilter){
+    if(dateFilter == 'tcTest' || dateFilter == 'tcAll'){
       dates <- c(dates, getPackageData(TC_DATES_TEST))
     }
     if(length(setdiff(dates, allDates)) > 0){
@@ -445,6 +445,7 @@ getFlightDelayData <- function(
       ret[,,i] <- filteredDelays[,,filter]
     }
   }
+  ret <- drop(ret)
   return(ret)
 }
 
