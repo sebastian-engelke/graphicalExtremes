@@ -9,8 +9,8 @@ FILE_CSV_AIRPORTS <- file.path(RAW_DIR, 'airportsUsed.csv')
 
 
 # # specify years to keep (or `NULL` to keep all)
-# KEEP_YEARS <- seq(2010, 2013) # used for CRAN
-KEEP_YEARS <- NULL # used on GitHub
+KEEP_YEARS <- seq(2010, 2013) # used for CRAN
+# KEEP_YEARS <- NULL # used on GitHub
 
 
 # read data
