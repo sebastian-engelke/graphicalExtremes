@@ -76,7 +76,7 @@
 
     
     
-<!-- Rmarkdown requries 4 spaces of indentation -->
+<!-- Rmarkdown reqirequires 4 spaces of indentation -->
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sebastian-engelke/graphicalExtremes" class="external-link">graphicalExtremes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -86,19 +86,18 @@
 <h2 id="danube-data">
 <span class="header-section-number">1</span> Danube Data<a class="anchor" aria-label="anchor" href="#danube-data"></a>
 </h2>
-<p>Throughout this document
-we use the Danube dataset from <span class="citation">Asadi, Davison, and Engelke (2015)</span> to illustrate functions and concepts.
-The dataset is provided in the package as <code>danube</code>,
+<p>Throughout this document we use the Danube dataset from <span class="citation">Asadi et al. (2015)</span> to illustrate functions and
+concepts. The dataset is provided in the package as <code>danube</code>,
 see the corresponding help page for details and related functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the physical locations of measuring stations, indicating flow volume by width</span></span>
 <span><span class="fu"><a href="../reference/plotDanube.html">plotDanube</a></span><span class="op">(</span>useStationVolume <span class="op">=</span> <span class="cn">TRUE</span>, useConnectionVolume <span class="op">=</span> <span class="cn">TRUE</span>, xyRatio <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot only the flow graph</span></span>
 <span><span class="va">danube_flow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getDanubeFlowGraph.html">getDanubeFlowGraph</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotDanube.html">plotDanubeIGraph</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">danube_flow</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot some pairwise scatter plots</span></span>
 <span><span class="va">plotData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">data_clustered</span><span class="op">)</span></span>
@@ -108,28 +107,43 @@ see the corresponding help page for details and related functions.</p>
 </div>
 <div class="section level2" number="2">
 <h2 id="multivariate-pareto-distributions">
-<span class="header-section-number">2</span> Multivariate Pareto distributions<a class="anchor" aria-label="anchor" href="#multivariate-pareto-distributions"></a>
+<span class="header-section-number">2</span> Multivariate Pareto
+distributions<a class="anchor" aria-label="anchor" href="#multivariate-pareto-distributions"></a>
 </h2>
 <div class="section level3" number="2.1">
 <h3 id="definition">
 <span class="header-section-number">2.1</span> Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
 </h3>
-<p>The goal is to study the extremal tail of a multivariate random vector <span class="math inline">\(\mathbf{X} = (X_1,\dots, X_d)\)</span>. Here, we are interested only in the extremal dependence and therefore normalize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
-<span class="math display" id="eq:pareto">\[\begin{equation}
+<p>The goal is to study the extremal tail of a multivariate random
+vector <span class="math inline">\(\mathbf{X} = (X_1,\dots,
+X_d)\)</span>. Here, we are interested only in the extremal dependence
+and therefore normalize the marginal distributions <span class="math inline">\(F_j\)</span> of <span class="math inline">\(X_j\)</span> to standard Pareto distributions by
+<span class="math display">\[\begin{equation}
     1 /\{1- F_j(X_j)\}, \quad j=1,\dots, d.
-    \tag{2.1}
-\end{equation}\]</span>
-We assume in the sequel that the vector <span class="math inline">\(\mathbf{X}\)</span> has been normalized to standard Pareto margins.</p>
-<p>A multivariate Pareto distribution (MPD) is defined as the limiting distribution the exceedances of <span class="math inline">\(\mathbf{X}\)</span> over a high threshold, where the multivariate threshold is chosen in terms of the <span class="math inline">\(l_\infty\)</span>-norm. For any <span class="math inline">\(u&gt;0\)</span>, we define exceedance distribution as
-<span class="math display" id="eq:exc">\[\begin{equation}
+    (\#eq:pareto)
+\end{equation}\]</span> We assume in the sequel that the vector <span class="math inline">\(\mathbf{X}\)</span> has been normalized to
+standard Pareto margins.</p>
+<p>A multivariate Pareto distribution (MPD) is defined as the limiting
+distribution the exceedances of <span class="math inline">\(\mathbf{X}\)</span> over a high threshold, where
+the multivariate threshold is chosen in terms of the <span class="math inline">\(l_\infty\)</span>-norm. For any <span class="math inline">\(u&gt;0\)</span>, we define exceedance distribution
+as <span class="math display">\[\begin{equation}
     \mathbf{X}_u = \mathbf{X} \mid \| \mathbf{X} \|_\infty &gt; u
-    \tag{2.2}
-\end{equation}\]</span>
-By sending <span class="math inline">\(u\to \infty\)</span> and normalizing properly, the random vector <span class="math inline">\(\mathbf{X}_u\)</span> converges to a limiting distribution <span class="math inline">\(\mathbf{Y}\)</span> called the MPD:
-<span class="math display">\[ \mathbf{Y} = \lim_{u\to \infty} \mathbf{X}_u /u,\]</span>
-where the limit is in terms of convergence in distribution. By construction, the distribution of the MPD <span class="math inline">\(\mathbf{Y}\)</span> is defined on the space <span class="math inline">\(\mathcal L = \{\mathbf{x} \in [0,\infty)^d : \| \mathbf{x} \|_\infty &gt; 1\}\)</span>, and if <span class="math inline">\(\mathbf{Y}\)</span> possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then it is proportional to the so-called exponent measure density <span class="math inline">\(\lambda\)</span>; for details see <span class="citation">Engelke and Hitz (2020)</span>.</p>
-<p>In practice, we use the approximation <span class="math inline">\(\mathbf{Y} \approx \mathbf{X}_u\)</span> for some large value <span class="math inline">\(u\)</span>, where <span class="math inline">\(u\)</span> can be chosen as the <span class="math inline">\(p\)</span>th quantile of the distribution of <span class="math inline">\(\|\mathbf{X}\|_\infty\)</span>.
-Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(\mathbf{X}_1, \dots, \mathbf{X}_n\)</span> of <span class="math inline">\(\mathbf{X}\)</span>, the function <code><a href="../reference/data2mpareto.html">data2mpareto()</a></code> first computes the standardization in <a href="#eq:pareto">(2.1)</a> based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances <span class="math inline">\(\mathbf{X}_u\)</span> according to <a href="#eq:exc">(2.2)</a>.</p>
+    (\#eq:exc)
+\end{equation}\]</span> By sending <span class="math inline">\(u\to
+\infty\)</span> and normalizing properly, the random vector <span class="math inline">\(\mathbf{X}_u\)</span> converges to a limiting
+distribution <span class="math inline">\(\mathbf{Y}\)</span> called the
+MPD: <span class="math display">\[ \mathbf{Y} = \lim_{u\to \infty}
+\mathbf{X}_u /u,\]</span> where the limit is in terms of convergence in
+distribution. By construction, the distribution of the MPD <span class="math inline">\(\mathbf{Y}\)</span> is defined on the space <span class="math inline">\(\mathcal L = \{\mathbf{x} \in [0,\infty)^d : \|
+\mathbf{x} \|_\infty &gt; 1\}\)</span>, and if <span class="math inline">\(\mathbf{Y}\)</span> possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then it is proportional
+to the so-called exponent measure density <span class="math inline">\(\lambda\)</span>; for details see <span class="citation">Engelke and Hitz (2020)</span>.</p>
+<p>In practice, we use the approximation <span class="math inline">\(\mathbf{Y} \approx \mathbf{X}_u\)</span> for some
+large value <span class="math inline">\(u\)</span>, where <span class="math inline">\(u\)</span> can be chosen as the <span class="math inline">\(p\)</span>th quantile of the distribution of <span class="math inline">\(\|\mathbf{X}\|_\infty\)</span>. Given <span class="math inline">\(n\)</span> oberservations <span class="math inline">\(\mathbf{X}_1, \dots, \mathbf{X}_n\)</span> of
+<span class="math inline">\(\mathbf{X}\)</span>, the function
+<code><a href="../reference/data2mpareto.html">data2mpareto()</a></code> first computes the standardization in
+@ref(eq:pareto) based on the empirical distribution functions <span class="math inline">\(\hat F_j\)</span> and then selects the exceedances
+<span class="math inline">\(\mathbf{X}_u\)</span> according to
+@ref(eq:exc).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">danube</span><span class="op">$</span><span class="va">data_clustered</span></span>
 <span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data2mpareto.html">data2mpareto</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
@@ -139,88 +153,136 @@ Given <span class="math inline">\(n\)</span> oberservations <span class="math in
 <span class="header-section-number">2.2</span> Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
 <div class="example">
-<p><span id="exm:unlabeled-div-1" class="example"><strong>Example 2.1  </strong></span>The extremal logistic distribution with parameter <span class="math inline">\(\theta\in(0,1)\)</span> induces a multivariate
-Pareto distribution with density
-<span class="math display">\[\begin{equation}
-f_{\mathbf{Y}}(\mathbf{y}) = \frac{1}{d^{\theta}} \left(y_1^{-1/\theta}+\dots+y_d^{-1/\theta}\right)^{\theta-d}\prod_{i=1}^{d-1}\left(\frac{i}{\theta}-1\right) \prod_{i=1}^{d} y_i^{-1/\theta-1}, \quad \mathbf{y} \in \mathcal L.
-\end{equation}\]</span>
-The parameter <span class="math inline">\(\theta\)</span> governs the extremal dependence, ranging from complete dependence for <span class="math inline">\(\theta\to 0\)</span> and independence for <span class="math inline">\(\theta \to 1\)</span>.</p>
-<p>The function <code><a href="../reference/rmpareto.html">rmpareto()</a></code> generates samples from a MPD <span class="math inline">\(\mathbf{Y}\)</span> based on the exact algorithm described in <span class="citation">Engelke and Hitz (2020)</span>.</p>
+<p>The extremal logistic distribution with parameter <span class="math inline">\(\theta\in(0,1)\)</span> induces a multivariate
+Pareto distribution with density <span class="math display">\[\begin{equation}
+f_{\mathbf{Y}}(\mathbf{y}) = \frac{1}{d^{\theta}}
+\left(y_1^{-1/\theta}+\dots+y_d^{-1/\theta}\right)^{\theta-d}\prod_{i=1}^{d-1}\left(\frac{i}{\theta}-1\right)
+\prod_{i=1}^{d} y_i^{-1/\theta-1}, \quad \mathbf{y} \in \mathcal L.
+\end{equation}\]</span> The parameter <span class="math inline">\(\theta\)</span> governs the extremal dependence,
+ranging from complete dependence for <span class="math inline">\(\theta\to 0\)</span> and independence for <span class="math inline">\(\theta \to 1\)</span>.</p>
+<p>The function <code><a href="../reference/rmpareto.html">rmpareto()</a></code> generates samples from a MPD
+<span class="math inline">\(\mathbf{Y}\)</span> based on the exact
+algorithm described in <span class="citation">Engelke and Hitz
+(2020)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">.5</span></span>
 <span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"logistic"</span>, d <span class="op">=</span> <span class="fl">2</span>, par <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-2" class="example"><strong>Example 2.2  </strong></span>The <span class="math inline">\(d\)</span>-dimensional Hüsler–Reiss distribution <span class="citation">(Hüsler and Reiss 1989)</span> is parameterized by the variogram matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>. The corresponding density of the exponent measure can be written for any <span class="math inline">\(k\in\{1,\dots, d\}\)</span> as
-<span class="math display" id="eq:fYHR">\[\begin{equation}
-    \lambda(\mathbf{y}) = y_k^{-2}\prod_{i\neq k} y_i^{-1} \phi_{d-1}\left(\mathbf{\tilde y}_{\setminus k}; \Sigma^{(k)}\right), \quad \mathbf{y} \in \mathcal L,  \tag{2.3}
-\end{equation}\]</span>
-where <span class="math inline">\(\phi_p(\cdot; \Sigma)\)</span> is the density of a centred <span class="math inline">\(p\)</span>-dimensional normal distribution with covariance matrix <span class="math inline">\(\Sigma\)</span>, <span class="math inline">\(\mathbf{\tilde y} = \{\log(y_i/y_k) + \Gamma_{ik}/2\}_{i=1,\dots, d}\)</span> and
-<span class="math display" id="eq:Sigmak">\[\begin{equation}\label{sigma_k}
-    \Sigma^{(k)}  =\frac{1}{2} \{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb R^{(d-1)\times (d-1)}. \tag{2.4}
-\end{equation}\]</span>
-The matrix <span class="math inline">\(\Sigma^{(k)}\)</span> is positive definite and will play an important role in the theory of extremal graphical models. The representation of the density in <a href="#eq:fYHR">(2.3)</a> seems to depend on the choice of <span class="math inline">\(k\)</span>, but, in fact, the value of the right-hand side of this equation is independent of <span class="math inline">\(k\)</span>.
-The Hüsler–Reiss multivariate Pareto distribution has density
-<span class="math inline">\(f_{\mathbf{Y}}(\mathbf{y}) \propto \lambda(\mathbf{y})\)</span> and the
-strength of dependence between the <span class="math inline">\(i\)</span>th and <span class="math inline">\(j\)</span>th component is parameterized by <span class="math inline">\(\Gamma_{ij}\)</span>, ranging from complete dependence for <span class="math inline">\(\Gamma_{ij} \to 0\)</span> and independence for <span class="math inline">\(\Gamma_{ij} \to \infty\)</span>.</p>
+<p>The <span class="math inline">\(d\)</span>-dimensional Hüsler–Reiss
+distribution <span class="citation">(Hüsler and Reiss, 1989)</span> is
+parameterized by the variogram matrix <span class="math inline">\(\Gamma
+= \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>. The corresponding density
+of the exponent measure can be written for any <span class="math inline">\(k\in\{1,\dots, d\}\)</span> as <span class="math display">\[\begin{equation}
+    \lambda(\mathbf{y}) = y_k^{-2}\prod_{i\neq k} y_i^{-1}
+\phi_{d-1}\left(\mathbf{\tilde y}_{\setminus k}; \Sigma^{(k)}\right),
+\quad \mathbf{y} \in \mathcal L,  (\#eq:fYHR)
+\end{equation}\]</span> where <span class="math inline">\(\phi_p(\cdot;
+\Sigma)\)</span> is the density of a centred <span class="math inline">\(p\)</span>-dimensional normal distribution with
+covariance matrix <span class="math inline">\(\Sigma\)</span>, <span class="math inline">\(\mathbf{\tilde y} = \{\log(y_i/y_k) +
+\Gamma_{ik}/2\}_{i=1,\dots, d}\)</span> and <span class="math display">\[\begin{equation}\label{sigma_k}
+    \Sigma^{(k)}  =\frac{1}{2}
+\{\Gamma_{ik}+\Gamma_{jk}-\Gamma_{ij}\}_{i,j\neq k} \in\mathbb
+R^{(d-1)\times (d-1)}. (\#eq:Sigmak)
+\end{equation}\]</span> The matrix <span class="math inline">\(\Sigma^{(k)}\)</span> is positive definite and
+will play an important role in the theory of extremal graphical models.
+The representation of the density in @ref(eq:fYHR) seems to depend on
+the choice of <span class="math inline">\(k\)</span>, but, in fact, the
+value of the right-hand side of this equation is independent of <span class="math inline">\(k\)</span>. The Hüsler–Reiss multivariate Pareto
+distribution has density <span class="math inline">\(f_{\mathbf{Y}}(\mathbf{y}) \propto
+\lambda(\mathbf{y})\)</span> and the strength of dependence between the
+<span class="math inline">\(i\)</span>th and <span class="math inline">\(j\)</span>th component is parameterized by <span class="math inline">\(\Gamma_{ij}\)</span>, ranging from complete
+dependence for <span class="math inline">\(\Gamma_{ij} \to 0\)</span>
+and independence for <span class="math inline">\(\Gamma_{ij} \to
+\infty\)</span>.</p>
 <p>The extension of Hüsler–Reiss distributions to random fields are
-Brown–Resnick processes <span class="citation">(Kabluchko, Schlather, and Haan 2009)</span>, which are widely used models for spatial
-extremes.</p>
+Brown–Resnick processes <span class="citation">(Kabluchko et al.,
+2009)</span>, which are widely used models for spatial extremes.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">G</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable.html">rmstable()</a></code>, following the exact algorithm in <span class="citation">Dombry, Engelke, and Oesting (2016)</span>.</p>
+<p>Note that we can also generate samples from the corresponding
+max-stable distribution with the function <code><a href="../reference/rmstable.html">rmstable()</a></code>,
+following the exact algorithm in <span class="citation">Dombry et al.
+(2016)</span>.</p>
 </div>
 <div class="section level3" number="2.3">
 <h3 id="measures-of-extremal-dependence">
-<span class="header-section-number">2.3</span> Measures of extremal dependence<a class="anchor" aria-label="anchor" href="#measures-of-extremal-dependence"></a>
+<span class="header-section-number">2.3</span> Measures of extremal
+dependence<a class="anchor" aria-label="anchor" href="#measures-of-extremal-dependence"></a>
 </h3>
 <div class="section level4" number="2.3.1">
 <h4 id="extremal-correlation">
-<span class="header-section-number">2.3.1</span> Extremal correlation<a class="anchor" aria-label="anchor" href="#extremal-correlation"></a>
+<span class="header-section-number">2.3.1</span> Extremal
+correlation<a class="anchor" aria-label="anchor" href="#extremal-correlation"></a>
 </h4>
-<p>The extremal correlation <span class="math inline">\(\chi_{ij}\in [0,1]\)</span> measures the dependence between the largest values of the random variables <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>. It is defined as
-<span class="math display">\[\begin{equation}\label{EC}
-    \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb P\left\{F_i(X_i) &gt; p\mid  F_j(X_j) &gt; p \right\},
-\end{equation}\]</span>
-where the boundary cases <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> correspond to asymptotic independence and complete dependence, respectively.</p>
-<p>For <span class="math inline">\(n\)</span> observations <span class="math inline">\(X_1,\dots, X_n\)</span> of the <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(X\)</span>, we can empirically estimate the <span class="math inline">\(d\times d\)</span> matrix of all pairwise extremal correlations for a fixed threshold <span class="math inline">\(p\)</span> close to 1.</p>
+<p>The extremal correlation <span class="math inline">\(\chi_{ij}\in
+[0,1]\)</span> measures the dependence between the largest values of the
+random variables <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>. It is defined as <span class="math display">\[\begin{equation}\label{EC}
+    \chi_{ij} = \lim_{p\to 1} \chi_{ij}(p) = \lim_{p\to 1} \mathbb
+P\left\{F_i(X_i) &gt; p\mid  F_j(X_j) &gt; p \right\},
+\end{equation}\]</span> where the boundary cases <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> correspond to asymptotic independence
+and complete dependence, respectively.</p>
+<p>For <span class="math inline">\(n\)</span> observations <span class="math inline">\(X_1,\dots, X_n\)</span> of the <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(X\)</span>, we can empirically estimate the <span class="math inline">\(d\times d\)</span> matrix of all pairwise extremal
+correlations for a fixed threshold <span class="math inline">\(p\)</span> close to 1.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span></code></pre></div>
-<p>In this and other functions, the default argument <code>p = NULL</code> implies that the data is already expected to be on MPD scale, and no thresholding is performed.
-For the <code><a href="../reference/danube.html">danube()</a></code> data, we may therefore directly use <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>:</p>
+<p>In this and other functions, the default argument
+<code>p = NULL</code> implies that the data is already expected to be on
+MPD scale, and no thresholding is performed. For the <code>danube</code>
+data, we may therefore directly use <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chi_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span></code></pre></div>
 <div class="example">
-<p><span id="exm:unlabeled-div-3" class="example"><strong>Example 2.3  </strong></span>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq d}\)</span>, the extremal correlation is given by
-<span class="math display">\[ \chi_{ij} =  2 - 2 \Phi(\sqrt{\Gamma_{ij}}/2),\]</span>
-where <span class="math inline">\(\Phi\)</span> is the standard normal distribution function. We can use the functions <code><a href="../reference/chi2Gamma.html">Gamma2chi()</a></code> and <code><a href="../reference/chi2Gamma.html">chi2Gamma()</a></code> to switch between the two coefficients.</p>
+<p>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma = \{\Gamma_{ij}\}_{1\leq i,j\leq
+d}\)</span>, the extremal correlation is given by <span class="math display">\[ \chi_{ij} =  2 - 2
+\Phi(\sqrt{\Gamma_{ij}}/2),\]</span> where <span class="math inline">\(\Phi\)</span> is the standard normal distribution
+function. We can use the functions <code><a href="../reference/chi2Gamma.html">Gamma2chi()</a></code> and
+<code><a href="../reference/chi2Gamma.html">chi2Gamma()</a></code> to switch between the two coefficients.</p>
 </div>
 </div>
 <div class="section level4" number="2.3.2">
 <h4 id="extremal-variogram">
-<span class="header-section-number">2.3.2</span> Extremal variogram<a class="anchor" aria-label="anchor" href="#extremal-variogram"></a>
+<span class="header-section-number">2.3.2</span> Extremal
+variogram<a class="anchor" aria-label="anchor" href="#extremal-variogram"></a>
 </h4>
-<p>There exist several other summary statistics for extremal dependence. The extremal variogram is introduced in <span class="citation">Engelke and Volgushev (2022)</span> and turns out to be particularly useful for inference of extremal graphical models discussed below.</p>
-<p>For any root node <span class="math inline">\(k\in V\)</span>, the pre-asymptotic extremal variogram is defined as the matrix <span class="math inline">\(\Gamma^{(k)}\)</span> with entries
-<span class="math display">\[\begin{equation*}
-    \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) &gt; p\right], \quad i,j\in V,
+<p>There exist several other summary statistics for extremal dependence.
+The extremal variogram is introduced in <span class="citation">Engelke
+and Volgushev (2022)</span> and turns out to be particularly useful for
+inference of extremal graphical models discussed below.</p>
+<p>For any root node <span class="math inline">\(k\in V\)</span>, the
+pre-asymptotic extremal variogram is defined as the matrix <span class="math inline">\(\Gamma^{(k)}\)</span> with entries <span class="math display">\[\begin{equation*}
+    \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left[\log\{1
+-  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) &gt; p\right], \quad
+i,j\in V,
     \end{equation*}\]</span><br>
-whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 - F_i(X_{i})\}\)</span> transforms <span class="math inline">\(X_i\)</span> to a standard exponential distribution, such that <span class="math inline">\(\Gamma^{(k)}\)</span> is simply the variogram matrix of <span class="math inline">\(\mathbf{X}\)</span> on exponential scale, condtioned on the <span class="math inline">\(k\)</span>th variable being large.</p>
-<p>The limit as <span class="math inline">\(p\to 1\)</span> is called the extremal variogram and can be expressed in terms of the MPD <span class="math inline">\(\mathbf{Y}\)</span>:
-<span class="math display">\[\begin{equation*}
-\Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k &gt; 1 \right\}, \quad i,j\in V.
+whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 - F_i(X_{i})\}\)</span> transforms <span class="math inline">\(X_i\)</span> to a standard exponential
+distribution, such that <span class="math inline">\(\Gamma^{(k)}\)</span> is simply the variogram
+matrix of <span class="math inline">\(\mathbf{X}\)</span> on exponential
+scale, conditioned on the <span class="math inline">\(k\)</span>th
+variable being large.</p>
+<p>The limit as <span class="math inline">\(p\to 1\)</span> is called
+the extremal variogram and can be expressed in terms of the MPD <span class="math inline">\(\mathbf{Y}\)</span>: <span class="math display">\[\begin{equation*}
+\Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) =
+\mathop{\mathrm{Var}}\left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k &gt; 1
+\right\}, \quad i,j\in V.
 \end{equation*}\]</span><br>
-Weak/strong extremal dependence is indicated by large/small values of the extremal variogram, respectively. The function <code><a href="../reference/emp_vario.html">emp_vario()</a></code> estimates the (pre-asymptotic) extremal variogram, for instance for <span class="math inline">\(k=1\)</span>.</p>
+Weak/strong extremal dependence is indicated by large/small values of
+the extremal variogram, respectively. The function
+<code><a href="../reference/emp_vario.html">emp_vario()</a></code> estimates the (pre-asymptotic) extremal
+variogram, for instance for <span class="math inline">\(k=1\)</span>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Gamma_1_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, k <span class="op">=</span> <span class="fl">1</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p>In general, the matrices <span class="math inline">\(\Gamma^{(k)}\)</span> can be different for <span class="math inline">\(k \in V\)</span>, but for example for the Hüsler–Reiss distribution, they all coincide.</p>
+<p>In general, the matrices <span class="math inline">\(\Gamma^{(k)}\)</span> can be different for <span class="math inline">\(k \in V\)</span>, but for example for the
+Hüsler–Reiss distribution, they all coincide.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-4" class="example"><strong>Example 2.4  </strong></span>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma\)</span>, the extremal variogram matrices satisfy
-<span class="math display">\[ \Gamma = \Gamma^{(1)} = \dots = \Gamma^{(d)}.\]</span></p>
+<p>For the Hüsler–Reiss distribution with parameter matrix <span class="math inline">\(\Gamma\)</span>, the extremal variogram matrices
+satisfy <span class="math display">\[ \Gamma = \Gamma^{(1)} = \dots =
+\Gamma^{(d)}.\]</span></p>
 </div>
-<p>In this case it makes sense to estimate the extremal variogram <span class="math inline">\(\hat \Gamma\)</span> as the average of the estimators <span class="math inline">\(\hat \Gamma^{(k)}\)</span>:</p>
+<p>In this case it makes sense to estimate the extremal variogram <span class="math inline">\(\hat \Gamma\)</span> as the average of the
+estimators <span class="math inline">\(\hat \Gamma^{(k)}\)</span>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Gamma_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">X</span>, p <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="va">Gamma_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_vario.html">emp_vario</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span><span class="op">)</span></span></code></pre></div>
@@ -229,12 +291,27 @@ Weak/strong extremal dependence is indicated by large/small values of the extrem
 </div>
 <div class="section level2" number="3">
 <h2 id="extremal-graphical-models">
-<span class="header-section-number">3</span> Extremal graphical models<a class="anchor" aria-label="anchor" href="#extremal-graphical-models"></a>
+<span class="header-section-number">3</span> Extremal graphical
+models<a class="anchor" aria-label="anchor" href="#extremal-graphical-models"></a>
 </h2>
-<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected graph with index set <span class="math inline">\(V = \{1,\dots, d\}\)</span> and edges <span class="math inline">\(E \subset V \times V\)</span>. The figure below shows examples of different graphical structures: a tree, a decomposable graph and a non-decomposable graph. <span class="citation">Engelke and Hitz (2020)</span> introduce a new notion of extremal conditional independence for MPDs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the pairwise Markov property
-<span class="math display">\[   Y_i \perp_e Y_j \mid  Y_{\setminus \{i,j\}}, \quad \text{ if } (i,j)\notin E,\]</span>
-that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the extremal sense <span class="math inline">\(\perp_e\)</span> given all other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
-<p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a Hammersley–Clifford theorem stating that for an extremal graphical model on a decomposable graph <span class="math inline">\(G\)</span>, the density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes into the marginal density on the cliques.</p>
+<p>Let <span class="math inline">\(G=(V,E)\)</span> be an undirected
+graph with index set <span class="math inline">\(V = \{1,\dots,
+d\}\)</span> and edges <span class="math inline">\(E \subset V \times
+V\)</span>. The figure below shows examples of different graphical
+structures: a tree, a decomposable graph and a non-decomposable graph.
+<span class="citation">Engelke and Hitz (2020)</span> introduce a new
+notion of extremal conditional independence for MPDs, denoted by <span class="math inline">\(\perp_e\)</span>. They define an extremal
+graphical model on <span class="math inline">\(G\)</span> as a MPD <span class="math inline">\(Y = (Y_j : j\in V)\)</span> that satisfies the
+pairwise Markov property <span class="math display">\[   Y_i \perp_e Y_j
+\mid  Y_{\setminus \{i,j\}}, \quad \text{ if } (i,j)\notin E,\]</span>
+that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are conditionally independent in the
+extremal sense <span class="math inline">\(\perp_e\)</span> given all
+other nodes whenever there is no edge between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> in <span class="math inline">\(G\)</span>.</p>
+<p>If the MPD possesses a density <span class="math inline">\(f_{\mathbf{Y}}\)</span>, then the graph <span class="math inline">\(G\)</span> has to be connected. <span class="citation">Engelke and Hitz (2020)</span> then show a
+Hammersley–Clifford theorem stating that for an extremal graphical model
+on a decomposable graph <span class="math inline">\(G\)</span>, the
+density <span class="math inline">\(f_{\mathbf{Y}}\)</span> factorizes
+into the marginal density on the cliques.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A tree graph, a decomposable graph, and a non-decomposable (cycle) graph</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_literal.html" class="external-link">graph_from_literal</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
@@ -245,21 +322,39 @@ that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">
 <h3 id="trees">
 <span class="header-section-number">3.1</span> Trees<a class="anchor" aria-label="anchor" href="#trees"></a>
 </h3>
-<p>A tree <span class="math inline">\(T = (V,E)\)</span> is a particularly simple type of graph, which is connected and does not have cycles. This implies that there are exactly <span class="math inline">\(|E| = d-1\)</span> edges. The Hammersley–Clifford theorem shown in <span class="citation">Engelke and Hitz (2020)</span> yields that the density of an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span> on the tree <span class="math inline">\(T= (V,E)\)</span> factorizes into
-<span class="math display" id="eq:treedens">\[\begin{equation}
-    f_{\mathbf{Y}}(\mathbf{y}) \propto  \prod_{\{i,j\}\in E} {\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V} y_i^{-2},  \tag{3.1}
-\end{equation}\]</span>
-where <span class="math inline">\(\lambda_{ij}\)</span> are the bivariate marginals of the exponent measure density <span class="math inline">\(\lambda\)</span> corresponding to <span class="math inline">\(\mathbf{Y}\)</span>. The <span class="math inline">\(d\)</span>-dimensional density of the MPD is therefore reduced to bivariate interactions only.</p>
-<p>For extremal graphical models on trees, the extremal variograms <span class="math inline">\(\Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, are very natural since they define a so-called additive tree metric, that is,<br><span class="math display" id="eq:treemetric">\[\begin{equation}
-\Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(k)}_{st}, \tag{3.2}
-\end{equation}\]</span>
-where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path between node <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> on the tree <span class="math inline">\(T\)</span>.</p>
+<p>A tree <span class="math inline">\(T = (V,E)\)</span> is a
+particularly simple type of graph, which is connected and does not have
+cycles. This implies that there are exactly <span class="math inline">\(|E| = d-1\)</span> edges. The Hammersley–Clifford
+theorem shown in <span class="citation">Engelke and Hitz (2020)</span>
+yields that the density of an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span> on the tree <span class="math inline">\(T= (V,E)\)</span> factorizes into <span class="math display">\[\begin{equation}
+    f_{\mathbf{Y}}(\mathbf{y}) \propto  \prod_{\{i,j\}\in E}
+{\lambda_{ij}(y_i,y_j) \over y_i^{-2} y_j^{-2}} \prod_{i\in V}
+y_i^{-2},  (\#eq:treedens)
+\end{equation}\]</span> where <span class="math inline">\(\lambda_{ij}\)</span> are the bivariate marginals
+of the exponent measure density <span class="math inline">\(\lambda\)</span> corresponding to <span class="math inline">\(\mathbf{Y}\)</span>. The <span class="math inline">\(d\)</span>-dimensional density of the MPD is
+therefore reduced to bivariate interactions only.</p>
+<p>For extremal graphical models on trees, the extremal variograms <span class="math inline">\(\Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, are very natural since they
+define a so-called additive tree metric, that is,<br><span class="math display">\[\begin{equation}
+\Gamma_{ij}^{(k)} = \sum_{(s,t) \in \text{ph}(ij)} \Gamma^{(k)}_{st},
+(\#eq:treemetric)
+\end{equation}\]</span> where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path between
+node <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> on the tree <span class="math inline">\(T\)</span>.</p>
 <div class="section level4" number="3.1.1">
 <h4 id="simulation">
 <span class="header-section-number">3.1.1</span> Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h4>
-<p>By representation <a href="#eq:treedens">(3.1)</a> we can specify any bivariate models <span class="math inline">\(\lambda_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span> and combine them to a valid tree model. For instance, if we use bivariate Hüsler–Reiss distributions on all edges of the tree <span class="math inline">\(T\)</span>, the resulting <span class="math inline">\(d\)</span>-dimensional tree model is again Hüsler–Reiss and its parameter matrix <span class="math inline">\(\Gamma\)</span> is implied by <a href="#eq:treemetric">(3.2)</a>. If we use bivariate logistic distributions on all edges, the resulting extremal tree model is not a <span class="math inline">\(d\)</span>-dimensional logistic model, but a more flexible model with <span class="math inline">\(d-1\)</span> parameters.</p>
-<p>The function <code><a href="../reference/rmpareto_tree.html">rmpareto_tree()</a></code> generates samples from an extremal tree model <span class="math inline">\(\mathbf{Y}\)</span>.</p>
+<p>By representation @ref(eq:treedens) we can specify any bivariate
+models <span class="math inline">\(\lambda_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span> and combine them to a valid
+tree model. For instance, if we use bivariate Hüsler–Reiss distributions
+on all edges of the tree <span class="math inline">\(T\)</span>, the
+resulting <span class="math inline">\(d\)</span>-dimensional tree model
+is again Hüsler–Reiss and its parameter matrix <span class="math inline">\(\Gamma\)</span> is implied by @ref(eq:treemetric).
+If we use bivariate logistic distributions on all edges, the resulting
+extremal tree model is not a <span class="math inline">\(d\)</span>-dimensional logistic model, but a more
+flexible model with <span class="math inline">\(d-1\)</span>
+parameters.</p>
+<p>The function <code><a href="../reference/rmpareto_tree.html">rmpareto_tree()</a></code> generates samples from an
+extremal tree model <span class="math inline">\(\mathbf{Y}\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
@@ -278,14 +373,29 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <span>    tree <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>,</span>
 <span>    par <span class="op">=</span> <span class="va">theta_vec</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Note that we can also generate samples from the corresponding max-stable distribution with the function <code><a href="../reference/rmstable_tree.html">rmstable_tree()</a></code>.</p>
+<p>Note that we can also generate samples from the corresponding
+max-stable distribution with the function
+<code><a href="../reference/rmstable_tree.html">rmstable_tree()</a></code>.</p>
 </div>
 <div class="section level4" number="3.1.2">
 <h4 id="estimation">
 <span class="header-section-number">3.1.2</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
 </h4>
-<p>For a given tree <span class="math inline">\(T= (V,E)\)</span> and a parametric model <span class="math inline">\(\{f_{\mathbf{Y}}(\mathbf{y}; \theta): \theta \in \Theta\}\)</span> of MPDs on the tree <span class="math inline">\(T\)</span>, estimation of the model parameters is fairly straight-forward. If <span class="math inline">\(\theta = \{ \theta_{ij}: (i,j) \in E\}\)</span> consists of one parameter per edge, then thanks to the factorization <a href="#eq:treedens">(3.1)</a> we may fit each parameter <span class="math inline">\(\theta_{ij}\)</span> separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.</p>
-<p>If provided with a tree and data, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> estimates the <span class="math inline">\(d-1\)</span> parametres of a Hüsler–Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the <code><a href="../reference/danube.html">danube()</a></code> data set and compare the fitted with the empirical extremal coefficients.</p>
+<p>For a given tree <span class="math inline">\(T= (V,E)\)</span> and a
+parametric model <span class="math inline">\(\{f_{\mathbf{Y}}(\mathbf{y}; \theta): \theta \in
+\Theta\}\)</span> of MPDs on the tree <span class="math inline">\(T\)</span>, estimation of the model parameters is
+fairly straight-forward. If <span class="math inline">\(\theta = \{
+\theta_{ij}: (i,j) \in E\}\)</span> consists of one parameter per edge,
+then thanks to the factorization @ref(eq:treedens) we may fit each
+parameter <span class="math inline">\(\theta_{ij}\)</span> separately.
+This can be done by (censored) maximum likelihood methods, or by other
+methods such as M-estimation.</p>
+<p>If provided with a tree and data, the function
+<code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> estimates the <span class="math inline">\(d-1\)</span> parameters of a Hüsler–Reiss model on
+that tree. As an example, we fit an extremal tree model to the
+(undirected) tree resulting from the flow connections in the
+<code><a href="../reference/danube.html">danube()</a></code> data set and compare the fitted with the empirical
+extremal coefficients.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Utility function to plot fitted parameters against true/empirical ones</span></span>
 <span><span class="va">plot_fitted_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">G0</span>, <span class="va">G1</span>, <span class="va">xlab</span> <span class="op">=</span> <span class="st">'True'</span>, <span class="va">ylab</span> <span class="op">=</span> <span class="st">'Fitted'</span><span class="op">)</span><span class="op">{</span></span>
@@ -314,21 +424,48 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <span>    graph <span class="op">=</span> <span class="va">flow_graph</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">chi_hat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">flow_Gamma</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">'Empirical'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-17-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4" number="3.1.3">
 <h4 id="structure-learning">
-<span class="header-section-number">3.1.3</span> Structure learning<a class="anchor" aria-label="anchor" href="#structure-learning"></a>
+<span class="header-section-number">3.1.3</span> Structure
+learning<a class="anchor" aria-label="anchor" href="#structure-learning"></a>
 </h4>
-<p>In practice, the underlying conditonal independence tree <span class="math inline">\(T = (V,E)\)</span> is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see <span class="citation">Engelke and Volgushev (2022)</span> for details.</p>
-<p>The method is based on the notion of a minimum spanning tree. For a set of symmetric weights <span class="math inline">\(\rho_{ij} &gt; 0\)</span> associated with any pair of nodes <span class="math inline">\(i,j\in V\)</span>, <span class="math inline">\(i\neq j\)</span>, the latter is defined as the tree structure
-<span class="math display">\[\begin{align}\label{Tmin}
-    T_{\mathop{\mathrm{mst}}} = \mathop{\mathrm{arg\,min}}_{T' = (V,E)} \sum_{(i,j)\in E} \rho_{ij},
-\end{align}\]</span>
-that minimizes the sum of distances on that tree.</p>
-<p><span class="citation">Engelke and Volgushev (2022)</span> show that if <span class="math inline">\(\mathbf{Y}\)</span> is an extremal graphical model on an unkown tree <span class="math inline">\(T\)</span>, then the minimum spanning tree with the extremal variogram <span class="math inline">\(\rho_{ij} = \Gamma_{ij}^{(k)}\)</span> as weights is unique and satisfies <span class="math inline">\(T_{\mathop{\mathrm{mst}}} = T\)</span>. Using empircal estimates <span class="math inline">\(\hat \Gamma_{ij}^{(k)}\)</span> as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.</p>
-<p>In fact, taking the average of all <span class="math inline">\(\hat \Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, and using this as weights <span class="math inline">\(\rho_{ij} = \hat \Gamma_{ij}\)</span> makes better use of the data and usually improves the performance of structure estimation significantly. <span class="citation">Engelke and Volgushev (2022)</span> further show that the empircal extremal correlation <span class="math inline">\(\rho_{ij} = \hat \chi_{ij}\)</span> may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.</p>
-<p>The function <code><a href="../reference/emst.html">emst()</a></code> estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through <a href="#eq:treemetric">(3.2)</a>.</p>
+<p>In practice, the underlying conditional independence tree <span class="math inline">\(T = (V,E)\)</span> is usually unknown and has to
+be estimated in a data-driven way. For extremal tree models, it turns
+out that this can be done efficiently in a completely non-parametric
+way; see <span class="citation">Engelke and Volgushev (2022)</span> for
+details.</p>
+<p>The method is based on the notion of a minimum spanning tree. For a
+set of symmetric weights <span class="math inline">\(\rho_{ij} &gt;
+0\)</span> associated with any pair of nodes <span class="math inline">\(i,j\in V\)</span>, <span class="math inline">\(i\neq j\)</span>, the latter is defined as the
+tree structure <span class="math display">\[\begin{align}\label{Tmin}
+    T_{\mathop{\mathrm{mst}}} = \mathop{\mathrm{arg\,min}}_{T' =
+(V,E)} \sum_{(i,j)\in E} \rho_{ij},
+\end{align}\]</span> that minimizes the sum of distances on that
+tree.</p>
+<p><span class="citation">Engelke and Volgushev (2022)</span> show that
+if <span class="math inline">\(\mathbf{Y}\)</span> is an extremal
+graphical model on an unknown tree <span class="math inline">\(T\)</span>, then the minimum spanning tree with
+the extremal variogram <span class="math inline">\(\rho_{ij} =
+\Gamma_{ij}^{(k)}\)</span> as weights is unique and satisfies <span class="math inline">\(T_{\mathop{\mathrm{mst}}} = T\)</span>. Using
+empirical estimates <span class="math inline">\(\hat
+\Gamma_{ij}^{(k)}\)</span> as weights, we can thus consistently recover
+the underlying tree structure in a fully non-parametric way.</p>
+<p>In fact, taking the average of all <span class="math inline">\(\hat
+\Gamma^{(k)}\)</span>, <span class="math inline">\(k \in V\)</span>, and
+using this as weights <span class="math inline">\(\rho_{ij} = \hat
+\Gamma_{ij}\)</span> makes better use of the data and usually improves
+the performance of structure estimation significantly. <span class="citation">Engelke and Volgushev (2022)</span> further show that
+the empirical extremal correlation <span class="math inline">\(\rho_{ij}
+= \hat \chi_{ij}\)</span> may also be used for consistent tree recovery,
+but the performance is typically inferior to extremal variogram based
+algorithms.</p>
+<p>The function <code><a href="../reference/emst.html">emst()</a></code> estimates the extremal tree
+structure by a minimum spanning tree algorithm based on the different
+summary statistics for extremal dependence. It provides the estimated
+tree and the implied extremal variogram matrix through
+@ref(eq:treemetric).</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit tree grpah to the data</span></span>
 <span><span class="va">emst_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emst.html">emst</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Y</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
@@ -346,31 +483,41 @@ that minimizes the sum of distances on that tree.</p>
 </div>
 <div class="section level3" number="3.2">
 <h3 id="hüslerreiss-graphical-models">
-<span class="header-section-number">3.2</span> Hüsler–Reiss graphical models<a class="anchor" aria-label="anchor" href="#h%C3%BCslerreiss-graphical-models"></a>
+<span class="header-section-number">3.2</span> Hüsler–Reiss
+graphical models<a class="anchor" aria-label="anchor" href="#h%C3%BCslerreiss-graphical-models"></a>
 </h3>
-<p>The Hüsler–Reiss Pareto distribution <span class="math inline">\(\mathbf{Y}\)</span>
-is parametrized by the variogram matrix <span class="math inline">\(\Gamma\)</span>. Using the linear transformation <a href="#eq:Sigmak">(2.4)</a>, we obtain the covariance matrix <span class="math inline">\(\Sigma^{(k)}\)</span> for <span class="math inline">\(k\in V\)</span>. The inverse, called a precision matrix, is denoted by <span class="math inline">\(\Theta^{(k)}\)</span>.
-Following <span class="citation">Hentschel, Engelke, and Segers (2022)</span>, these <span class="math inline">\((d-1) \times (d-1)\)</span> matrices can be combined into the <span class="math inline">\(d \times d\)</span> precision matrix <span class="math inline">\(\Theta\)</span> by
-<span class="math display">\[\begin{equation*}
+<p>The Hüsler–Reiss Pareto distribution <span class="math inline">\(\mathbf{Y}\)</span> is parametrized by the
+variogram matrix <span class="math inline">\(\Gamma\)</span>. Using the
+linear transformation @ref(eq:Sigmak), we obtain the covariance matrix
+<span class="math inline">\(\Sigma^{(k)}\)</span> for <span class="math inline">\(k\in V\)</span>. The inverse, called a precision
+matrix, is denoted by <span class="math inline">\(\Theta^{(k)}\)</span>.
+Following <span class="citation">Hentschel et al. (2022)</span>, these
+<span class="math inline">\((d-1) \times (d-1)\)</span> matrices can be
+combined into the <span class="math inline">\(d \times d\)</span>
+precision matrix <span class="math inline">\(\Theta\)</span> by <span class="math display">\[\begin{equation*}
     \Theta_{ij} = \Theta^{(k)}_{ij} \text{ for some } k \neq i,j.
-\end{equation*}\]</span>
-<span class="citation">Engelke and Hitz (2020)</span> show that this matrix is well-defined and encodes extremal conditional independence as zeros on the off-diagonal:
-<span class="math display">\[\begin{equation*}
+\end{equation*}\]</span> <span class="citation">Engelke and Hitz
+(2020)</span> show that this matrix is well-defined and encodes extremal
+conditional independence as zeros on the off-diagonal: <span class="math display">\[\begin{equation*}
     Y_i\perp_e Y_j\mid \mathbf{Y}_{V\setminus \{i,j\}} \quad \iff \quad
     \Theta_{ij}= 0,  \quad i,j \in V.
 \end{equation*}\]</span></p>
 <div class="section level4" number="3.2.1">
 <h4 id="transformations">
-<span class="header-section-number">3.2.1</span> Transformations<a class="anchor" aria-label="anchor" href="#transformations"></a>
+<span class="header-section-number">3.2.1</span>
+Transformations<a class="anchor" aria-label="anchor" href="#transformations"></a>
 </h4>
-<p>While the Hüsler–Reiss distribution is parameterized by the variogram matrix <span class="math inline">\(\Gamma\)</span>,
-other objects such as <span class="math inline">\(\Theta^{(k)}\)</span>, <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta\)</span>,
-and its Moore–Penrose inverse <span class="math inline">\(\Sigma := \Theta^+\)</span> are often required,
-for instance, to identify the extremal graphical structure.
-The functions <code><a href="../reference/parameterMatrixConversion.html">Gamma2Sigma()</a></code>, <code><a href="../reference/parameterMatrixConversion.html">Sigma2Gamma()</a></code>, <code><a href="../reference/parameterMatrixConversion.html">Gamma2Theta()</a></code>, etc. perform these transformations.
-Note that all of these function are bijections.
-The functions <code><a href="../reference/matrix2graph.html">Gamma2graph()</a></code>, <code><a href="../reference/matrix2graph.html">Theta2graph()</a></code> etc. create an <code><a href="https://r.igraph.org/reference/make_graph.html" class="external-link">igraph::graph()</a></code> object,
-which represents the corresponding extremal graph structure.</p>
+<p>While the Hüsler–Reiss distribution is parameterized by the variogram
+matrix <span class="math inline">\(\Gamma\)</span>, other objects such
+as <span class="math inline">\(\Theta^{(k)}\)</span>, <span class="math inline">\(\Sigma^{(k)}\)</span>, <span class="math inline">\(\Theta\)</span>, and its Moore–Penrose inverse
+<span class="math inline">\(\Sigma := \Theta^+\)</span> are often
+required, for instance, to identify the extremal graphical structure.
+The functions <code><a href="../reference/parameterMatrixConversion.html">Gamma2Sigma()</a></code>, <code><a href="../reference/parameterMatrixConversion.html">Sigma2Gamma()</a></code>,
+<code><a href="../reference/parameterMatrixConversion.html">Gamma2Theta()</a></code>, etc. perform these transformations. Note
+that all of these function are bijections. The functions
+<code><a href="../reference/matrix2graph.html">Gamma2graph()</a></code>, <code><a href="../reference/matrix2graph.html">Theta2graph()</a></code> etc. create an
+<code><a href="https://r.igraph.org/reference/make_graph.html" class="external-link">igraph::graph()</a></code> object, which represents the corresponding
+extremal graph structure.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span>,</span>
@@ -390,20 +537,28 @@ which represents the corresponding extremal graph structure.</p>
 <span><span class="co">#&gt; [3,] -0.5  0.0  1.0 -0.5</span></span>
 <span><span class="co">#&gt; [4,]  0.0 -0.5 -0.5  1.0</span></span>
 <span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH f253fff U--- 4 4 -- </span></span>
-<span><span class="co">#&gt; + edges from f253fff:</span></span>
+<span><span class="co">#&gt; IGRAPH 8924af6 U--- 4 4 -- </span></span>
+<span><span class="co">#&gt; + edges from 8924af6:</span></span>
 <span><span class="co">#&gt; [1] 1--2 1--3 2--4 3--4</span></span></code></pre></div>
 </div>
 <div class="section level4" number="3.2.2">
 <h4 id="completion-of-gamma">
 <span class="header-section-number">3.2.2</span> Completion of <span class="math inline">\(\Gamma\)</span><a class="anchor" aria-label="anchor" href="#completion-of-gamma"></a>
 </h4>
-<p>For Hüsler–Reiss graphical models it suffices to specify the graph structure <span class="math inline">\(G = (V,E)\)</span> on all entries of the parameter matrix <span class="math inline">\(\Gamma_{ij}\)</span> for <span class="math inline">\((i,j) \in E\)</span>. The remaining entries of the matrix <span class="math inline">\(\Gamma\)</span> are then implied by the graph structure.</p>
-<p>The function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> takes as inputs a partially specified <span class="math inline">\(\Gamma\)</span> matrix and the corresponding graph structure,
-and completes the <span class="math inline">\(\Gamma\)</span> matrix.
-The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.</p>
+<p>For Hüsler–Reiss graphical models it suffices to specify the graph
+structure <span class="math inline">\(G = (V,E)\)</span> on all entries
+of the parameter matrix <span class="math inline">\(\Gamma_{ij}\)</span>
+for <span class="math inline">\((i,j) \in E\)</span>. The remaining
+entries of the matrix <span class="math inline">\(\Gamma\)</span> are
+then implied by the graph structure <span class="citation">(Hentschel et
+al., 2022)</span>.</p>
+<p>The function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> takes as inputs a
+partially specified <span class="math inline">\(\Gamma\)</span> matrix
+and the corresponding graph structure, and completes the <span class="math inline">\(\Gamma\)</span> matrix. The mathematical theory
+for completion is different depending on whether the graph is
+decomposable or non-decomposable.</p>
 <p>The simplest case is a tree, where the entries <span class="math inline">\(\Gamma_{ij}\)</span> for <span class="math inline">\((i,j) \notin E\)</span> can be easily obtained
-from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
+from the additive tree metric property @ref(eq:treemetric).</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">my_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateRandomGraph.html">generate_random_tree</a></span><span class="op">(</span>d <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
@@ -416,8 +571,12 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="co">#&gt; [3,]  1.9  1.4  0.0  2.2</span></span>
 <span><span class="co">#&gt; [4,]  1.3  0.8  2.2  0.0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-20-1.png" width="480" style="display: block; margin: auto;"></p>
-<p>This also works for more general decomposable graphs, where the matrix <span class="math inline">\(\Gamma\)</span> has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by <span class="math inline">\(\Gamma_{ij} = \text{NA}\)</span> for <span class="math inline">\((i,j)\notin E\)</span>.</p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;"></p>
+<p>This also works for more general decomposable graphs, where the
+matrix <span class="math inline">\(\Gamma\)</span> has to be specified
+on all cliques. For decomposable graphs, the graph structure can also be
+implied by <span class="math inline">\(\Gamma_{ij} = \text{NA}\)</span>
+for <span class="math inline">\((i,j)\notin E\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">G</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">7</span>, <span class="fl">6</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
@@ -428,8 +587,9 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">Gamma_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/complete_Gamma.html">complete_Gamma</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-21-1.png" width="480" style="display: block; margin: auto;"></p>
-<p>For non-decomposable graphs, a valid <span class="math inline">\(\Gamma\)</span> matrix and an undirected, connected graph has to be provided.</p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;"></p>
+<p>For non-decomposable graphs, a valid <span class="math inline">\(\Gamma\)</span> matrix and an undirected,
+connected graph has to be provided.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">G</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
@@ -442,57 +602,83 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="va">my_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateRandomGraph.html">generate_random_connected_graph</a></span><span class="op">(</span>d <span class="op">=</span> <span class="fl">5</span>, m <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">Gamma_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/complete_Gamma.html">complete_Gamma</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">G</span>, graph <span class="op">=</span> <span class="va">my_graph</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-22-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4" number="3.2.3">
 <h4 id="estimation-1">
 <span class="header-section-number">3.2.3</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation-1"></a>
 </h4>
-<p>Let us first suppose that a connected graph <span class="math inline">\(G\)</span> is given.
-For some data set, the function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> fits a Hüsler–Reiss graphical model on the graph <span class="math inline">\(G\)</span>.</p>
-<p>If the graph is decomposable, then the parameters of each clique can be fitted separately and combined together to a full <span class="math inline">\(\Gamma\)</span> matrix. If the cliques are small enough, then (censored) maximum likelihood estimation is feasible, otherwise the empirical extremal variogram is used.
-Combining the clique estimates relies on the same principle as in the <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> function, but with some care required to ensure that the <span class="math inline">\(\Gamma_{ij}\)</span> estimates are consistent if <span class="math inline">\((i,j)\)</span> belongs to a separator set between two or more cliques.</p>
+<p>Let us first suppose that a connected graph <span class="math inline">\(G\)</span> is given. For some data set, the
+function <code><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR()</a></code> fits a Hüsler–Reiss graphical
+model on the graph <span class="math inline">\(G\)</span>.</p>
+<p>If the graph is decomposable, then the parameters of each clique can
+be fitted separately and combined together to a full <span class="math inline">\(\Gamma\)</span> matrix. If the cliques are small
+enough, then (censored) maximum likelihood estimation is feasible,
+otherwise the empirical extremal variogram is used. Combining the clique
+estimates relies on the same principle as in the
+<code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code> function, but with some care required to
+ensure that the <span class="math inline">\(\Gamma_{ij}\)</span>
+estimates are consistent if <span class="math inline">\((i,j)\)</span>
+belongs to a separator set between two or more cliques.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"decomposable"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
 <span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-2.png" width="480" style="display: block; margin: auto;"></p>
-<p>If the graph <span class="math inline">\(G\)</span> is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of <span class="math inline">\(G\)</span> using the function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code>.</p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-2.png" style="display: block; margin: auto;"></p>
+<p>If the graph <span class="math inline">\(G\)</span> is
+non-decomposable, then the empirical extremal variogram is first
+computed and then it is fitted to graph structure of <span class="math inline">\(G\)</span> using the function
+<code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"general"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
 <span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-2.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-2.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4" number="3.2.4">
 <h4 id="general-structure-learning">
-<span class="header-section-number">3.2.4</span> General structure learning<a class="anchor" aria-label="anchor" href="#general-structure-learning"></a>
+<span class="header-section-number">3.2.4</span> General structure
+learning<a class="anchor" aria-label="anchor" href="#general-structure-learning"></a>
 </h4>
-<p>For structure learning of more general, possibly non-decomposable graphs, we can use the <code>eglearn</code> method.
-Given an estimate <span class="math inline">\(\widehat \Gamma\)</span> of the parameter matrix, e.g.,
-obtained by <code><a href="../reference/emp_vario.html">emp_vario()</a></code>, we compute the corresponding matrices <span class="math inline">\(\widehat \Sigma^{(k)}\)</span> through the function <code><a href="../reference/parameterMatrixConversion.html">Gamma2Sigma()</a></code>.
-In order to enforce sparsity, we compute the <span class="math inline">\(\ell_1\)</span>-penalized precision matrices for each <span class="math inline">\(k\in V\)</span>.
-For a tuning parameter <span class="math inline">\(\rho\geq 0\)</span> and choice of <span class="math inline">\(k\)</span>, the estimated <span class="math inline">\((d-1) \times (d-1)\)</span> precision matrix is
+<p>For structure learning of more general, possibly non-decomposable
+graphs, we can use the <code>eglearn</code> method. Given an estimate
+<span class="math inline">\(\widehat \Gamma\)</span> of the parameter
+matrix, e.g., obtained by <code><a href="../reference/emp_vario.html">emp_vario()</a></code>, we compute the
+corresponding matrices <span class="math inline">\(\widehat
+\Sigma^{(k)}\)</span> through the function <code><a href="../reference/parameterMatrixConversion.html">Gamma2Sigma()</a></code>.
+In order to enforce sparsity, we compute the <span class="math inline">\(\ell_1\)</span>-penalized precision matrices for
+each <span class="math inline">\(k\in V\)</span>. For a tuning parameter
+<span class="math inline">\(\rho\geq 0\)</span> and choice of <span class="math inline">\(k\)</span>, the estimated <span class="math inline">\((d-1) \times (d-1)\)</span> precision matrix is
 <span class="math display">\[\begin{align*}  
-\widehat \Theta^{(k)}_{\rho} = \underset{{\Theta} \succeq 0}{\mathop{\mathrm{arg\,max}}} \,\,   \log \det{\Theta}-\operatorname{tr}(\widehat \Sigma^{(k)}\Theta) -\rho \sum_{\substack{i\neq j \\ i,j\neq k}} \left|\Theta_{ij}\right|.
-\end{align*}\]</span>
-Since we run <span class="math inline">\(d\)</span> different graphical lasso algorithms and the <span class="math inline">\(k\)</span>th only enforces sparsity for all edges that do not involve the <span class="math inline">\(k\)</span>th node, we determine the estimated graph structure <span class="math inline">\(\widehat{G}_\rho = (\widehat E_\rho,V)\)</span> by majority vote:
-<span class="math display">\[ (i,j) \in \widehat E_\rho \quad \Leftrightarrow \quad \frac1{d-2} \# \left\{k \in V \setminus \{i,j\}: \right(\widehat\Theta^{(k)}_\rho \left)_{ij} \neq 0 \right\} \geq 1/2.\]</span></p>
-<p>The best parameter <span class="math inline">\(\rho\)</span> can be chosen for instance as the minimizer of the BIC of the resulting models.
-The extremal graphical lasso is implemented in the <code><a href="../reference/eglearn.html">eglearn()</a></code> function.
-It returns the (sequence) of estimated graphs and, if desired, the corresponding <span class="math inline">\(\widehat \Gamma_\rho\)</span> estimates.</p>
+\widehat \Theta^{(k)}_{\rho} = \underset{{\Theta} \succeq
+0}{\mathop{\mathrm{arg\,max}}} \,\,   \log
+\det{\Theta}-\operatorname{tr}(\widehat \Sigma^{(k)}\Theta) -\rho
+\sum_{\substack{i\neq j \\ i,j\neq k}} \left|\Theta_{ij}\right|.
+\end{align*}\]</span> Since we run <span class="math inline">\(d\)</span> different graphical lasso algorithms
+and the <span class="math inline">\(k\)</span>th only enforces sparsity
+for all edges that do not involve the <span class="math inline">\(k\)</span>th node, we determine the estimated
+graph structure <span class="math inline">\(\widehat{G}_\rho = (\widehat
+E_\rho,V)\)</span> by majority vote: <span class="math display">\[ (i,j)
+\in \widehat E_\rho \quad \Leftrightarrow \quad \frac1{d-2} \# \left\{k
+\in V \setminus \{i,j\}: \right(\widehat\Theta^{(k)}_\rho \left)_{ij}
+\neq 0 \right\} \geq 1/2.\]</span></p>
+<p>The best parameter <span class="math inline">\(\rho\)</span> can be
+chosen for instance as the minimizer of the BIC of the resulting models.
+The extremal graphical lasso is implemented in the
+<code><a href="../reference/eglearn.html">eglearn()</a></code> function. It returns the (sequence) of estimated
+graphs and, if desired, the corresponding <span class="math inline">\(\widehat \Gamma_\rho\)</span> estimates.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run eglearn for a suitable list of penalization parameters</span></span>
 <span><span class="va">rholist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
@@ -533,7 +719,7 @@ It returns the (sequence) of estimated graphs and, if desired, the corresponding
 <span>            name <span class="op">=</span> <span class="st">"Number of edges"</span></span>
 <span>        <span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-25-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare fitted chi to empirical one</span></span>
 <span><span class="va">best_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">logliks_eglearn</span><span class="op">[</span><span class="st">'bic'</span>, <span class="op">]</span><span class="op">)</span></span>
@@ -546,29 +732,41 @@ It returns the (sequence) of estimated graphs and, if desired, the corresponding
 </div>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
 <div id="ref-asadi2015" class="csl-entry">
-Asadi, Peiman, Anthony C. Davison, and Sebastian Engelke. 2015. <span>“<span class="nocase">Extremes on river networks</span>.”</span> <em>The Annals of Applied Statistics</em> 9 (4): 2023–50. <a href="https://doi.org/10.1214/15-AOAS863" class="external-link">https://doi.org/10.1214/15-AOAS863</a>.
+Asadi, P., Davison, A. C., and Engelke, S. (2015). Extremes on river
+networks. <em>Ann. Appl. Stat.</em>, <em>9</em>(4), 2023–2050. <a href="https://doi.org/10.1214/15-AOAS863" class="external-link">https://doi.org/10.1214/15-AOAS863</a>
 </div>
 <div id="ref-dom2016" class="csl-entry">
-Dombry, C., S. Engelke, and M. Oesting. 2016. <span>“Exact Simulation of Max-Stable Processes.”</span> <em>Biometrika</em> 103: 303–17.
+Dombry, C., Engelke, S., and Oesting, M. (2016). Exact simulation of
+max-stable processes. <em>Biometrika</em>, <em>103</em>, 303–317.
 </div>
 <div id="ref-eng2019" class="csl-entry">
-Engelke, S., and A. S. Hitz. 2020. <span>“Graphical Models for Extremes (with Discussion).”</span> <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> 82: 871–932.
+Engelke, S., and Hitz, A. S. (2020). Graphical models for extremes (with
+discussion). <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>,
+<em>82</em>, 871–932.
 </div>
 <div id="ref-eng2020" class="csl-entry">
-Engelke, S., and S. Volgushev. 2022. <span>“Structure Learning for Extremal Tree Models.”</span> <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em> https://doi.org/<a href="https://doi.org/10.1111/rssb.12556" class="external-link">https://doi.org/10.1111/rssb.12556</a>.
+Engelke, S., and Volgushev, S. (2022). Structure learning for extremal
+tree models. <em>J. R. Stat. Soc. Ser. B Stat. Methodol.</em>
+https://doi.org/<a href="https://doi.org/10.1111/rssb.12556" class="external-link">https://doi.org/10.1111/rssb.12556</a>
 </div>
 <div id="ref-hen2022" class="csl-entry">
-Hentschel, Manuel, Sebastian Engelke, and Johan Segers. 2022. <span>“Statistical Inference for Hüsler-Reiss Graphical Models Through Matrix Completions.”</span> arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link">https://doi.org/10.48550/ARXIV.2210.14292</a>.
+Hentschel, M., Engelke, S., and Segers, J. (2022). <em>Statistical
+inference for <span>H</span>üsler-<span>R</span>eiss graphical models
+through matrix completions</em>. arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link">https://doi.org/10.48550/ARXIV.2210.14292</a>
 </div>
 <div id="ref-hue1989" class="csl-entry">
-Hüsler, J., and R.-D. Reiss. 1989. <span>“Maxima of Normal Random Vectors: Between Independence and Complete Dependence.”</span> <em>Statist. Probab. Lett.</em> 7: 283–86.
+Hüsler, J., and Reiss, R.-D. (1989). Maxima of normal random vectors:
+Between independence and complete dependence. <em>Statist. Probab.
+Lett.</em>, <em>7</em>, 283–286.
 </div>
 <div id="ref-kab2009" class="csl-entry">
-Kabluchko, Z., M. Schlather, and L. de Haan. 2009. <span>“Stationary Max-Stable Fields Associated to Negative Definite Functions.”</span> <em>Ann. Probab.</em> 37: 2042–65.
+Kabluchko, Z., Schlather, M., and Haan, L. de. (2009). Stationary
+max-stable fields associated to negative definite functions. <em>Ann.
+Probab.</em>, <em>37</em>, 2042–2065.
 </div>
 </div>
 </div>

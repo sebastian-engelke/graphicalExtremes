@@ -64,7 +64,7 @@ Currently, all possible selections correspond to the case study in Hentschel et 
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getFlightDelayData</span><span class="op">(</span></span>
 <span>  what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"delays"</span>, <span class="st">"IATAs"</span>, <span class="st">"dates"</span><span class="op">)</span>,</span>
 <span>  airportFilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"tcCluster"</span>, <span class="st">"tcAll"</span><span class="op">)</span>,</span>
-<span>  dateFilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"tcTrain"</span>, <span class="st">"tcTest"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  dateFilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"tcTrain"</span>, <span class="st">"tcTest"</span>, <span class="st">"tcAll"</span><span class="op">)</span>,</span>
 <span>  delayFilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"totals"</span>, <span class="st">"arrivals"</span>, <span class="st">"departures"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -82,26 +82,24 @@ or dates (as strings). Specify exactly one.</p></dd>
 
 
 <dt>dateFilter</dt>
-<dd><p>Which dates to include. Specify one or more. See details below.</p></dd>
+<dd><p>Which dates to include. Specify exactly one. See details below.</p></dd>
 
 
 <dt>delayFilter</dt>
-<dd><p>Which kinds of delays to include. Possible values are <code>"arrivals"</code>,
-<code>"departures"</code>, and <code>"totals"</code> (computed as sum of arrival and departure delays).</p></dd>
+<dd><p>Which kinds of delays to include. Specify one or more.
+Possible values are <code>"arrivals"</code>, <code>"departures"</code>, and <code>"totals"</code> (computed as sum of arrival and departure delays).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>If <code>what="delays"</code>, a three-dimensional array,
-with dimensions corresponding to dates, airports, and delay types.
-If only one value is specified for <code>delayFilter</code>, the result can be
-converted to a matrix by calling <code>drop(...)</code>.</p>
-
-
 <p>If <code>what="IATAs"</code> or <code>what="dates"</code>, a character vector.
 If required, it can be converted to <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> objects using <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code>.</p>
+
+
+<p>If <code>what="delays"</code>, a three-dimensional array or two-dimensional matrix,
+with dimensions corresponding to dates, airports, and delay types.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -113,8 +111,9 @@ The argument <code>airportFilter="tcCluster"</code> corresponds to the airports 
 <code>airportFilter="all"</code> corresponds to all airports in the dataset.</p>
 <p>Similarly, <code>dateFilter="tcTrain"</code> selects the dates from the training set,
 <code>dateFilter="tcTest"</code> the ones from the test/validation set.
-To get the union of these sets, specify <code>dateFilter=c("tcTest", "tcTrain")</code>.
-To get all dates in the dataset, specify <code>dateFilter="all"</code>.</p>
+To get the union of these sets, specify <code>dateFilter="tcAll"</code>.
+To get all dates in the dataset (possibly more than for "tcAll"),
+specify <code>dateFilter="all"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

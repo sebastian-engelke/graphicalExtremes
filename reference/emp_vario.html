@@ -107,6 +107,14 @@ This is more robust if the data contains many <code>NA</code>s, but can take rat
 <code><a href="loglik_HR.html">loglik_HR</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">G</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_random_Gamma.html">generate_random_Gamma</a></span><span class="op">(</span>d<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="rmpareto.html">rmpareto</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">100</span>, par<span class="op">=</span><span class="va">G</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Ghat</span> <span class="op">&lt;-</span> <span class="fu">emp_vario</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

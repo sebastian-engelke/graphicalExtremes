@@ -117,7 +117,7 @@ each of the gauging stations or its corresponding catchment area:</p><dl><dt><co
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Asadi P, Davison AC, Engelke S (2015).
 “Extremes on river networks.”
-<em>The Annals of Applied Statistics</em>, <b>9</b>(4), 2023 -- 2050.
+<em>Ann. Appl. Stat.</em>, <b>9</b>(4), 2023 -- 2050.
 <a href="https://doi.org/10.1214/15-AOAS863" class="external-link">doi:10.1214/15-AOAS863</a>
 .</p>
     </div>
@@ -132,10 +132,12 @@ each of the gauging stations or its corresponding catchment area:</p><dl><dt><co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_edgelist.html" class="external-link">graph_from_edgelist</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">flow_edges</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">info</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PlotCoordX'</span>, <span class="st">'PlotCoordY'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span>, layout <span class="op">=</span> <span class="va">loc</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="danube-1.png" alt="" width="700" height="433"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">data_clustered</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 428  31</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">info</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "RivNames"    "Lat"         "Long"        "AveVol"      "Lat_Center" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "Long_Center" "Alt"         "Area"        "Chos"        "Density"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "Slope"       "PlotCoordX"  "PlotCoordY" </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
