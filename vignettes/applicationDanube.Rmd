@@ -1,7 +1,7 @@
 ---
 title: "Introduction and application to Danube data"
 output:
-    bookdown::html_document2:
+    html_vignette:
         fig_width: 5
         fig_height: 5
         number_sections: true
@@ -17,7 +17,7 @@ vignette: >
 csl: ../inst/apa-no-ampersand.csl
 ---
 
-<!-- Rmarkdown requries 4 spaces of indentation -->
+<!-- Rmarkdown reqirequires 4 spaces of indentation -->
 
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
@@ -94,7 +94,7 @@ danube_flow <- getDanubeFlowGraph()
 plotDanubeIGraph(graph = danube_flow)
 ```
 
-```{r, fig.show='hold', out.width="50%", fig.align=''}
+```{r, fig.show='hold', out.width='50%', fig.align=''}
 # Plot some pairwise scatter plots
 plotData <- as_tibble(danube$data_clustered)
 ggplot(plotData) + geom_point(aes(x = X1, y = X2))
@@ -250,7 +250,7 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
-```{r, out.width="33%", fig.align='', fig.show='hold', nomargin=TRUE}
+```{r, out.width='33%', fig.align='', fig.show='hold', nomargin=TRUE}
 # A tree graph, a decomposable graph, and a non-decomposable (cycle) graph
 plot(graph_from_literal(1--2--3, 2--4))
 plot(graph_from_literal(1--2--3--1, 2--4))

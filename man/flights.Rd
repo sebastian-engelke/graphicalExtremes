@@ -82,10 +82,10 @@ Some entries are missing, which is indicated by \code{NA}s.
 totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
 
 # Get number of flights for specific years in the dataset:
-flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), sum)
+flightCounts_10_11 <- apply(flights$flightCounts[,,c('2010', '2011')], c(1,2), sum)
 
 # Get list of connections from 2008:
-connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008'])
+connections_10 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2010'])
 
 }
 \references{

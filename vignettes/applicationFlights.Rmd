@@ -1,7 +1,7 @@
 ---
 title: "Application to flight data"
 output:
-    bookdown::html_document2:
+    html_vignette:
         fig_width: 5
         fig_height: 5
         number_sections: true
@@ -69,7 +69,7 @@ The `flights` dataset contains daily total delays of major U.S. airlines.
 For details, see the corresponding documentation page.
 Below, we plot all airports in the dataset.
 
-```{r, fig.width=10}
+```{r, fig.width=6, fig.height=3}
 plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 ```
 
@@ -79,7 +79,7 @@ whose results are available through the function `getFlightDelayData()`.
 For more detailed explanations of the individual methods see Vignette "applicationDanube" and the help pages of applied functions.
 *Note: Due to size restrictions, the CRAN version of this package contains only a part of the full dataset.*
 *A version of this package with the complete dataset is available on GitHub.*
-```{r, fig.width=10}
+```{r, fig.width=6, fig.height=4}
 # Get IATAs from Texas cluster
 IATAs <- getFlightDelayData('IATAs', 'tcCluster')
 
