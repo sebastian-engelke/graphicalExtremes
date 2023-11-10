@@ -14,7 +14,7 @@ vignette: >
     %\VignetteIndexEntry{Introduction and application to Danube data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
-csl: ../apa-no-ampersand.csl
+csl: ../inst/apa-no-ampersand.csl
 ---
 
 <!-- Rmarkdown requries 4 spaces of indentation -->

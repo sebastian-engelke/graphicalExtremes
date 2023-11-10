@@ -14,7 +14,7 @@ vignette: >
     %\VignetteIndexEntry{Application to flight data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
-csl: ../apa-no-ampersand.csl
+csl: ../inst/apa-no-ampersand.csl
 ---
 
 <!-- Rmarkdown requires 4 spaces of indentation -->

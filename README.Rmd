@@ -4,7 +4,7 @@ output:
     html_preview: false
 output_file: readme.md
 bibliography: inst/REFERENCES.bib
-csl: apa-no-ampersand.csl
+csl: ./inst/apa-no-ampersand.csl
 ---
 
 <!-- README.md is generated from README.Rmd, using `rmarkdown::render()`. Please edit that file -->
