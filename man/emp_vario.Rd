@@ -34,6 +34,12 @@ Estimates the variogram of the Huesler-Reiss distribution empirically.
 \code{emp_vario_pairwise} calls \code{emp_vario} for each pair of observations.
 This is more robust if the data contains many \code{NA}s, but can take rather long.
 }
+\examples{
+G <- generate_random_Gamma(d=5)
+y <- rmpareto(n=100, par=G)
+Ghat <- emp_vario(y)
+
+}
 \seealso{
 Other parameter estimation methods:
 \code{\link{data2mpareto}()},

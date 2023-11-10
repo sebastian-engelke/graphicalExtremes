@@ -30,7 +30,6 @@ library(graphicalExtremes)
 library(dplyr)
 library(ggplot2)
 library(igraph)
-source('memoise.R')
 ```
 
 ```{r, include=FALSE, eval=FALSE}

@@ -3,7 +3,7 @@
 - Fix the copy sign for code in the applicationDanube.Rmd file
 - Spell check
 - Show first level of subsections in applicationDanube.Rmd
-- In the first paragraph of Section 1, make "danube" the object that on can click on?
+x- In the first paragraph of Section 1, make "danube" the object that on can click on? -> not feasible
 - emp_vario help file: add a small example?
 - 3.2.2: mention Hentschel et al. after first paragraph for more details
 - eglearn: example in the help file?

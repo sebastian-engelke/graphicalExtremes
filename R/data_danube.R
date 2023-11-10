@@ -32,9 +32,8 @@
 #' graphicalExtremes::plotDanube(
 #'     clipMap = 1.2,
 #'     useConnectionVolume = TRUE,
-#'     useStationVolume = TRUE,
-#'     returnGGPlot = TRUE
-#' ) + ggplot2::theme(legend.position = "none")
+#'     useStationVolume = TRUE
+#' )
 #' 
 #' # Plot other graph structures
 #' nStations <- nrow(graphicalExtremes::danube$info)

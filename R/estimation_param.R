@@ -258,6 +258,11 @@ combine_clique_estimates_by_averaging <- function(cliques, subGammas){
 #'
 #' @return Numeric \dxd matrix. The estimated variogram of the Huesler-Reiss distribution.
 #' 
+#' @examples
+#' G <- generate_random_Gamma(d=5)
+#' y <- rmpareto(n=100, par=G)
+#' Ghat <- emp_vario(y)
+#' 
 #' @rdname emp_vario
 #' @family parameterEstimation
 #' @export

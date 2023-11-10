@@ -65,9 +65,8 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' }
 #' 
 #' @examples
-#' g <- igraph::graph_from_edgelist(danube$flow_edges)
-#' loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
-#' plot(g, layout = loc)
+#' dim(danube$data_clustered)
+#' colnames(danube$info)
 #' 
 #' @family danubeData
 #' @family datasets
@@ -134,21 +133,14 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' @references \insertAllCited{}
 #' 
 #' @examples 
-#' \dontrun{
-#' 
 #' # Get total number of flights in the dataset:
 #' totalFlightCounts <- apply(flights$flightCounts, c(1,2), sum)
 #' 
 #' # Get number of flights for specific years in the dataset:
 #' flightCounts_08_09 <- apply(flights$flightCounts[,,c('2008', '2009')], c(1,2), sum)
 #' 
-#' # Get list of connections:
-#' connections <- flightCountMatrixToConnectionList(flights$flightCounts)
+#' # Get list of connections from 2008:
 #' connections_08 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2008'])
-#' 
-#' # Get total delays (arriving + departing):
-#' totalDelays <- apply(flights$delays, c(1,2), sum)
-#' }
 #' 
 #' @family flightData
 #' @family datasets

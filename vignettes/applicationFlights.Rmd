@@ -25,7 +25,6 @@ csl: ../apa-no-ampersand.csl
 library(graphicalExtremes)
 library(ggplot2)
 library(igraph)
-source('memoise.R')
 ```
 
 ```{r, include=FALSE, eval=FALSE}

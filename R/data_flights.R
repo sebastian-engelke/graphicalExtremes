@@ -464,8 +464,10 @@ getFlightDelayData <- function(
 #' @return A data frame with columns `departureAirport`, `arrivalAirport`, `nFlights`.
 #' Each row represents one connection with >=1 flights in the input matrix.
 #' 
-#' @family flightData
+#' @examples
+#' flightCountMatrixToConnectionList(flights$flightCounts[1:100, 1:100, 1])
 #' 
+#' @family flightData
 #' @export
 flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TRUE){
   # sum up over years if necessary
