@@ -12,7 +12,7 @@ simu_px_neglogistic(n, d, idx, theta)
 \item{d}{Dimension of the multivariate Pareto distribution.
 In some cases this can be \code{NULL} and will be inferred from \code{par}.}
 
-\item{idx}{Integer or numeric vector with \code{n} elements. Inde(x|ces) from
+\item{idx}{Integer or numeric vector with \code{n} elements. Index/indices from
 1 to \code{d}, that determine which extremal function to simulate.}
 
 \item{theta}{Numeric --- assume \eqn{\theta > 0}.}

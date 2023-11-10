@@ -38,7 +38,7 @@ Default is \code{complete_Gamma = FALSE}.}
 \value{
 List made of:
 \item{\code{graph}}{
-A list of [\code{igraph::graph}] objects representing the
+A list of \code{\link[igraph:make_graph]{igraph::graph}} objects representing the
 fitted graphs for each \code{rho} in \code{rholist}.
 }
 \item{\code{Gamma}}{
@@ -51,7 +51,7 @@ underlying graph is not connected, it returns \code{NULL}.
 The list of penalty coefficients.
 }
 \item{\code{graph_ic}}{
-A list of [\code{igraph::graph}] objects
+A list of \code{\link[igraph:make_graph]{igraph::graph}} objects
 representing the optimal graph
 according to the \code{aic}, \code{bic}, and \code{mbic} information criteria.
 If \code{reg_method = "glasso"}, it returns a list of \code{NULL}.
@@ -69,6 +69,13 @@ Following the methodology from \insertCite{eng2022a;textual}{graphicalExtremes},
 fits an extremal graph structure using the neighborhood selection approach
 (see \insertCite{meins2006;textual}{graphicalExtremes}) or graphical lasso
 (see \insertCite{friedman2008;textual}{graphicalExtremes}).
+}
+\examples{
+set.seed(2)
+m <- generate_random_model(d=6)
+y <- rmpareto(n=500, par=m$Gamma)
+ret <- eglearn(y)
+
 }
 \references{
 \insertAllCited{}

@@ -21,6 +21,10 @@ Each row represents one connection with >=1 flights in the input matrix.
 Convert a numeric matrix containing flight counts between airports to a data
 frame containing a list of connections.
 }
+\examples{
+flightCountMatrixToConnectionList(flights$flightCounts[1:100, 1:100, 1])
+
+}
 \seealso{
 Other flight data related topics:
 \code{\link{flights}},

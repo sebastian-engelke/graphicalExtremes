@@ -8,9 +8,9 @@ An implementation of the statistical methodology paper Engelke and Hitz
 simulation algorithms and statistical inference methods for multivariate
 Pareto distributions on graphical structures.
 
-Furthermore contains implementations of statistical methods from Engelke
-and Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022), and
-Hentschel et al. (2022), as well as datasets from Asadi et al. (2015)
+Contains also implementations of statistical methods from Engelke and
+Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022), and
+Hentschel et al. (2022), as well as data sets from Asadi et al. (2015)
 and Hentschel et al. (2022).
 
 ## Installation
@@ -38,9 +38,9 @@ line-spacing="2">
 
 <div id="ref-asadi2015" class="csl-entry">
 
-Asadi, P., Davison, A. C., and Engelke, S. (2015). <span
-class="nocase">Extremes on river networks</span>. *The Annals of Applied
-Statistics*, *9*(4), 2023–2050. <https://doi.org/10.1214/15-AOAS863>
+Asadi, P., Davison, A. C., and Engelke, S. (2015). Extremes on river
+networks. *Ann. Appl. Stat.*, *9*(4), 2023–2050.
+<https://doi.org/10.1214/15-AOAS863>
 
 </div>
 
@@ -70,7 +70,7 @@ https://doi.org/<https://doi.org/10.1111/rssb.12556>
 <div id="ref-hen2022" class="csl-entry">
 
 Hentschel, M., Engelke, S., and Segers, J. (2022). *Statistical
-inference for hüsler-reiss graphical models through matrix completions*.
+inference for Hüsler-Reiss graphical models through matrix completions*.
 arXiv. <https://doi.org/10.48550/ARXIV.2210.14292>
 
 </div>

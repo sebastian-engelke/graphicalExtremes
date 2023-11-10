@@ -1,12 +1,12 @@
 ---
 title: "Introduction and application to Danube data"
 output:
-    bookdown::html_document2:
+    html_vignette:
         fig_width: 5
         fig_height: 5
         number_sections: true
         toc: true
-        toc_depth: 1
+        toc_depth: 2
 pkgdown:
     as_is: true
 bibliography: ../inst/REFERENCES.bib
@@ -14,9 +14,10 @@ vignette: >
     %\VignetteIndexEntry{Introduction and application to Danube data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+csl: ../inst/apa-no-ampersand.csl
 ---
 
-<!-- Rmarkdown requries 4 spaces of indentation -->
+<!-- Rmarkdown reqirequires 4 spaces of indentation -->
 
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\g}[1]{\mathbf{#1}}
@@ -93,7 +94,7 @@ danube_flow <- getDanubeFlowGraph()
 plotDanubeIGraph(graph = danube_flow)
 ```
 
-```{r, fig.show='hold', out.width="50%", fig.align=''}
+```{r, fig.show='hold', out.width='50%', fig.align=''}
 # Plot some pairwise scatter plots
 plotData <- as_tibble(danube$data_clustered)
 ggplot(plotData) + geom_point(aes(x = X1, y = X2))
@@ -192,7 +193,7 @@ chi_hat <- emp_chi(data = X, p = .8)
 ```
 
 In this and other functions, the default argument `p = NULL` implies that the data is already expected to be on MPD scale, and no thresholding is performed.
-For the `danube()` data, we may therefore directly use $\g Y$ instead of $\g X$:
+For the `danube` data, we may therefore directly use $\g Y$ instead of $\g X$:
 
 ```{r}
 chi_hat <- emp_chi(data = Y)
@@ -214,7 +215,7 @@ For any root node $k\in V$, the pre-asymptotic extremal variogram is defined as 
 \begin{equation*}
     \Gamma_{ij}^{(k)}(p) = \Var \left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) > p\right], \quad i,j\in V,
     \end{equation*}  
-whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, condtioned on the $k$th variable being large. 
+whenever right-hand side exists. Note that $-\log\{1 -  F_i(X_{i})\}$ transforms $X_i$ to a standard exponential distribution, such that $\Gamma^{(k)}$ is simply the variogram matrix of $\g X$ on exponential scale, conditioned on the $k$th variable being large. 
 
 The limit as $p\to 1$ is called the extremal variogram and can be expressed in terms of the MPD $\g Y$:
 \begin{equation*}
@@ -249,7 +250,7 @@ that is, $Y_i$ and $Y_j$ are conditionally independent in the extremal sense $\p
 
 If the MPD possesses a density $f_{\g Y}$, then the graph $G$ has to be connected. @eng2019 then show a Hammersley--Clifford theorem stating that for an extremal graphical model on a decomposable graph $G$, the density $f_{\g Y}$ factorizes into the marginal density on the cliques.
 
-```{r, out.width="33%", fig.align='', fig.show='hold', nomargin=TRUE}
+```{r, out.width='33%', fig.align='', fig.show='hold', nomargin=TRUE}
 # A tree graph, a decomposable graph, and a non-decomposable (cycle) graph
 plot(graph_from_literal(1--2--3, 2--4))
 plot(graph_from_literal(1--2--3--1, 2--4))
@@ -304,7 +305,7 @@ Note that we can also generate samples from the corresponding max-stable distrib
 
 For a given tree $T= (V,E)$ and a parametric model $\{f_{\g Y}(\g y; \theta): \theta \in \Theta\}$ of MPDs on the tree $T$, estimation of the model parameters is fairly straight-forward. If $\theta = \{ \theta_{ij}: (i,j) \in E\}$ consists of one parameter per edge, then thanks to the factorization \@ref(eq:treedens) we may fit each parameter $\theta_{ij}$ separately. This can be done by (censored) maximum likelihood methods, or by other methods such as M-estimation.  
 
-If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parametres of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the fitted with the empirical extremal coefficients.
+If provided with a tree and data, the function `fmpareto_graph_HR()` estimates the $d-1$ parameters of a Hüsler--Reiss model on that tree. As an example, we fit an extremal tree model to the (undirected) tree resulting from the flow connections in the `danube()` data set and compare the fitted with the empirical extremal coefficients.
 
 ```{r}
 # Utility function to plot fitted parameters against true/empirical ones
@@ -342,7 +343,7 @@ plot_fitted_params(chi_hat, Gamma2chi(flow_Gamma), xlab = 'Empirical')
 
 ### Structure learning
 
-In practice, the underlying conditonal independence tree $T = (V,E)$ is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see @eng2020 for details.
+In practice, the underlying conditional independence tree $T = (V,E)$ is usually unknown and has to be estimated in a data-driven way. For extremal tree models, it turns out that this can be done efficiently in a completely non-parametric way; see @eng2020 for details.
 
 The method is based on the notion of a minimum spanning tree. For a set of symmetric weights $\rho_{ij} > 0$ associated with any pair of nodes $i,j\in V$, $i\neq j$, the latter is defined as the tree structure
 \begin{align}\label{Tmin}
@@ -350,9 +351,9 @@ The method is based on the notion of a minimum spanning tree. For a set of symme
 \end{align}
 that minimizes the sum of distances on that tree.
 
-@eng2020 show that if $\g Y$ is an extremal graphical model on an unkown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empircal estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
+@eng2020 show that if $\g Y$ is an extremal graphical model on an unknown tree $T$, then the minimum spanning tree with the extremal variogram $\rho_{ij} = \Gamma_{ij}^{(k)}$ as weights is unique and satisfies $T_{\MST} = T$. Using empirical estimates $\hat \Gamma_{ij}^{(k)}$ as weights, we can thus consistently recover the underlying tree structure in a fully non-parametric way.
 
-In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empircal extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
+In fact, taking the average of all $\hat \Gamma^{(k)}$, $k \in V$, and using this as weights $\rho_{ij} = \hat \Gamma_{ij}$ makes better use of the data and usually improves the performance of structure estimation significantly. @eng2020 further show that the empirical extremal correlation $\rho_{ij} = \hat \chi_{ij}$ may also be used for consistent tree recovery, but the performance is typically inferior to extremal variogram based algorithms.
 
 The function `emst()` estimates the extremal tree structure by a minimum spanning tree algorithm based on the different summary statistics for extremal dependence. It provides the estimated tree and the implied extremal variogram matrix through \@ref(eq:treemetric).
 
@@ -412,11 +413,12 @@ Gamma2graph(Gamma)
 
 ### Completion of $\Gamma$
 
-For Hüsler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$. The remaining entries of the matrix $\Gamma$ are then implied by the graph structure. 
+For Hüsler--Reiss graphical models it suffices to specify the graph structure $G = (V,E)$ on all entries of the parameter matrix $\Gamma_{ij}$ for $(i,j) \in E$.
+The remaining entries of the matrix $\Gamma$ are then implied by the graph structure [@hen2022].
 
 The function `complete_Gamma()` takes as inputs a partially specified $\Gamma$ matrix and the corresponding graph structure,
 and completes the $\Gamma$ matrix.
-The mathematical theory for completion is different depening on whether the graph is decomposable or non-decomposable.
+The mathematical theory for completion is different depending on whether the graph is decomposable or non-decomposable.
 
 The simplest case is a tree, where the entries $\Gamma_{ij}$ for $(i,j) \notin E$ can be easily obtained
 from the additive tree metric property \@ref(eq:treemetric).

@@ -4,7 +4,7 @@ output:
     html_preview: false
 output_file: readme.md
 bibliography: inst/REFERENCES.bib
-csl: apa-no-ampersand.csl
+csl: ./inst/apa-no-ampersand.csl
 ---
 
 <!-- README.md is generated from README.Rmd, using `rmarkdown::render()`. Please edit that file -->
@@ -18,7 +18,7 @@ inference methods for multivariate Pareto distributions on graphical structures.
 
 Contains also implementations of statistical methods from
 @eng2020, @roe2021, @eng2022a, and @hen2022,
-and data sets from @asadi2015 and @hen2022.
+as well as data sets from @asadi2015 and @hen2022.
 
 
 ## Installation

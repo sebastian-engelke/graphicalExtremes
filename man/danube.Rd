@@ -49,9 +49,8 @@ X-Y-coordinates which can be used to arrange the gauging stations when plotting 
 }
 }
 \examples{
-g <- igraph::graph_from_edgelist(danube$flow_edges)
-loc <- as.matrix(danube$info[,c('PlotCoordX', 'PlotCoordY')])
-plot(g, layout = loc)
+dim(danube$data_clustered)
+colnames(danube$info)
 
 }
 \references{

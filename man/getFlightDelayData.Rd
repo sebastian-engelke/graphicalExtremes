@@ -7,7 +7,7 @@
 getFlightDelayData(
   what = c("delays", "IATAs", "dates"),
   airportFilter = c("all", "tcCluster", "tcAll"),
-  dateFilter = c("all", "tcTrain", "tcTest")[1],
+  dateFilter = c("all", "tcTrain", "tcTest", "tcAll"),
   delayFilter = c("totals", "arrivals", "departures")[1]
 )
 }
@@ -18,19 +18,17 @@ or dates (as strings). Specify exactly one.}
 
 \item{airportFilter}{Which airports to include. Specify exactly one. See details below.}
 
-\item{dateFilter}{Which dates to include. Specify one or more. See details below.}
+\item{dateFilter}{Which dates to include. Specify exactly one. See details below.}
 
-\item{delayFilter}{Which kinds of delays to include. Possible values are \code{"arrivals"},
-\code{"departures"}, and \code{"totals"} (computed as sum of arrival and departure delays).}
+\item{delayFilter}{Which kinds of delays to include. Specify one or more.
+Possible values are \code{"arrivals"}, \code{"departures"}, and \code{"totals"} (computed as sum of arrival and departure delays).}
 }
 \value{
-If \code{what="delays"}, a three-dimensional array,
-with dimensions corresponding to dates, airports, and delay types.
-If only one value is specified for \code{delayFilter}, the result can be
-converted to a matrix by calling \code{drop(...)}.
-
 If \code{what="IATAs"} or \code{what="dates"}, a character vector.
 If required, it can be converted to \code{\link{Date}} objects using \code{\link[=as.Date]{as.Date()}}.
+
+If \code{what="delays"}, a three-dimensional array or two-dimensional matrix,
+with dimensions corresponding to dates, airports, and delay types.
 }
 \description{
 Get filtered flight delay data, containing only a selection of dates and airports.
@@ -45,8 +43,9 @@ The argument \code{airportFilter="tcCluster"} corresponds to the airports in the
 
 Similarly, \code{dateFilter="tcTrain"} selects the dates from the training set,
 \code{dateFilter="tcTest"} the ones from the test/validation set.
-To get the union of these sets, specify \code{dateFilter=c("tcTest", "tcTrain")}.
-To get all dates in the dataset, specify \code{dateFilter="all"}.
+To get the union of these sets, specify \code{dateFilter="tcAll"}.
+To get all dates in the dataset (possibly more than for "tcAll"),
+specify \code{dateFilter="all"}.
 }
 \references{
 \insertAllCited{}

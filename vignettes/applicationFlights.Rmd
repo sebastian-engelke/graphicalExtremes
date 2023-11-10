@@ -1,7 +1,7 @@
 ---
 title: "Application to flight data"
 output:
-    bookdown::html_document2:
+    html_vignette:
         fig_width: 5
         fig_height: 5
         number_sections: true
@@ -14,9 +14,10 @@ vignette: >
     %\VignetteIndexEntry{Application to flight data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+csl: ../inst/apa-no-ampersand.csl
 ---
 
-<!-- Rmarkdown requries 4 spaces of indentation -->
+<!-- Rmarkdown requires 4 spaces of indentation -->
 
 # The dataset
 
@@ -68,32 +69,19 @@ The `flights` dataset contains daily total delays of major U.S. airlines.
 For details, see the corresponding documentation page.
 Below, we plot all airports in the dataset.
 
-```{r, fig.width=10}
+```{r, fig.width=6, fig.height=3}
 plotFlights(plotConnections = FALSE, map = "world", xyRatio = 2)
 ```
 
-To perform an example application,
-we consider the years 2010 - 2013 and choose, as an example,
-airports from the westcoast with a large number of flights per year.
-A similar analysis is performed in @hen2022 for airports in Texas.
-For more detailed explanations concerning usage of the methods see Vignette "applicationDanube" and the help pages of applied functions.
-*Note: In the CRAN version of this package, these are the only available years.*
-*A version of this package with a larger dataset is available on GitHub*
-```{r, fig.width=10}
-# Specify years
-yearNames <- as.character(seq(2010, 2013))
-
-# Compute departures + arrivals per airport
-flightsPerConnection <- apply(flights$flightCounts[, , yearNames], c(1, 2), sum)
-flightsPerAirport <- rowSums(flightsPerConnection) + colSums(flightsPerConnection)
-
-# Select airports (more than 1000 flights/year and rough westcoast coordinates)
-indKeep <- (
-    flightsPerAirport >= length(yearNames) * 1000
-    & flights$airports$Longitude < -119 & flights$airports$Longitude > -130
-    & flights$airports$Latitude > 25 & flights$airports$Latitude < 50
-)
-IATAs <- flights$airports$IATA[indKeep]
+To perform an example application, we follow Section 6 of @hen2022.
+The subset of airports analyzed there is obtained through a previous clustering step,
+whose results are available through the function `getFlightDelayData()`.
+For more detailed explanations of the individual methods see Vignette "applicationDanube" and the help pages of applied functions.
+*Note: Due to size restrictions, the CRAN version of this package contains only a part of the full dataset.*
+*A version of this package with the complete dataset is available on GitHub.*
+```{r, fig.width=6, fig.height=4}
+# Get IATAs from Texas cluster
+IATAs <- getFlightDelayData('IATAs', 'tcCluster')
 
 # Plot airports + connections (indicating number of flights by thickness)
 plotFlights(
@@ -103,25 +91,45 @@ plotFlights(
 )
 ```
 
-Next, we create the matrix containing (departing) flight delays for the considered airports and dates.
+For hyperparameter tuning and model comparison purposes, we will use a train-test-split,
+utilizing some data to estimate the graph structure and parameter matrix,
+and the remaining data to compute a likelihood value.
 ```{r}
-dates <- as.Date(dimnames(flights$delays)[[1]])
-indDates <- format(dates, "%Y") %in% yearNames
-mat <- flights$delays[indDates, IATAs, "departures"]
-# We remove all rows containing NAs
-rowHasNA <- apply(is.na(mat), 1, any)
-mat <- mat[!rowHasNA, ]
+# Check whether all dates from the train-test-split are available
+# (due to size restrictions, the CRAN version of this package does not contain all dates)
+allDatesAvailable <- tryCatch({
+    getFlightDelayData('dates', dateFilter = c('tcTrain', 'tcTest'))
+    TRUE
+}, error = function(...) FALSE)
+cat('All dates avilable:', allDatesAvailable, '\n')
 
-# Percentile used as threshold when transforming to multivariate Pareto distribution
-p <- 0.7
-
-# Empirical extremal correlation matrix
-emp_chi_mat <- emp_chi(mat, p = p)
-
+# Create train and test data sets
+if(allDatesAvailable){
+    # Use train-test-split and threshold p from article
+    matEst <- drop(getFlightDelayData('delays', 'tcCluster', 'tcTrain'))
+    matVal <- drop(getFlightDelayData('delays', 'tcCluster', 'tcTest'))
+    p <- 0.95
+} else {
+    # Take all available dates that do not contain NAs
+    mat <- drop(getFlightDelayData('delays', 'tcCluster', 'all'))
+    rowHasNA <- apply(is.na(mat), 1, any)
+    mat <- mat[!rowHasNA, ]
+    
+    # Split dates in half
+    splitInd <- floor(nrow(mat)/2)
+    matEst <- mat[1:splitInd,]
+    matVal <- mat[(splitInd+1):nrow(mat),]
+    
+    # Use a lower threshold to compensate for the smaller dataset
+    p <- 0.8
+}
 ```
 
 This function will be used later to compare fitted parameters to empirical ones.
 ```{r}
+# Compute the empirical extremal correlation matrix
+emp_chi_mat <- emp_chi(matEst, p = p)
+
 # Utility function to plot fitted parameters against true/empirical ones
 plot_fitted_params <- function(G0, G1, xlab = 'Empirical', ylab = 'Fitted'){
     return(
@@ -143,11 +151,12 @@ As a baseline for graphical modelling, we consider the graph with edges
 representing at least monthly connections between airports. 
 ```{r}
 # Compute undirected flights per connection between selected airports
+nYears <- dim(flights$flightCounts)[3]
+flightsPerConnection <- apply(flights$flightCounts[IATAs,IATAs,], c(1, 2), sum)
 flightsPerConnectionUD <- flightsPerConnection + t(flightsPerConnection)
-flightsPerConnectionUD <- flightsPerConnectionUD[IATAs, IATAs]
 
 # Make flight graph from adjacency matrix
-A <- 1 * (flightsPerConnectionUD > length(yearNames) * 12)
+A <- 1 * (flightsPerConnectionUD > nYears * 12)
 flight_graph <- graph_from_adjacency_matrix(A, diag = FALSE, mode = "undirected")
 
 # Plot flight graph
@@ -158,7 +167,7 @@ Given the `flight_graph` object, we fit a Hüsler--Reiss model with that graphic
 ```{r, message=FALSE, warning=FALSE}
 # Fit the model
 model_fit <- fmpareto_graph_HR(
-    data = mat,
+    data = matEst,
     graph = flight_graph,
     p = p,
     method = "vario"
@@ -166,12 +175,12 @@ model_fit <- fmpareto_graph_HR(
 
 # Compute likelihood/ICs
 flights_loglik_graph <- loglik_HR(
-    data = mat,
+    data = matVal,
     p = p,
     graph = flight_graph,
     Gamma = model_fit
 )
-cat("Flight graph BIC =", round(flights_loglik_graph['bic'], 2), "\n")
+cat("Flight graph test-loglikelihood =", round(flights_loglik_graph['loglik'], 2), "\n")
 
 # Plot fitted parameters
 plot_fitted_params(emp_chi_mat, Gamma2chi(model_fit))
@@ -182,16 +191,16 @@ plot_fitted_params(emp_chi_mat, Gamma2chi(model_fit))
 Next, we fit an extremal tree model to the flight delays using `emst()`.
 ```{r, collapse=TRUE, fig.align='', fig.show='hold', out.width='50%'}
 # Fit the model
-flights_emst_fit <- emst(data = mat, p = p, method = "vario")
+flights_emst_fit <- emst(data = matEst, p = p, method = "vario")
 
 # Compute likelihood/ICs
 flights_loglik_tree <- loglik_HR(
-    data = mat,
+    data = matVal,
     p = p,
     Gamma = flights_emst_fit$Gamma,
     graph = flights_emst_fit$graph
 )
-cat("Tree BIC =", round(flights_loglik_tree['bic'], 2), "\n")
+cat("Tree test-loglikelihood =", round(flights_loglik_tree['likelihood'], 2), "\n")
 
 # Plot fitted graph, parameters
 plotFlights(
@@ -210,12 +219,12 @@ Lastly, we fit a general graphical model with `eglearn()`, using a suitable list
 ```{r, message=FALSE, warning=FALSE}
 # Fit the model
 rholist <- seq(0, 0.50, length.out = 11)
-flights_eglearn_fit <- eglearn(mat, p = p, rholist = rholist, complete_Gamma = TRUE)
+flights_eglearn_fit <- eglearn(matEst, p = p, rholist = rholist, complete_Gamma = TRUE)
 
 # Compute likelihood/ICs
 flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
     loglik_HR(
-        data = mat,
+        data = matVal,
         p = p,
         Gamma = flights_eglearn_fit$Gamma[[j]],
         graph = flights_eglearn_fit$graph[[j]]
@@ -223,16 +232,16 @@ flights_loglik <- sapply(seq_along(rholist), FUN = function(j) {
 })
 ```
 
-The "best" penalization parameter can be chosen e.g. such that the BIC is minimized.
+The "best" penalization parameter can be chosen e.g. such that the test-likelihood is maximized
 ```{r}
 ggplot(
-    mapping = aes(x = rholist, y = flights_loglik['bic', ])) +
+    mapping = aes(x = rholist, y = flights_loglik['loglik', ])) +
     geom_line() +
     geom_point(shape = 21, size = 3, stroke = 1, fill = "white") +
-    geom_hline(aes(yintercept = flights_loglik_graph['bic']), lty = "dashed") +
-    geom_hline(aes(yintercept = flights_loglik_tree['bic']), lty = "dotted") +
+    geom_hline(aes(yintercept = flights_loglik_graph['loglik']), lty = "dashed") +
+    geom_hline(aes(yintercept = flights_loglik_tree['loglik']), lty = "dotted") +
     xlab("rho") +
-    ylab("BIC") +
+    ylab("Log-likelihood") +
     scale_x_continuous(
         breaks = rholist,
         labels = round(rholist, 3),
@@ -246,9 +255,9 @@ ggplot(
         )
 )
 
-best_index <- which.min(flights_loglik['bic',])
+best_index <- which.max(flights_loglik['loglik',])
 cat('Best rho =', rholist[best_index], '\n')
-cat('Corresponding BIC =', flights_loglik['bic', best_index])
+cat('Corresponding test-loglikelihood =', flights_loglik['loglik', best_index])
 ```
 
 We plot the estimated graph and parameters of the best fitted model.

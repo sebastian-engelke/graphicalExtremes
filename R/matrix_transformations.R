@@ -413,7 +413,7 @@ matrix2par <- function(M, allowVector = FALSE, allowNull = FALSE){
 #'
 #' Transforms between the extremal correlation \eChi and the variogram \eGamma.
 #' Only valid for Huesler-Reiss distributions.
-#' Done elementwise, no checks of the entire matrix structure are performed.
+#' Done element-wise, no checks of the entire matrix structure are performed.
 #'
 #' @param chi Numeric vector or matrix with entries between 0 and 1.
 #'

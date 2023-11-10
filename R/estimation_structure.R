@@ -29,7 +29,7 @@
 #'
 #' @return List made of:
 #' \item{`graph`}{
-#'   A list of \[`igraph::graph`\] objects representing the
+#'   A list of [`igraph::graph`] objects representing the
 #'   fitted graphs for each `rho` in `rholist`.
 #' }
 #' \item{`Gamma`}{
@@ -42,7 +42,7 @@
 #'   The list of penalty coefficients.
 #' }
 #' \item{`graph_ic`}{
-#'   A list of \[`igraph::graph`\] objects
+#'   A list of [`igraph::graph`] objects
 #'   representing the optimal graph
 #'   according to the `aic`, `bic`, and `mbic` information criteria.
 #'   If `reg_method = "glasso"`, it returns a list of `NULL`.
@@ -54,6 +54,12 @@
 #'   If `reg_method = "glasso"`, `complete_Gamma = FALSE`, or the underlying
 #'   graph is not connected, it returns a list of `NULL`.
 #' }
+#' 
+#' @examples
+#' set.seed(2)
+#' m <- generate_random_model(d=6)
+#' y <- rmpareto(n=500, par=m$Gamma)
+#' ret <- eglearn(y)
 #' 
 #' @references \insertAllCited{}
 #'
