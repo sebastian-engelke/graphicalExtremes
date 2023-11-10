@@ -1,12 +1,13 @@
 ---
 title: "Application to flight data"
 output:
-    html_vignette:
+    bookdown::html_vignette2:
         fig_width: 5
         fig_height: 5
         number_sections: true
         toc: true
         toc_depth: 1
+        output_file: lalala.html
 pkgdown:
     as_is: true
 bibliography: ../inst/REFERENCES.bib
