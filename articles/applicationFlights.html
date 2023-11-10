@@ -85,21 +85,18 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sebastian-engelke/graphicalExtremes" class="external-link">graphicalExtremes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span></code></pre></div>
-<p>The <code>flights</code> dataset contains daily total delays of major
-U.S. airlines. For details, see the corresponding documentation page.
+<p>The <code>flights</code> dataset contains daily total delays of major U.S. airlines.
+For details, see the corresponding documentation page.
 Below, we plot all airports in the dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotFlights.html">plotFlights</a></span><span class="op">(</span>plotConnections <span class="op">=</span> <span class="cn">FALSE</span>, map <span class="op">=</span> <span class="st">"world"</span>, xyRatio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;"></p>
-<p>To perform an example application, we follow Section 6 of <span class="citation">Hentschel et al. (2022)</span>. The subset of airports
-analyzed there is obtained through a previous clustering step, whose
-results are available through the function
-<code><a href="../reference/getFlightDelayData.html">getFlightDelayData()</a></code>. For more detailed explanations of the
-individual methods see Vignette “applicationDanube” and the help pages
-of applied functions. <em>Note: Due to size restrictions, the CRAN
-version of this package contains only a part of the full dataset.</em>
-<em>A version of this package with the complete dataset is available on
-GitHub.</em></p>
+<p>To perform an example application, we follow Section 6 of <span class="citation">Hentschel et al. (2022)</span>.
+The subset of airports analyzed there is obtained through a previous clustering step,
+whose results are available through the function <code><a href="../reference/getFlightDelayData.html">getFlightDelayData()</a></code>.
+For more detailed explanations of the individual methods see Vignette “applicationDanube” and the help pages of applied functions.
+<em>Note: Due to size restrictions, the CRAN version of this package contains only a part of the full dataset.</em>
+<em>A version of this package with the complete dataset is available on GitHub.</em></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get IATAs from Texas cluster</span></span>
 <span><span class="va">IATAs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getFlightDelayData.html">getFlightDelayData</a></span><span class="op">(</span><span class="st">'IATAs'</span>, <span class="st">'tcCluster'</span><span class="op">)</span></span>
@@ -111,10 +108,9 @@ GitHub.</em></p>
 <span>    useConnectionNFlights <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;"></p>
-<p>For hyperparameter tuning and model comparison purposes, we will use
-a train-test-split, utilizing some data to estimate the graph structure
-and parameter matrix, and the remaining data to compute a likelihood
-value.</p>
+<p>For hyperparameter tuning and model comparison purposes, we will use a train-test-split,
+utilizing some data to estimate the graph structure and parameter matrix,
+and the remaining data to compute a likelihood value.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check whether all dates from the train-test-split are available</span></span>
 <span><span class="co"># (due to size restrictions, the CRAN version of this package does not contain all dates)</span></span>
@@ -145,8 +141,7 @@ value.</p>
 <span>    <span class="co"># Use a lower threshold to compensate for the smaller dataset</span></span>
 <span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">0.8</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This function will be used later to compare fitted parameters to
-empirical ones.</p>
+<p>This function will be used later to compare fitted parameters to empirical ones.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the empirical extremal correlation matrix</span></span>
 <span><span class="va">emp_chi_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emp_chi.html">emp_chi</a></span><span class="op">(</span><span class="va">matEst</span>, p <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
@@ -167,11 +162,10 @@ empirical ones.</p>
 </div>
 <div class="section level2" number="2">
 <h2 id="fitting-a-model-to-the-flight-graph">
-<span class="header-section-number">2</span> Fitting a model to the
-flight graph<a class="anchor" aria-label="anchor" href="#fitting-a-model-to-the-flight-graph"></a>
+<span class="header-section-number">2</span> Fitting a model to the flight graph<a class="anchor" aria-label="anchor" href="#fitting-a-model-to-the-flight-graph"></a>
 </h2>
-<p>As a baseline for graphical modelling, we consider the graph with
-edges representing at least monthly connections between airports.</p>
+<p>As a baseline for graphical modelling, we consider the graph with edges
+representing at least monthly connections between airports.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute undirected flights per connection between selected airports</span></span>
 <span><span class="va">nYears</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">flights</span><span class="op">$</span><span class="va">flightCounts</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
@@ -185,8 +179,7 @@ edges representing at least monthly connections between airports.</p>
 <span><span class="co"># Plot flight graph</span></span>
 <span><span class="fu"><a href="../reference/plotFlights.html">plotFlights</a></span><span class="op">(</span><span class="va">IATAs</span>, graph <span class="op">=</span> <span class="va">flight_graph</span>, clipMap <span class="op">=</span> <span class="fl">1.3</span>, xyRatio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;"></p>
-<p>Given the <code>flight_graph</code> object, we fit a Hüsler–Reiss
-model with that graphical structure.</p>
+<p>Given the <code>flight_graph</code> object, we fit a Hüsler–Reiss model with that graphical structure.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit the model</span></span>
 <span><span class="va">model_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span></span>
@@ -204,7 +197,7 @@ model with that graphical structure.</p>
 <span>    Gamma <span class="op">=</span> <span class="va">model_fit</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Flight graph test-loglikelihood ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_graph</span><span class="op">[</span><span class="st">'loglik'</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Flight graph test-loglikelihood = -38439.26</span></span>
+<span><span class="co">#&gt; Flight graph test-loglikelihood = -38439.38</span></span>
 <span></span>
 <span><span class="co"># Plot fitted parameters</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">emp_chi_mat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -212,11 +205,9 @@ model with that graphical structure.</p>
 </div>
 <div class="section level2" number="3">
 <h2 id="fitting-a-tree-model">
-<span class="header-section-number">3</span> Fitting a tree
-model<a class="anchor" aria-label="anchor" href="#fitting-a-tree-model"></a>
+<span class="header-section-number">3</span> Fitting a tree model<a class="anchor" aria-label="anchor" href="#fitting-a-tree-model"></a>
 </h2>
-<p>Next, we fit an extremal tree model to the flight delays using
-<code><a href="../reference/emst.html">emst()</a></code>.</p>
+<p>Next, we fit an extremal tree model to the flight delays using <code><a href="../reference/emst.html">emst()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit the model</span></span>
 <span><span class="va">flights_emst_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/emst.html">emst</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">matEst</span>, p <span class="op">=</span> <span class="va">p</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
@@ -243,11 +234,9 @@ model<a class="anchor" aria-label="anchor" href="#fitting-a-tree-model"></a>
 </div>
 <div class="section level2" number="4">
 <h2 id="fitting-a-general-model">
-<span class="header-section-number">4</span> Fitting a general
-model<a class="anchor" aria-label="anchor" href="#fitting-a-general-model"></a>
+<span class="header-section-number">4</span> Fitting a general model<a class="anchor" aria-label="anchor" href="#fitting-a-general-model"></a>
 </h2>
-<p>Lastly, we fit a general graphical model with <code><a href="../reference/eglearn.html">eglearn()</a></code>,
-using a suitable list of penalization parameters.</p>
+<p>Lastly, we fit a general graphical model with <code><a href="../reference/eglearn.html">eglearn()</a></code>, using a suitable list of penalization parameters.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit the model</span></span>
 <span><span class="va">rholist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.50</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
@@ -262,8 +251,7 @@ using a suitable list of penalization parameters.</p>
 <span>        graph <span class="op">=</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">j</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>The “best” penalization parameter can be chosen e.g. such that the
-test-likelihood is maximized</p>
+<p>The “best” penalization parameter can be chosen e.g. such that the test-likelihood is maximized</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rholist</span>, y <span class="op">=</span> <span class="va">flights_loglik</span><span class="op">[</span><span class="st">'loglik'</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -292,9 +280,8 @@ test-likelihood is maximized</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Best rho ='</span>, <span class="va">rholist</span><span class="op">[</span><span class="va">best_index</span><span class="op">]</span>, <span class="st">'\n'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Best rho = 0.15</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Corresponding test-loglikelihood ='</span>, <span class="va">flights_loglik</span><span class="op">[</span><span class="st">'loglik'</span>, <span class="va">best_index</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Corresponding test-loglikelihood = -36971.07</span></span></code></pre></div>
-<p>We plot the estimated graph and parameters of the best fitted
-model.</p>
+<span><span class="co">#&gt; Corresponding test-loglikelihood = -36971</span></span></code></pre></div>
+<p>We plot the estimated graph and parameters of the best fitted model.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best_graph</span> <span class="op">&lt;-</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">best_Gamma</span> <span class="op">&lt;-</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>
@@ -303,13 +290,11 @@ model.</p>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-13-1.png" width="50%"><img src="applicationFlights_files/figure-html/unnamed-chunk-13-2.png" width="50%"></p>
 </div>
 <div class="section level2">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
 <div id="ref-hen2022" class="csl-entry">
-Hentschel, M., Engelke, S., and Segers, J. (2022). <em>Statistical
-inference for <span>H</span>üsler-<span>R</span>eiss graphical models
-through matrix completions</em>. arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link">https://doi.org/10.48550/ARXIV.2210.14292</a>
+Hentschel, M., Engelke, S., and Segers, J. (2022). <em>Statistical inference for <span>H</span>üsler-<span>R</span>eiss graphical models through matrix completions</em>. arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link">https://doi.org/10.48550/ARXIV.2210.14292</a>
 </div>
 </div>
 </div>
