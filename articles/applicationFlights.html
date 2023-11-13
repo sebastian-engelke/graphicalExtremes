@@ -197,7 +197,7 @@ representing at least monthly connections between airports.</p>
 <span>    Gamma <span class="op">=</span> <span class="va">model_fit</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Flight graph test-loglikelihood ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_graph</span><span class="op">[</span><span class="st">'loglik'</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Flight graph test-loglikelihood = -38439.38</span></span>
+<span><span class="co">#&gt; Flight graph test-loglikelihood = -38439.26</span></span>
 <span></span>
 <span><span class="co"># Plot fitted parameters</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">emp_chi_mat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -280,7 +280,7 @@ representing at least monthly connections between airports.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Best rho ='</span>, <span class="va">rholist</span><span class="op">[</span><span class="va">best_index</span><span class="op">]</span>, <span class="st">'\n'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Best rho = 0.15</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Corresponding test-loglikelihood ='</span>, <span class="va">flights_loglik</span><span class="op">[</span><span class="st">'loglik'</span>, <span class="va">best_index</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Corresponding test-loglikelihood = -36971</span></span></code></pre></div>
+<span><span class="co">#&gt; Corresponding test-loglikelihood = -36971.19</span></span></code></pre></div>
 <p>We plot the estimated graph and parameters of the best fitted model.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best_graph</span> <span class="op">&lt;-</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>
