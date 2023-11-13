@@ -7,7 +7,6 @@ output:
         number_sections: true
         toc: true
         toc_depth: 1
-        output_file: lalala.html
 pkgdown:
     as_is: true
 bibliography: ../inst/REFERENCES.bib
