@@ -23,11 +23,12 @@
 #' @param useConnectionNFlights Logical. Whether to vary the size of the edges representing connections in the plot,
 #' according to the number of flights on that connection.
 #' @param minNFlights Numeric scalar. Only plot connections with at least this many flights.
-#' @param map String or `NULL`. What map to use as the background image. Is passed to `ggplot2::map_data()`.
+#' @param map String or [`data.frame`] or `NULL`. What map to use as the background image.
+#' Strings are passed to [`ggplot2::map_data()`], data frames are assumed to be the output of [`ggplot2::map_data()`].
 #' @param vertexColors Optional vector, named with IATA codes, to be used as colors for the vertices/airports.
 #' @param vertexShapes Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to `character`.
 #' @param edgeColors Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
-#' If this is a vector, its entries must match the plotted connections (in the order specified in `connections_sel` or implied by `igraph::get.edgelist`).
+#' If this is a vector, its entries must match the plotted connections (in the order specified in `connections_sel` or implied by [`igraph::get.edgelist`]).
 #' If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).
 #' @param xyRatio Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.
 #' @param clipMap Logical or numeric scalar. Whether to ignore the map image when determining the axis limits of the plot.
@@ -95,7 +96,7 @@ plotFlights <- function(
     }
   }
   # Set map to NULL if not specified:
-  if(is.null(map) || is.na(map) || nchar(map) == 0){
+  if(is.null(map) || is.na(map) || identical(map, '')){
     map <- NULL
   }
   # Make selection of airports:
@@ -244,7 +245,13 @@ plotFlights <- function(
   
   # Plot US map in background:
   if(!is.null(map)){
-    dmap <- ggplot2::map_data(map)
+    if(is.character(map)){
+      dmap <- ggplot2::map_data(map)
+    } else if(is.data.frame(map)){
+      dmap <- map
+    } else{
+      stop('Argument `map` has to be a string, data.frame, or NULL.')
+    }
     ggp <- ggp + ggplot2::geom_polygon(
       data = dmap,
       ggplot2::aes_string(x = 'long', y = 'lat', group = 'group'),
@@ -261,7 +268,7 @@ plotFlights <- function(
     xData <- airports_sel$Longitude
     yData <- airports_sel$Latitude
     if(!clipMap && !is.null(map)){
-      m <- ggplot2::map_data(map)
+      m <- dmap
       xData <- c(xData, range(m$long))
       yData <- c(yData, range(m$lat))
     }
