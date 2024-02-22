@@ -374,7 +374,7 @@ plot_fitted_params(chi_hat, Gamma2chi(emst_fit$Gamma), xlab = 'Empirical')
 ```
 
 
-## Hüsler--Reiss graphical models
+## Huesler--Reiss graphical models
 
 The Hüsler--Reiss Pareto distribution $\g Y$
 is parametrized by the variogram matrix $\Gamma$. Using the linear transformation \@ref(eq:Sigmak), we obtain the covariance matrix $\Sigma^{(k)}$ for $k\in V$. The inverse, called a precision matrix, is denoted by $\Theta^{(k)}$.
