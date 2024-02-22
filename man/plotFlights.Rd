@@ -55,14 +55,15 @@ according to the number of flights on that connection.}
 
 \item{minNFlights}{Numeric scalar. Only plot connections with at least this many flights.}
 
-\item{map}{String or \code{NULL}. What map to use as the background image. Is passed to \code{ggplot2::map_data()}.}
+\item{map}{String or \code{\link{data.frame}} or \code{NULL}. What map to use as the background image.
+Strings are passed to \code{\link[ggplot2:map_data]{ggplot2::map_data()}}, data frames are assumed to be the output of \code{\link[ggplot2:map_data]{ggplot2::map_data()}}.}
 
 \item{vertexColors}{Optional vector, named with IATA codes, to be used as colors for the vertices/airports.}
 
 \item{vertexShapes}{Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to \code{character}.}
 
 \item{edgeColors}{Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
-If this is a vector, its entries must match the plotted connections (in the order specified in \code{connections_sel} or implied by \code{igraph::get.edgelist}).
+If this is a vector, its entries must match the plotted connections (in the order specified in \code{connections_sel} or implied by \code{\link[igraph:as_edgelist]{igraph::get.edgelist}}).
 If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).}
 
 \item{xyRatio}{Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.}
