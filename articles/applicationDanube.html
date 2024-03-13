@@ -207,7 +207,7 @@ where <span class="math inline">\(\Phi\)</span> is the standard normal distribut
 <span class="math display">\[\begin{equation*}
     \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left[\log\{1 -  F_i(X_{i})\}- \log\{1 - F_j(X_j)\} \mid F_k(X_k) &gt; p\right], \quad i,j\in V,
     \end{equation*}\]</span><br>
-whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 - F_i(X_{i})\}\)</span> transforms <span class="math inline">\(X_i\)</span> to a standard exponential distribution, such that <span class="math inline">\(\Gamma^{(k)}\)</span> is simply the variogram matrix of <span class="math inline">\(\mathbf{X}\)</span> on exponential scale, conditioned on the <span class="math inline">\(k\)</span>th variable being large.</p>
+whenever right-hand side exists. Note that <span class="math inline">\(-\log\{1 -  F_i(X_{i})\}\)</span> transforms <span class="math inline">\(X_i\)</span> to a standard exponential distribution, such that <span class="math inline">\(\Gamma^{(k)}\)</span> is simply the variogram matrix of <span class="math inline">\(\mathbf{X}\)</span> on exponential scale, conditioned on the <span class="math inline">\(k\)</span>th variable being large.</p>
 <p>The limit as <span class="math inline">\(p\to 1\)</span> is called the extremal variogram and can be expressed in terms of the MPD <span class="math inline">\(\mathbf{Y}\)</span>:
 <span class="math display">\[\begin{equation*}
 \Gamma_{ij}^{(k)} = \lim_{p\to 1} \Gamma_{ij}^{(k)}(p) = \mathop{\mathrm{Var}}\left\{ \log Y^k_{i} - \log Y^k_j \mid Y_k &gt; 1 \right\}, \quad i,j\in V.
@@ -390,8 +390,8 @@ which represents the corresponding extremal graph structure.</p>
 <span><span class="co">#&gt; [3,] -0.5  0.0  1.0 -0.5</span></span>
 <span><span class="co">#&gt; [4,]  0.0 -0.5 -0.5  1.0</span></span>
 <span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH 6e9d53d U--- 4 4 -- </span></span>
-<span><span class="co">#&gt; + edges from 6e9d53d:</span></span>
+<span><span class="co">#&gt; IGRAPH 973b969 U--- 4 4 -- </span></span>
+<span><span class="co">#&gt; + edges from 973b969:</span></span>
 <span><span class="co">#&gt; [1] 1--2 1--3 2--4 3--4</span></span></code></pre></div>
 </div>
 <div class="section level4" number="3.2.2">
@@ -549,7 +549,7 @@ It returns the (sequence) of estimated graphs and, if desired, the corresponding
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-asadi2015" class="csl-entry">
 Asadi, P., Davison, A. C., and Engelke, S. (2015). Extremes on river networks. <em>Ann. Appl. Stat.</em>, <em>9</em>(4), 2023–2050. <a href="https://doi.org/10.1214/15-AOAS863" class="external-link">https://doi.org/10.1214/15-AOAS863</a>
 </div>

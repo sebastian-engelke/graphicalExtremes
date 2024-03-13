@@ -197,7 +197,7 @@ representing at least monthly connections between airports.</p>
 <span>    Gamma <span class="op">=</span> <span class="va">model_fit</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Flight graph test-loglikelihood ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">flights_loglik_graph</span><span class="op">[</span><span class="st">'loglik'</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Flight graph test-loglikelihood = 536.04</span></span>
+<span><span class="co">#&gt; Flight graph test-loglikelihood = 536.06</span></span>
 <span></span>
 <span><span class="co"># Plot fitted parameters</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">emp_chi_mat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">model_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -272,7 +272,12 @@ representing at least monthly connections between airports.</p>
 <span>            <span class="op">)</span>,</span>
 <span>            name <span class="op">=</span> <span class="st">"Number of edges"</span></span>
 <span>        <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `trans` argument of `sec_axis()` is deprecated as of ggplot2 3.5.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `transform` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
 <p><img src="applicationFlights_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -280,7 +285,7 @@ representing at least monthly connections between airports.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Best rho ='</span>, <span class="va">rholist</span><span class="op">[</span><span class="va">best_index</span><span class="op">]</span>, <span class="st">'\n'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Best rho = 0.15</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'Corresponding test-loglikelihood ='</span>, <span class="va">flights_loglik</span><span class="op">[</span><span class="st">'loglik'</span>, <span class="va">best_index</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Corresponding test-loglikelihood = 1123.474</span></span></code></pre></div>
+<span><span class="co">#&gt; Corresponding test-loglikelihood = 1123.491</span></span></code></pre></div>
 <p>We plot the estimated graph and parameters of the best fitted model.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best_graph</span> <span class="op">&lt;-</span> <span class="va">flights_eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>
@@ -292,7 +297,7 @@ representing at least monthly connections between airports.</p>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-hen2022" class="csl-entry">
 Hentschel, M., Engelke, S., and Segers, J. (2022). <em>Statistical inference for <span>H</span>üsler-<span>R</span>eiss graphical models through matrix completions</em>. arXiv. <a href="https://doi.org/10.48550/ARXIV.2210.14292" class="external-link">https://doi.org/10.48550/ARXIV.2210.14292</a>
 </div>
