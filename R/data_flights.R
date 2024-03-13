@@ -159,41 +159,30 @@ plotFlights <- function(
   if(plotConnections){
     # Make selection of connections:
     if(is.null(graph)){
-      # Select all connections, that are between selected airports
-      # and with >= minNFlights flights:
-      ind <- (
-        (
-          connections_sel$departureAirport %in% IATAS
-          | connections_sel$arrivalAirport %in% IATAS
-        )
-        & connections_sel$nFlights >= minNFlights
-      )
-      connections_sel <- connections_sel[ind,]
-    } else{
-      # Convert graph to connections list
-      m <- igraph::get.edgelist(graph, names=FALSE)
-      connections_graph <- data.frame(matrix(IATAS[m], ncol = 2))
-      airportColNames <- c('departureAirport', 'arrivalAirport')
-      colnames(connections_graph) <- airportColNames
-
-      # Read nFlights per connection from connections_sel
-      rownames(connections_sel) <- paste0(
-        connections_sel$departureAirport, '_', connections_sel$arrivalAirport 
-      )
-      rownames(connections_graph) <- paste0(
-        connections_graph$departureAirport, '_', connections_graph$arrivalAirport 
-      )
-      if(useConnectionNFlights){
-        connections_graph$nFlights <- 0
-        connections_graph$nFlights <- connections_sel[
-          rownames(connections_graph),
-          'nFlights'
-        ]
-        connections_graph$nFlights[is.na(connections_graph$nFlights)] <- 1
-      }
-      connections_sel <- connections_graph
+      graph <- getFlightGraph(IATAS, minNFlights = minNFlights)
     }
+    # Convert graph to connections list
+    m <- igraph::get.edgelist(graph, names=FALSE)
+    connections_graph <- data.frame(matrix(IATAS[m], ncol = 2))
+    airportColNames <- c('departureAirport', 'arrivalAirport')
+    colnames(connections_graph) <- airportColNames
 
+    # Read nFlights per connection from connections_sel
+    rownames(connections_sel) <- paste0(
+      connections_sel$departureAirport, '_', connections_sel$arrivalAirport 
+    )
+    rownames(connections_graph) <- paste0(
+      connections_graph$departureAirport, '_', connections_graph$arrivalAirport 
+    )
+    if(useConnectionNFlights){
+      connections_graph$nFlights <- 0
+      connections_graph$nFlights <- connections_sel[
+        rownames(connections_graph),
+        'nFlights'
+      ]
+      connections_graph$nFlights[is.na(connections_graph$nFlights)] <- 1
+    }
+    connections_sel <- connections_graph
 
     # Add coordinates to selected connections:
     connections_sel$x0 <- airports_sel[connections_sel$departureAirport, 'Longitude']
@@ -507,3 +496,47 @@ flightCountMatrixToConnectionList <- function(nFlightsPerConnection, directed=TR
   )
   return(df)
 }
+
+
+#' Get flight graph
+#' 
+#' Convert the info from `flights$flightCounts` to an [`igraph::graph`] object.
+#' 
+#' @param IATAs Character vector. IATA codes of airports to include
+#' @param years Character vector. Years to include (as strings).
+#' @param minNFlights Numerical scalar. Minimum number of flights on a connection to
+#' be included as an edge.
+#' @param directed Logical scalar. Whether flights A->B and B->A should be considered separately.
+#' 
+#' @return An [`igraph::graph`] object containing a vertex for each airport
+#' and an edge whenever there are at least `minNFlights` between two airports.
+#' 
+#' @examples
+#' g <- getFlightGraph()
+#' 
+#' @family flightData
+#' @export
+getFlightGraph <- function(
+  IATAs = NULL,
+  years = NULL,
+  minNFlights = 1,
+  directed = FALSE
+){
+  flightCounts <- flights$flightCounts
+  if(!is.null(IATAs)){
+    flightCounts <- flightCounts[IATAs, IATAs,]
+  }
+  if(!is.null(years)){
+    flightCounts <- flightCounts[,,years]
+  }
+  nFlightMat <- apply(flightCounts, c(1,2), sum)
+  if(directed){
+    A <- 1*(nFlightMat >= minNFlights)
+    g <- igraph::graph_from_adjacency_matrix(A, mode = 'directed')
+  } else{
+    A <- 1*(nFlightMat + t(nFlightMat) >= minNFlights)
+    g <- igraph::graph_from_adjacency_matrix(A, mode = 'undirected')
+  }
+  return(g)
+}
+

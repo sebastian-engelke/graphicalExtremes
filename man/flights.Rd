@@ -95,6 +95,7 @@ connections_10 <- flightCountMatrixToConnectionList(flights$flightCounts[,,'2010
 Other flight data related topics:
 \code{\link{flightCountMatrixToConnectionList}()},
 \code{\link{getFlightDelayData}()},
+\code{\link{getFlightGraph}()},
 \code{\link{plotFlights}()}
 
 Other datasets:

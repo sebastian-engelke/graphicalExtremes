@@ -54,6 +54,7 @@ specify \code{dateFilter="all"}.
 Other flight data related topics:
 \code{\link{flightCountMatrixToConnectionList}()},
 \code{\link{flights}},
+\code{\link{getFlightGraph}()},
 \code{\link{plotFlights}()}
 }
 \concept{flightData}

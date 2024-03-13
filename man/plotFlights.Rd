@@ -101,6 +101,7 @@ plotFlights(IATAs, graph=graph, clipMap = 1.5)
 Other flight data related topics:
 \code{\link{flightCountMatrixToConnectionList}()},
 \code{\link{flights}},
-\code{\link{getFlightDelayData}()}
+\code{\link{getFlightDelayData}()},
+\code{\link{getFlightGraph}()}
 }
 \concept{flightData}
