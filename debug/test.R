@@ -1,28 +1,50 @@
 
-# devtools::load_all()
+library(graphicalExtremes)
 
-options(warn=1)
+FILE0 <- 'plotFlights0.pdf'
+FILE1 <- 'plotFlights1.pdf'
 
-eps <- 1e-15
-eps2 <- 1e-13
-eps3 <- 0.0004
+IATAs <- getFlightDelayData("IATAs", "tcCluster")
 
-Mij <- function(i, j, d){
-  M <- matrix(0, d, d)
-  M[i,j] <- 1
-  return(M)
+pdf(FILE0)
+
+MIN_N_FLIGHTS <- 20
+
+gg0 <- plotFlights(
+  IATAs,
+  minNFlights = MIN_N_FLIGHTS,
+  useAirportNFlights = TRUE,
+  useConnectionNFlights = FALSE,
+  returnGGPlot = TRUE,
+  clipMap = 1.3,
+  xyRatio = 1
+)
+plot(gg0)
+dev.off()
+
+pdf(FILE1)
+g <- getFlightGraph(IATAs, minNFlights = MIN_N_FLIGHTS)
+gg1 <- plotFlights(
+  IATAs,
+  graph = g,
+  useAirportNFlights = TRUE,
+  useConnectionNFlights = FALSE,
+  returnGGPlot = TRUE,
+  clipMap = 1.3,
+  xyRatio = 1
+)
+plot(gg1)
+dev.off()
+
+silentRdiff <- function(from, to){
+  capture.output(ret <- suppressWarnings(tools::Rdiff(from, to, Log=TRUE)))
+  ret$status != 0L
 }
 
-emptyMatrix <- matrix(0, 0, 0)
 
-oneMatrix0 <- matrix(0, 1, 1)
-oneMatrix1 <- matrix(1, 1, 1)
-oneMatrixEps <- matrix(eps, 1, 1)
-
-G1 <- matrix(c(0, 1, 1, 0), 2, 2)
-G2 <- G1 + diag(2) * eps
-G3 <- G1 + Mij(1, 2, 2) * eps2 + diag(2) * eps2
-
-G3c <- checkGamma(G3, tol = 0, alert=TRUE)
-
-G3c <- checkGamma(G3c, tol = 0, alert=TRUE)
+pdfsDifferent <- silentRdiff(FILE0, FILE1)
+if(pdfsDifferent){
+  cat('PDF plots are different (', FILE0, ' != ', FILE1, ').\n', sep='')
+} else{
+  cat('PDF plots are the same (', FILE0, ' == ', FILE1, ').\n', sep='')
+}
