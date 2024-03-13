@@ -29,6 +29,7 @@ flightCountMatrixToConnectionList(flights$flightCounts[1:100, 1:100, 1])
 Other flight data related topics:
 \code{\link{flights}},
 \code{\link{getFlightDelayData}()},
+\code{\link{getFlightGraph}()},
 \code{\link{plotFlights}()}
 }
 \concept{flightData}
