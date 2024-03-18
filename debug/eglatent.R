@@ -1,4 +1,9 @@
 
+library(tidyverse)
+library(CVXR)
+library(igraph)
+library(graphicalExtremes)
+
 generate_latent_model <- function(p, h) {
   W <- matrix(1, p + h, p + h)
   S <- matrix(0, p, p)
@@ -85,7 +90,9 @@ eglatent <- function(Gamma,
   lambda_list <- list()
 
   for (lambda1_iter in 1:length(lam1_list)) {
+    cat('\n\nLambda 1:', lam1_list[lambda1_iter], '(', lambda1_iter, '/', length(lam1_list), ')\n\n\n')
     for (lambda2_iter in 1:length(lam2_list)) {
+      cat('Lambda 2:', lam2_list[lambda2_iter], '(', lambda2_iter, '/', length(lam2_list), ')\n')
       lambda_1 <- lam1_list[lambda1_iter]
       lambda_2 <- lam2_list[lambda2_iter]
 
@@ -647,3 +654,12 @@ save_myplot <- function(plt, plt_nm,
     knitr::plot_crop(plt_nm)
   } 
 }
+
+ret <- sim_study_latent(
+  method='mpareto',
+  lambda=c(0.1, 0.15, 0.19, 0.205),
+  gen_model='BA',
+  reg_method='eglatent',
+  rhostring='seq(0.01,0.15,length=4)'
+)
+
