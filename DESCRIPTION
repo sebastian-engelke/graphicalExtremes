@@ -38,7 +38,8 @@ Imports:
     osqp,
     glmnet,
     glassoFast,
-    edmcr
+    edmcr,
+    CVXR
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
 RdMacros: Rdpack
