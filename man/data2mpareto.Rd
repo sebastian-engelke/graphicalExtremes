@@ -59,6 +59,7 @@ Other parameter estimation methods:
 \code{\link{loglik_HR}()}
 
 Other structure estimation methods:
+\code{\link{eglatent}()},
 \code{\link{eglearn}()},
 \code{\link{emst}()},
 \code{\link{fit_graph_to_Theta}()}

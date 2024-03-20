@@ -25,6 +25,7 @@ correspond to high absolute values in Theta.
 \seealso{
 Other structure estimation methods:
 \code{\link{data2mpareto}()},
+\code{\link{eglatent}()},
 \code{\link{eglearn}()},
 \code{\link{emst}()}
 }

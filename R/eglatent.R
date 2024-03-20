@@ -1,5 +1,42 @@
 
 
+#' Learning extremal graph structure with latent variables
+#' 
+#' Following the methodology from \insertCite{engelkeTaeb2024;textual}{graphicalExtremes},
+#' fits an extremal graph structure with latent variables.
+#' 
+#' 
+#' @param Gamma Numeric matrix, ??
+#' 
+#' @param lam1_list Numeric vector, ??
+#' 
+#' @param lam2_list Numeric vector, ??
+#' 
+#' @param refit Logical scalar, ??
+#' 
+#' @param verbose Logical scalar, indicating whether to print progress updates.
+#' 
+#' @return List made of:
+#' \item{`G_obs`}{
+#'   List of numeric matrices, ??
+#' }
+#' \item{`G_obs_refit`}{
+#'   List of numeric matrices, ?? if `refit == TRUE` ??
+#' }
+#' \item{`graph`}{
+#'   List of [`igraph::graph`] objects, ??
+#' }
+#' \item{`rk`}{
+#'   Numeric vector, ??
+#' }
+#' 
+#' @examples
+#' ??
+#' 
+#' @references \insertAllCited{}
+#'
+#' @family structureEstimation
+#' @export
 eglatent <- function(
   Gamma,
   lam1_list = c(0.1, 0.15, 0.19, 0.205),

@@ -64,6 +64,7 @@ my_fit <- emst(my_data, p = NULL, method = "ML", cens = FALSE)
 \seealso{
 Other structure estimation methods:
 \code{\link{data2mpareto}()},
+\code{\link{eglatent}()},
 \code{\link{eglearn}()},
 \code{\link{fit_graph_to_Theta}()}
 }

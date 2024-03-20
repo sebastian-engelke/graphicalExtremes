@@ -212,7 +212,8 @@ sim_study_latent <- function(d = 5,
   }
   else if(reg_method=="eglatent"){
     ptm <- proc.time()[1]
-    fit_latent <- eglatent(Gamma = G_emp, lam1_list = rholist, lam2_list = lambda_2, refit = TRUE)    
+    # fit_latent <- eglatent(verbose = TRUE, Gamma = G_emp, lam1_list = rholist, lam2_list = lambda_2, refit = TRUE)    
+    fit_latent <- eglatent(verbose = TRUE, Gamma = G_emp, lam1_list = rholist[1], lam2_list = lambda_2[1], refit = TRUE)    
     time <- proc.time()[1] - ptm
     F1 <- sapply(1:length(rholist), FUN = function(i) F1_score(g = g, gest = fit_latent$graph[[i]]))
     rk <- fit_latent$rk
