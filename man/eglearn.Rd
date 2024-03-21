@@ -83,6 +83,7 @@ ret <- eglearn(y)
 \seealso{
 Other structure estimation methods:
 \code{\link{data2mpareto}()},
+\code{\link{eglatent}()},
 \code{\link{emst}()},
 \code{\link{fit_graph_to_Theta}()}
 }
