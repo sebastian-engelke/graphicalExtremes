@@ -7,44 +7,54 @@
 eglatent(
   Gamma,
   lam1_list = c(0.1, 0.15, 0.19, 0.205),
-  lam2_list = c(0.1, 0.15, 0.19, 0.205),
+  lam2_list = c(2),
   refit = TRUE,
   verbose = FALSE
 )
 }
 \arguments{
-\item{Gamma}{Numeric matrix, ??}
+\item{Gamma}{conditionally negative semidefinite matrix. This will be typically the empirical variogram matrix.}
 
-\item{lam1_list}{Numeric vector, ??}
+\item{lam1_list}{Numeric vector of non-negative regularization parameters for eglatent.
+Default is \code{lam1_list = c(0.1, 0.15, 0.19, 0.205)}.}
 
-\item{lam2_list}{Numeric vector, ??}
+\item{lam2_list}{Numeric vector of non-negative regularization parameters for eglatent.
+Default is \code{lam2_list = c(2)}.}
 
-\item{refit}{Logical scalar, ??}
+\item{refit}{Logical scalar, if TRUE then the model is refit on the estimated graph to obtain an estimate of the Gamma matrix on that graph.
+Default is \code{refit = TRUE}.}
 
 \item{verbose}{Logical scalar, indicating whether to print progress updates.}
 }
 \value{
-List made of:
-\item{\code{G_obs}}{
-List of numeric matrices, ??
-}
-\item{\code{G_obs_refit}}{
-List of numeric matrices, ?? if \code{refit == TRUE} ??
-}
-\item{\code{graph}}{
-List of \code{\link[igraph:make_graph]{igraph::graph}} objects, ??
+The function fits one model for each combination
+of values in \code{lam1_list} and \code{lam2_list}. All returned objects
+have one entry per model. List consisting of:
+#' \item{\code{graph}}{
+A list of \code{\link[igraph:make_graph]{igraph::graph}} objects representing the
+fitted graphs.
 }
 \item{\code{rk}}{
-Numeric vector, ??
+Numeric vector containing the estimated ranks of the latent
+variables.
+}
+\item{\code{G_est}}{
+A list of numeric estimated \dxd
+variogram matrices \eGamma corresponding to the fitted graphs.
+}
+\item{\code{G_refit}}{
+A list of numeric estimated \dxd
+variogram matrices \eGamma refitted with fixed graphs
+corresponding to the fitted graphs.
+}
+\item{\code{lambdas}}{
+A list containing the values of \code{lam1_list} and \code{lam2_list}
+used for the model fit.
 }
 }
 \description{
 Following the methodology from \insertCite{engelkeTaeb2024;textual}{graphicalExtremes},
 fits an extremal graph structure with latent variables.
-}
-\examples{
-??
-
 }
 \references{
 \insertAllCited{}

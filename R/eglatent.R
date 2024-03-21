@@ -39,7 +39,7 @@
 #'   variogram matrices \eGamma refitted with fixed graphs 
 #'   corresponding to the fitted graphs.
 #' }
-#' \item{`lambda_list`}{
+#' \item{`lambdas`}{
 #'   A list containing the values of `lam1_list` and `lam2_list` 
 #'   used for the model fit.
 #' }
@@ -146,10 +146,10 @@ eglatent <- function(
   }
 
   return(list(
-    graph = graph,
+    graph = graph_obs,
     rk = rk_vec,
     G_est = G_est,
     G_refit = G_refit,
-    lambda_list = lambda_list
+    lambdas = lambda_list
   ))
 }

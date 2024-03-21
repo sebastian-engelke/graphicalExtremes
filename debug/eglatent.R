@@ -4,7 +4,7 @@ library(CVXR)
 library(igraph)
 
 # devtools::load_all()
-library(graphicalExtremes)
+# library(graphicalExtremes)
 
 generate_latent_model <- function(p, h) {
   W <- matrix(1, p + h, p + h)
@@ -218,7 +218,7 @@ sim_study_latent <- function(d = 5,
     time <- proc.time()[1] - ptm
     F1 <- sapply(1:length(rholist), FUN = function(i) F1_score(g = g, gest = fit_latent$graph[[i]]))
     rk <- fit_latent$rk
-    loglik_val <- sapply(1:length(rholist), FUN = function(i) {loglik_HR(data = X_val, p=p, Gamma = fit_latent$G_obs_refit[[i]], cens = FALSE)[1]})
+    loglik_val <- sapply(1:length(rholist), FUN = function(i) {loglik_HR(data = X_val, p=p, Gamma = fit_latent$G_refit[[i]], cens = FALSE)[1]})
   }
 
 
