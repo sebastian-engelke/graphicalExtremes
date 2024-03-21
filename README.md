@@ -9,9 +9,9 @@ simulation algorithms and statistical inference methods for multivariate
 Pareto distributions on graphical structures.
 
 Contains also implementations of statistical methods from Engelke and
-Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022), and
-Hentschel et al. (2022), as well as data sets from Asadi et al. (2015)
-and Hentschel et al. (2022).
+Volgushev (2022), Röttger et al. (2021), Engelke et al. (2022),
+Hentschel et al. (2022), and Engelke and Taeb (2024), as well as data
+sets from Asadi et al. (2015) and Hentschel et al. (2022).
 
 ## Installation
 
@@ -56,6 +56,13 @@ discussion). *J. R. Stat. Soc. Ser. B Stat. Methodol.*, *82*, 871–932.
 Engelke, S., Lalancette, M., and Volgushev, S. (2022). *Learning
 extremal graphical structures in high dimensions*. arXiv.
 <https://doi.org/10.48550/ARXIV.2111.00840>
+
+</div>
+
+<div id="ref-engelkeTaeb2024" class="csl-entry">
+
+Engelke, S., and Taeb, A. (2024). *Extremal graphical modeling with
+latent variables*. <https://arxiv.org/abs/2403.09604>
 
 </div>
 
