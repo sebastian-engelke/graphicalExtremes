@@ -91,7 +91,7 @@ eglatent <- function(
       constraints <- list(P == S - L, U %*% t(U) %*% (P) %*% U %*% t(U) == P)
       prob <- CVXR::Problem(objective, constraints)
       result <- CVXR::solve(prob)
-      G_est[[r]] <- graphicalExtremes:::ensure_matrix_symmetry(Theta2Gamma(result$getValue(P), check = FALSE))
+      G_est[[r]] <- ensure_matrix_symmetry(Theta2Gamma(result$getValue(P), check = FALSE))
 
       rk_vec[r] <- length(which(eigen(result$getValue(L))$values >= 10^(-3)))
       if (rk_vec[r] == 0) {
@@ -124,7 +124,7 @@ eglatent <- function(
           S <- CVXR::Variable(d, d, PSD = TRUE)
           R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::diag(P %*% Gamma)) 
           objective <- CVXR::Minimize(R)
-          constraints <- list(P == S - subspace_est %*% M %*% t(subspace_est), U %*% t(U) %*% (P) %*% U %*% t(U) == P, A %*% reshape_expr(S, c(d^2, 1)) == 0)
+          constraints <- list(P == S - subspace_est %*% M %*% t(subspace_est), U %*% t(U) %*% (P) %*% U %*% t(U) == P, A %*% CVXR::reshape_expr(S, c(d^2, 1)) == 0)
 
           prob <- CVXR::Problem(objective, constraints)
           result <- CVXR::solve(prob)
