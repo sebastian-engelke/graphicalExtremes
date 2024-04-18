@@ -87,7 +87,7 @@ plotDanube <- function(
   stations <- danube$info[stationIndices,]
 
   # Set map to NULL if not specified:
-  if(is.null(mapCountries) || is.na(mapCountries) || length(mapCountries) == 0 || nchar(mapCountries) == 0){
+  if(is.null(mapCountries) || identical(mapCountries, NA) || length(mapCountries) == 0 || nchar(mapCountries) == 0){
     map <- NULL
   }
 
