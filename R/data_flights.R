@@ -522,6 +522,9 @@ getFlightGraph <- function(
   minNFlights = 1,
   directed = FALSE
 ){
+  # This makes sure `flights` is available, even if the package was not called with `library()`
+  flights <- graphicalExtremes::flights
+
   flightCounts <- flights$flightCounts
   if(!is.null(IATAs)){
     flightCounts <- flightCounts[IATAs, IATAs,]
