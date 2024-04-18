@@ -96,7 +96,7 @@ plotFlights <- function(
     }
   }
   # Set map to NULL if not specified:
-  if(is.null(map) || is.na(map) || identical(map, '')){
+  if(is.null(map) || identical(map, NA) || identical(map, '')){
     map <- NULL
   }
   # Make selection of airports:
