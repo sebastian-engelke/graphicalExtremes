@@ -17,7 +17,7 @@ A numeric array, containing yearly flight numbers between airports in the datase
 \source{
 Raw delays data:
 \itemize{
-\item \url{https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time}
+\item \url{https://www.bts.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time}
 }
 
 Fields/Forms used in the raw data:
@@ -38,7 +38,7 @@ flights
 \description{
 A dataset containing daily total delays of major U.S. airlines.
 The raw data was obtained from the U.S.
-\href{https://www.bts.dot.gov/}{Bureau of Transportation Statistics},
+\href{https://www.bts.gov/}{Bureau of Transportation Statistics},
 and pre-processed as described in
 \insertCite{hen2022;textual}{graphicalExtremes}.
 \emph{Note: The CRAN version of this package contains only data from 2010-2013.}

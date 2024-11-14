@@ -64,8 +64,8 @@ and can already take a significant amount of time for modest dimensions (e.g. \c
 \seealso{
 Other parameter estimation methods:
 \code{\link{data2mpareto}()},
-\code{\link{emp_chi_multdim}()},
 \code{\link{emp_chi}()},
+\code{\link{emp_chi_multdim}()},
 \code{\link{emp_vario}()},
 \code{\link{emtp2}()},
 \code{\link{fmpareto_HR_MLE}()},

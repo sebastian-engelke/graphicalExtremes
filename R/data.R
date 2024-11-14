@@ -82,7 +82,7 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' 
 #' A dataset containing daily total delays of major U.S. airlines.
 #' The raw data was obtained from the U.S.
-#' [Bureau of Transportation Statistics](https://www.bts.dot.gov/),
+#' [Bureau of Transportation Statistics](https://www.bts.gov/),
 #' and pre-processed as described in
 #' \insertCite{hen2022;textual}{graphicalExtremes}.
 #' *Note: The CRAN version of this package contains only data from 2010-2013.*
@@ -147,7 +147,7 @@ getPackageData <- function(filename, isRDS=TRUE){
 #' 
 #' @source
 #' Raw delays data:
-#' - <https://www.bts.dot.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time>
+#' - <https://www.bts.gov/browse-statistical-products-and-data/bts-publications/airline-service-quality-performance-234-time>
 #' 
 #' Fields/Forms used in the raw data:
 #' - <https://esubmit.rita.dot.gov/ViewReports.aspx>

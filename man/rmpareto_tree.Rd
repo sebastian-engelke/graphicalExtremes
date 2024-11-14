@@ -76,7 +76,7 @@ rmpareto_tree(n, model = "dirichlet", tree = my_tree, par = alpha)
 \seealso{
 Other sampling functions:
 \code{\link{rmpareto}()},
-\code{\link{rmstable_tree}()},
-\code{\link{rmstable}()}
+\code{\link{rmstable}()},
+\code{\link{rmstable_tree}()}
 }
 \concept{samplingFunctions}

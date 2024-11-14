@@ -44,9 +44,9 @@ using multiple cores if available.
 }
 \seealso{
 Other matrix completion related topics:
+\code{\link{complete_Gamma}()},
 \code{\link{complete_Gamma_decomposable}()},
-\code{\link{complete_Gamma_general_demo}()},
 \code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma}()}
+\code{\link{complete_Gamma_general_demo}()}
 }
 \concept{matrixCompletions}

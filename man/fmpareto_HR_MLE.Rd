@@ -72,8 +72,8 @@ depending on the value of \code{useTheta}. If \code{graph} is non-decomposable,
 \seealso{
 Other parameter estimation methods:
 \code{\link{data2mpareto}()},
-\code{\link{emp_chi_multdim}()},
 \code{\link{emp_chi}()},
+\code{\link{emp_chi_multdim}()},
 \code{\link{emp_vario}()},
 \code{\link{emtp2}()},
 \code{\link{fmpareto_graph_HR}()},

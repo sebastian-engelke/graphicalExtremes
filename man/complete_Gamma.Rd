@@ -90,8 +90,8 @@ complete_Gamma(G, g)
 
 Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
+\code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_general_demo}()},
-\code{\link{complete_Gamma_general_split}()},
-\code{\link{complete_Gamma_general}()}
+\code{\link{complete_Gamma_general_split}()}
 }
 \concept{matrixCompletions}
