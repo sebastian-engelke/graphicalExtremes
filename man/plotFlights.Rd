@@ -63,7 +63,7 @@ Strings are passed to \code{\link[ggplot2:map_data]{ggplot2::map_data()}}, data 
 \item{vertexShapes}{Optional vector, named with IATA codes, to be used as shapes for the vertices/airports. Is coerced to \code{character}.}
 
 \item{edgeColors}{Optional vector or symmetric matrix (character or numeric), to be used as colors for edges/connections.
-If this is a vector, its entries must match the plotted connections (in the order specified in \code{connections_sel} or implied by \code{\link[igraph:as_edgelist]{igraph::get.edgelist}}).
+If this is a vector, its entries must match the plotted connections (in the order specified in \code{connections_sel} or implied by \code{\link[igraph:get.edgelist]{igraph::get.edgelist}}).
 If this is a matrix, its row/column names must be IATA codes, or its rows/columns match the plotted airports (in number and order).}
 
 \item{xyRatio}{Approximate X-Y-ratio (w.r.t. distance on the ground) of the area shown in the plot.}

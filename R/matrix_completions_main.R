@@ -21,7 +21,10 @@
 #' the edges of the graph, other entries are ignored.
 #' If `graph` is not decomposable, the graphical completion algorithm requires
 #' a fully specified (but non-graphical) variogram matrix `Gamma` to begin with.
-#' If necessary, this initial completion is computed using [edmcr::npf()].
+#'
+#' If not initial completion is provided, the function [edmcr::npf()]
+#' can be used to compute one. The package `edmcr` might need to be installed
+#' manually from [GitHub](https://github.com/great-northern-diver/edmcr)!
 #'
 #' @examples
 #' ## Block graph:
@@ -90,6 +93,9 @@ complete_Gamma <- function(
 
   # Compute initial non-graphical completion if necessary:
   if(any(is.na(Gamma))){
+    if(!requireNamespace("edmcr", quietly = TRUE)){
+      stop('Package "edmcr" is required to compute initial completion!')
+    }
     A <- 1*!is.na(Gamma)
     tmp <- edmcr::npf(Gamma, A, d = NROW(Gamma)-1)
     Gamma <- tmp$D
