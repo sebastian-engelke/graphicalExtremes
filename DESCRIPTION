@@ -25,6 +25,7 @@ Suggests:
     dplyr,
     ggplot2,
     bookdown,
+    edmcr,
     maps
 RoxygenNote: 7.2.2
 Roxygen: list(markdown = TRUE)
@@ -38,7 +39,6 @@ Imports:
     osqp,
     glmnet,
     glassoFast,
-    edmcr,
     CVXR
 URL: https://github.com/sebastian-engelke/graphicalExtremes
 BugReports: https://github.com/sebastian-engelke/graphicalExtremes/issues
