@@ -1,6 +1,6 @@
 Package: graphicalExtremes
 Title: Statistical Methodology for Graphical Extreme Value Models
-Version: 0.3.2
+Version: 0.3.3
 Maintainer: Sebastian Engelke <sebastian.engelke@unige.ch>
 Authors@R: 
     c(
