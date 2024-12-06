@@ -1,91 +1,267 @@
-<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/articles/applicationDanube.html</loc></url>
-<url><loc>/articles/applicationFlights.html</loc></url>
-<url><loc>/articles/index.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/Gamma2chi_3D.html</loc></url>
-<url><loc>/reference/V_HR.html</loc></url>
-<url><loc>/reference/Zmatrix.html</loc></url>
-<url><loc>/reference/censor.html</loc></url>
-<url><loc>/reference/checkGamma.html</loc></url>
-<url><loc>/reference/check_graph.html</loc></url>
-<url><loc>/reference/check_partial_matrix_and_graph.html</loc></url>
-<url><loc>/reference/check_split_by_sep.html</loc></url>
-<url><loc>/reference/chi2Gamma.html</loc></url>
-<url><loc>/reference/complete_Gamma.html</loc></url>
-<url><loc>/reference/complete_Gamma_decomposable.html</loc></url>
-<url><loc>/reference/complete_Gamma_general.html</loc></url>
-<url><loc>/reference/complete_Gamma_general_demo.html</loc></url>
-<url><loc>/reference/complete_Gamma_general_split.html</loc></url>
-<url><loc>/reference/complete_Gamma_one_step.html</loc></url>
-<url><loc>/reference/computeLimits.html</loc></url>
-<url><loc>/reference/danube.html</loc></url>
-<url><loc>/reference/data2mpareto.html</loc></url>
-<url><loc>/reference/eglatent.html</loc></url>
-<url><loc>/reference/eglearn.html</loc></url>
-<url><loc>/reference/emp_chi.html</loc></url>
-<url><loc>/reference/emp_chi_multdim.html</loc></url>
-<url><loc>/reference/emp_vario.html</loc></url>
-<url><loc>/reference/emst.html</loc></url>
-<url><loc>/reference/emtp2.html</loc></url>
-<url><loc>/reference/ensure_matrix_symmetry_and_truncate_zeros.html</loc></url>
-<url><loc>/reference/fast_diag.html</loc></url>
-<url><loc>/reference/fillFixedParams.html</loc></url>
-<url><loc>/reference/findVsep.html</loc></url>
-<url><loc>/reference/fitInInterval.html</loc></url>
-<url><loc>/reference/fit_graph_to_Theta.html</loc></url>
-<url><loc>/reference/flightCountMatrixToConnectionList.html</loc></url>
-<url><loc>/reference/flights.html</loc></url>
-<url><loc>/reference/fmpareto_HR_MLE.html</loc></url>
-<url><loc>/reference/fmpareto_HR_helpers.html</loc></url>
-<url><loc>/reference/fmpareto_graph_HR.html</loc></url>
-<url><loc>/reference/generateRandomGraph.html</loc></url>
-<url><loc>/reference/generate_random_Gamma.html</loc></url>
-<url><loc>/reference/generate_random_graphical_Gamma.html</loc></url>
-<url><loc>/reference/generate_random_integer_Gamma.html</loc></url>
-<url><loc>/reference/generate_random_model.html</loc></url>
-<url><loc>/reference/generate_random_spd_matrix.html</loc></url>
-<url><loc>/reference/getDanubeFlowGraph.html</loc></url>
-<url><loc>/reference/getFlightDelayData.html</loc></url>
-<url><loc>/reference/getFlightGraph.html</loc></url>
-<url><loc>/reference/getPackageData.html</loc></url>
-<url><loc>/reference/getSubMatrixForSubgraph.html</loc></url>
-<url><loc>/reference/get_alert_function.html</loc></url>
-<url><loc>/reference/get_cliques_and_separators.html</loc></url>
-<url><loc>/reference/get_cliques_and_separators_OLD.html</loc></url>
-<url><loc>/reference/get_mc_cores.html</loc></url>
-<url><loc>/reference/get_tol.html</loc></url>
-<url><loc>/reference/graphicalExtremes.html</loc></url>
-<url><loc>/reference/graphs_equal.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/logLH_HR.html</loc></url>
-<url><loc>/reference/logdVK_HR.html</loc></url>
-<url><loc>/reference/logdV_HR.html</loc></url>
-<url><loc>/reference/loglik_HR.html</loc></url>
-<url><loc>/reference/make_numeric_indices.html</loc></url>
-<url><loc>/reference/make_sep_list.html</loc></url>
-<url><loc>/reference/matrix2graph.html</loc></url>
-<url><loc>/reference/mparetomargins.html</loc></url>
-<url><loc>/reference/order_cliques.html</loc></url>
-<url><loc>/reference/par2Matrix.html</loc></url>
-<url><loc>/reference/parToMatricesFactory.html</loc></url>
-<url><loc>/reference/parameterMatrixConversion.html</loc></url>
-<url><loc>/reference/plotDanube.html</loc></url>
-<url><loc>/reference/plotFlights.html</loc></url>
-<url><loc>/reference/rmpareto.html</loc></url>
-<url><loc>/reference/rmpareto_tree.html</loc></url>
-<url><loc>/reference/rmstable.html</loc></url>
-<url><loc>/reference/rmstable_tree.html</loc></url>
-<url><loc>/reference/simu_px_HR.html</loc></url>
-<url><loc>/reference/simu_px_dirichlet.html</loc></url>
-<url><loc>/reference/simu_px_logistic.html</loc></url>
-<url><loc>/reference/simu_px_neglogistic.html</loc></url>
-<url><loc>/reference/simu_px_tree_HR.html</loc></url>
-<url><loc>/reference/simu_px_tree_dirichlet.html</loc></url>
-<url><loc>/reference/simu_px_tree_logistic.html</loc></url>
-<url><loc>/reference/split_graph.html</loc></url>
-<url><loc>/reference/unif.html</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/404.html</loc>
+  </url>
+  <url>
+    <loc>/articles/applicationDanube.html</loc>
+  </url>
+  <url>
+    <loc>/articles/applicationFlights.html</loc>
+  </url>
+  <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Gamma2chi_3D.html</loc>
+  </url>
+  <url>
+    <loc>/reference/V_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Zmatrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/censor.html</loc>
+  </url>
+  <url>
+    <loc>/reference/checkGamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_graph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_partial_matrix_and_graph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_split_by_sep.html</loc>
+  </url>
+  <url>
+    <loc>/reference/chi2Gamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma_decomposable.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma_general.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma_general_demo.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma_general_split.html</loc>
+  </url>
+  <url>
+    <loc>/reference/complete_Gamma_one_step.html</loc>
+  </url>
+  <url>
+    <loc>/reference/computeLimits.html</loc>
+  </url>
+  <url>
+    <loc>/reference/danube.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data2mpareto.html</loc>
+  </url>
+  <url>
+    <loc>/reference/eglatent.html</loc>
+  </url>
+  <url>
+    <loc>/reference/eglearn.html</loc>
+  </url>
+  <url>
+    <loc>/reference/emp_chi.html</loc>
+  </url>
+  <url>
+    <loc>/reference/emp_chi_multdim.html</loc>
+  </url>
+  <url>
+    <loc>/reference/emp_vario.html</loc>
+  </url>
+  <url>
+    <loc>/reference/emst.html</loc>
+  </url>
+  <url>
+    <loc>/reference/emtp2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ensure_matrix_symmetry_and_truncate_zeros.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fast_diag.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fillFixedParams.html</loc>
+  </url>
+  <url>
+    <loc>/reference/findVsep.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fitInInterval.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fit_graph_to_Theta.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flightCountMatrixToConnectionList.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flights.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fmpareto_HR_MLE.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fmpareto_HR_helpers.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fmpareto_graph_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generateRandomGraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_random_Gamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_random_graphical_Gamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_random_integer_Gamma.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_random_model.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generate_random_spd_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getDanubeFlowGraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getFlightDelayData.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getFlightGraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getPackageData.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getSubMatrixForSubgraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_alert_function.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_cliques_and_separators.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_cliques_and_separators_OLD.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_mc_cores.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_tol.html</loc>
+  </url>
+  <url>
+    <loc>/reference/graphicalExtremes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/graphs_equal.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/logLH_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/logdVK_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/logdV_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/loglik_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/make_numeric_indices.html</loc>
+  </url>
+  <url>
+    <loc>/reference/make_sep_list.html</loc>
+  </url>
+  <url>
+    <loc>/reference/matrix2graph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mparetomargins.html</loc>
+  </url>
+  <url>
+    <loc>/reference/order_cliques.html</loc>
+  </url>
+  <url>
+    <loc>/reference/par2Matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parToMatricesFactory.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parameterMatrixConversion.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plotDanube.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plotFlights.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rmpareto.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rmpareto_tree.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rmstable.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rmstable_tree.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_dirichlet.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_logistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_neglogistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_tree_HR.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_tree_dirichlet.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simu_px_tree_logistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/split_graph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/unif.html</loc>
+  </url>
 </urlset>
-
