@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown")
+          install.packages('https://cran.r-project.org/src/contrib/Archive/pkgdown/pkgdown_2.0.0.tar.gz')
           install.packages("stringi")
         shell: Rscript {0}
 
