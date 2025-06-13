@@ -24,7 +24,7 @@ to standardize the \code{data}.}
 \item{rholist}{Numeric vector of non-negative regularization parameters
 for the lasso.
 Default is \code{rholist = c(0.1, 0.15, 0.19, 0.205)}.
-For details see \code{\link[glasso:glassopath]{glasso::glassopath()}}.}
+For details see \code{glasso::glassopath()}.}
 
 \item{reg_method}{One of \verb{"ns", "glasso"}, for neighborhood selection and
 graphical lasso, respectively.

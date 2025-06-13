@@ -32,9 +32,9 @@ the edges of the graph, other entries are ignored.
 If \code{graph} is not decomposable, the graphical completion algorithm requires
 a fully specified (but non-graphical) variogram matrix \code{Gamma} to begin with.
 
-If not initial completion is provided, the function \code{\link[edmcr:npf]{edmcr::npf()}}
+If not initial completion is provided, the function \code{edmcr::npf()}
 can be used to compute one. The package \code{edmcr} might need to be installed
-manually from \href{https://github.com/great-northern-diver/edmcr}{GitHub}!
+manually from \href{https://github.com/great-northern-diver/edmcr}{GitHub}.
 }
 \examples{
 ## Block graph:
@@ -90,8 +90,8 @@ complete_Gamma(G, g)
 
 Other matrix completion related topics:
 \code{\link{complete_Gamma_decomposable}()},
+\code{\link{complete_Gamma_general}()},
 \code{\link{complete_Gamma_general_demo}()},
-\code{\link{complete_Gamma_general_split}()},
-\code{\link{complete_Gamma_general}()}
+\code{\link{complete_Gamma_general_split}()}
 }
 \concept{matrixCompletions}

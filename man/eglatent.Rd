@@ -30,7 +30,8 @@ Default is \code{refit = TRUE}.}
 The function fits one model for each combination
 of values in \code{lam1_list} and \code{lam2_list}. All returned objects
 have one entry per model. List consisting of:
-#' \item{\code{graph}}{
+
+\item{\code{graph}}{
 A list of \code{\link[igraph:make_graph]{igraph::graph}} objects representing the
 fitted graphs.
 }

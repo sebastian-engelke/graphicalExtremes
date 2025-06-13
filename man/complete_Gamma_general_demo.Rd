@@ -41,9 +41,9 @@ that is used. Is way slower than other functions.
 }
 \seealso{
 Other matrix completion related topics:
+\code{\link{complete_Gamma}()},
 \code{\link{complete_Gamma_decomposable}()},
-\code{\link{complete_Gamma_general_split}()},
 \code{\link{complete_Gamma_general}()},
-\code{\link{complete_Gamma}()}
+\code{\link{complete_Gamma_general_split}()}
 }
 \concept{matrixCompletions}

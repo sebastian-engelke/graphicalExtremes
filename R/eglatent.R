@@ -22,7 +22,8 @@
 #' @return The function fits one model for each combination 
 #' of values in `lam1_list` and `lam2_list`. All returned objects 
 #' have one entry per model. List consisting of:
-#' #' \item{`graph`}{
+#'
+#' \item{`graph`}{
 #'   A list of [`igraph::graph`] objects representing the
 #'   fitted graphs.
 #' }

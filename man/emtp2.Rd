@@ -31,8 +31,8 @@ See \insertCite{roe2021;textual}{graphicalExtremes} for details.
 \seealso{
 Other parameter estimation methods:
 \code{\link{data2mpareto}()},
-\code{\link{emp_chi_multdim}()},
 \code{\link{emp_chi}()},
+\code{\link{emp_chi_multdim}()},
 \code{\link{emp_vario}()},
 \code{\link{fmpareto_HR_MLE}()},
 \code{\link{fmpareto_graph_HR}()},
