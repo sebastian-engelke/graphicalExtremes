@@ -1,5 +1,5 @@
 
-del graphicalExtremes_0.3.3.tar.gz
+del graphicalExtremes_0.3.4.tar.gz
 
 rmdir graphicalExtremes.Rcheck /S /Q
 
@@ -17,4 +17,4 @@ set RCMD="C:\Program Files\R\R-devel\bin\R.exe"
 %RCMD% CMD build .
 
 @REM %RCMD% CMD check --ignore-vignettes --as-cran graphicalExtremes_0.2.0.tar.gz
-%RCMD% CMD check --as-cran graphicalExtremes_0.3.3.tar.gz
+%RCMD% CMD check --as-cran graphicalExtremes_0.3.4.tar.gz

@@ -1,5 +1,5 @@
 
-rm graphicalExtremes_0.3.3.tar.gz
+rm graphicalExtremes_0.3.4.tar.gz
 
 rm -rf graphicalExtremes.Rcheck
 
@@ -12,4 +12,4 @@ export RCMD=R
 $RCMD CMD build .
 
 # %RCMD% CMD check --ignore-vignettes --as-cran graphicalExtremes_0.2.0.tar.gz
-$RCMD CMD check --as-cran graphicalExtremes_0.3.3.tar.gz
+$RCMD CMD check --as-cran graphicalExtremes_0.3.4.tar.gz
