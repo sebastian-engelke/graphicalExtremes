@@ -22,9 +22,9 @@
 #' If `graph` is not decomposable, the graphical completion algorithm requires
 #' a fully specified (but non-graphical) variogram matrix `Gamma` to begin with.
 #'
-#' If not initial completion is provided, the function [edmcr::npf()]
+#' If not initial completion is provided, the function `edmcr::npf()`
 #' can be used to compute one. The package `edmcr` might need to be installed
-#' manually from [GitHub](https://github.com/great-northern-diver/edmcr)!
+#' manually from [GitHub](https://github.com/great-northern-diver/edmcr).
 #'
 #' @examples
 #' ## Block graph:
