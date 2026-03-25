@@ -92,19 +92,36 @@ The dataset is provided in the package as <code>danube</code>,
 see the corresponding help page for details and related functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the physical locations of measuring stations, indicating flow volume by width</span></span>
-<span><span class="fu"><a href="../reference/plotDanube.html">plotDanube</a></span><span class="op">(</span>useStationVolume <span class="op">=</span> <span class="cn">TRUE</span>, useConnectionVolume <span class="op">=</span> <span class="cn">TRUE</span>, xyRatio <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="../reference/plotDanube.html">plotDanube</a></span><span class="op">(</span>useStationVolume <span class="op">=</span> <span class="cn">TRUE</span>, useConnectionVolume <span class="op">=</span> <span class="cn">TRUE</span>, xyRatio <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `aes_string()` was deprecated in ggplot2 3.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use tidy evaluation idioms with `aes()`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">graphicalExtremes</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/sebastian-engelke/graphicalExtremes/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">graphicalExtremes</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/sebastian-engelke/graphicalExtremes/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-4-1.png" alt="" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot only the flow graph</span></span>
 <span><span class="va">danube_flow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getDanubeFlowGraph.html">getDanubeFlowGraph</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotDanube.html">plotDanubeIGraph</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">danube_flow</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-5-1.png" alt="" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot some pairwise scatter plots</span></span>
 <span><span class="va">plotData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">danube</span><span class="op">$</span><span class="va">data_clustered</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">plotData</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">plotData</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">X22</span>, y <span class="op">=</span> <span class="va">X28</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-6-1.png" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-6-2.png" width="50%"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-6-1.png" alt="" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-6-2.png" alt="" width="50%"></p>
 </div>
 <div class="section level2" number="2">
 <h2 id="multivariate-pareto-distributions">
@@ -240,7 +257,7 @@ that is, <span class="math inline">\(Y_i\)</span> and <span class="math inline">
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_literal.html" class="external-link">graph_from_literal</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_literal.html" class="external-link">graph_from_literal</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">3</span><span class="op">-</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_literal.html" class="external-link">graph_from_literal</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="op">-</span><span class="fl">2</span><span class="op">-</span><span class="op">-</span><span class="fl">3</span><span class="op">-</span><span class="op">-</span><span class="fl">4</span><span class="op">-</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-14-1.png" width="33%"><img src="applicationDanube_files/figure-html/unnamed-chunk-14-2.png" width="33%"><img src="applicationDanube_files/figure-html/unnamed-chunk-14-3.png" width="33%"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-14-1.png" alt="" width="33%"><img src="applicationDanube_files/figure-html/unnamed-chunk-14-2.png" alt="" width="33%"><img src="applicationDanube_files/figure-html/unnamed-chunk-14-3.png" alt="" width="33%"></p>
 <div class="section level3" number="3.1">
 <h3 id="trees">
 <span class="header-section-number">3.1</span> Trees<a class="anchor" aria-label="anchor" href="#trees"></a>
@@ -314,7 +331,7 @@ where <span class="math inline">\(\text{ph}(ij)\)</span> denotes the path betwee
 <span>    graph <span class="op">=</span> <span class="va">flow_graph</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">chi_hat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">flow_Gamma</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">'Empirical'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4" number="3.1.3">
 <h4 id="structure-learning">
@@ -341,7 +358,7 @@ that minimizes the sum of distances on that tree.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotDanube.html">plotDanubeIGraph</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">emst_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">chi_hat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">emst_fit</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">'Empirical'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-18-1.png" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-18-2.png" width="50%"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-18-1.png" alt="" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-18-2.png" alt="" width="50%"></p>
 </div>
 </div>
 <div class="section level3" number="3.2">
@@ -390,8 +407,8 @@ which represents the corresponding extremal graph structure.</p>
 <span><span class="co">#&gt; [3,] -0.5  0.0  1.0 -0.5</span></span>
 <span><span class="co">#&gt; [4,]  0.0 -0.5 -0.5  1.0</span></span>
 <span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH 9fcd065 U--- 4 4 -- </span></span>
-<span><span class="co">#&gt; + edges from 9fcd065:</span></span>
+<span><span class="co">#&gt; IGRAPH 7c2319b U--- 4 4 -- </span></span>
+<span><span class="co">#&gt; + edges from 7c2319b:</span></span>
 <span><span class="co">#&gt; [1] 1--2 1--3 2--4 3--4</span></span></code></pre></div>
 </div>
 <div class="section level4" number="3.2.2">
@@ -417,7 +434,7 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="co">#&gt; [3,]  1.9  1.4  0.0  2.2</span></span>
 <span><span class="co">#&gt; [4,]  1.3  0.8  2.2  0.0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-20-1.png" alt="" style="display: block; margin: auto;"></p>
 <p>This also works for more general decomposable graphs, where the matrix <span class="math inline">\(\Gamma\)</span> has to be specified on all cliques. For decomposable graphs, the graph structure can also be implied by <span class="math inline">\(\Gamma_{ij} = \text{NA}\)</span> for <span class="math inline">\((i,j)\notin E\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">G</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
@@ -429,7 +446,7 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">Gamma_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/complete_Gamma.html">complete_Gamma</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">G</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-21-1.png" alt="" style="display: block; margin: auto;"></p>
 <p>For non-decomposable graphs, a valid <span class="math inline">\(\Gamma\)</span> matrix and an undirected, connected graph has to be provided.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
@@ -443,7 +460,7 @@ from the additive tree metric property <a href="#eq:treemetric">(3.2)</a>.</p>
 <span><span class="va">my_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateRandomGraph.html">generate_random_connected_graph</a></span><span class="op">(</span>d <span class="op">=</span> <span class="fl">5</span>, m <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">Gamma_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/complete_Gamma.html">complete_Gamma</a></span><span class="op">(</span>Gamma <span class="op">=</span> <span class="va">G</span>, graph <span class="op">=</span> <span class="va">my_graph</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/matrix2graph.html">Gamma2graph</a></span><span class="op">(</span><span class="va">Gamma_comp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-22-1.png" alt="" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4" number="3.2.3">
 <h4 id="estimation-1">
@@ -458,23 +475,24 @@ Combining the clique estimates relies on the same principle as in the <code><a h
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"decomposable"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-1.png" alt="" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
 <span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-2.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-23-2.png" alt="" style="display: block; margin: auto;"></p>
 <p>If the graph <span class="math inline">\(G\)</span> is non-decomposable, then the empirical extremal variogram is first computed and then it is fitted to graph structure of <span class="math inline">\(G\)</span> using the function <code><a href="../reference/complete_Gamma.html">complete_Gamma()</a></code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">my_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_random_model.html">generate_random_model</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, graph_type <span class="op">=</span> <span class="st">"general"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-24-1.png" alt="" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ysim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmpareto.html">rmpareto</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, d <span class="op">=</span> <span class="va">d</span>, model <span class="op">=</span> <span class="st">"HR"</span>, par <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span></span>
 <span><span class="va">my_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fmpareto_graph_HR.html">fmpareto_graph_HR</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Ysim</span>, graph <span class="op">=</span> <span class="va">my_model</span><span class="op">$</span><span class="va">graph</span>, p <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"vario"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in complete_Gamma(Gamma_partial, graph): Package "edmcr" is required to compute initial completion!</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `complete_Gamma()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Package "edmcr" is required to compute initial completion!</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">$</span><span class="va">Gamma</span><span class="op">)</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">my_fit</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `geom_point()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Problem while computing aesthetics.</span></span>
@@ -540,7 +558,7 @@ It returns the (sequence) of estimated graphs and, if desired, the corresponding
 <span>            name <span class="op">=</span> <span class="st">"Number of edges"</span></span>
 <span>        <span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-25-1.png" alt="" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare fitted chi to empirical one</span></span>
 <span><span class="va">best_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">logliks_eglearn</span><span class="op">[</span><span class="st">'bic'</span>, <span class="op">]</span><span class="op">)</span></span>
@@ -548,7 +566,7 @@ It returns the (sequence) of estimated graphs and, if desired, the corresponding
 <span><span class="va">best_graph</span> <span class="op">&lt;-</span> <span class="va">eglearn_fit</span><span class="op">$</span><span class="va">graph</span><span class="op">[[</span><span class="va">best_index</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plotDanube.html">plotDanubeIGraph</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">best_graph</span><span class="op">)</span></span>
 <span><span class="fu">plot_fitted_params</span><span class="op">(</span><span class="va">chi_hat</span>, <span class="fu"><a href="../reference/chi2Gamma.html">Gamma2chi</a></span><span class="op">(</span><span class="va">best_Gamma</span><span class="op">)</span>, xlab<span class="op">=</span><span class="st">'Empirical'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="applicationDanube_files/figure-html/unnamed-chunk-26-1.png" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-26-2.png" width="50%"></p>
+<p><img src="applicationDanube_files/figure-html/unnamed-chunk-26-1.png" alt="" width="50%"><img src="applicationDanube_files/figure-html/unnamed-chunk-26-2.png" alt="" width="50%"></p>
 </div>
 </div>
 </div>
