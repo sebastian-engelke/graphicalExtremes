@@ -84,24 +84,24 @@ eglatent <- function(
       lambda_list[[r]] <- c(lambda_1, lambda_2)
 
       # run the sparse+low-rank estimator using CVXR
-      P <- CVXR::Variable(d, d, PSD = TRUE)
-      L <- CVXR::Variable(d, d, PSD = TRUE)
-      S <- CVXR::Variable(d, d, PSD = TRUE)
-      R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::diag(P %*% Gamma)) + lambda_1 * (sum(sum(abs(S))) + lambda_2 * sum(CVXR::diag(L)))
+      P <- CVXR::Variable(c(d, d), PSD = TRUE)
+      L <- CVXR::Variable(c(d, d), PSD = TRUE)
+      S <- CVXR::Variable(c(d, d), PSD = TRUE)
+      R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::DiagMat(P %*% Gamma)) + lambda_1 * (sum(sum(abs(S))) + lambda_2 * sum(CVXR::DiagMat(L)))
       objective <- CVXR::Minimize(R)
       constraints <- list(P == S - L, U %*% t(U) %*% (P) %*% U %*% t(U) == P)
       prob <- CVXR::Problem(objective, constraints)
-      result <- CVXR::solve(prob)
-      G_est[[r]] <- ensure_matrix_symmetry(Theta2Gamma(result$getValue(P), check = FALSE))
+      result <- CVXR::psolve(prob)
+      G_est[[r]] <- ensure_matrix_symmetry(Theta2Gamma(CVXR::value(P), check = FALSE))
 
-      rk_vec[r] <- length(which(eigen(result$getValue(L))$values >= 10^(-3)))
+      rk_vec[r] <- length(which(eigen(CVXR::value(L))$values >= 10^(-3)))
       if (rk_vec[r] == 0) {
         subspace_est <- matrix(0, d, 1)
       } else {
-        subspace_est <- base::svd(result$getValue(L))$u[, 1:rk_vec[r], drop = FALSE]
+        subspace_est <- base::svd(CVXR::value(L))$u[, 1:rk_vec[r], drop = FALSE]
       }
 
-      output_1 <- result$getValue(S)
+      output_1 <- CVXR::value(S)
       output_1[which(abs(output_1) <= 10^(-3))] <- 0
       output_1[which(abs(output_1) > 10^(-3))] <- 1
       output_1 <- output_1 - diag(diag(output_1))
@@ -120,27 +120,27 @@ eglatent <- function(
         }
         rk <- rk_vec[r]
         if (rk != 0) {
-          P <- CVXR::Variable(d, d, PSD = TRUE)
-          M <- CVXR::Variable(rk, rk, PSD = TRUE)
-          S <- CVXR::Variable(d, d, PSD = TRUE)
-          R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::diag(P %*% Gamma)) 
+          P <- CVXR::Variable(c(d, d), PSD = TRUE)
+          M <- CVXR::Variable(c(rk, rk), PSD = TRUE)
+          S <- CVXR::Variable(c(d, d), PSD = TRUE)
+          R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::DiagMat(P %*% Gamma))
           objective <- CVXR::Minimize(R)
           constraints <- list(P == S - subspace_est %*% M %*% t(subspace_est), U %*% t(U) %*% (P) %*% U %*% t(U) == P, A %*% CVXR::reshape_expr(S, c(d^2, 1)) == 0)
 
           prob <- CVXR::Problem(objective, constraints)
-          result <- CVXR::solve(prob)
+          result <- CVXR::psolve(prob)
         } else {
-          P <- CVXR::Variable(d, d, PSD = TRUE)
-          S <- CVXR::Variable(d, d, PSD = TRUE)
+          P <- CVXR::Variable(c(d, d), PSD = TRUE)
+          S <- CVXR::Variable(c(d, d), PSD = TRUE)
           R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::diag(P %*% Gamma)) 
           objective <- CVXR::Minimize(R)
           constraints <- list(P == S, U %*% t(U) %*% (P) %*% U %*% t(U) == P, A %*% CVXR::reshape_expr(S, c(d^2, 1)) == 0)
 
           prob <- CVXR::Problem(objective, constraints)
-          result <- CVXR::solve(prob)
+          result <- CVXR::psolve(prob)
         }
 
-        G_refit[[r]] <- ensure_matrix_symmetry(Theta2Gamma(result$getValue(P), check = FALSE))
+        G_refit[[r]] <- ensure_matrix_symmetry(Theta2Gamma(CVXR::value(P), check = FALSE))
       }
       r <- r + 1
     }
