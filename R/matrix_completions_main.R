@@ -96,9 +96,8 @@ complete_Gamma <- function(
     if(!requireNamespace("edmcr", quietly = TRUE)){
       stop('Package "edmcr" is required to compute initial completion!')
     }
-    A <- 1*!is.na(Gamma)
-    tmp <- edmcr::npf(Gamma, A, d = NROW(Gamma)-1)
-    Gamma <- tmp$D
+    # TODO: Remove, only raise error, give line of code in docs
+    Gamma <- edmcr::npf(Gamma, 1*!is.na(Gamma), d = NROW(Gamma)-1)$D
     if(!is_valid_Gamma(Gamma)){
       stop('Did not find an initial non-graphical completion (using edmcr::npf)!')
     }
