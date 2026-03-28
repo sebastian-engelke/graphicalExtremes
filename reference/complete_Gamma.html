@@ -22,7 +22,7 @@ Hentschel et al. (2022)
     
     <a class="navbar-brand me-2" href="../index.html">graphicalExtremes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,10 +103,11 @@ is not decomposable</p></dd>
     <p>If <code>graph</code> is decomposable, <code>Gamma</code> only needs to be specified on
 the edges of the graph, other entries are ignored.
 If <code>graph</code> is not decomposable, the graphical completion algorithm requires
-a fully specified (but non-graphical) variogram matrix <code>Gamma</code> to begin with.</p>
-<p>If not initial completion is provided, the function <code>edmcr::npf()</code>
-can be used to compute one. The package <code>edmcr</code> might need to be installed
-manually from <a href="https://github.com/great-northern-diver/edmcr" class="external-link">GitHub</a>.</p>
+a fully specified (but non-graphical) variogram matrix <code>Gamma</code> to begin with.
+Such a matrix can be obtained using the (currently archived) CRAN package <code>npf</code> as follows.
+The package can be installed from <a href="https://github.com/great-northern-diver/edmcr" class="external-link">GitHub</a>,
+but is currently not available on CRAN and therefore not directly used here.
+<code>Gamma &lt;- edmcr::npf(Gamma, 1*!is.na(Gamma), d = NROW(Gamma)-1)$D</code></p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
