@@ -21,10 +21,10 @@
 #' the edges of the graph, other entries are ignored.
 #' If `graph` is not decomposable, the graphical completion algorithm requires
 #' a fully specified (but non-graphical) variogram matrix `Gamma` to begin with.
-#'
-#' If not initial completion is provided, the function `edmcr::npf()`
-#' can be used to compute one. The package `edmcr` might need to be installed
-#' manually from [GitHub](https://github.com/great-northern-diver/edmcr).
+#' Such a matrix can be obtained using the (currently archived) CRAN package `npf` as follows.
+#' The package can be installed from [GitHub](https://github.com/great-northern-diver/edmcr),
+#' but is currently not available on CRAN and therefore not directly used here.
+#' `Gamma <- edmcr::npf(Gamma, 1*!is.na(Gamma), d = NROW(Gamma)-1)$D`
 #'
 #' @examples
 #' ## Block graph:
@@ -91,17 +91,12 @@ complete_Gamma <- function(
     return(complete_Gamma_decomposable(Gamma, graph))
   }
 
-  # Compute initial non-graphical completion if necessary:
+  # We need a full Gamma matrix for non-decomposable graphs.
   if(any(is.na(Gamma))){
-    if(!requireNamespace("edmcr", quietly = TRUE)){
-      stop('Package "edmcr" is required to compute initial completion!')
-    }
-    A <- 1*!is.na(Gamma)
-    tmp <- edmcr::npf(Gamma, A, d = NROW(Gamma)-1)
-    Gamma <- tmp$D
-    if(!is_valid_Gamma(Gamma)){
-      stop('Did not find an initial non-graphical completion (using edmcr::npf)!')
-    }
+    stop('For non-decomposable graphs, Gamma must be fully specified!')
+    # The following works if package npf is installed:
+    # (Causes CRAN issues due to npf being archived, so we just throw an error for now.)
+    # Gamma <- edmcr::npf(Gamma, 1*!is.na(Gamma), d = NROW(Gamma)-1)$D
   }
 
   # Compute non-decomposable completion

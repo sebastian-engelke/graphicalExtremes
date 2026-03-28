@@ -132,7 +132,7 @@ eglatent <- function(
         } else {
           P <- CVXR::Variable(c(d, d), PSD = TRUE)
           S <- CVXR::Variable(c(d, d), PSD = TRUE)
-          R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::diag(P %*% Gamma)) 
+          R <- -CVXR::log_det(t(U) %*% P %*% U) - 1 / 2 * sum(CVXR::DiagMat(P %*% Gamma))
           objective <- CVXR::Minimize(R)
           constraints <- list(P == S, U %*% t(U) %*% (P) %*% U %*% t(U) == P, A %*% CVXR::reshape_expr(S, c(d^2, 1)) == 0)
 
