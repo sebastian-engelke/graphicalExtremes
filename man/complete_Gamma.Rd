@@ -31,10 +31,10 @@ If \code{graph} is decomposable, \code{Gamma} only needs to be specified on
 the edges of the graph, other entries are ignored.
 If \code{graph} is not decomposable, the graphical completion algorithm requires
 a fully specified (but non-graphical) variogram matrix \code{Gamma} to begin with.
-
-If not initial completion is provided, the function \code{edmcr::npf()}
-can be used to compute one. The package \code{edmcr} might need to be installed
-manually from \href{https://github.com/great-northern-diver/edmcr}{GitHub}.
+Such a matrix can be obtained using the (currently archived) CRAN package \code{npf} as follows.
+The package can be installed from \href{https://github.com/great-northern-diver/edmcr}{GitHub},
+but is currently not available on CRAN and therefore not directly used here.
+\code{Gamma <- edmcr::npf(Gamma, 1*!is.na(Gamma), d = NROW(Gamma)-1)$D}
 }
 \examples{
 ## Block graph:

@@ -5,8 +5,9 @@ rmdir graphicalExtremes.Rcheck /S /Q
 
 @REM Make sure dependencies are installed before!
 @REM set RCMD=R
-set RCMD="C:\Program Files\R\R-devel\bin\R.exe"
+@REM set RCMD="C:\Program Files\R\R-devel\bin\R.exe"
 @REM set RCMD="%USERPROFILE%\AppData\Local\Programs\R\R-devel\bin\R.exe"
+set RCMD="C:\Program Files\R\R-4.5.3\bin\R.exe"
 
 @REM %RCMD% -e "unlink(Sys.getenv('R_LIBS_USER'),recursive=TRUE,force=TRUE)"
 @REM %RCMD% -e "dir.create(Sys.getenv('R_LIBS_USER'),recursive=TRUE)"
