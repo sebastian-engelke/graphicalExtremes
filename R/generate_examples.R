@@ -339,6 +339,8 @@ generate_random_cactus <- function(d, cMin = 2, cMax = 6){
     A[,joinVertex0] <- A[joinVertex0,]
     A <- A[-joinVertex1,-joinVertex1,drop=FALSE]
   }
+  # Make sure there are no multi-edges (can happen for size 2 rings)
+  A <- pmin(A, 1)
   g <- igraph::graph_from_adjacency_matrix(A, mode = 'undirected')
   return(g)
 }
